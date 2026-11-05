@@ -10,7 +10,9 @@ import { logger } from './views/logger'
 export function useLanguageClient() {
   const serverModule = Uri.joinPath(extensionContext.value!.extensionUri, 'dist', 'language-server.cjs')
   const runOptions = { execArgv: <string[]>[] }
-  const debugOptions = { execArgv: ['--nolazy', `--inspect=${6009}`] }
+  const debugOptions = {
+    execArgv: ['--nolazy', `--inspect=${6009}`],
+  }
   const serverOptions: ServerOptions = {
     run: {
       module: serverModule.fsPath,

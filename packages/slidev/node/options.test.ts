@@ -33,9 +33,15 @@ vi.mock('./resolver', () => ({
   toAtFS: (value: string) => value,
 }))
 
-vi.mock('./setups/indexHtml', () => ({ default: vi.fn().mockResolvedValue('') }))
-vi.mock('./setups/katex', () => ({ default: vi.fn().mockResolvedValue({}) }))
-vi.mock('./setups/shiki', () => ({ default: vi.fn().mockResolvedValue({}) }))
+vi.mock('./setups/indexHtml', () => ({
+  default: vi.fn().mockResolvedValue(''),
+}))
+vi.mock('./setups/katex', () => ({
+  default: vi.fn().mockResolvedValue({}),
+}))
+vi.mock('./setups/shiki', () => ({
+  default: vi.fn().mockResolvedValue({}),
+}))
 
 describe('resolveOptions', () => {
   beforeEach(() => {
@@ -70,7 +76,9 @@ describe('resolveOptions', () => {
         theme: 'bootstrap',
         title: 'before',
       },
-      slides: [{ content: 'before addon preparser' }],
+      slides: [
+        { content: 'before addon preparser' },
+      ],
     }
     const reloadedData = {
       headmatter: {
@@ -79,7 +87,9 @@ describe('resolveOptions', () => {
         theme: 'final',
         title: 'after',
       },
-      slides: [{ content: 'after addon preparser' }],
+      slides: [
+        { content: 'after addon preparser' },
+      ],
     }
     const initialConfig = {
       addons: ['slidev-addon-bootstrap'],
@@ -125,7 +135,12 @@ describe('resolveOptions', () => {
     )
     expect(mocks.resolveAddons).toHaveBeenCalledWith(initialConfig.addons)
     expect(mocks.load).toHaveBeenNthCalledWith(2, {
-      allowedRoots: ['/workspace', '/theme', '/addon', '/project'],
+      allowedRoots: [
+        '/workspace',
+        '/theme',
+        '/addon',
+        '/project',
+      ],
       roots: ['/theme', '/addon', '/project'],
       userRoot: '/project',
     }, '/project/slides.md', undefined, 'dev')

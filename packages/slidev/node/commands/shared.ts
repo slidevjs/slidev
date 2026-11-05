@@ -14,7 +14,9 @@ export function getSlideTitle(data: SlidevData) {
   const tokens = sharedMd.parseInline(data.config.title, {})
   const title = stringifyMarkdownTokens(tokens)
   const slideTitle = data.config.titleTemplate.replace('%s', title)
-  return slideTitle === 'Slidev - Slidev' ? 'Slidev' : slideTitle
+  return slideTitle === 'Slidev - Slidev'
+    ? 'Slidev'
+    : slideTitle
 }
 
 export async function resolveViteConfigs(
@@ -26,7 +28,9 @@ export async function resolveViteConfigs(
 ) {
   // Merge theme & addon & user configs
   const configEnv: ConfigEnv = {
-    mode: command === 'build' ? 'production' : 'development',
+    mode: command === 'build'
+      ? 'production'
+      : 'development',
     command,
   }
   const files = resolveSourceFiles(options.roots, 'vite.config')

@@ -34,7 +34,9 @@ export const templateMonacoTypes: VirtualModuleTemplate = {
 
       // strip module filepath e.g. lodash/identity => lodash
       const [a = '', b = ''] = moduleSpecifier.split('/')
-      const moduleName = a.startsWith('@') ? `${a}/${b}` : a
+      const moduleName = a.startsWith('@')
+        ? `${a}/${b}`
+        : a
 
       return moduleName
     }

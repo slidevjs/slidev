@@ -37,7 +37,9 @@ export function resolveShikiOptions(options: (ShikiSetupReturn | void)[]) {
     mergedOptions.defaultColor = false
 
   const themeOption = extractThemeName(mergedOptions.theme) || extractThemeNames(mergedOptions.themes || {})
-  const themeNames = typeof themeOption === 'string' ? [themeOption] : Object.values(themeOption)
+  const themeNames = typeof themeOption === 'string'
+    ? [themeOption]
+    : Object.values(themeOption)
 
   const themeInput: Record<string, ThemeInput> = Object.assign({}, bundledThemes)
   if (typeof mergedOptions.theme === 'object' && mergedOptions.theme?.name) {
@@ -51,7 +53,14 @@ export function resolveShikiOptions(options: (ShikiSetupReturn | void)[]) {
     }
   }
 
-  const languageNames = new Set<string>(['markdown', 'vue', 'javascript', 'typescript', 'html', 'css'])
+  const languageNames = new Set<string>([
+    'markdown',
+    'vue',
+    'javascript',
+    'typescript',
+    'html',
+    'css',
+  ])
   const languageInput: Record<string, LanguageInput> = Object.assign({}, bundledLanguages)
   for (const option of options) {
     const langs = option?.langs

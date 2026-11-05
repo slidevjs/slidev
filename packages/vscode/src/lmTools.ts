@@ -62,7 +62,9 @@ export const useLmTools = defineService(() => {
 
   // List all loaded Slidev entries
   registerSimpleTool('slidev_listEntries', () => {
-    const entries = [...projects.keys()]
+    const entries = [
+      ...projects.keys(),
+    ]
     if (entries.length === 0) {
       return 'No loaded Slidev project entries.'
     }
@@ -120,7 +122,9 @@ function resolveProjectFromEntry(entry: string) {
   let project = projects.get(entry)
   if (!project) {
     entry = slash(entry)
-    const possibleProjects = [...projects.values()].filter(p => p.entry.includes(entry))
+    const possibleProjects = [
+      ...projects.values(),
+    ].filter(p => p.entry.includes(entry))
     if (possibleProjects.length === 0) {
       throw new Error(`No project found for entry: ${entry}. All entries: ${formatList(projects.keys())}`)
     }

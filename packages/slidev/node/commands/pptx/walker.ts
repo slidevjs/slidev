@@ -217,7 +217,9 @@ export function collectSnapshot(options: {
     const start = parent && parent.tagName.toUpperCase() === 'OL'
       ? Number(parent.getAttribute('start') || '1')
       : 1
-    const value = ordinal + (Number.isFinite(start) ? start : 1) - 1
+    const value = ordinal + (Number.isFinite(start)
+      ? start
+      : 1) - 1
 
     if (listStyleType === 'lower-alpha' || listStyleType === 'lower-latin')
       return `${String.fromCharCode(96 + ((value - 1) % 26) + 1)}. `
@@ -276,7 +278,15 @@ export function collectSnapshot(options: {
         if (!rects.length) {
           if (text.trim())
             return
-          nodes.push({ id: nextId++, parent, tag: '#text', style: -1, rect: { x: 0, y: 0, w: 0, h: 0 }, glyphRects: [], text })
+          nodes.push({
+            id: nextId++,
+            parent,
+            tag: '#text',
+            style: -1,
+            rect: { x: 0, y: 0, w: 0, h: 0 },
+            glyphRects: [],
+            text,
+          })
           return
         }
         // Glyph rects, not the element box: positioned from the element rect the text lands offset and re-wraps.
@@ -295,7 +305,9 @@ export function collectSnapshot(options: {
           glyphRects: rects.map(relative),
           text,
           // A text node inherits the compounded opacity; without it a greyed paragraph exports solid.
-          ...(inheritedOpacity < 1 ? { opacity: inheritedOpacity } : {}),
+          ...(inheritedOpacity < 1
+            ? { opacity: inheritedOpacity }
+            : {}),
         })
         return
       }
@@ -314,7 +326,9 @@ export function collectSnapshot(options: {
       const own = Number(computed.opacity)
       // CSS `opacity` does not inherit, and DrawingML has no group opacity to stand
       // in for a wrapper's, so it is compounded here while the tree is available.
-      const effectiveOpacity = inheritedOpacity * (Number.isFinite(own) ? own : 1)
+      const effectiveOpacity = inheritedOpacity * (Number.isFinite(own)
+        ? own
+        : 1)
       if (effectiveOpacity === 0)
         return
 
@@ -439,12 +453,16 @@ export function collectSnapshot(options: {
         nodes.push({
           id: nextId++,
           parent: id,
-          tag: which === '::before' ? '::BEFORE' : '::AFTER',
+          tag: which === '::before'
+            ? '::BEFORE'
+            : '::AFTER',
           style: intern(pseudo),
           rect: relative(box),
           // A pseudo has no element to screenshot, so it is captured by clipping the page.
           pageRect,
-          ...(text && pseudo.content !== 'normal' ? { text } : {}),
+          ...(text && pseudo.content !== 'normal'
+            ? { text }
+            : {}),
         })
       }
 
@@ -466,7 +484,9 @@ export function collectSnapshot(options: {
 
     slides.push({
       no,
-      clickIndex: Number.isFinite(clickIndex) ? clickIndex : 0,
+      clickIndex: Number.isFinite(clickIndex)
+        ? clickIndex
+        : 0,
       // The exact id: with `--with-clicks` a prefix match plus `.first()`
       // hands every step a picture of step one.
       containerId: container.id,
@@ -478,5 +498,10 @@ export function collectSnapshot(options: {
     })
   }
 
-  return { slides, styles, fontResolution, unplaceablePseudos } as RawSnapshot
+  return {
+    slides,
+    styles,
+    fontResolution,
+    unplaceablePseudos,
+  } as RawSnapshot
 }

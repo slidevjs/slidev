@@ -21,13 +21,19 @@ export default defineCodeblockTransformer(async ({ info, code, options: { data: 
   if (monaco === 'monaco-diff') {
     const [original, modified] = code.split(RE_DIFF_SEPARATOR, 2)
     encoded = lz.compressToBase64(original)
-    diff = modified === undefined ? '' : `diff-lz="${lz.compressToBase64(modified)}"`
+    diff = modified === undefined
+      ? ''
+      : `diff-lz="${lz.compressToBase64(modified)}"`
   }
   else {
     encoded = lz.compressToBase64(code)
   }
 
-  const optionsProp = options ? `v-bind="${options}"` : ''
-  const runnable = monaco === 'monaco-run' ? 'runnable' : ''
+  const optionsProp = options
+    ? `v-bind="${options}"`
+    : ''
+  const runnable = monaco === 'monaco-run'
+    ? 'runnable'
+    : ''
   return `<Monaco ${optionsProp} ${runnable} lang="${lang}" code-lz="${encoded}" ${diff} />`
 })
