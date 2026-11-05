@@ -11,7 +11,7 @@ import { readFile, writeFile } from 'node:fs/promises'
 import { slash } from '@antfu/utils'
 import { dirname, isAbsolute, relative, resolve } from 'pathe'
 import YAML from 'yaml'
-import { detectFeatures, parse, parseRangeString, stringify } from './core'
+import { detectFeatures, parse, parseRangeString, stringify, validateExportClicks } from './core'
 
 /**
  * Whether `filePath` resolves inside any of `roots` (no `..` escape).
@@ -172,8 +172,17 @@ export async function load(
       }
     }
     else {
+      const frontmatter = { ...slide.frontmatter, ...frontmatterOverride }
+      const exportClicksError = validateExportClicks(frontmatter.exportClicks)
+      if (exportClicksError) {
+        md.errors ??= []
+        md.errors.push({
+          row: slide.start,
+          message: exportClicksError,
+        })
+      }
       slides.push({
-        frontmatter: { ...slide.frontmatter, ...frontmatterOverride },
+        frontmatter,
         content: slide.content,
         revision: slide.revision,
         frontmatterRaw: slide.frontmatterRaw,

@@ -379,6 +379,17 @@ export interface Frontmatter extends TransitionOptions {
    */
   clicksStart?: number
   /**
+   * Click steps to export for this slide, overriding the `withClicks` export option
+   *
+   * - `true` - one page per click step
+   * - `last` - one page with the final state
+   * - `[0, 2, 'last']` or `'0,2-3,5-'` - one page per listed click step, `last` being the final state
+   * - `[]` - skip this slide
+   *
+   * See https://sli.dev/features/export-clicks
+   */
+  exportClicks?: true | (number | string)[] | string
+  /**
    * Preload the slide when the previous slide is active
    * @default true
    */

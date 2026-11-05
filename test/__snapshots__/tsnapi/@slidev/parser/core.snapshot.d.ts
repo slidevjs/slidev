@@ -20,10 +20,15 @@ export interface TimesplitOutput {
 }
 // #endregion
 
+// #region Types
+export type ExportClickStep = number | [number, number];
+// #endregion
+
 // #region Functions
 export declare function detectFeatures(_: string): SlidevDetectedFeatures;
 export declare function extractImagesUsage(_: string, _: Record<string, any>): string[];
 export declare function getDefaultConfig(): SlidevConfig;
+export declare function getExportClickSteps(_: boolean | ExportClickStep[], _: number, _: number): number[];
 export declare function parse(_: string, _: string, _?: SlidevPreparserExtension[], _?: SlidevParserOptions): Promise<SlidevMarkdown>;
 export declare function parseAspectRatio(_: string | number): number;
 export declare function parseRangeString(_: number, _?: string): number[];
@@ -37,8 +42,10 @@ export declare function parseTimeString(_: string | number): {
 export declare function prettify(_: SlidevMarkdown): SlidevMarkdown;
 export declare function prettifySlide(_: SourceSlideInfo): SourceSlideInfo;
 export declare function resolveConfig(_: any, _?: SlidevThemeMeta, _?: string, _?: boolean): SlidevConfig;
+export declare function resolveExportClicks(_: unknown, _: boolean): boolean | ExportClickStep[];
 export declare function resolveFonts(_?: FontOptions): ResolvedFontOptions;
 export declare function stringify(_: SlidevMarkdown): string;
 export declare function stringifySlide(_: SourceSlideInfo, _?: number): string;
+export declare function validateExportClicks(_: unknown): string | undefined;
 export declare function verifyConfig(_: SlidevConfig, _?: SlidevThemeMeta, _?: (_: string) => void): void;
 // #endregion

@@ -4,7 +4,7 @@ import fs from 'node:fs/promises'
 import process from 'node:process'
 import { clearUndefined, ensureSuffix, slash } from '@antfu/utils'
 import { outlinePdfFactory } from '@lillallol/outline-pdf'
-import { parseRangeString } from '@slidev/parser/core'
+import { getExportClickSteps, parseRangeString, resolveExportClicks } from '@slidev/parser/core'
 import { blue, cyan, dim, green, yellow } from 'ansis'
 import { Presets, SingleBar } from 'cli-progress'
 import { resolve } from 'mlly'
@@ -12,8 +12,6 @@ import path, { dirname, relative } from 'pathe'
 import * as pdfLib from 'pdf-lib'
 import { PDFDocument } from 'pdf-lib'
 import { getRoots } from '../resolver'
-
-const RE_CLICKS_PARAM = /clicks=([1-9]\d*)/
 
 export interface ExportOptions {
   total: number
@@ -236,9 +234,9 @@ export async function exportSlides({
   const relativeOutput = slash(relative('.', output))
   return relativeOutput.startsWith('.') ? relativeOutput : `./${relativeOutput}`
 
-  async function go(no: number | string, clicks?: string) {
+  async function go(no: number | string, clicks?: string, printClicks = withClicks) {
     const query = new URLSearchParams()
-    if (withClicks)
+    if (printClicks)
       query.set('print', 'clicks')
     else
       query.set('print', 'true')
@@ -335,28 +333,46 @@ export async function exportSlides({
     return slideIndexes
   }
 
-  function getClicksFromUrl(url: string) {
-    return url.match(RE_CLICKS_PARAM)?.[1]
+  // Exposed by SlideWrapper.vue once the slide is mounted
+  async function getClicksTotal(no: number) {
+    const total = await page
+      .locator(`[data-slidev-no="${no}"][data-slidev-clicks-total]`)
+      .getAttribute('data-slidev-clicks-total', { timeout })
+    return +(total || 0)
   }
 
+  // Navigate to every click step the slide exports and capture each of them
   async function genPageWithClicks(
-    fn: (no: number, clicks?: string) => Promise<any>,
+    capture: (no: number, clicks?: string) => Promise<any>,
     no: number,
-    clicks?: string,
   ) {
-    await fn(no, clicks)
-    if (withClicks) {
-      await page.keyboard.press('ArrowRight', { delay: 100 })
-      const _clicks = getClicksFromUrl(page.url())
-      if (_clicks && clicks !== _clicks)
-        await genPageWithClicks(fn, no, _clicks)
+    const frontmatter = slides[no - 1]?.frontmatter ?? {}
+    const exportClicks = resolveExportClicks(frontmatter.exportClicks, withClicks)
+
+    // `exportClicks: []` skips the slide
+    if (Array.isArray(exportClicks) && !exportClicks.length)
+      return
+    if (exportClicks === false) {
+      await go(no, undefined, false)
+      await capture(no)
+      return
+    }
+
+    const clicksStart = +(frontmatter.clicksStart ?? 0)
+    await go(no, undefined, true)
+    const total = Math.max(clicksStart, await getClicksTotal(no))
+    for (const step of getExportClickSteps(exportClicks, clicksStart, total)) {
+      const clicks = step ? String(step) : undefined
+      // the first step is already shown
+      if (step !== clicksStart)
+        await go(no, clicks, true)
+      await capture(no, clicks)
     }
   }
 
   async function genPagePdfPerSlide() {
     const buffers: Buffer[] = []
-    const genPdfBuffer = async (i: number, clicks?: string) => {
-      await go(i, clicks)
+    const genPdfBuffer = async () => {
       const pdf = await page.pdf({
         width,
         height,
@@ -432,8 +448,18 @@ export async function exportSlides({
     const slideContainers = page.locator('.print-slide-container')
     const count = await slideContainers.count()
 
+    const ids: string[] = []
+    for (let i = 0; i < count; i++)
+      ids.push((await slideContainers.nth(i).getAttribute('id')) || '')
+    // Slides with `exportClicks` can have multiple pages even without `--with-clicks`
+    const pagesPerSlide: Record<number, number> = {}
+    for (const id of ids) {
+      const slideNo = +id.split('-')[0]
+      pagesPerSlide[slideNo] = (pagesPerSlide[slideNo] || 0) + 1
+    }
+
     for (let i = 0; i < count; i++) {
-      const id = (await slideContainers.nth(i).getAttribute('id')) || ''
+      const id = ids[i]
       const slideNo = +id.split('-')[0]
 
       // Only process slides that are in the specified range
@@ -445,7 +471,7 @@ export async function exportSlides({
       const buffer = await slideContainers.nth(i).screenshot({
         omitBackground,
       })
-      const filename = `${withClicks ? id : slideNo}.png`
+      const filename = `${withClicks || pagesPerSlide[slideNo] > 1 ? id : slideNo}.png`
       result.push({ slideIndex: slideNo - 1, buffer, filename })
       if (writeToDisk)
         await fs.writeFile(path.join(writeToDisk, filename), buffer)
@@ -456,7 +482,6 @@ export async function exportSlides({
   async function genPagePngPerSlide(writeToDisk: string | false) {
     const result: ExportPngResult[] = []
     const genScreenshot = async (no: number, clicks?: string) => {
-      await go(no, clicks)
       const buffer = await page.screenshot({
         omitBackground,
       })
@@ -496,7 +521,7 @@ export async function exportSlides({
   async function genPageMd() {
     const pngs = await genPagePng(dirname(output), false)
     const content = slides
-      .filter(({ index }) => pages.includes(index + 1))
+      .filter(({ index }) => pages.includes(index + 1) && pngs.some(({ slideIndex }) => slideIndex === index))
       .map(({ title, index, note }) =>
         pngs.filter(({ slideIndex }) => slideIndex === index)
           .map(({ filename }) => `![${title || (index + 1)}](./${filename})\n\n`)
@@ -588,7 +613,8 @@ export async function exportSlides({
     const outlinePdf = outlinePdfFactory(pdfLib)
     const slideIndexes = await getSlidesIndex()
 
-    const tocTree = slides.filter(slide => slide.title)
+    // slides skipped with `exportClicks: []` have no page to point to
+    const tocTree = slides.filter(slide => slide.title && slideIndexes[slide.index + 1] != null)
       .reduce((acc: TocItem[], slide) => {
         addToTree(acc, slide, slideIndexes)
         return acc

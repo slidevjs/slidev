@@ -5,6 +5,7 @@
 export function detectFeatures(_) {}
 export function extractImagesUsage(_, _) {}
 export function getDefaultConfig() {}
+export function getExportClickSteps(_, _, _) {}
 export function injectPreparserExtensionLoader(_) {}
 export function isPathInsideRoots(_, _) {}
 export async function load(_, _, _, _) {}
@@ -18,9 +19,11 @@ export function parseTimeString(_) {}
 export function prettify(_) {}
 export function prettifySlide(_) {}
 export function resolveConfig(_, _, _, _) {}
+export function resolveExportClicks(_, _) {}
 export function resolveFonts(_) {}
 export async function save(_) {}
 export function stringify(_) {}
 export function stringifySlide(_, _) {}
+export function validateExportClicks(_) {}
 export function verifyConfig(_, _, _) {}
 // #endregion

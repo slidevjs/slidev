@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import type { SlideRoute } from '@slidev/types'
+import { resolveExportClicks } from '@slidev/parser/utils'
 import { recomputeAllPoppers } from 'floating-vue'
 import { computed, shallowRef, TransitionGroup, watchEffect } from 'vue'
 import { GlobalBottom, GlobalTop } from '#slidev/global-layers'
@@ -92,7 +93,7 @@ function onAfterLeave() {
     <template v-for="route of loadedRoutes" :key="route.no">
       <SlideWrapper
         v-show="route === currentSlideRoute"
-        :clicks-context="isPrintMode && !isPrintWithClicks ? createFixedClicks(route, CLICKS_MAX) : getPrimaryClicks(route)"
+        :clicks-context="isPrintMode && resolveExportClicks(route.meta.slide.frontmatter.exportClicks, isPrintWithClicks) === false ? createFixedClicks(route, CLICKS_MAX) : getPrimaryClicks(route)"
         :route="route"
         :render-context="renderContext"
       />

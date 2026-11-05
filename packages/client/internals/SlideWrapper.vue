@@ -41,6 +41,7 @@ const style = computed<CSSProperties>(() => ({
 <template>
   <div
     :data-slidev-no="props.route.no"
+    :data-slidev-clicks-total="props.clicksContext.isMounted ? props.clicksContext.total : undefined"
     :class="getSlideClass(route, ['slide', 'presenter'].includes(props.renderContext) ? '' : 'disable-view-transition')"
     :style="style"
     :lang="props.route.meta.slide.frontmatter.lang"
