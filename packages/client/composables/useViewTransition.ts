@@ -17,6 +17,10 @@ export function useViewTransition() {
     const toMeta = getSlide(to.params.no as string)?.meta
     const fromNo = fromMeta?.slide?.no
     const toNo = toMeta?.slide?.no
+    // Navigating within the same slide (only `clicks` changed): keep the current mode.
+    // Resetting it swaps the wrapper in SlidesShow and remounts every slide.
+    if (fromNo != null && fromNo === toNo)
+      return
     const transitionType = fromNo != null && toNo != null && fromNo !== toNo
       && ((fromNo < toNo ? fromMeta?.transition : toMeta?.transition) ?? configs.transition)
     if (transitionType !== 'view-transition') {

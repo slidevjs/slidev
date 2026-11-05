@@ -379,8 +379,8 @@ catalogs:
       specifier: ^30.6.0
       version: 30.6.0
     '@comark/markdown-it':
-      specifier: ^0.3.4
-      version: 0.3.4
+      specifier: ^0.4.0
+      version: 0.4.0
     '@hedgedoc/markdown-it-plugins':
       specifier: ^2.1.4
       version: 2.1.4
@@ -441,18 +441,12 @@ catalogs:
     gray-matter:
       specifier: ^4.0.3
       version: 4.0.3
-    htmlparser2:
-      specifier: ^12.0.0
-      version: 12.0.0
     is-installed-globally:
       specifier: ^1.0.1
       version: 1.0.1
     jiti:
       specifier: ^2.7.0
       version: 2.7.0
-    local-pkg:
-      specifier: ^1.2.1
-      version: 1.2.1
     magic-string:
       specifier: ^1.4.3
       version: 1.4.3
@@ -501,9 +495,6 @@ catalogs:
     public-ip:
       specifier: ^8.0.0
       version: 8.0.0
-    resolve-from:
-      specifier: ^5.0.0
-      version: 5.0.0
     resolve-global:
       specifier: ^2.0.0
       version: 2.0.0
@@ -1145,7 +1136,7 @@ importers:
         version: 9.3.0
       '@comark/markdown-it':
         specifier: catalog:prod
-        version: 0.3.4(@types/markdown-it@14.2.0)(markdown-it@14.3.2)
+        version: 0.4.0(@types/markdown-it@14.2.0)(markdown-it@14.3.2)
       '@iconify-json/carbon':
         specifier: catalog:icons
         version: 1.2.28
@@ -1221,9 +1212,6 @@ importers:
       global-directory:
         specifier: catalog:prod
         version: 5.0.0
-      htmlparser2:
-        specifier: catalog:prod
-        version: 12.0.0
       is-installed-globally:
         specifier: catalog:prod
         version: 1.0.1
@@ -1233,9 +1221,6 @@ importers:
       katex:
         specifier: catalog:frontend
         version: 0.18.10
-      local-pkg:
-        specifier: catalog:prod
-        version: 1.2.1
       lz-string:
         specifier: catalog:frontend
         version: 1.5.0
@@ -1293,9 +1278,6 @@ importers:
       public-ip:
         specifier: catalog:prod
         version: 8.0.0
-      resolve-from:
-        specifier: catalog:prod
-        version: 5.0.0
       resolve-global:
         specifier: catalog:prod
         version: 2.0.0
@@ -2223,8 +2205,8 @@ packages:
   '@colordx/core@7.3.0':
     resolution: {integrity: sha512-LVzTTPhX7wpy7TkGjouA9zbbCBIw92RGm7ZQqSKFE0oYE3sMx2FGXz90eVpgw7k/+wrrY+qJ86nHXifZWMS5jA==}
 
-  '@comark/markdown-it@0.3.4':
-    resolution: {integrity: sha512-btB+klvBi08qRZGeSLbykfD2ROxhLLQJ4+uDI7FjL560ztlzTtBlGmqe6zP49mW/Yp9y39kSWeRS46iEFpGa0w==}
+  '@comark/markdown-it@0.4.0':
+    resolution: {integrity: sha512-GsNpVqjaYgq7x7DSG7VHP3Y8A9HRrsPCVwmhvR4M9jqMiC9bkmcMN5EHc9SEvpRwMXP02HIKA6C8y6KLUkUtPQ==}
     peerDependencies:
       '@types/markdown-it': '*'
       markdown-it: ^14.0.0
@@ -5760,27 +5742,11 @@ packages:
     resolution: {integrity: sha512-BDeBd8najI4/lS00HSKpdFia+OvUMytaVjfzR9n5Lq8MlZRSvtbI+uLtx1+XmQFls5wFU9dssccTmQQ6nfpjdg==}
     engines: {node: '>=6'}
 
-  dom-serializer@3.1.1:
-    resolution: {integrity: sha512-4MEa38/QexBob6gFNwu+EGdWvhJ1OKuNwdYY3Y3NyeWDQfnGeDYQUDfIRzWu5B5gsv03so2Uxd28YC6zrsx3Lw==}
-    engines: {node: '>=20.19.0'}
-
-  domelementtype@3.0.0:
-    resolution: {integrity: sha512-umCQid3jKbDmVjx8jGaW7uUykm4DEUeyV21hPxNMo2nV955DhUThwqyOIDtreepP31hl84X7G5U9ZfsWvIB3Pg==}
-    engines: {node: '>=20.19.0'}
-
-  domhandler@6.0.1:
-    resolution: {integrity: sha512-gYzvtM72ZtxQO0T048kd6HWSbbGCNOUwcnfQ01cqIJ4X2IYKFFHZ5mKvrQETcFXxsRObZulDaKmy//R7TPtsBg==}
-    engines: {node: '>=20.19.0'}
-
   dompurify@3.4.15:
     resolution: {integrity: sha512-EUBjM+B+lkDE41iE82DDSCfkoPGfXx8IxFxPMjNzm/Uk4xDet77rTN9wqlxlVg71kK7XGuUMv6wUxJUwwv+Xyw==}
 
   dompurify@3.4.8:
     resolution: {integrity: sha512-yb1cEmaOum7wFvOCSQxyfgVlv5D47Rc30iZWoMpbDIWTnJ6grDDQyu2KFJzB2k7u0pMuJcQ1zphH//fFnw2tjQ==}
-
-  domutils@4.0.2:
-    resolution: {integrity: sha512-qI4JLRKnSzqFqr7hAlS5xQDusBCjKSEG4t4+7aNrIQMHBcsC2TGEhuyABJdYkgSewL57PNLYEiibY2iPKhKpaA==}
-    engines: {node: '>=20.19.0'}
 
   dotenv@17.4.2:
     resolution: {integrity: sha512-nI4U3TottKAcAD9LLud4Cb7b2QztQMUEfHbvhTH09bqXTxnSie8WnjPALV/WMCrJZ6UV/qHJ6L03OqO3LcdYZw==}
@@ -6549,10 +6515,6 @@ packages:
 
   html-void-elements@3.0.0:
     resolution: {integrity: sha512-bEqo66MRXsUGxWHV5IP0PUiAWwoEjba4VCzg0LjFJBpchPaTfyfCKTG6bc5F8ucKec3q5y6qOdGyYTSBEvhCrg==}
-
-  htmlparser2@12.0.0:
-    resolution: {integrity: sha512-Tz7u1i95/g2x2jz81+x0FBVhBhY5aRTvD3tXXdFaljuNdzDLJ8UGNRrTcj2cgQvAg3iW/h77Fz15nLW0L0CrZw==}
-    engines: {node: '>=20.19.0'}
 
   http-proxy-agent@7.0.2:
     resolution: {integrity: sha512-T1gkAiYYDWYx3V5Bmyu7HcfcvL7mUrTWiM6yOfa3PIphViJ/gFPbvidQ+veqSOHci/PxBcDabeUNCzpOODJZig==}
@@ -8013,10 +7975,6 @@ packages:
   reserved-identifiers@1.2.0:
     resolution: {integrity: sha512-yE7KUfFvaBFzGPs5H3Ops1RevfUEsDc5Iz65rOwWg4lE8HJSYtle77uul3+573457oHvBKuHYDl/xqUkKpEEdw==}
     engines: {node: '>=18'}
-
-  resolve-from@5.0.0:
-    resolution: {integrity: sha512-qYg9KP24dD5qka9J47d0aVky0N+b4fTU89LN9iDnjB5waksiC49rvMB0PrUJQGoTmH50XPiqOvAjDfaijGxYZw==}
-    engines: {node: '>=8'}
 
   resolve-global@2.0.0:
     resolution: {integrity: sha512-gnAQ0Q/KkupGkuiMyX4L0GaBV8iFwlmoXsMtOz+DFTaKmHhOO/dSlP1RMKhpvHv/dh6K/IQkowGJBqUG0NfBUw==}
@@ -10348,7 +10306,7 @@ snapshots:
 
   '@colordx/core@7.3.0': {}
 
-  '@comark/markdown-it@0.3.4(@types/markdown-it@14.2.0)(markdown-it@14.3.2)':
+  '@comark/markdown-it@0.4.0(@types/markdown-it@14.2.0)(markdown-it@14.3.2)':
     dependencies:
       '@types/markdown-it': 14.2.0
       js-yaml: 4.3.2
@@ -13626,18 +13584,6 @@ snapshots:
     dependencies:
       dns-packet: 5.6.1
 
-  dom-serializer@3.1.1:
-    dependencies:
-      domelementtype: 3.0.0
-      domhandler: 6.0.1
-      entities: 8.1.0
-
-  domelementtype@3.0.0: {}
-
-  domhandler@6.0.1:
-    dependencies:
-      domelementtype: 3.0.0
-
   dompurify@3.4.15:
     optionalDependencies:
       '@types/trusted-types': 2.0.7
@@ -13645,12 +13591,6 @@ snapshots:
   dompurify@3.4.8:
     optionalDependencies:
       '@types/trusted-types': 2.0.7
-
-  domutils@4.0.2:
-    dependencies:
-      dom-serializer: 3.1.1
-      domelementtype: 3.0.0
-      domhandler: 6.0.1
 
   dotenv@17.4.2:
     optional: true
@@ -14550,13 +14490,6 @@ snapshots:
   html-entities@2.6.0: {}
 
   html-void-elements@3.0.0: {}
-
-  htmlparser2@12.0.0:
-    dependencies:
-      domelementtype: 3.0.0
-      domhandler: 6.0.1
-      domutils: 4.0.2
-      entities: 8.1.0
 
   http-proxy-agent@7.0.2(supports-color@8.1.1):
     dependencies:
@@ -16304,8 +16237,6 @@ snapshots:
   require-from-string@2.0.2: {}
 
   reserved-identifiers@1.2.0: {}
-
-  resolve-from@5.0.0: {}
 
   resolve-global@2.0.0:
     dependencies:
