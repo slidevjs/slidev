@@ -336,6 +336,17 @@ export const community: AddonInfo[] = [
     },
     repo: 'https://github.com/maxkurze1/slidev-addon-gsap',
   },
+  {
+    id: 'slidev-addon-logi-spotlight',
+    name: 'Logi Spotlight',
+    description: 'Start the presentation from a Logitech Spotlight clicker and get its timer vibrations, like in Google Slides.',
+    tags: ['Integration'],
+    author: {
+      name: 'Erik Zaadi',
+      link: 'https://github.com/erikzaadi',
+    },
+    repo: 'https://github.com/erikzaadi/slidev-addon-logi-spotlight',
+  },
   // Add yours here!
   {
     id: '',
