@@ -216,26 +216,15 @@ export const community: AddonInfo[] = [
     repo: 'https://github.com/whitphx/slidev-addon-window-mockup',
   },
   {
-    id: 'slidev-addon-bpmn',
-    name: 'BPMN viewer',
-    description: 'Visualize bpmn-files in your slidev',
+    id: 'slidev-addon-diagram-js',
+    name: 'BPMN, DMN & more',
+    description: 'Display diagrams like BPMN, DMN, Wardley Maps and Event Storming in your slidev',
     tags: ['Component'],
     author: {
       name: 'emaarco',
       link: 'https://github.com/emaarco',
     },
-    repo: 'https://github.com/emaarco/slidev-addon-bpmn',
-  },
-  {
-    id: 'slidev-addon-dmn',
-    name: 'DMN viewer',
-    description: 'Display DMN decision tables and DRD diagrams in your slidev',
-    tags: ['Component'],
-    author: {
-      name: 'emaarco',
-      link: 'https://github.com/emaarco',
-    },
-    repo: 'https://github.com/emaarco/slidev-addon-dmn',
+    repo: 'https://github.com/emaarco/slidev-addon-diagram-js',
   },
   {
     id: 'slidev-addon-p5',
