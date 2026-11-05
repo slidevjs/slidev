@@ -71,6 +71,8 @@ pwa: false
 overviewSnapshots: false
 # router mode for vue-router, can be "history", "hash", or "memory"
 routerMode: history
+# ignore duplicate forward navigation within this many milliseconds (0 disables it)
+advanceDebounce: 0
 
 # force color schema for the slides, can be 'auto', 'light', or 'dark'
 colorSchema: auto

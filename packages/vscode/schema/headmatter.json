@@ -265,6 +265,12 @@
           "markdownDescription": "Router mode for vue-router\n\n- `history`: the slide number is reflected in the URL path\n- `hash`: hash-based routing, for static hosts or subdirectory deploys\n- `memory`: routing is kept in memory, so the URL never reflects the slide number and cannot be used to navigate — useful for kiosk or externally driven \"follower\" decks (deep-links, `/presenter`, `/overview` and export-by-URL are unavailable)",
           "default": "history"
         },
+        "advanceDebounce": {
+          "type": "number",
+          "description": "Ignore repeated forward navigation within this many milliseconds. The first advance is immediate. Set to 0 to disable.",
+          "markdownDescription": "Ignore repeated forward navigation within this many milliseconds.\nThe first advance is immediate. Set to 0 to disable.",
+          "default": 0
+        },
         "aspectRatio": {
           "type": [
             "number",
