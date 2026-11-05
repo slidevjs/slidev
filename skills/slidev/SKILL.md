@@ -17,6 +17,15 @@ Web-based slides maker built on Vite, Vue, and Markdown.
 - Export to PDF, PPTX, or host as SPA
 - Code walkthroughs for developer talks or workshops
 
+## Prerequisites
+
+Slidev is a Node.js project. Before creating or running a deck, check that the machine has:
+
+- **Node.js >= 22.12.0**: `node -v`. If it is missing or older, install the LTS release from https://nodejs.org or use a version manager such as `nvm` or `fnm`.
+- **pnpm** (recommended package manager): `pnpm -v`. If it is missing, run `npm i -g pnpm` or `corepack enable`. npm, yarn, and bun also work; replace `pnpm` in the commands below.
+
+Do not assume a development setup exists. If either check fails, walk the user through the installation before running any Slidev command.
+
 ## Quick Start
 
 ```bash
