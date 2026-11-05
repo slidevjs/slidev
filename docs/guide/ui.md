@@ -13,24 +13,25 @@ In Play mode, move your mouse to the bottom left corner of the page, you can see
 
 ## Navigation Actions {#navigation-actions}
 
-| Keyboard Shortcut                   | Button in Navigation Bar                                                              | Description                                                     |
-| ----------------------------------- | ------------------------------------------------------------------------------------- | --------------------------------------------------------------- |
-| <kbd>f</kbd>                        | <carbon-maximize class="inline-icon-btn"/> <carbon-minimize class="inline-icon-btn"/> | Toggle fullscreen                                               |
-| <kbd>right</kbd> / <kbd>space</kbd> | <carbon-arrow-right class="inline-icon-btn"/>                                         | Next animation or slide                                         |
-| <kbd>left</kbd>                     | <carbon-arrow-left class="inline-icon-btn"/>                                          | Previous animation or slide                                     |
-| <kbd>up</kbd>                       | -                                                                                     | Previous slide                                                  |
-| <kbd>down</kbd>                     | -                                                                                     | Next slide                                                      |
-| <kbd>o</kbd>                        | <carbon-apps class="inline-icon-btn"/>                                                | Toggle [Quick Overview](#quick-overview)                        |
-| <kbd>d</kbd>                        | <carbon-sun class="inline-icon-btn"/> <carbon-moon class="inline-icon-btn"/>          | Toggle dark mode                                                |
-| -                                   | <carbon-user-avatar class="inline-icon-btn"/>                                         | Toggle [Camera View](../features/recording#camera-view)         |
-| -                                   | <carbon-video class="inline-icon-btn"/>                                               | Start <LinkInline link="features/recording" />                  |
-| -                                   | <carbon-user-speaker class="inline-icon-btn"/>                                        | Enter [Presenter Mode](#presenter-mode)                         |
-| -                                   | <carbon-text-annotation-toggle class="inline-icon-btn"/>                              | Toggle <LinkInline link="features/side-editor" />               |
-| -                                   | <carbon-document-pdf class="inline-icon-btn"/>                                        | Enter [Browser Exporter](#exporter)                             |
-| -                                   | <carbon-download class="inline-icon-btn"/>                                            | Download PDF. See <LinkInline link="features/build-with-pdf" /> |
-| -                                   | <carbon-information class="inline-icon-btn"/>                                         | Show information about the slides                               |
-| -                                   | <carbon-settings-adjust class="inline-icon-btn"/>                                     | More options                                                    |
-| <kbd>g</kbd>                        | -                                                                                     | Show goto...                                                    |
+| Keyboard Shortcut                                               | Button in Navigation Bar                                                              | Description                                                                     |
+| --------------------------------------------------------------- | ------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------- |
+| <kbd>f</kbd>                                                    | <carbon-maximize class="inline-icon-btn"/> <carbon-minimize class="inline-icon-btn"/> | Toggle fullscreen                                                               |
+| <kbd>cmd</kbd>+<kbd>enter</kbd> / <kbd>ctrl</kbd>+<kbd>F5</kbd> | -                                                                                     | Toggle fullscreen (Google Slides "Present" keys, used by presentation clickers) |
+| <kbd>right</kbd> / <kbd>space</kbd>                             | <carbon-arrow-right class="inline-icon-btn"/>                                         | Next animation or slide                                                         |
+| <kbd>left</kbd>                                                 | <carbon-arrow-left class="inline-icon-btn"/>                                          | Previous animation or slide                                                     |
+| <kbd>up</kbd>                                                   | -                                                                                     | Previous slide                                                                  |
+| <kbd>down</kbd>                                                 | -                                                                                     | Next slide                                                                      |
+| <kbd>o</kbd>                                                    | <carbon-apps class="inline-icon-btn"/>                                                | Toggle [Quick Overview](#quick-overview)                                        |
+| <kbd>d</kbd>                                                    | <carbon-sun class="inline-icon-btn"/> <carbon-moon class="inline-icon-btn"/>          | Toggle dark mode                                                                |
+| -                                                               | <carbon-user-avatar class="inline-icon-btn"/>                                         | Toggle [Camera View](../features/recording#camera-view)                         |
+| -                                                               | <carbon-video class="inline-icon-btn"/>                                               | Start <LinkInline link="features/recording" />                                  |
+| -                                                               | <carbon-user-speaker class="inline-icon-btn"/>                                        | Enter [Presenter Mode](#presenter-mode)                                         |
+| -                                                               | <carbon-text-annotation-toggle class="inline-icon-btn"/>                              | Toggle <LinkInline link="features/side-editor" />                               |
+| -                                                               | <carbon-document-pdf class="inline-icon-btn"/>                                        | Enter [Browser Exporter](#exporter)                                             |
+| -                                                               | <carbon-download class="inline-icon-btn"/>                                            | Download PDF. See <LinkInline link="features/build-with-pdf" />                 |
+| -                                                               | <carbon-information class="inline-icon-btn"/>                                         | Show information about the slides                                               |
+| -                                                               | <carbon-settings-adjust class="inline-icon-btn"/>                                     | More options                                                                    |
+| <kbd>g</kbd>                                                    | -                                                                                     | Show goto...                                                                    |
 
 > You can [configure the shortcuts](../custom/config-shortcuts).
 
