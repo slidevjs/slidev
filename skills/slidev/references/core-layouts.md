@@ -160,6 +160,7 @@ Full-screen image:
 layout: image
 image: /photo.jpg
 backgroundSize: cover
+text: dark        # keep the theme text color instead of white (default: light)
 ---
 ```
 
