@@ -93,7 +93,9 @@ function runProps(run: IrRun): Record<string, unknown> {
 }
 
 function addText(slide: PptxGenJS.Slide, node: IrText): void {
-  const slack = node.lineCount === 1 ? SLACK_SINGLE_LINE_PX : SLACK_MULTI_LINE_PX
+  const slack = node.lineCount === 1
+    ? SLACK_SINGLE_LINE_PX
+    : SLACK_MULTI_LINE_PX
 
   // Widening a box moves its content unless the origin moves too: a centered
   // line would drift right by half the slack, a right-aligned one by all of it.
@@ -104,7 +106,10 @@ function addText(slide: PptxGenJS.Slide, node: IrText): void {
     x -= slack
 
   slide.addText(
-    node.runs.map(run => ({ text: run.text, options: runProps(run) })),
+    node.runs.map(run => ({
+      text: run.text,
+      options: runProps(run),
+    })),
     {
       x: inch(x),
       y: inch(node.rect.y),
@@ -122,7 +127,11 @@ function addText(slide: PptxGenJS.Slide, node: IrText): void {
       wrap: node.lineCount > 1,
       // Only for multi-line text: a single-line box is measured from glyph ink,
       // shorter than the CSS line box, and the taller value clips descenders.
-      ...(node.lineCount > 1 ? { lineSpacing: pt(node.lineHeight) } : {}),
+      ...(node.lineCount > 1
+        ? {
+            lineSpacing: pt(node.lineHeight),
+          }
+        : {}),
     },
   )
 }
@@ -152,13 +161,19 @@ function addEdge(slide: PptxGenJS.Slide, shapeType: typeof PptxGenJS.ShapeType, 
     slide.addShape(shapeType.line, {
       x: inch(rect.x),
       y: inch(rect.y),
-      w: inch(side === 0 || side === 2 ? rect.w : 0),
-      h: inch(side === 0 || side === 2 ? 0 : rect.h),
+      w: inch(side === 0 || side === 2
+        ? rect.w
+        : 0),
+      h: inch(side === 0 || side === 2
+        ? 0
+        : rect.h),
       line: {
         color: hex(border.color),
         transparency: transparency(border.color),
         width: pt(border.width),
-        dashType: border.style === 'dotted' ? 'sysDot' : 'dash',
+        dashType: border.style === 'dotted'
+          ? 'sysDot'
+          : 'dash',
       },
     })
     return
@@ -169,7 +184,10 @@ function addEdge(slide: PptxGenJS.Slide, shapeType: typeof PptxGenJS.ShapeType, 
     y: inch(rect.y),
     w: inch(rect.w),
     h: inch(rect.h),
-    fill: { color: hex(border.color), transparency: transparency(border.color) },
+    fill: {
+      color: hex(border.color),
+      transparency: transparency(border.color),
+    },
   })
 }
 
@@ -212,14 +230,22 @@ function addBox(slide: PptxGenJS.Slide, shapeType: typeof PptxGenJS.ShapeType, n
   // `fill` and `line` are omitted rather than set to `{ type: 'none' }`.
   // pptxgenjs writes `<a:noFill/>` for an ABSENT fill and nothing at all for
   // that object, so the explicit-looking version was the one that inherited.
-  if (node.fill)
-    options.fill = { color: hex(node.fill), transparency: transparency(node.fill) }
+  if (node.fill) {
+    options.fill = {
+      color: hex(node.fill),
+      transparency: transparency(node.fill),
+    }
+  }
 
   if (uniform && borders[0]) {
     options.line = {
       color: hex(borders[0].color),
       width: pt(borders[0].width),
-      dashType: borders[0].style === 'solid' ? 'solid' : borders[0].style === 'dotted' ? 'sysDot' : 'dash',
+      dashType: borders[0].style === 'solid'
+        ? 'solid'
+        : borders[0].style === 'dotted'
+          ? 'sysDot'
+          : 'dash',
       // `ShapeLineProps extends ShapeFillProps`: without `transparency` a
       // hairline set in `rgba(0, 0, 0, 0.1)` comes out solid black.
       transparency: transparency(borders[0].color),

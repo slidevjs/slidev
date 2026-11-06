@@ -71,8 +71,11 @@ function processNote() {
     let n = marker
     let p = marker.parentElement
     while (p && n !== noteDisplay.value) {
-      if (!parentsMap.has(p))
-        parentsMap.set(p, [[null, lastClicks]])
+      if (!parentsMap.has(p)) {
+        parentsMap.set(p, [
+          [null, lastClicks],
+        ])
+      }
       parentsMap.get(p)!.push([n, clicks])
       n = p
       p = p.parentElement

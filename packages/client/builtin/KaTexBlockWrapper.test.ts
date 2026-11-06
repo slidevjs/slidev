@@ -22,8 +22,12 @@ describe('collectKatexEquationLines', () => {
     const rowB2 = fakeElement()
     const nestedRow = fakeElement()
 
-    const outerLeftParent = fakeElement({ children: [rowA1, rowA2] })
-    const outerRightParent = fakeElement({ children: [rowB1, rowB2] })
+    const outerLeftParent = fakeElement({
+      children: [rowA1, rowA2],
+    })
+    const outerRightParent = fakeElement({
+      children: [rowB1, rowB2],
+    })
     const nestedParent = fakeElement({
       parent: fakeElement({ closest: outerLeftParent }),
       children: [nestedRow],

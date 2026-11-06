@@ -9,7 +9,9 @@ import { startScreenshotSession } from './screenshot'
 import { getSlide } from './slides'
 
 const chromeVersion = window.navigator.userAgent.match(/Chrome\/(\d+)/)?.[1]
-export const isScreenshotSupported = chromeVersion ? Number(chromeVersion) >= 94 : false
+export const isScreenshotSupported = chromeVersion
+  ? Number(chromeVersion) >= 94
+  : false
 
 const initialWait = 100
 

@@ -25,7 +25,7 @@ export function isPathInsideRoots(filePath: string, roots: string[]): boolean {
   })
 }
 
-const RE_FRONTMATTER_START = /^---(?:[^-].*)?$/
+const RE_FRONTMATTER_START = /^﻿?---(?:[^-].*)?$/
 const RE_BLANK_LINE = /^\s*$/
 const RE_FRONTMATTER_END = /^---$/
 const RE_CRLF = /\r?\n/g
@@ -61,7 +61,9 @@ export async function load(
   sources: Record<string, string> | ((path: string) => Promise<string>) = {},
   mode?: string,
 ): Promise<LoadedSlidevData> {
-  const loadSource = typeof sources === 'function' ? sources : async (path: string) => sources[path] ?? readFile(path, 'utf-8')
+  const loadSource = typeof sources === 'function'
+    ? sources
+    : async (path: string) => sources[path] ?? readFile(path, 'utf-8')
 
   const markdown = await loadSource(filepath)
 
@@ -168,12 +170,17 @@ export async function load(
         })
       }
       else {
-        await loadMarkdown(path, rangeRaw, frontmatterOverride, importChain ? [...importChain, slide] : [slide])
+        await loadMarkdown(path, rangeRaw, frontmatterOverride, importChain
+          ? [...importChain, slide]
+          : [slide])
       }
     }
     else {
       slides.push({
-        frontmatter: { ...slide.frontmatter, ...frontmatterOverride },
+        frontmatter: {
+          ...slide.frontmatter,
+          ...frontmatterOverride,
+        },
         content: slide.content,
         revision: slide.revision,
         frontmatterRaw: slide.frontmatterRaw,
