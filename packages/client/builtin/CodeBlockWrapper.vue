@@ -72,11 +72,17 @@ onMounted(() => {
   const clicksInfo = clicks.calculateSince(props.at, props.ranges.length - 1)
   clicks.register(id, clicksInfo)
 
-  const index = computed(() => clicksInfo ? Math.max(0, clicks.current - clicksInfo.start + 1) : CLICKS_MAX)
+  const index = computed(() => clicksInfo
+    ? Math.max(0, clicks.current - clicksInfo.start + 1)
+    : CLICKS_MAX)
 
   const finallyRange = computed(() => {
-    return props.finally === 'last' ? props.ranges.at(-1) : props.finally.toString()
+    return props.finally === 'last'
+      ? props.ranges.at(-1)
+      : props.finally.toString()
   })
+
+  let hiddenByRange = false
 
   watchEffect(() => {
     if (!el.value)
@@ -84,7 +90,11 @@ onMounted(() => {
 
     let rangeStr = props.ranges[index.value] ?? finallyRange.value
     const hide = rangeStr === 'hide'
-    el.value.classList.toggle(CLASS_VCLICK_HIDDEN, hide)
+    // Only toggle the class when a `hide` range set it, so a click directive on the same element keeps control
+    if (hide || hiddenByRange) {
+      el.value.classList.toggle(CLASS_VCLICK_HIDDEN, hide)
+      hiddenByRange = hide
+    }
     if (hide)
       rangeStr = props.ranges[index.value + 1] ?? finallyRange.value
 

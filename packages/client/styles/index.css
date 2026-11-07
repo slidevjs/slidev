@@ -122,6 +122,21 @@ html {
   transform: scale(calc(1 / var(--slidev-slide-scale)));
 }
 
+/*
+ * Counter the slide scale so iframes lay out and rasterize at their real
+ * on-screen resolution. Without this, canvas-based content (e.g. Excalidraw)
+ * is rendered at the slide's design size and bitmap-upscaled, which makes it
+ * blurry when the slide is scaled up. Scales below 1 are not countered, so
+ * scaled-down views like the overview keep the original layout.
+ */
+.slidev-layout-iframe {
+  --slidev-iframe-raster: max(var(--slidev-slide-scale, 1), 1);
+  width: calc(100% * var(--slidev-iframe-raster));
+  height: calc(100% * var(--slidev-iframe-raster));
+  transform: scale(calc(var(--slidev-iframe-scale, 1) / var(--slidev-iframe-raster)));
+  transform-origin: top left;
+}
+
 #twoslash-container {
   position: fixed;
 

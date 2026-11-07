@@ -1,6 +1,6 @@
 {
   "name": "@slidev/types",
-  "version": "52.19.0",
+  "version": "53.1.0",
   "description": "Shared types declarations for Slidev",
   "author": "Anthony Fu <anthonyfu117@hotmail.com>",
   "license": "MIT",
@@ -20,7 +20,7 @@
     "index.d.ts"
   ],
   "engines": {
-    "node": ">=20.12.0"
+    "node": ">=22.12.0"
   },
   "scripts": {
     "build": "tsdown src/index.ts",

@@ -8,7 +8,9 @@ export default defineCodeblockTransformer(async ({ info, code }) => {
   if (!match)
     return
   const [, options] = match
-  const optionsProp = options ? `v-bind="${options}"` : ''
+  const optionsProp = options
+    ? `v-bind="${options}"`
+    : ''
   const encoded = lz.compressToBase64(code.trim())
   return `<Mermaid ${optionsProp} code-lz="${encoded}" />`
 })

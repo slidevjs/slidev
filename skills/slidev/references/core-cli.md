@@ -65,11 +65,11 @@ Options:
 | Option | Default | Description |
 |--------|---------|-------------|
 | `--output` | - | Output filename |
-| `--format` | pdf | pdf / png / pptx / md |
+| `--format` | pdf | pdf / png / pptx / pptx-editable / md |
 | `--timeout` | 30000 | Timeout per slide (ms) |
 | `--range` | - | Slide range (e.g., 1,4-7) |
 | `--dark` | false | Export dark mode |
-| `--with-clicks` | false | Include click steps |
+| `--with-clicks` | false (true for PPTX) | Include click steps |
 | `--with-toc` | false | PDF table of contents |
 | `--wait` | 0 | Wait ms before export |
 | `--wait-until` | networkidle | Wait condition |

@@ -96,6 +96,22 @@ console.log('Step 2')
 ````
 `````
 
+## Animation Options {#animation-options}
+
+> Available since v52.21.0
+
+Besides `magicMoveDuration`, you can fine-tune the underlying [Shiki Magic Move](https://shiki.style/packages/magic-move#options) animation (easing, stagger, delays, diffing behavior, etc.) via the `shiki.magicMove` headmatter option:
+
+```yaml
+---
+shiki:
+  magicMove:
+    easing: ease-in-out
+    stagger: 5
+    delayMove: 0.2
+---
+```
+
 ## Copy Button {#copy-button}
 
 > Available since v0.52.0

@@ -8,6 +8,7 @@ import process from 'node:process'
 import { fileURLToPath } from 'node:url'
 import { blue, bold, cyan, dim, green, yellow } from 'ansis'
 import minimist from 'minimist'
+import { detect } from 'package-manager-detector/detect'
 import path from 'pathe'
 import prompts from 'prompts'
 import { x } from 'tinyexec'
@@ -95,21 +96,7 @@ async function init() {
 
   console.log(green('  Done.\n'))
 
-  function getPkgManager() {
-    const pm = []
-    if (typeof Deno !== 'undefined')
-      pm.push('deno')
-    if (typeof Bun !== 'undefined')
-      pm.push('bun')
-    const userAgent = process.env.npm_config_user_agent || ''
-    const execPath = process.env.npm_execpath || ''
-    if (execPath.includes('pnpm') || userAgent.includes('pnpm'))
-      pm.push('pnpm')
-    if (execPath.includes('yarn') || userAgent.includes('yarn'))
-      pm.push('yarn')
-    return pm.length === 1 ? pm[0] : null
-  }
-  const pkgManager = getPkgManager()
+  const pkgManager = await detect().then(r => r.name).catch(() => undefined) ?? 'npm'
 
   /**
    * @type {{ yes: boolean }}
@@ -118,23 +105,22 @@ async function init() {
     type: 'confirm',
     name: 'yes',
     initial: 'Y',
-    message: `Install and start it now${pkgManager ? ` using ${pkgManager}` : ''}?`,
+    message: `Install and start it now${pkgManager
+      ? ` using ${pkgManager}`
+      : ''}?`,
   })
 
   if (yes) {
-    const agent = pkgManager || (await prompts({
-      name: 'agent',
-      type: 'select',
-      message: 'Choose the package manager',
-      choices: ['npm', 'yarn', 'pnpm', 'bun', 'deno'].map(i => ({ value: i, title: i })),
-    }).agent)
-
-    if (!agent)
+    if (!pkgManager)
       return
 
-    writeReadme(agent)
-    await x(agent, ['install'], { nodeOptions: { stdio: 'inherit', cwd: root } })
-    await x(agent, ['run', 'dev'], { nodeOptions: { stdio: 'inherit', cwd: root } })
+    writeReadme(pkgManager)
+    await x(pkgManager, ['install'], {
+      nodeOptions: { stdio: 'inherit', cwd: root },
+    })
+    await x(pkgManager, ['run', 'dev'], {
+      nodeOptions: { stdio: 'inherit', cwd: root },
+    })
   }
   else {
     writeReadme(pkgManager)
@@ -188,7 +174,9 @@ async function getValidPackageName(projectName) {
       name: 'inputPackageName',
       message: 'Package name:',
       initial: suggestedPackageName,
-      validate: input => packageNameRegExp.test(input) ? true : 'Invalid package.json name',
+      validate: input => packageNameRegExp.test(input)
+        ? true
+        : 'Invalid package.json name',
     })
     return inputPackageName
   }

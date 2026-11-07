@@ -23,13 +23,13 @@ jobs:
           git config --global core.autocrlf false
           git config --global core.eol lf
 
-      - uses: actions/checkout@v6
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
 
       - name: Setup pnpm
-        uses: pnpm/action-setup@v4
+        uses: pnpm/action-setup@73e46992e05b19abd31f2f3c20e0e7370d762115 # v6.1.1
 
       - name: Use Node.js
-        uses: actions/setup-node@v6
+        uses: actions/setup-node@949feb2413d6458794dcd2491c4babbbce0c15c1 # v7.1.0
         with:
           node-version: lts/*
           cache: pnpm
@@ -49,7 +49,7 @@ jobs:
         run: node ./scripts/pack.mjs /tmp/slidev-pkgs
 
       - name: Upload artifacts
-        uses: actions/upload-artifact@v6
+        uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9 # v7.0.2
         with:
           name: slidev-packages
           path: /tmp/slidev-pkgs
@@ -70,13 +70,13 @@ jobs:
           git config --global core.autocrlf false
           git config --global core.eol lf
 
-      - uses: actions/checkout@v6
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
 
       - name: Setup PNPM
-        uses: pnpm/action-setup@v4
+        uses: pnpm/action-setup@73e46992e05b19abd31f2f3c20e0e7370d762115 # v6.1.1
 
       - name: Use Node.js lts/*
-        uses: actions/setup-node@v6
+        uses: actions/setup-node@949feb2413d6458794dcd2491c4babbbce0c15c1 # v7.1.0
         with:
           node-version: lts/*
           cache: pnpm
@@ -95,7 +95,7 @@ jobs:
         run: nci
 
       - name: Download artifacts
-        uses: actions/download-artifact@v7
+        uses: actions/download-artifact@9000827ccba6bdab643e8b6fd33ac0654aef8333 # v8.0.2
         with:
           name: slidev-packages
           path: /tmp/slidev-pkgs
@@ -133,7 +133,7 @@ jobs:
         working-directory: ../temp/slidev-project
 
       - name: E2E Smoke Test
-        uses: cypress-io/github-action@v7
+        uses: cypress-io/github-action@18016a55674bd02cabf197de5762a1710cb5577c # v7.4.9
         if: ${{ matrix.os != 'windows-latest' }}
         with:
           install-command: echo
@@ -162,7 +162,6 @@ jobs:
         run: slidev build template.md
         if: ${{ matrix.pm == 'npm' }}
         working-directory: ../temp
-
       # Commented out because it's not working
       # - name: E2E test in global mode
       #   uses: cypress-io/github-action@v7

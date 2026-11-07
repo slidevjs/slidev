@@ -12,6 +12,7 @@ Export presentations to PDF, PPTX, PNG, or Markdown.
 Access at `http://localhost:3030/export`:
 - Select format and options
 - Preview and download
+- PPTX here is image-based; use the CLI for `pptx-editable`
 
 ## CLI Export
 
@@ -30,8 +31,11 @@ slidev export --output my-slides.pdf
 ### PowerPoint Export
 
 ```bash
-slidev export --format pptx
+slidev export --format pptx           # each slide as an image
+slidev export --format pptx-editable  # native shapes, selectable text
 ```
+
+`pptx-editable` measures the rendered slides and rebuilds them as PowerPoint shapes. SVG (including Mermaid), canvas, iframes, KaTeX formulas, gradients and CSS filters stay pictures, and any slide that cannot be rebuilt falls back to the image export on its own. Fonts are named, not embedded. `--per-slide` is not supported with it.
 
 ### PNG Export
 
@@ -50,7 +54,7 @@ slidev export --format md
 
 ### With Click Steps
 
-Export each click as separate page:
+Export each click as separate page (default for PPTX formats):
 ```bash
 slidev export --with-clicks
 ```
@@ -134,7 +138,7 @@ slidev export --wait 3000 --timeout 60000
 
 ### Wrong Global Layer State
 
-Use `--per-slide` or use `slide-top.vue` instead of `global-top.vue`.
+Use `--per-slide` (not supported with `pptx-editable`) or use `slide-top.vue` instead of `global-top.vue`.
 
 ### Broken Emojis
 

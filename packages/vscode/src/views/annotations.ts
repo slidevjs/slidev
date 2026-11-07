@@ -40,14 +40,18 @@ const codeBlockLineNumberDecoration = window.createTextEditorDecorationType({
 
 function mergeSlideNumbers(slides: { index: number }[]): string {
   const indexes = slides.map(s => s.index + 1)
-  const merged = [[indexes[0], indexes[0]]]
+  const merged = [
+    [indexes[0], indexes[0]],
+  ]
   for (let i = 1; i < indexes.length; i++) {
     if (merged[merged.length - 1][1] + 1 === indexes[i])
       merged[merged.length - 1][1] = indexes[i]
     else
       merged.push([indexes[i], indexes[i]])
   }
-  return merged.map(([start, end]) => start === end ? `#${start}` : `#${start}-${end}`).join(', ')
+  return merged.map(([start, end]) => start === end
+    ? `#${start}`
+    : `#${start}-${end}`).join(', ')
 }
 
 interface CodeBlockInfo {
@@ -144,7 +148,14 @@ export const useAnnotations = defineService(() => {
   const projectInfo = useProjectFromDoc(doc)
 
   watch(
-    [editor, doc, projectInfo, activeProject, () => config.annotations, () => config['annotations-line-numbers']],
+    [
+      editor,
+      doc,
+      projectInfo,
+      activeProject,
+      () => config.annotations,
+      () => config['annotations-line-numbers'],
+    ],
     ([editor, doc, projectInfo, activeProject, enabled, lineNumbersEnabled]) => {
       if (!editor || !doc)
         return
@@ -184,7 +195,9 @@ export const useAnnotations = defineService(() => {
       const frontmatterContentRanges: DecorationOptions[] = []
       const frontmatterEndRanges: DecorationOptions[] = []
       for (const slide of md.slides) {
-        const lineNo = slide.frontmatterStyle === 'frontmatter' ? slide.start : slide.start - 1
+        const lineNo = slide.frontmatterStyle === 'frontmatter'
+          ? slide.start
+          : slide.start - 1
         const line = doc.lineAt(clamp(lineNo, 0, doc.lineCount))
 
         const start = new Position(line.lineNumber, 0)

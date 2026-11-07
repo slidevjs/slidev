@@ -22,7 +22,10 @@ export function useCommands() {
     while (true) {
       const addNewEntry = '$(add) Add new slides entry...'
       const entry = await window.showQuickPick(
-        [...projects.keys(), addNewEntry],
+        [
+          ...projects.keys(),
+          addNewEntry,
+        ],
         {
           title: 'Choose active slides entry.',
         },
@@ -57,7 +60,10 @@ export function useCommands() {
         const workspaceRoot = workspace.workspaceFolders[0].uri.fsPath
         const relatives = selected.map(s => slash(relative(workspaceRoot, s)))
         // write back to settings.json
-        await config.update('include', [...config.include, ...relatives])
+        await config.update('include', [
+          ...config.include,
+          ...relatives,
+        ])
       }
     }
     return !!selected

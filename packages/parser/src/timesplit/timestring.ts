@@ -58,6 +58,9 @@ export function parseTimeString(timestamp: string | number): {
   }
   else if (!RE_ALPHA.test(timestamp)) {
     seconds = Number(timestamp)
+    if (Number.isNaN(seconds)) {
+      throw new TypeError('Invalid timestamp format')
+    }
   }
   else {
     const unitMap: Record<string, number> = {

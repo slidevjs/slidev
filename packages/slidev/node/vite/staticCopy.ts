@@ -6,7 +6,10 @@ export async function createStaticCopyPlugin(
   { themeRoots, addonRoots }: ResolvedSlidevOptions,
   pluginOptions: SlidevPluginOptions,
 ) {
-  const publicDirs = [...themeRoots, ...addonRoots].map(i => join(i, 'public')).filter(existsSync)
+  const publicDirs = [
+    ...themeRoots,
+    ...addonRoots,
+  ].map(i => join(i, 'public')).filter(existsSync)
   if (!publicDirs.length)
     return
   const { viteStaticCopy } = await import('vite-plugin-static-copy')

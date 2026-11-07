@@ -25,7 +25,7 @@ export function isPathInsideRoots(filePath: string, roots: string[]): boolean {
   })
 }
 
-const RE_FRONTMATTER_START = /^---(?:[^-].*)?$/
+const RE_FRONTMATTER_START = /^﻿?---(?:[^-].*)?$/
 const RE_BLANK_LINE = /^\s*$/
 const RE_FRONTMATTER_END = /^---$/
 const RE_CRLF = /\r?\n/g
@@ -61,7 +61,9 @@ export async function load(
   sources: Record<string, string> | ((path: string) => Promise<string>) = {},
   mode?: string,
 ): Promise<LoadedSlidevData> {
-  const loadSource = typeof sources === 'function' ? sources : async (path: string) => sources[path] ?? readFile(path, 'utf-8')
+  const loadSource = typeof sources === 'function'
+    ? sources
+    : async (path: string) => sources[path] ?? readFile(path, 'utf-8')
 
   const markdown = await loadSource(filepath)
 
@@ -98,6 +100,16 @@ export async function load(
     const directImporter = importers?.at(-1)
     for (const index of parseRangeString(md.slides.length, range)) {
       const subSlide = md.slides[index - 1]
+      if (!subSlide) {
+        // `parseRangeString` only drops indexes above the total, so a range
+        // such as `#0` or `#-3` still reaches here and has no slide.
+        md.errors ??= []
+        md.errors.push({
+          row: 0,
+          message: `Slide ${index} does not exist in "${path}", which has ${md.slides.length} slides`,
+        })
+        continue
+      }
       try {
         await loadSlide(md, subSlide, frontmatterOverride, importers)
       }
@@ -158,12 +170,17 @@ export async function load(
         })
       }
       else {
-        await loadMarkdown(path, rangeRaw, frontmatterOverride, importChain ? [...importChain, slide] : [slide])
+        await loadMarkdown(path, rangeRaw, frontmatterOverride, importChain
+          ? [...importChain, slide]
+          : [slide])
       }
     }
     else {
       slides.push({
-        frontmatter: { ...slide.frontmatter, ...frontmatterOverride },
+        frontmatter: {
+          ...slide.frontmatter,
+          ...frontmatterOverride,
+        },
         content: slide.content,
         revision: slide.revision,
         frontmatterRaw: slide.frontmatterRaw,

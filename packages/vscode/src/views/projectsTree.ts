@@ -11,22 +11,30 @@ import { toRelativePath } from '../utils/toRelativePath'
 /**
  * No projects has dependency files. Then it would be weired to show a collapse button.
  */
-const nothingToCollapse = computed(() => [...projects.values()]
+const nothingToCollapse = computed(() => [
+  ...projects.values(),
+]
   .every(project => Object.keys(project.data.markdownFiles).length <= 1))
 
 function getProjectTreeItem(project: SlidevProject): TreeItem {
   const active = activeEntry.value === project.entry
   return {
     label: toRelativePath(project.entry),
-    description: `${getSlidesTitle(project.data)}${project.detected.value?.ready ? ` (port: ${project.detected.value.port})` : ''}`,
+    description: `${getSlidesTitle(project.data)}${project.detected.value?.ready
+      ? ` (port: ${project.detected.value.port})`
+      : ''}`,
     resourceUri: Uri.file(project.entry),
     iconPath: new ThemeIcon(active ? 'eye' : 'eye-closed'),
-    collapsibleState: nothingToCollapse.value ? TreeItemCollapsibleState.None : active ? TreeItemCollapsibleState.Expanded : TreeItemCollapsibleState.Collapsed,
+    collapsibleState: nothingToCollapse.value
+      ? TreeItemCollapsibleState.None
+      : active ? TreeItemCollapsibleState.Expanded : TreeItemCollapsibleState.Collapsed,
     contextValue: `<project><${active ? 'active' : 'inactive'}>`,
     command: {
       title: 'Open',
       command: 'vscode.open',
-      arguments: [Uri.file(project.entry)],
+      arguments: [
+        Uri.file(project.entry),
+      ],
     },
   }
 }
@@ -39,21 +47,27 @@ function getFileTreeItem(file: string): TreeItem {
     command: {
       title: 'Open',
       command: 'vscode.open',
-      arguments: [Uri.file(file)],
+      arguments: [
+        Uri.file(file),
+      ],
     },
   }
 }
 
 export const useProjectsTree = defineService(() => {
   const treeData = computed(() => {
-    return [...projects.values()]
+    return [
+      ...projects.values(),
+    ]
       .sort((a, b) => a.entry.localeCompare(b.entry, undefined, { numeric: true }))
       .map(project => ({
         treeItem: getProjectTreeItem(project),
         children: Object.keys(project.data.markdownFiles)
           .filter(file => file.toLowerCase() !== project.entry.toLowerCase())
           .sort((a, b) => a.localeCompare(b, undefined, { numeric: true }))
-          .map(file => ({ treeItem: getFileTreeItem(file) })),
+          .map(file => ({
+            treeItem: getFileTreeItem(file),
+          })),
       }))
   })
 

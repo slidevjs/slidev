@@ -332,6 +332,12 @@ export interface HeadmatterConfig extends TransitionOptions {
    */
   magicMoveDuration?: number
   /**
+   * Configure Shiki
+   *
+   * @default {}
+   */
+  shiki?: ShikiOptions
+  /**
    * Default click animation for the slides
    */
   clickAnimation?: string
@@ -520,6 +526,78 @@ export interface FontOptions {
    * @default true
    */
   fallbacks?: boolean
+}
+
+export interface ShikiOptions {
+  /**
+   * Options passed to Shiki Magic Move for customizing code transition animations
+   *
+   * See https://shiki.style/packages/magic-move#options for the full list of options
+   *
+   * @default {}
+   */
+  magicMove?: ShikiMagicMoveOptions
+}
+
+export interface ShikiMagicMoveOptions {
+  /**
+   * Ratio of the duration to delay the move animation
+   *
+   * @default 0.3
+   */
+  delayMove?: number
+  /**
+   * Ratio of the duration to delay the leave animation
+   *
+   * @default 0
+   */
+  delayLeave?: number
+  /**
+   * Ratio of the duration to delay the enter animation
+   *
+   * @default 0.7
+   */
+  delayEnter?: number
+  /**
+   * Ratio of the duration to delay the container animation
+   *
+   * @default 0.4
+   */
+  delayContainer?: number
+  /**
+   * Easing function, in the CSS `transition-timing-function` format
+   *
+   * @default 'ease'
+   */
+  easing?: string
+  /**
+   * Apply animation to the container
+   *
+   * @default false
+   */
+  animateContainer?: boolean
+  /**
+   * Apply styles (color and background) to the container
+   *
+   * @default true
+   */
+  containerStyle?: boolean
+  /**
+   * Stagger the animation of the tokens, in milliseconds
+   *
+   * @default 1
+   */
+  stagger?: number
+  /**
+   * Split the tokens at the edge of diff chunks
+   *
+   * @default false
+   */
+  splitTokens?: boolean
+  /**
+   * Enhance the matching algorithm to match tokens that has same content
+   */
+  enhanceMatching?: boolean
 }
 
 export type BuiltinSlideTransition = 'fade' | 'fade-out' | 'slide-up' | 'slide-down' | 'slide-left' | 'slide-right' | 'view-transition'

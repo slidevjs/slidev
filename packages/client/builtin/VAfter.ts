@@ -13,7 +13,9 @@ export default defineComponent({
     const after = resolveDirective('after')!
 
     function applyDirective(node: VNode, directive: Directive) {
-      return withDirectives(node, [[directive]])
+      return withDirectives(node, [
+        [directive],
+      ])
     }
 
     let defaults = this.$slots.default?.()

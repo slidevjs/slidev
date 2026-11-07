@@ -23,9 +23,18 @@ export function createVMotionDirectives() {
 
           const props = node.props = { ...node.props }
 
-          const variantInitial = { ...props.initial, ...props.variants?.['slidev-initial'] }
-          const variantEnter = { ...props.enter, ...props.variants?.['slidev-enter'] }
-          const variantLeave = { ...props.leave, ...props.variants?.['slidev-leave'] }
+          const variantInitial = {
+            ...props.initial,
+            ...props.variants?.['slidev-initial'],
+          }
+          const variantEnter = {
+            ...props.enter,
+            ...props.variants?.['slidev-enter'],
+          }
+          const variantLeave = {
+            ...props.leave,
+            ...props.variants?.['slidev-leave'],
+          }
           delete props.initial
           delete props.enter
           delete props.leave
@@ -41,7 +50,9 @@ export function createVMotionDirectives() {
           for (const k of Object.keys(props)) {
             if (k.startsWith('click-')) {
               const s = k.slice(6)
-              const at = s.includes('-') ? s.split('-').map(Number) as [number, number] : +s
+              const at = s.includes('-')
+                ? s.split('-').map(Number) as [number, number]
+                : +s
               const id = idPrefix + s
               clicks.push({
                 id,
@@ -53,7 +64,11 @@ export function createVMotionDirectives() {
             }
           }
 
-          clicks.sort((a, b) => (Array.isArray(a.at) ? a.at[0] : a.at) - (Array.isArray(b.at) ? b.at[0] : b.at))
+          clicks.sort((a, b) => (Array.isArray(a.at)
+            ? a.at[0]
+            : a.at) - (Array.isArray(b.at)
+            ? b.at[0]
+            : b.at))
 
           original.created!(el, binding, node, prevNode)
           original.mounted!(el, binding, node, prevNode)
@@ -67,7 +82,10 @@ export function createVMotionDirectives() {
             () => {
               const visibility = resolvedClickMap.get(el)?.visibilityState.value ?? 'shown'
               if (!clicksContext?.value || !['slide', 'presenter'].includes(renderContext?.value ?? '')) {
-                const mixedVariant: Record<string, unknown> = { ...variantInitial, ...variantEnter }
+                const mixedVariant: Record<string, unknown> = {
+                  ...variantInitial,
+                  ...variantEnter,
+                }
                 for (const { variant } of clicks)
                   Object.assign(mixedVariant, variant)
 
@@ -75,7 +93,10 @@ export function createVMotionDirectives() {
               }
               else if (isPrintMode.value || thisPage?.value === currentPage.value) {
                 if (visibility === 'shown') {
-                  const mixedVariant: Record<string, unknown> = { ...variantInitial, ...variantEnter }
+                  const mixedVariant: Record<string, unknown> = {
+                    ...variantInitial,
+                    ...variantEnter,
+                  }
                   for (const { variant, info } of clicks) {
                     if (!info || info.isActive.value)
                       Object.assign(mixedVariant, variant)
@@ -86,11 +107,15 @@ export function createVMotionDirectives() {
                     motion.apply(mixedVariant)
                 }
                 else {
-                  motion.apply(visibility === 'before' ? variantInitial : variantLeave)
+                  motion.apply(visibility === 'before'
+                    ? variantInitial
+                    : variantLeave)
                 }
               }
               else {
-                motion.apply((thisPage?.value ?? -1) > currentPage.value ? variantInitial : variantLeave)
+                motion.apply((thisPage?.value ?? -1) > currentPage.value
+                  ? variantInitial
+                  : variantLeave)
               }
             },
             {

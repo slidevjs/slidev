@@ -130,7 +130,9 @@ cli.command(
 
     async function initServer() {
       const options = await resolveOptions({ entry, remote, theme, inspect, base }, 'dev')
-      const host = remote !== undefined ? bind : 'localhost'
+      const host = remote !== undefined
+        ? bind
+        : 'localhost'
       port = userPort || await getPort({
         port: 3030,
         random: false,
@@ -147,7 +149,11 @@ cli.command(
             // @ts-expect-error Vite <= 4
             force,
             // Allow Cloudflare Quick Tunnel domains when tunneling is enabled
-            ...(tunnel && remote != null ? { allowedHosts: ['.trycloudflare.com'] } : {}),
+            ...(tunnel && remote != null
+              ? {
+                  allowedHosts: ['.trycloudflare.com'],
+                }
+              : {}),
           },
           optimizeDeps: {
             // Vite 5
@@ -168,7 +174,9 @@ cli.command(
               return false
             }
             // Because themeRaw is not changed, we don't resolve it again
-            const themeMeta = options.themeRoots[0] ? await getThemeMeta(themeRaw, options.themeRoots[0]) : undefined
+            const themeMeta = options.themeRoots[0]
+              ? await getThemeMeta(themeRaw, options.themeRoots[0])
+              : undefined
             const newData: SlidevData = {
               ...loaded,
               themeMeta,
@@ -204,7 +212,7 @@ cli.command(
 
       let publicIp: string | undefined
       if (remote)
-        publicIp = await import('public-ip').then(r => r.publicIpv4())
+        publicIp = await resolvePublicIp()
 
       lastRemoteUrl = printInfo(options, port, base, remote, tunnelUrl, publicIp)
       if (open)
@@ -220,6 +228,15 @@ cli.command(
       }
       catch {
         console.log(yellow(`\n  Could not open the browser automatically. Please open ${url} in your browser.\n`))
+      }
+    }
+
+    async function resolvePublicIp() {
+      try {
+        return await import('public-ip').then(r => r.publicIpv4())
+      }
+      catch {
+        console.log(yellow('\n  Could not determine the public IP address.\n'))
       }
     }
 
@@ -383,7 +400,15 @@ cli.command(
     const { build } = await import('./commands/build')
 
     for (const entryFile of entry as unknown as string[]) {
-      const options = await resolveOptions({ entry: entryFile, theme, inspect, download, base, withoutNotes, routerMode: routerMode as 'hash' | 'history' | 'memory' | undefined }, 'build')
+      const options = await resolveOptions({
+        entry: entryFile,
+        theme,
+        inspect,
+        download,
+        base,
+        withoutNotes,
+        routerMode: routerMode as 'hash' | 'history' | 'memory' | undefined,
+      }, 'build')
 
       printInfo(options)
       await build(
@@ -391,7 +416,9 @@ cli.command(
         {
           base,
           build: {
-            outDir: entry.length === 1 ? out : path.join(out, path.basename(entryFile, '.md')),
+            outDir: entry.length === 1
+              ? out
+              : path.join(out, path.basename(entryFile, '.md')),
           },
         },
         { ...args, entry: entryFile },
@@ -445,7 +472,9 @@ cli.command(
           const options = await resolveOptions({ entry }, 'dev')
           const data = await parser.load(options, entry)
           let themeRaw = themeInput || data.headmatter.theme as string | null | undefined
-          themeRaw = themeRaw === null ? 'none' : (themeRaw || 'default')
+          themeRaw = themeRaw === null
+            ? 'none'
+            : (themeRaw || 'default')
           if (themeRaw === 'none') {
             console.error('Cannot eject theme "none"')
             process.exit(1)
@@ -585,7 +614,9 @@ cli.command(
 
         const result = await exportNotes({
           port,
-          output: output || (options.data.config.exportFilename ? `${options.data.config.exportFilename}-notes` : `${path.basename(entryFile, '.md')}-export-notes`),
+          output: output || (options.data.config.exportFilename
+            ? `${options.data.config.exportFilename}-notes`
+            : `${path.basename(entryFile, '.md')}-export-notes`),
           timeout,
           wait,
         })
@@ -633,7 +664,13 @@ function exportOptions<T>(args: Argv<T>) {
     })
     .option('format', {
       type: 'string',
-      choices: ['pdf', 'png', 'pptx', 'md'],
+      choices: [
+        'pdf',
+        'png',
+        'pptx',
+        'pptx-editable',
+        'md',
+      ],
       describe: 'output format',
     })
     .option('timeout', {
@@ -646,7 +683,12 @@ function exportOptions<T>(args: Argv<T>) {
     })
     .option('wait-until', {
       type: 'string',
-      choices: ['networkidle', 'load', 'domcontentloaded', 'none'],
+      choices: [
+        'networkidle',
+        'load',
+        'domcontentloaded',
+        'none',
+      ],
       describe: 'wait until the specified event before exporting each slide',
     })
     .option('range', {
@@ -700,12 +742,16 @@ function printInfo(
   console.log()
   console.log()
   console.log(`  ${cyan('●') + blue('■') + yellow('▲')}`)
-  console.log(`${bold('  Slidev')}  ${blue(`v${version}`)} ${isInstalledGlobally.value ? yellow('(global)') : ''}`)
+  console.log(`${bold('  Slidev')}  ${blue(`v${version}`)} ${isInstalledGlobally.value
+    ? yellow('(global)')
+    : ''}`)
   console.log()
 
   verifyConfig(options.data.config, options.data.themeMeta, v => console.warn(yellow(`  ! ${v}`)))
 
-  console.log(dim('  theme       ') + (options.theme ? green(options.theme) : gray('none')))
+  console.log(dim('  theme       ') + (options.theme
+    ? green(options.theme)
+    : gray('none')))
   console.log(dim('  css engine  ') + blue('unocss'))
   console.log(dim('  entry       ') + dim(path.normalize(path.dirname(options.entry)) + path.sep) + path.basename(options.entry))
 
@@ -713,10 +759,18 @@ function printInfo(
     const baseText = base?.slice(0, -1) || ''
     const portAndBase = port + baseText
     const baseUrl = `http://localhost:${bold(portAndBase)}`
-    const query = remote ? `?password=${remote}` : ''
-    const presenterPath = `${options.data.config.routerMode === 'hash' ? '/#/' : '/'}presenter/${query}`
-    const entryPath = `${options.data.config.routerMode === 'hash' ? '/#/' : '/'}entry${query}/`
-    const overviewPath = `${options.data.config.routerMode === 'hash' ? '/#/' : '/'}overview${query}/`
+    const query = remote
+      ? `?password=${remote}`
+      : ''
+    const presenterPath = `${options.data.config.routerMode === 'hash'
+      ? '/#/'
+      : '/'}presenter/${query}`
+    const entryPath = `${options.data.config.routerMode === 'hash'
+      ? '/#/'
+      : '/'}entry${query}/`
+    const overviewPath = `${options.data.config.routerMode === 'hash'
+      ? '/#/'
+      : '/'}overview${query}/`
     console.log()
     console.log(`${dim('  public slide show ')}  > ${cyan(`${baseUrl}/`)}`)
     if (query)
@@ -757,7 +811,9 @@ function printInfo(
     }
 
     console.log()
-    console.log(`${dim('  shortcuts ')}          > ${underline('r')}${dim('estart | ')}${underline('o')}${dim('pen | ')}${underline('e')}${dim('dit | ')}${underline('q')}${dim('uit')}${lastRemoteUrl ? ` | ${dim('qr')}${underline('c')}${dim('ode')}` : ''}`)
+    console.log(`${dim('  shortcuts ')}          > ${underline('r')}${dim('estart | ')}${underline('o')}${dim('pen | ')}${underline('e')}${dim('dit | ')}${underline('q')}${dim('uit')}${lastRemoteUrl
+      ? ` | ${dim('qr')}${underline('c')}${dim('ode')}`
+      : ''}`)
 
     return lastRemoteUrl
   }

@@ -25,7 +25,6 @@ export async function useMarkdownItPlugins(
   const { data: { features, config }, utils: { katexOptions } } = options
 
   md.use(MarkdownItSnippet, options)
-  // @ts-expect-error @shikijs/markdown-it types expect MarkdownItAsync, but MarkdownExit is API-compatible
   md.use(await MarkdownItShiki(options))
   md.use(MarkdownItCodeblocks, options, codeblockTransformers)
 

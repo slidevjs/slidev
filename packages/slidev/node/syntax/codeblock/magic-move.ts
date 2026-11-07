@@ -7,13 +7,17 @@ import { normalizeRangeStr } from '../utils'
 
 const RE_MAGIC_MOVE_INFO = /^(?:md|markdown) magic-move\s*(?:\[([^\]]*)\])?\s*(\{[^}]*\})?/
 // eslint-disable-next-line regexp/no-super-linear-backtracking
-const RE_CODE_BLOCK = /^```([\w'-]+)?(?:[ \t]*|[ \t][ \w\t'-]*)(?:\[([^\]]*)\])?[ \t]*(?:\{([\w*,|-]+)\}[ \t]*(\{[^}]*\})?([^\r\n]*))?\r?\n((?:(?!^```)[\s\S])*?)^```$/gm
+const RE_CODE_BLOCK = /^```([\w'#+-]+)?(?:[ \t]*|[ \t][ \w\t'-]*)(?:\[([^\]]*)\])?[ \t]*(?:\{([\w*,|-]+)\}[ \t]*(\{[^}]*\})?([^\r\n]*))?\r?\n((?:(?!^```)[\s\S])*?)^```$/gm
 const RE_INNER_CODE_FENCE = /^```/
 const RE_LINES_TRUE = /\blines: *true\b/
 const RE_LINES_FALSE = /\blines: *false\b/
 
 function parseLineNumbersOption(options: string) {
-  return RE_LINES_TRUE.test(options) ? true : RE_LINES_FALSE.test(options) ? false : undefined
+  return RE_LINES_TRUE.test(options)
+    ? true
+    : RE_LINES_FALSE.test(options)
+      ? false
+      : undefined
 }
 
 function resolveMagicMoveSnippetImports(code: string, userRoot: string, slide: SlideInfo, watchFiles: Record<string, Set<number>>) {
@@ -36,7 +40,9 @@ function resolveMagicMoveSnippetImports(code: string, userRoot: string, slide: S
     watchFiles[snippet.src].add(slide.index)
 
     const info = `${snippet.lang} ${snippet.meta}`.trim()
-    const content = snippet.content.endsWith('\n') ? snippet.content : `${snippet.content}\n`
+    const content = snippet.content.endsWith('\n')
+      ? snippet.content
+      : `${snippet.content}\n`
     return `\`\`\`${info}\n${content}\`\`\``
   }).join('\n')
 }
@@ -49,7 +55,9 @@ export default defineCodeblockTransformer(async ({ info, fence, code, slide, opt
     return
   const [, title = '', options = '{}'] = match
   const defaultLineNumbers = parseLineNumbersOption(options) ?? config.lineNumbers
-  const resolvedCode = slide ? resolveMagicMoveSnippetImports(code, userRoot, slide, watchFiles) : code
+  const resolvedCode = slide
+    ? resolveMagicMoveSnippetImports(code, userRoot, slide, watchFiles)
+    : code
   const matches = Array.from(resolvedCode.matchAll(RE_CODE_BLOCK))
   if (!matches.length)
     throw new Error('Magic Move block must contain at least one code block')
@@ -65,7 +73,12 @@ export default defineCodeblockTransformer(async ({ info, fence, code, slide, opt
     }
     const { tokens, bg, fg, rootStyle, themeName } = await shiki.codeToTokens(code, options)
     return {
-      ...toKeyedTokens(code, tokens, JSON.stringify([lang, 'themes' in options ? options.themes : options.theme]), lineNumbers),
+      ...toKeyedTokens(code, tokens, JSON.stringify([
+        lang,
+        'themes' in options
+          ? options.themes
+          : options.theme,
+      ]), lineNumbers),
       bg,
       fg,
       rootStyle,

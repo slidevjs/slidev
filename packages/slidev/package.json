@@ -1,7 +1,7 @@
 {
   "name": "@slidev/cli",
   "type": "module",
-  "version": "52.19.0",
+  "version": "53.1.0",
   "description": "Presentation slides for developers",
   "author": "Anthony Fu <anthonyfu117@hotmail.com>",
   "license": "MIT",
@@ -32,7 +32,7 @@
     "template.md"
   ],
   "engines": {
-    "node": ">=20.12.0"
+    "node": ">=22.22.0"
   },
   "scripts": {
     "build": "tsdown node/index.ts node/cli.ts",
@@ -81,11 +81,9 @@
     "fast-glob": "catalog:prod",
     "get-port-please": "catalog:prod",
     "global-directory": "catalog:prod",
-    "htmlparser2": "catalog:prod",
     "is-installed-globally": "catalog:prod",
     "jiti": "catalog:prod",
     "katex": "catalog:frontend",
-    "local-pkg": "catalog:prod",
     "lz-string": "catalog:frontend",
     "magic-string": "catalog:prod",
     "magic-string-stack": "catalog:prod",
@@ -104,7 +102,6 @@
     "pptxgenjs": "catalog:prod",
     "prompts": "catalog:prod",
     "public-ip": "catalog:prod",
-    "resolve-from": "catalog:prod",
     "resolve-global": "catalog:prod",
     "shiki": "catalog:frontend",
     "sirv": "catalog:prod",
@@ -132,6 +129,7 @@
   "devDependencies": {
     "@hedgedoc/markdown-it-plugins": "catalog:prod",
     "@types/picomatch": "catalog:types",
-    "@types/plantuml-encoder": "catalog:types"
+    "@types/plantuml-encoder": "catalog:types",
+    "jszip": "catalog:dev"
   }
 }
