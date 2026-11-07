@@ -14,7 +14,7 @@ const RE_HEADING = /^(#+) (.*)$/m
 const RE_CODE_BLOCK = /^```[\s\S]+?^```/gm
 const RE_LEADING_BACKTICKS = /^\s*`+/
 const RE_CRLF = /\r?\n/g
-const RE_BOM = /^﻿/
+const RE_BOM = /^\uFEFF/
 
 export interface SlidevParserOptions {
   noParseYAML?: boolean
