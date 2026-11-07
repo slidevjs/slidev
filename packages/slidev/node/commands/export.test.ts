@@ -35,7 +35,13 @@ async function tempRoot() {
 }
 
 function exportInto(output: string, format: 'pdf' | 'pptx' | 'pptx-editable') {
-  return exportSlides({ output, format, slides: [], total: 0, waitUntil: undefined })
+  return exportSlides({
+    output,
+    format,
+    slides: [],
+    total: 0,
+    waitUntil: undefined,
+  })
 }
 
 describe('exportSlides creates the output directory', () => {

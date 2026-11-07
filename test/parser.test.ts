@@ -147,7 +147,10 @@ f
 
     const userRoot = resolve(__dirname, 'fixtures/markdown')
     const filepath = slash(resolve(userRoot, 'bom.md'))
-    const loaded = await load({ userRoot, roots: [userRoot] }, filepath, { [filepath]: markdown })
+    const loaded = await load({
+      userRoot,
+      roots: [userRoot],
+    }, filepath, { [filepath]: markdown })
     expect(loaded.headmatter).toEqual({ theme: 'seriph', title: 'Hello' })
   })
 
@@ -681,6 +684,19 @@ Some content
     expect(errors.map(e => e.message)).toEqual([
       expect.stringContaining('Slide 0 does not exist'),
     ])
+  })
+
+  it('records an error for slide 0 in a mixed src: range and ignores slides past the end', async () => {
+    const root = resolve(__dirname, 'fixtures/markdown/out-of-range')
+    const data = await load({
+      userRoot: root,
+      roots: [root],
+    }, resolve(root, 'mixed.md'))
+    const errors = Object.values(data.markdownFiles).flatMap(md => md.errors ?? [])
+    expect(errors.map(e => e.message)).toEqual([
+      expect.stringContaining('Slide 0 does not exist'),
+    ])
+    expect(data.slides.map(s => s.title)).toEqual(['Entry', 'Two'])
   })
 
   it('records an error when a src: import escapes the allowed roots', async () => {
