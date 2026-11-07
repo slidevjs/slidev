@@ -683,6 +683,19 @@ Some content
     ])
   })
 
+  it('records an error for slide 0 in a mixed src: range and ignores slides past the end', async () => {
+    const root = resolve(__dirname, 'fixtures/markdown/out-of-range')
+    const data = await load({
+      userRoot: root,
+      roots: [root],
+    }, resolve(root, 'mixed.md'))
+    const errors = Object.values(data.markdownFiles).flatMap(md => md.errors ?? [])
+    expect(errors.map(e => e.message)).toEqual([
+      expect.stringContaining('Slide 0 does not exist'),
+    ])
+    expect(data.slides.map(s => s.title)).toEqual(['Entry', 'Two'])
+  })
+
   it('records an error when a src: import escapes the allowed roots', async () => {
     const root = resolve(__dirname, 'fixtures/markdown/escaping/root')
     const data = await load({

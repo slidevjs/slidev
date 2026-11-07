@@ -7,7 +7,9 @@ const RE_RANGE_FRAGMENT = /^(\d+)(?:\s*-\s*(\d*))?$/
 
 function parsePositiveSafeInteger(value: string) {
   const integer = Number(value)
-  return Number.isSafeInteger(integer) && integer >= 1 ? integer : undefined
+  return Number.isSafeInteger(integer) && integer >= 1
+    ? integer
+    : undefined
 }
 
 /**
