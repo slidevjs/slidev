@@ -12,3 +12,7 @@ export function getSlideRoutePath(
       ? `/presenter/${no}`
       : `/${no}`
 }
+
+export function getPrintSlideAnchorId(no: number | string) {
+  return `slide-${no}`
+}
