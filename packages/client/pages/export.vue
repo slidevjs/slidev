@@ -16,6 +16,7 @@ import FormCheckbox from '../internals/FormCheckbox.vue'
 import FormItem from '../internals/FormItem.vue'
 import PrintSlide from '../internals/PrintSlide.vue'
 import SegmentControl from '../internals/SegmentControl.vue'
+import { isPdfExportSupported } from '../logic/printSupport'
 import { isScreenshotSupported, startScreenshotSession } from '../logic/screenshot'
 import { captureDelay, skipExportPdfTip } from '../state'
 import Play from './play.vue'
@@ -33,6 +34,7 @@ type ScreenshotResult = { slideIndex: number, clickIndex: number, dataUrl: strin
 const screenshotSession = ref<ScreenshotSession | null>(null)
 const capturedImages = ref<ScreenshotResult | null>(null)
 const title = ref(configs.exportFilename || slidesTitle)
+const pdfExportSupported = isPdfExportSupported(window.navigator.userAgent)
 
 useHead({
   title,
@@ -242,8 +244,14 @@ if (import.meta.hot) {
       </div>
       <div class="flex-grow" />
       <div class="min-w-fit" flex="~ col gap-3">
-        <div border="~ main rounded-lg" p3 flex="~ col gap-2">
+        <div border="~ main rounded-lg" p3 flex="~ col gap-2" :class="pdfExportSupported ? '' : 'border-orange'">
           <h2>Export as Vector File</h2>
+          <div v-if="!pdfExportSupported" class="min-w-full w-0 text-orange/100 p-1 mb-2 bg-orange/10 rounded">
+            <span class="i-carbon:warning-alt inline-block mb--.5" />
+            Your browser may not export the PDF as intended.
+            If you encounter issues, please use a modern Chromium-based browser,
+            or export via the CLI.
+          </div>
           <div class="flex flex-col gap-2 min-w-max">
             <button class="slidev-form-button" @click="pdf">
               PDF
