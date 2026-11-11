@@ -281,7 +281,9 @@ export function useDragElement(directive: DirectiveBinding | null, posRaw?: stri
       state.stopDragging()
     },
     startDragging(): void {
-      if (!enabled)
+      // Positions are only saved by the dev editor; elsewhere (static builds)
+      // a stray double-click or double-tap would move an element on screen.
+      if (!enabled || !(__DEV__ && __SLIDEV_FEATURE_EDITOR__))
         return
       updateBounds()
       activeDragElement.value = state
