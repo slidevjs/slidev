@@ -416,8 +416,13 @@ const useSharedNav = createSharedComposable((): SlidevContextNavFull => {
   }
 })
 
+// HMR re-runs this module for the updated slide. Keep the nav created in `setupRoot()`.
+const useAppNav: typeof useSharedNav = import.meta.hot
+  ? (import.meta.hot.data.useSharedNav ??= useSharedNav)
+  : useSharedNav
+
 export function useNav(): SlidevContextNavFull {
-  const nav = useSharedNav()
+  const nav = useAppNav()
   // `useNav()` is also called outside of `setup()`, most notably from the
   // `mounted`/`created` hooks of the `v-motion` and `v-mark` directives.
   // `injectLocal` throws there, and there is no slide-local context to read
