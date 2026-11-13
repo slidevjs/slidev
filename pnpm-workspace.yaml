@@ -128,12 +128,12 @@ catalogs:
   prod:
     '@antfu/ni': ^30.6.0
     '@comark/markdown-it': ^0.4.0
-    '@myriaddreamin/typst-ts-node-compiler': 0.8.0-rc2
     '@hedgedoc/markdown-it-plugins': ^2.1.4
     '@lillallol/outline-pdf': ^4.0.0
     '@modelcontextprotocol/client': ^2.4.0
     '@modelcontextprotocol/node': ^2.1.2
     '@modelcontextprotocol/server': ^2.4.0
+    '@myriaddreamin/typst-ts-node-compiler': 0.8.0-rc2
     '@shikijs/twoslash': ^4.6.0
     '@shikijs/vitepress-twoslash': ^4.6.0
     '@unocss/extractor-mdc': ^66.12.0

@@ -22,6 +22,7 @@ export function getDefaultConfig(): SlidevConfig {
     export: {} as ResolvedExportOptions,
     info: false,
     highlighter: 'shiki',
+    mathRenderer: 'katex',
     twoslash: true,
     lineNumbers: false,
     colorSchema: 'auto',

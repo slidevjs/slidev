@@ -41,9 +41,9 @@
     "start": "tsx node/cli.ts"
   },
   "peerDependencies": {
+    "@myriaddreamin/typst-ts-node-compiler": "0.8.0-rc3",
     "playwright-chromium": "^1.10.0",
-    "vite-plugin-pwa": "^1.0.0",
-    "@myriaddreamin/typst-ts-node-compiler": "0.8.0-rc3"
+    "vite-plugin-pwa": "^1.0.0"
   },
   "peerDependenciesMeta": {
     "@myriaddreamin/typst-ts-node-compiler": {

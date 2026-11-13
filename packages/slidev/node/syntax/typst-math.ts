@@ -33,8 +33,12 @@ function isValidDelim(state: any, pos: number) {
   let can_open = true
   let can_close = true
 
-  const prevChar = pos > 0 ? state.src.charCodeAt(pos - 1) : -1
-  const nextChar = pos + 1 <= max ? state.src.charCodeAt(pos + 1) : -1
+  const prevChar = pos > 0
+    ? state.src.charCodeAt(pos - 1)
+    : -1
+  const nextChar = pos + 1 <= max
+    ? state.src.charCodeAt(pos + 1)
+    : -1
 
   if (
     prevChar === 0x20 /* " " */
@@ -126,7 +130,7 @@ function math_block(state: any, start: number, end: number, silent: boolean) {
     return true
 
   let singleLine = false
-  if (firstLine.slice(-2) === '$$') {
+  if (firstLine.endsWith('$$')) {
     firstLine = firstLine.slice(0, -2).trim()
     found = true
     singleLine = true
@@ -161,7 +165,9 @@ function math_block(state: any, start: number, end: number, silent: boolean) {
   else {
     token.info = firstLine
     token.content = state.getLines(start + 1, next, state.tShift[start], true)
-      + (lastLine && lastLine.trim() ? lastLine : '')
+      + (lastLine && lastLine.trim()
+        ? lastLine
+        : '')
   }
 
   token.map = [start, state.line]
@@ -249,7 +255,9 @@ function formatDiagnostics(diagnostics: Array<{ message?: string }> | undefined)
  */
 function renderTypstMath(compiler: TypstCompiler, content: string, displayMode: boolean): string {
   // Typst uses whitespace inside `$ … $` to mean display (block) mode.
-  const source = displayMode ? `$ ${content} $` : `$${content}$`
+  const source = displayMode
+    ? `$ ${content} $`
+    : `$${content}$`
 
   const result = compiler.tryHtml({ mainFileContent: source })
 
@@ -302,7 +310,9 @@ export default function MarkdownItTypstMath(md: MarkdownExit, compiler: TypstCom
     const token = tokens[idx]
     const [, rangeStr, optionsProp] = RE_TYPST_BLOCK_INFO.exec(token.info ?? '') || []
     const ranges = normalizeRangeStr(rangeStr)
-    const optionsAttr = optionsProp ? `v-bind="${optionsProp}"` : ''
+    const optionsAttr = optionsProp
+      ? `v-bind="${optionsProp}"`
+      : ''
     const mathHtml = renderTypstMath(compiler, token.content, true)
     // When line ranges are specified (`$$ {1|3|all}`), wrap in the Typst block
     // wrapper which toggles highlight classes on the MathML <mtr> rows.
@@ -314,7 +324,12 @@ export default function MarkdownItTypstMath(md: MarkdownExit, compiler: TypstCom
 
   md.inline.ruler.after('escape', 'math_inline', math_inline)
   md.block.ruler.after('blockquote', 'math_block', math_block, {
-    alt: ['paragraph', 'reference', 'blockquote', 'list'],
+    alt: [
+      'paragraph',
+      'reference',
+      'blockquote',
+      'list',
+    ],
   })
   md.renderer.rules.math_inline = inlineRenderer
   md.renderer.rules.math_block = blockRenderer

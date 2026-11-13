@@ -21,6 +21,12 @@ function replaceCRLF(s: string) {
 }
 
 describe('md parser', () => {
+  it('defaults to KaTeX and accepts Typst in headmatter', () => {
+    expect(getDefaultConfig().mathRenderer).toBe('katex')
+    expect(resolveConfig({}).mathRenderer).toBe('katex')
+    expect(resolveConfig({ mathRenderer: 'typst' }).mathRenderer).toBe('typst')
+  })
+
   const userRoot = resolve(__dirname, 'fixtures/markdown')
   const files = fg.sync('*.md', {
     cwd: userRoot,
@@ -147,7 +153,10 @@ f
 
     const userRoot = resolve(__dirname, 'fixtures/markdown')
     const filepath = slash(resolve(userRoot, 'bom.md'))
-    const loaded = await load({ userRoot, roots: [userRoot] }, filepath, { [filepath]: markdown })
+    const loaded = await load({
+      userRoot,
+      roots: [userRoot],
+    }, filepath, { [filepath]: markdown })
     expect(loaded.headmatter).toEqual({ theme: 'seriph', title: 'Hello' })
   })
 
