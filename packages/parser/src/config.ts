@@ -22,6 +22,7 @@ export function getDefaultConfig(): SlidevConfig {
     export: {} as ResolvedExportOptions,
     info: false,
     highlighter: 'shiki',
+    mathRenderer: 'katex',
     twoslash: true,
     lineNumbers: false,
     colorSchema: 'auto',
@@ -161,6 +162,7 @@ export function resolveFonts(fonts: FontOptions = {}): ResolvedFontOptions {
   let sans = toArray(fonts.sans).flatMap(i => i.split(',')).map(i => i.trim())
   let serif = toArray(fonts.serif).flatMap(i => i.split(',')).map(i => i.trim())
   let mono = toArray(fonts.mono).flatMap(i => i.split(',')).map(i => i.trim())
+  let math = toArray(fonts.math).flatMap(i => i.split(',')).map(i => i.trim())
   const weights = toArray(fonts.weights || '200,400,600').flatMap(i => i.toString().split(',')).map(i => i.trim())
   const custom = toArray(fonts.custom).flatMap(i => i.split(',')).map(i => i.trim())
 
@@ -220,12 +222,19 @@ export function resolveFonts(fonts: FontOptions = {}): ResolvedFontOptions {
       '"Courier New"',
       'monospace',
     ])
+    if (math.length > 0) {
+      math = uniq([
+        ...math.map(toQuoted),
+        'math',
+      ])
+    }
   }
 
   return {
     sans,
     serif,
     mono,
+    math,
     webfonts,
     provider,
     local,

@@ -133,6 +133,7 @@ catalogs:
     '@modelcontextprotocol/client': ^2.4.0
     '@modelcontextprotocol/node': ^2.1.2
     '@modelcontextprotocol/server': ^2.4.0
+    '@myriaddreamin/typst-ts-node-compiler': 0.8.0-rc4
     '@shikijs/twoslash': ^4.6.0
     '@shikijs/vitepress-twoslash': ^4.6.0
     '@unocss/extractor-mdc': ^66.12.0

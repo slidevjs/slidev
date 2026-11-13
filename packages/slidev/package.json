@@ -41,10 +41,14 @@
     "start": "tsx node/cli.ts"
   },
   "peerDependencies": {
+    "@myriaddreamin/typst-ts-node-compiler": "0.8.0-rc4",
     "playwright-chromium": "^1.10.0",
     "vite-plugin-pwa": "^1.0.0"
   },
   "peerDependenciesMeta": {
+    "@myriaddreamin/typst-ts-node-compiler": {
+      "optional": true
+    },
     "playwright-chromium": {
       "optional": true
     },
@@ -128,6 +132,7 @@
   },
   "devDependencies": {
     "@hedgedoc/markdown-it-plugins": "catalog:prod",
+    "@myriaddreamin/typst-ts-node-compiler": "catalog:prod",
     "@types/picomatch": "catalog:types",
     "@types/plantuml-encoder": "catalog:types",
     "jszip": "catalog:dev"

@@ -11,6 +11,7 @@ exports[`md parser > frontmatter.md > config 1`] = `
   "fonts": {
     "italic": false,
     "local": [],
+    "math": [],
     "mono": [
       ""Fira Code"",
       "ui-monospace",
@@ -74,6 +75,7 @@ exports[`md parser > frontmatter.md > features 1`] = `
   "mermaid": false,
   "monaco": false,
   "tweet": false,
+  "typstMath": false,
 }
 `;
 
@@ -566,6 +568,7 @@ exports[`md parser > mdc.md > config 1`] = `
   "fonts": {
     "italic": false,
     "local": [],
+    "math": [],
     "mono": [
       "ui-monospace",
       "SFMono-Regular",
@@ -619,6 +622,7 @@ exports[`md parser > mdc.md > features 1`] = `
   "mermaid": false,
   "monaco": false,
   "tweet": false,
+  "typstMath": false,
 }
 `;
 
@@ -691,6 +695,7 @@ exports[`md parser > minimal.md > config 1`] = `
   "fonts": {
     "italic": false,
     "local": [],
+    "math": [],
     "mono": [
       "ui-monospace",
       "SFMono-Regular",
@@ -744,6 +749,7 @@ exports[`md parser > minimal.md > features 1`] = `
   "mermaid": false,
   "monaco": false,
   "tweet": false,
+  "typstMath": false,
 }
 `;
 
@@ -917,6 +923,7 @@ exports[`md parser > multi-entries.md > config 1`] = `
   "fonts": {
     "italic": false,
     "local": [],
+    "math": [],
     "mono": [
       "ui-monospace",
       "SFMono-Regular",
@@ -971,6 +978,7 @@ exports[`md parser > multi-entries.md > features 1`] = `
   "mermaid": false,
   "monaco": false,
   "tweet": true,
+  "typstMath": false,
 }
 `;
 
