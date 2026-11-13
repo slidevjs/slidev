@@ -212,7 +212,7 @@ export async function loadTypstCompiler(roots: string[] = []): Promise<TypstComp
   if (!mod) {
     throw new Error(
       `[slidev] Typst math rendering requires the "${PACKAGE_NAME}" package. `
-      + `Install it with \`npm i -D ${PACKAGE_NAME}\` or remove \`mathRenderer: typst\` from your headmatter.`,
+      + `Install it with \`npm i -D ${PACKAGE_NAME}@0.8.0-rc4\` or remove \`mathRenderer: typst\` from your headmatter.`,
     )
   }
 

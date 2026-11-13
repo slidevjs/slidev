@@ -27,6 +27,13 @@ describe('typst math', () => {
     expect(result).toContain(' here')
   })
 
+  it('renders fractions and radicals as MathML', () => {
+    const result = createMd().render('$sqrt(a/b)$')
+    expect(result).toContain('<msqrt>')
+    expect(result).toContain('<mfrac>')
+    expect(result).not.toContain('slidev-typst-math-error')
+  })
+
   it('renders block math as display MathML', () => {
     const result = createMd().render('$$\nx = 1\n$$')
     expect(result).toContain('<math display="block">')

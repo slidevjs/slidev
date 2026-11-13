@@ -95,7 +95,7 @@ All `$...$` and `$$...$$` expressions will then be parsed as Typst math and rend
 Typst math rendering requires the [`@myriaddreamin/typst-ts-node-compiler`](https://www.npmjs.com/package/@myriaddreamin/typst-ts-node-compiler) package, which embeds the official Typst compiler (~48MB executable for MacOS as of Typst v0.15). Install it as a dev dependency:
 
 ```bash
-npm i -D @myriaddreamin/typst-ts-node-compiler
+npm i -D @myriaddreamin/typst-ts-node-compiler@0.8.0-rc4
 ```
 
 :::
