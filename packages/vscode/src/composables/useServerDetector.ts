@@ -38,6 +38,15 @@ export const useServerDetector = defineService(() => {
       return state.pending
     const { resolve } = state.pending = createControlledPromise()
 
+    // Guard against a malicious/invalid port (e.g. injected via workspace config)
+    // that could redirect the request away from localhost (CWE-918 SSRF).
+    if (!Number.isInteger(port) || port < 1 || port > 65535) {
+      state.message = `Invalid port: ${port}`
+      state.pending = null
+      resolve(false)
+      return false
+    }
+
     async function pingUrl(url: string) {
       try {
         const text = await (await fetch(url)).text()
