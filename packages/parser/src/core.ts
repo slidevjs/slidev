@@ -12,7 +12,7 @@ const RE_BLUESKY_TAG = /<BlueSky\b/
 const RE_MERMAID_CODEBLOCK = /^```mermaid/m
 const RE_HEADING = /^(#+) (.*)$/m
 const RE_CODE_BLOCK = /^```[\s\S]+?^```/gm
-const RE_LEADING_BACKTICKS = /^\s*`+/
+const RE_LEADING_FENCE = /^\s*(?:`+|~+)/
 const RE_CRLF = /\r?\n/g
 const RE_BOM = /^﻿/
 
@@ -319,8 +319,8 @@ export async function parse(
       }
     }
     // skip code block
-    else if (line.trimStart().startsWith('```')) {
-      const codeBlockLevel = line.match(RE_LEADING_BACKTICKS)![0]
+    else if (line.trimStart().startsWith('```') || line.trimStart().startsWith('~~~')) {
+      const codeBlockLevel = line.match(RE_LEADING_FENCE)![0]
       let j = i + 1
       for (; j < lines.length; j++) {
         if (lines[j].startsWith(codeBlockLevel))
@@ -398,8 +398,8 @@ export function parseSync(
       }
     }
     // skip code block
-    else if (line.trimStart().startsWith('```')) {
-      const codeBlockLevel = line.match(RE_LEADING_BACKTICKS)![0]
+    else if (line.trimStart().startsWith('```') || line.trimStart().startsWith('~~~')) {
+      const codeBlockLevel = line.match(RE_LEADING_FENCE)![0]
       let j = i + 1
       for (; j < lines.length; j++) {
         if (lines[j].startsWith(codeBlockLevel))
