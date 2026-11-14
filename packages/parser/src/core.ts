@@ -200,24 +200,51 @@ function isMisplacedFrontmatter(type: FrontmatterStyle | undefined, raw: string 
   return data != null && (typeof data !== 'object' || Array.isArray(data))
 }
 
+/**
+ * Keys produced by an HTML comment written inside frontmatter,
+ * e.g. `layout: center\n<!-- note -->` gives `{ "<!-- note -->": null }`.
+ */
+function getHtmlCommentKeys(data: unknown) {
+  if (data == null || typeof data !== 'object' || Array.isArray(data))
+    return []
+  return Object.keys(data).filter(key => key.trimStart().startsWith('<!--'))
+}
+
+function resolveFrontmatter(type: FrontmatterStyle | undefined, raw: string | undefined, data: any): Record<string, any> {
+  if (isMisplacedFrontmatter(type, raw, data))
+    return {}
+  const commentKeys = getHtmlCommentKeys(data)
+  if (!commentKeys.length)
+    return data || {}
+  const frontmatter = { ...data }
+  for (const key of commentKeys)
+    delete frontmatter[key]
+  return frontmatter
+}
+
 const MISPLACED_FRONTMATTER_MESSAGE = 'Missing blank line after "---": the content below it was parsed as frontmatter and ignored. Add a blank line after "---" if it is slide content.'
+const HTML_COMMENT_IN_FRONTMATTER_MESSAGE = 'HTML comments are not supported in frontmatter and were ignored. Use "#" for YAML comments.'
 
 function checkMisplacedFrontmatter(slide: SourceSlideInfo, md: SlidevMarkdown) {
-  if (!isMisplacedFrontmatter(slide.frontmatterStyle, slide.frontmatterRaw, slide.frontmatterDoc?.toJSON()))
+  const data = slide.frontmatterDoc?.toJSON()
+  let message: string | undefined
+  if (isMisplacedFrontmatter(slide.frontmatterStyle, slide.frontmatterRaw, data))
+    message = MISPLACED_FRONTMATTER_MESSAGE
+  else if (slide.frontmatterStyle === 'frontmatter' && getHtmlCommentKeys(data).length)
+    message = HTML_COMMENT_IN_FRONTMATTER_MESSAGE
+  if (!message)
     return
   md.errors ??= []
   md.errors.push({
     row: slide.start,
-    message: MISPLACED_FRONTMATTER_MESSAGE,
+    message,
   })
 }
 
 export function parseSlide(raw: string, options: SlidevParserOptions = {}): Omit<SourceSlideInfo, 'filepath' | 'index' | 'start' | 'contentStart' | 'end'> {
   const matterResult = matter(raw, options)
   let note: string | undefined
-  const frontmatter = isMisplacedFrontmatter(matterResult.type, matterResult.raw, matterResult.data)
-    ? {}
-    : matterResult.data || {}
+  const frontmatter = resolveFrontmatter(matterResult.type, matterResult.raw, matterResult.data)
   let content = matterResult.content.trim()
   const revision = hash(raw.trim())
 

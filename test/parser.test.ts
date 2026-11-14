@@ -211,6 +211,18 @@ src: ./pages/three.md
     })
   })
 
+  it('ignores an HTML comment inside frontmatter and records an error', async () => {
+    const data = await parse(`# Slide 1\n\n---\nlayout: center\n<!-- note -->\n---\n\n# Slide 2\n`, 'slides.md')
+
+    expect(data.slides[1].frontmatter).toEqual({ layout: 'center' })
+    expect(data.errors).toEqual([
+      {
+        row: 2,
+        message: expect.stringContaining('HTML comments are not supported in frontmatter'),
+      },
+    ])
+  })
+
   it('detects slide separator even when comment opens on the same line', async () => {
     const data = await parse(`a
 
