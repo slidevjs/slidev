@@ -3,7 +3,7 @@ import { basename, relative, resolve } from 'node:path'
 import { objectMap, slash } from '@antfu/utils'
 import fg from 'fast-glob'
 import { describe, expect, it } from 'vitest'
-import { extractImagesUsage } from '../packages/parser/src/core'
+import { extractImagesUsage, parseSync } from '../packages/parser/src/core'
 import { getDefaultConfig, load, parse, prettify, resolveConfig, stringify } from '../packages/parser/src/fs'
 
 function configDiff(v: SlidevConfig) {
@@ -136,6 +136,15 @@ f
     expect(data.slides[0].title).toBe('Getting started')
     expect(data.slides[0].level).toBe(2)
     expect(data.slides[1].title).toBe(undefined)
+  })
+
+  it('ignores slide separators inside tilde code blocks', async () => {
+    const markdown = '# A\n\n~~~md\n---\ntitle: x\n---\n~~~\n\n---\n\n# B\n'
+
+    const data = await parse(markdown, 'file.md')
+    expect(data.slides.map(i => i.content.trim())).toEqual(['# A\n\n~~~md\n---\ntitle: x\n---\n~~~', '# B'])
+    expect(data.slides[0].frontmatter).toEqual({})
+    expect(parseSync(markdown, 'file.md').slides.map(i => i.content.trim())).toEqual(['# A\n\n~~~md\n---\ntitle: x\n---\n~~~', '# B'])
   })
 
   it('ignores a leading UTF-8 BOM', async () => {
