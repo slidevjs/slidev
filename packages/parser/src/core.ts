@@ -188,10 +188,36 @@ export function detectFeatures(code: string): SlidevDetectedFeatures {
   }
 }
 
+/**
+ * Detect slide content that was parsed as frontmatter because the blank line
+ * after `---` is missing, e.g. `---\n<!-- note -->\n\n---`.
+ */
+function isMisplacedFrontmatter(type: FrontmatterStyle | undefined, raw: string | undefined, data: unknown) {
+  if (type !== 'frontmatter' || !raw?.trim())
+    return false
+  if (raw.trimStart().startsWith('<!--'))
+    return true
+  return data != null && (typeof data !== 'object' || Array.isArray(data))
+}
+
+const MISPLACED_FRONTMATTER_MESSAGE = 'Missing blank line after "---": the content below it was parsed as frontmatter and ignored. Add a blank line after "---" if it is slide content.'
+
+function checkMisplacedFrontmatter(slide: SourceSlideInfo, md: SlidevMarkdown) {
+  if (!isMisplacedFrontmatter(slide.frontmatterStyle, slide.frontmatterRaw, slide.frontmatterDoc?.toJSON()))
+    return
+  md.errors ??= []
+  md.errors.push({
+    row: slide.start,
+    message: MISPLACED_FRONTMATTER_MESSAGE,
+  })
+}
+
 export function parseSlide(raw: string, options: SlidevParserOptions = {}): Omit<SourceSlideInfo, 'filepath' | 'index' | 'start' | 'contentStart' | 'end'> {
   const matterResult = matter(raw, options)
   let note: string | undefined
-  const frontmatter = matterResult.data || {}
+  const frontmatter = isMisplacedFrontmatter(matterResult.type, matterResult.raw, matterResult.data)
+    ? {}
+    : matterResult.data || {}
   let content = matterResult.content.trim()
   const revision = hash(raw.trim())
 
@@ -338,11 +364,14 @@ export async function parse(
   if (start <= lines.length - 1)
     await slice(lines.length)
 
-  return {
+  const md: SlidevMarkdown = {
     filepath,
     raw: markdown,
     slides,
   }
+  for (const slide of slides)
+    checkMisplacedFrontmatter(slide, md)
+  return md
 }
 
 export function parseSync(
@@ -417,11 +446,14 @@ export function parseSync(
   if (start <= lines.length - 1)
     slice(lines.length)
 
-  return {
+  const md: SlidevMarkdown = {
     filepath,
     raw: markdown,
     slides,
   }
+  for (const slide of slides)
+    checkMisplacedFrontmatter(slide, md)
+  return md
 }
 
 function scanMonacoReferencedMods(md: string) {
