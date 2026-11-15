@@ -147,6 +147,16 @@ f
     expect(parseSync(markdown, 'file.md').slides.map(i => i.content.trim())).toEqual(['# A\n\n~~~md\n---\ntitle: x\n---\n~~~', '# B'])
   })
 
+  it('does not treat indented tildes as a code fence', async () => {
+    for (const indent of ['    ', '\t']) {
+      const markdown = `# A\n\n${indent}~~~\n\n---\n\n# B\n\n${indent}~~~\n`
+      const expected = [`# A\n\n${indent}~~~`, `# B\n\n${indent}~~~`]
+
+      expect((await parse(markdown, 'file.md')).slides.map(i => i.content.trim())).toEqual(expected)
+      expect(parseSync(markdown, 'file.md').slides.map(i => i.content.trim())).toEqual(expected)
+    }
+  })
+
   it('ignores a leading UTF-8 BOM', async () => {
     const markdown = '﻿---\ntheme: seriph\ntitle: Hello\n---\n\n# Slide 1\n\n---\n\n# Slide 2\n'
 

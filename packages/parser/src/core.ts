@@ -13,6 +13,7 @@ const RE_MERMAID_CODEBLOCK = /^```mermaid/m
 const RE_HEADING = /^(#+) (.*)$/m
 const RE_CODE_BLOCK = /^```[\s\S]+?^```/gm
 const RE_LEADING_FENCE = /^\s*(?:`+|~+)/
+const RE_TILDE_FENCE = /^ {0,3}~~~/
 const RE_CRLF = /\r?\n/g
 const RE_BOM = /^﻿/
 
@@ -319,7 +320,7 @@ export async function parse(
       }
     }
     // skip code block
-    else if (line.trimStart().startsWith('```') || line.trimStart().startsWith('~~~')) {
+    else if (line.trimStart().startsWith('```') || RE_TILDE_FENCE.test(line)) {
       const codeBlockLevel = line.match(RE_LEADING_FENCE)![0]
       let j = i + 1
       for (; j < lines.length; j++) {
@@ -398,7 +399,7 @@ export function parseSync(
       }
     }
     // skip code block
-    else if (line.trimStart().startsWith('```') || line.trimStart().startsWith('~~~')) {
+    else if (line.trimStart().startsWith('```') || RE_TILDE_FENCE.test(line)) {
       const codeBlockLevel = line.match(RE_LEADING_FENCE)![0]
       let j = i + 1
       for (; j < lines.length; j++) {
