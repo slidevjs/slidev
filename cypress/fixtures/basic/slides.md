@@ -229,3 +229,16 @@ const answer = 42
 layout: iframe
 url: about:blank
 ---
+
+---
+
+# Page 19
+
+<div class="cy-mount">
+  <div v-click>A</div>
+  <div v-click.mount class="cy-mount-b">B</div>
+  <div v-after.mount class="cy-mount-c">C</div>
+  <div v-click.mount="[3, 5]" class="cy-mount-d">D</div>
+  <div v-click.mount.hide="3" class="cy-mount-e">E</div>
+  <v-click mount at="4"><div class="cy-mount-f">F</div></v-click>
+</div>
