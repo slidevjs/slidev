@@ -325,4 +325,37 @@ context('Basic', () => {
     cy.rightArrow()
     cy.get(wrapper).should('not.have.class', 'slidev-vclick-hidden')
   })
+
+  it('v-click.mount', () => {
+    goPage(19)
+
+    const expectMounted = (mounted: string[]) => {
+      for (const name of ['b', 'c', 'd', 'e', 'f']) {
+        cy.get(`#slideshow .slidev-page-19 .cy-mount-${name}`).should(mounted.includes(name)
+          ? 'exist'
+          : 'not.exist')
+      }
+    }
+
+    expectMounted(['e'])
+
+    cy.rightArrow()
+    expectMounted(['e'])
+
+    cy.rightArrow()
+    expectMounted(['b', 'c', 'e'])
+
+    cy.rightArrow()
+    expectMounted(['b', 'c', 'd'])
+
+    cy.rightArrow()
+    cy.url()
+      .should('eq', `${BASE}/19?clicks=4`)
+    expectMounted(['b', 'c', 'd', 'f'])
+
+    cy.rightArrow()
+    cy.url()
+      .should('eq', `${BASE}/19?clicks=5`)
+    expectMounted(['b', 'c', 'f'])
+  })
 })
