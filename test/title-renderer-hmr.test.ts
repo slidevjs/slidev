@@ -73,7 +73,8 @@ async function createReproServer(entry: string) {
           const hot = s.environments.client.hot
           const send = hot.send.bind(hot)
           hot.send = ((...args: Parameters<typeof hot.send>) => {
-            const payload = args[0]
+            // Parameters<> only sees the last `send` overload, which takes a string event
+            const payload = args[0] as HotPayload | string
             if (payload && typeof payload === 'object' && payload.type === 'full-reload')
               capture.fullReloads.push(payload)
             if (typeof payload === 'string' && payload === 'slidev:update-slide')
