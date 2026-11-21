@@ -239,6 +239,14 @@ export function createSlidesLoader(
         hmrSlidesIndexes.add(i)
       }
 
+      // Snippet imports (`<<<` and inside magic-move) add their files to `watchFiles`
+      // when a slide is rendered, not when it is parsed, so the reloaded data does
+      // not have them. Keep them, or later edits to those files are ignored.
+      for (const [file, indexes] of Object.entries(data.watchFiles)) {
+        if (!data.markdownFiles[file] && !newData.watchFiles[file])
+          newData.watchFiles[file] = indexes
+      }
+
       Object.assign(data, newData)
       Object.assign(utils, createDataUtils(options))
 
