@@ -240,5 +240,6 @@ url: about:blank
   <div v-after.mount class="cy-mount-c">C</div>
   <div v-click.mount="[3, 5]" class="cy-mount-d">D</div>
   <div v-click.mount.hide="3" class="cy-mount-e">E</div>
-  <v-click mount at="4"><div class="cy-mount-f">F</div></v-click>
+  <v-click mount at="4" animation="up"><div class="cy-mount-f">F</div></v-click>
+  <template v-click.mount="4"><div class="cy-mount-g">G</div><div class="cy-mount-h">H</div></template>
 </div>

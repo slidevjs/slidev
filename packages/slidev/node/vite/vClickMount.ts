@@ -93,12 +93,22 @@ function createBind(name: string, exp: AstNode, loc: Loc): AstNode {
   }
 }
 
+/**
+ * Modifiers of the directive that are not animation presets.
+ */
+const NON_ANIMATION_MODIFIERS = ['mount', 'hide']
+
 function wrapElement(el: AstNode): AstNode | undefined {
-  if (el.type !== NODE_ELEMENT || el.tag === 'template')
+  if (el.type !== NODE_ELEMENT)
     return
 
   const dirIndex = el.props.findIndex(isMountDirective)
   if (dirIndex === -1)
+    return
+
+  // `<template v-slot>` is a slot outlet, not content, so it's left untouched
+  const isTemplate = el.tag === 'template'
+  if (isTemplate && el.props.some((prop: AstNode) => prop.type === NODE_DIRECTIVE && prop.name === 'slot'))
     return
 
   const dir = el.props[dirIndex]
@@ -114,6 +124,10 @@ function wrapElement(el: AstNode): AstNode | undefined {
     props.push(createAttribute('at', preset.at, loc))
   else if (dir.exp)
     props.push(createBind('at', dir.exp, loc))
+  // e.g. `v-click.mount.fade.up` -> `animation="fade up"`
+  const animations = getModifiers(dir).filter(m => !NON_ANIMATION_MODIFIERS.includes(m))
+  if (animations.length)
+    props.push(createAttribute('animation', animations.join(' '), loc))
 
   // Move `v-if` / `v-for` / `key` to the wrapper, so every rendered element still
   // gets its own click, just like with the plain `v-click` directive.
@@ -134,7 +148,10 @@ function wrapElement(el: AstNode): AstNode | undefined {
     tag: 'v-click',
     tagType: ELEMENT_TYPE_COMPONENT,
     props,
-    children: [el],
+    // `<template>` isn't rendered, so its children are moved into the wrapper
+    children: isTemplate
+      ? el.children
+      : [el],
     isSelfClosing: false,
     codegenNode: undefined,
     loc: el.loc,
@@ -146,6 +163,8 @@ function wrapElement(el: AstNode): AstNode | undefined {
  *
  * A directive can't stop its own element from being mounted, so
  * `<div v-click.mount="3" />` is rewritten into `<v-click mount :at="3"><div /></v-click>`.
+ * Animation modifiers are passed as the `animation` prop, and the children of
+ * `<template v-click.mount>` are wrapped directly.
  *
  * The rewrite is done on the parent node, before its children are traversed,
  * so the moved element is only transformed once.

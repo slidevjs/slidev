@@ -227,6 +227,12 @@ By default, `v-click` only hides elements with CSS: they are mounted when the sl
 <div v-click.mount="3"> Mounted after 3 clicks </div>
 <div v-click.mount="[2, 4]"> Mounted at click 2 and 3 only </div>
 <div v-click.mount.hide="2"> Unmounted after 2 clicks </div>
+<div v-click.mount.fade-in.up> Mounted with an animation preset </div>
+
+<template v-click.mount="5">
+  <p> Mounted after 5 clicks </p>
+  <p> Together with this one </p>
+</template>
 ```
 
 For the components, use the `mount` prop:
@@ -235,10 +241,11 @@ For the components, use the `mount` prop:
 <v-click mount at="3"> Mounted after 3 clicks </v-click>
 <v-click mount hide> Unmounted after the next click </v-click>
 <v-click mount :at="[2, 4]"> Mounted at click 2 and 3 only </v-click>
+<v-click mount animation="fade-in up"> Mounted with an animation preset </v-click>
 <v-after mount> Mounted together with the previous click </v-after>
 ```
 
-Positions work the same way as without `.mount`, including relative values and ranges. Hidden elements don't take up space, and lifecycle hooks such as `@vue:mounted` run at the click:
+Positions work the same way as without `.mount`, including relative values and ranges. [Animation presets](#click-animation-presets) work too: the element is mounted with the hidden styles (`opacity: 0`), and they are removed on the next frame, so it animates in like a normal `v-click`. When it's hidden again, the content is unmounted on the click, and its element is removed once it has transitioned back to the hidden styles. Hidden elements don't take up space, and lifecycle hooks such as `@vue:mounted` and `@vue:unmounted` run at the click:
 
 ```md
 <!-- `onMounted` of this component runs at click 3, not when the slide loads -->
@@ -249,7 +256,7 @@ Positions work the same way as without `.mount`, including relative values and r
 
 > [!TIP]
 >
-> - Animation presets and the `slidev-vclick-*` classes are not applied with `.mount`, because the element doesn't exist while it's hidden. It simply appears and disappears.
+> - Each root element of the content is animated on its own. Text is wrapped in a `<span>`. A component that renders several root nodes is still mounted and unmounted on the click, but it can't be animated.
 > - Click animations inside mounted content are registered too late to be counted, so don't nest `v-click` inside a `.mount` element.
 > - The slide can also be rendered in other places, such as the next-click preview in presenter mode and the overview, where the content is mounted for that preview too. Check [`$renderContext`](/guide/global-context#render-context) if your code should only run in the main slide.
 

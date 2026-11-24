@@ -330,7 +330,7 @@ context('Basic', () => {
     goPage(19)
 
     const expectMounted = (mounted: string[]) => {
-      for (const name of ['b', 'c', 'd', 'e', 'f']) {
+      for (const name of ['b', 'c', 'd', 'e', 'f', 'g', 'h']) {
         cy.get(`#slideshow .slidev-page-19 .cy-mount-${name}`).should(mounted.includes(name)
           ? 'exist'
           : 'not.exist')
@@ -344,6 +344,11 @@ context('Basic', () => {
 
     cy.rightArrow()
     expectMounted(['b', 'c', 'e'])
+    // mounted hidden, then shown with the same classes as `v-click`
+    cy.get('#slideshow .slidev-page-19 .cy-mount-b')
+      .should('have.class', 'slidev-vclick-target')
+      .and('not.have.class', 'slidev-vclick-hidden')
+      .and('have.css', 'opacity', '1')
 
     cy.rightArrow()
     expectMounted(['b', 'c', 'd'])
@@ -351,11 +356,14 @@ context('Basic', () => {
     cy.rightArrow()
     cy.url()
       .should('eq', `${BASE}/19?clicks=4`)
-    expectMounted(['b', 'c', 'd', 'f'])
+    expectMounted(['b', 'c', 'd', 'f', 'g', 'h'])
+    cy.get('#slideshow .slidev-page-19 .cy-mount-f')
+      .should('have.class', 'slidev-vclick-anim-up')
+      .and('not.have.class', 'slidev-vclick-hidden')
 
     cy.rightArrow()
     cy.url()
       .should('eq', `${BASE}/19?clicks=5`)
-    expectMounted(['b', 'c', 'f'])
+    expectMounted(['b', 'c', 'f', 'g', 'h'])
   })
 })

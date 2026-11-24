@@ -1,16 +1,41 @@
 import type { ClicksContext } from '@slidev/types'
 import type { RendererElement, RendererNode } from 'vue'
 import { compileTemplate } from '@vue/compiler-sfc'
-import { afterEach, describe, expect, it, vi } from 'vitest'
+import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest'
 import { compile, createRenderer, defineComponent, h, nextTick, onMounted, onUnmounted, ref, shallowRef } from 'vue'
 import VAfter from '../packages/client/builtin/VAfter'
 import VClick from '../packages/client/builtin/VClick'
 import { createClicksContextBase } from '../packages/client/composables/useClicks'
-import { injectionClicksContext } from '../packages/client/constants'
+import { injectionClicksContext, injectionFrontmatter } from '../packages/client/constants'
 import { createVClickDirectives } from '../packages/client/modules/v-click'
 import { transformVClickMount } from '../packages/slidev/node/vite/vClickMount'
 
 vi.stubGlobal('__DEV__', true)
+
+// `<Transition>` of the `.mount` content reads the computed transition of the element,
+// so this is what `.slidev-vclick-target { transition: all 0.1s }` would give in a browser.
+let transitionDuration = '0s'
+beforeEach(() => {
+  transitionDuration = '0s'
+  vi.useFakeTimers()
+  vi.stubGlobal('requestAnimationFrame', (cb: () => void) => setTimeout(cb, 16))
+  vi.stubGlobal('window', {
+    getComputedStyle: (el: TestNode) => ({
+      transitionDuration: el.classList.contains('slidev-vclick-target') || String(el.props.class).includes('slidev-vclick-target')
+        ? transitionDuration
+        : '0s',
+      transitionDelay: '0s',
+      transitionProperty: 'all',
+      animationDuration: '0s',
+      animationDelay: '0s',
+    }),
+  })
+})
+afterEach(() => {
+  vi.useRealTimers()
+  vi.unstubAllGlobals()
+  vi.stubGlobal('__DEV__', true)
+})
 
 vi.mock('../packages/client/env', () => ({
   configs: {},
@@ -84,6 +109,27 @@ describe('v-click.mount template transform', () => {
     expect(compileToCode(`<div v-click-hide.mount="2">A</div>`)).toContain('hide: ""')
   })
 
+  it('passes animation modifiers as the animation prop', () => {
+    const code = compileToCode(`<div v-click.mount.fade.up="3">A</div>`)
+    expect(code).toContain('animation: "fade up"')
+    expect(code).toContain('at: 3')
+    expect(compileToCode(`<div v-after.mount.hide.scale>A</div>`)).toMatch(/hide: "",\s+at: "\+0",\s+animation: "scale"/)
+    expect(compileToCode(`<div v-click.mount.hide>A</div>`)).not.toContain('animation:')
+  })
+
+  it('wraps the children of <template v-click.mount>', () => {
+    const code = compileToCode(`<template v-click.mount="2"><p>A</p><p>B</p></template>`)
+    expect(code).toContain('_resolveComponent("v-click")')
+    expect(code).toContain('at: 2')
+    expect(code).not.toContain('"template"')
+
+    const forCode = compileToCode(`<template v-for="i in items" :key="i" v-click.mount><p>{{ i }}</p><p>B</p></template>`)
+    expect(forCode).toMatch(/_renderList\(_ctx\.items, \(i\) => \{\s+return \(_openBlock\(\), _createBlock\(_component_v_click, \{\s+mount: "",\s+key: i\s+\}/)
+
+    // slot templates are not content, so they are left alone
+    expect(compileToCode(`<Foo><template #a v-click.mount>A</template></Foo>`)).not.toContain('_resolveComponent("v-click")')
+  })
+
   it('leaves v-click without .mount untouched', () => {
     const code = compileToCode(`<div v-click="3">A</div><div v-click.hide>B</div>`)
     expect(code).toContain('_resolveDirective("click")')
@@ -120,6 +166,9 @@ interface TestNode extends RendererNode {
   children: TestNode[]
   props: Record<string, any>
   dataset: Record<string, string>
+  ownerDocument: { body: { offsetHeight: number } }
+  addEventListener: (name: string, fn: (e: { target: TestNode }) => void) => void
+  removeEventListener: (name: string, fn: (e: { target: TestNode }) => void) => void
   classList: {
     add: (c: string) => void
     remove: (c: string) => void
@@ -138,6 +187,11 @@ function createNode(tag: string, text = ''): TestNode {
     children: [],
     props: {},
     dataset: {},
+    ownerDocument: {
+      body: { offsetHeight: 0 },
+    },
+    addEventListener: () => {},
+    removeEventListener: () => {},
     classList: {
       add: c => classes.add(c),
       remove: c => classes.delete(c),
@@ -211,7 +265,7 @@ afterEach(() => {
   cleanups.splice(0).forEach(fn => fn())
 })
 
-async function mountSlide(template: string) {
+async function mountSlide(template: string, frontmatter: Record<string, any> = {}) {
   const current = ref(0)
   const clicks = createClicksContextBase(current)
   const log: string[] = []
@@ -253,6 +307,7 @@ async function mountSlide(template: string) {
 
   const app = createApp(Root)
   app.provide(injectionClicksContext, shallowRef<ClicksContext>(clicks))
+  app.provide(injectionFrontmatter, frontmatter)
   app.component('VClick', VClick)
   app.component('VAfter', VAfter)
   app.component('Probe', Probe)
@@ -268,10 +323,18 @@ async function mountSlide(template: string) {
     consoleWarn.mockRestore()
   })
   await nextTick()
+  await vi.runAllTimersAsync()
 
-  async function go(n: number) {
+  // Changes the click without waiting for the transitions
+  async function step(n: number) {
     clicks.current = n
     await nextTick()
+  }
+
+  // Changes the click and lets all the transitions finish
+  async function go(n: number) {
+    await step(n)
+    await vi.runAllTimersAsync()
     expect(warnings).toEqual([])
     return [...mounted].sort()
   }
@@ -281,9 +344,19 @@ async function mountSlide(template: string) {
     log,
     mounted,
     go,
+    step,
+    root,
     find: (text: string) => findByText(root, text),
     unmount: () => cleanups.pop()?.(),
   }
+}
+
+function classesOf(node: TestNode | undefined) {
+  if (!node)
+    return []
+  const classes = String(node.props.class ?? '').split(' ').filter(Boolean)
+  node.classList.forEach(c => classes.push(c))
+  return classes.sort()
 }
 
 describe('v-click.mount at runtime', () => {
@@ -360,6 +433,87 @@ describe('v-click.mount at runtime', () => {
       <Probe name="C" v-click.mount.hide />
     `)
     expect(await go(999999)).toEqual(['A', 'B'])
+  })
+
+  it('mounts with opacity 0 and animates in and out like v-click', async () => {
+    transitionDuration = '0.1s'
+    const { step, go, find, log } = await mountSlide(`
+      <div v-click>first</div>
+      <Probe name="A" v-click.mount.up />
+    `)
+    expect(find('A')).toBeUndefined()
+    await go(1)
+    expect(find('A')).toBeUndefined()
+
+    // mounted on the click, still hidden (`opacity: 0` + the preset) on the first frame
+    await step(2)
+    expect(log).toEqual(['mount A'])
+    expect(classesOf(find('A'))).toEqual([
+      'slidev-vclick-anim-up',
+      'slidev-vclick-current',
+      'slidev-vclick-hidden',
+      'slidev-vclick-target',
+    ])
+
+    // then the hidden class is removed, so the CSS transition plays
+    await vi.advanceTimersByTimeAsync(40)
+    expect(classesOf(find('A'))).toEqual(['slidev-vclick-anim-up', 'slidev-vclick-current', 'slidev-vclick-target'])
+    await vi.runAllTimersAsync()
+
+    // going back unmounts it on the click, but the element is only removed
+    // after it's hidden again and the transition has ended
+    await step(1)
+    expect(log).toEqual(['mount A', 'unmount A'])
+    await vi.advanceTimersByTimeAsync(40)
+    expect(classesOf(find('A'))).toContain('slidev-vclick-hidden')
+    await vi.advanceTimersByTimeAsync(110)
+    expect(find('A')).toBeUndefined()
+  })
+
+  it('animates .hide out before unmounting', async () => {
+    transitionDuration = '0.1s'
+    const { step, find, log } = await mountSlide(`<Probe name="A" v-click.mount.hide />`)
+    // already shown when the slide is rendered, so it's not animated in
+    expect(classesOf(find('A'))).toEqual(['slidev-vclick-target'])
+
+    await step(1)
+    expect(log).toEqual(['mount A', 'unmount A'])
+    await vi.advanceTimersByTimeAsync(40)
+    expect(classesOf(find('A'))).toContain('slidev-vclick-hidden')
+    await vi.advanceTimersByTimeAsync(110)
+    expect(find('A')).toBeUndefined()
+  })
+
+  it('uses the animation prop, then the clickAnimation frontmatter', async () => {
+    const { go, find } = await mountSlide(`
+      <v-click mount><p>A</p></v-click>
+      <v-click mount animation="fade-in scale"><p>B</p></v-click>
+      <v-click mount fade><p>C</p></v-click>
+      <div v-click.mount.none>D</div>
+    `, { clickAnimation: 'up' })
+    await go(4)
+    expect(classesOf(find('A'))).toContain('slidev-vclick-anim-up')
+    expect(classesOf(find('B'))).toEqual(expect.arrayContaining(['slidev-vclick-anim-fade-in', 'slidev-vclick-anim-scale']))
+    expect(classesOf(find('B'))).not.toContain('slidev-vclick-anim-up')
+    expect(classesOf(find('C'))).toContain('slidev-vclick-anim-fade')
+    expect(classesOf(find('D'))).toContain('slidev-vclick-anim-none')
+    expect(classesOf(find('D'))).toContain('slidev-vclick-current')
+    expect(classesOf(find('A'))).toContain('slidev-vclick-prior')
+    expect(classesOf(find('A'))).not.toContain('slidev-vclick-current')
+  })
+
+  it('mounts every child of <template v-click.mount> and wraps text', async () => {
+    const { clicks, go, find } = await mountSlide(`
+      <template v-click.mount><Probe name="A" /><Probe name="B" /></template>
+      <v-click mount>text</v-click>
+    `)
+    expect(clicks.total).toBe(2)
+    expect(await go(1)).toEqual(['A', 'B'])
+    expect(classesOf(find('A'))).toContain('slidev-vclick-target')
+    expect(find('text')).toBeUndefined()
+    await go(2)
+    expect(find('text')!.tag).toBe('span')
+    expect(classesOf(find('text'))).toContain('slidev-vclick-target')
   })
 
   it('unregisters the click when the slide unmounts', async () => {

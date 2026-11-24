@@ -52,6 +52,10 @@ export default defineComponent({
         {
           at: this.at,
           hide: this.hide,
+          animation: this.fade
+            ? `${this.animation ?? ''} fade`
+            : this.animation,
+          wrapText: this.wrapText,
         },
         {
           default: () => this.$slots.default?.(),
