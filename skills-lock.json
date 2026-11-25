@@ -5,7 +5,7 @@
       "source": "vercel-labs/agent-browser",
       "sourceType": "github",
       "skillPath": "skills/agent-browser/SKILL.md",
-      "computedHash": "60a9cbe5af176150582c019e16e5d3703a41bb02d88438e881349876120d7944",
+      "computedHash": "13d4c36e4147478e4749ece397f7a37c7ed04cd2697d81f37ba3c241431e085f",
       "via": "@antfu/skills"
     },
     "antfu": {
@@ -19,7 +19,7 @@
       "source": "antfu/skills",
       "sourceType": "github",
       "skillPath": "skills/antfu-create-pr/SKILL.md",
-      "computedHash": "f6e5de5f27febe99042715627e8ff67dbe2328e0914527e152544a17f2561d2a",
+      "computedHash": "f2d928b3a293ab699f3b9c77483620cc4cbecb314b4f97f2086b0d10568621c3",
       "via": "@antfu/skills"
     },
     "antfu-issue-triage": {
@@ -117,7 +117,7 @@
       "source": "onmax/nuxt-skills",
       "sourceType": "github",
       "skillPath": "skills/nuxt-modules/SKILL.md",
-      "computedHash": "6cb8128c38773b0fa1e5cd3f4eb3f2a68cdb48c1600b1dc2987188f3075d8220",
+      "computedHash": "70047e7e61ed3d59dad36415dab9827971950cf52b669d6da087e0978e8dc4f7",
       "via": "@antfu/skills"
     },
     "research": {
@@ -131,7 +131,7 @@
       "source": "AminBlg/SimpleEnglish",
       "sourceType": "github",
       "skillPath": "skills/simple-english/SKILL.md",
-      "computedHash": "bd1d3cad1bbe29dd289d0e81a10d5ce5c5224f89f769f482f14529b8effdcb90",
+      "computedHash": "b98d937866af35ae4fb6e88750f407d18df8489caac74f2caec0003e8ee058d2",
       "via": "@antfu/skills"
     },
     "taze": {
@@ -173,7 +173,7 @@
       "source": "cursor/plugins",
       "sourceType": "github",
       "skillPath": "pstack/skills/unslop/SKILL.md",
-      "computedHash": "eca0ad9fa3a3867c83f3aaf3a058e247a569c8976a68ca423a569b93eb86de5d",
+      "computedHash": "9bace43ba8cc2c76bfd18ce3f508381f490013cac2116d747553cfcd5cb44c88",
       "via": "@antfu/skills"
     },
     "vue-best-practices": {
