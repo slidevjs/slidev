@@ -8,6 +8,7 @@ import { createVClickDirectives } from '../modules/v-click'
 import { createVDragDirective } from '../modules/v-drag'
 import { createVMarkDirective } from '../modules/v-mark'
 import { createVMotionDirectives } from '../modules/v-motion'
+import { createVSlideElDirective } from '../modules/v-slide-el'
 import { setupPWA } from '../setup/pwa'
 import setupRoutes from '../setup/routes'
 import '../styles'
@@ -36,6 +37,7 @@ export default async function setupMain(app: App) {
   app.use(createVMarkDirective())
   app.use(createVDragDirective())
   app.use(createVMotionDirectives())
+  app.use(createVSlideElDirective())
   app.use(TwoSlashFloatingVue as any, { container: '#twoslash-container' })
 
   const context: AppContext = {
