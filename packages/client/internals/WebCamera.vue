@@ -2,7 +2,7 @@
 import type { CameraConfig } from '@slidev/types'
 import type { CameraPlacement, CameraScreenRect } from '../logic/camera'
 import { useDraggable, useElementBounding, useLocalStorage } from '@vueuse/core'
-import { computed, ref, watch, watchEffect } from 'vue'
+import { computed, nextTick, ref, watch, watchEffect } from 'vue'
 import { useNav } from '../composables/useNav'
 import { configs, slideHeight, slideWidth } from '../env'
 import { builtinCameraSize, CAMERA_MIN_SIZE, cameraAdjustmentTarget, cameraAnchorPosition, clampCameraToWindow, projectCamera, resolveCamera, unprojectCamera } from '../logic/camera'
@@ -52,6 +52,26 @@ const slideRect = computed<CameraScreenRect>(() => ({
 const hasSlideBox = computed(() => slideRect.value.width > 0 && slideRect.value.height > 0)
 
 const screenSize = ref(canvasPlacement.value.size)
+/** Slide-config moves ease into place. Drags and slide-box updates do not. */
+const motion = ref(false)
+let motionTimer: number | undefined
+let hasPlaced = false
+
+const CAMERA_MOVE_MS = 450
+let applyToken = 0
+
+function beginMotion() {
+  motion.value = true
+  window.clearTimeout(motionTimer)
+  motionTimer = window.setTimeout(() => {
+    motion.value = false
+  }, CAMERA_MOVE_MS)
+}
+
+function endMotion() {
+  motion.value = false
+  window.clearTimeout(motionTimer)
+}
 
 const frame = ref<HTMLDivElement | undefined>()
 const handler = ref<HTMLDivElement | undefined>()
@@ -106,6 +126,7 @@ function syncScreen() {
 }
 
 function rememberScreen(screenX: number, screenY: number, screenDiameter: number) {
+  endMotion()
   if (!hasSlideBox.value)
     return
   const screen = clampCameraToWindow(
@@ -119,9 +140,10 @@ function rememberScreen(screenX: number, screenY: number, screenDiameter: number
   syncScreen()
 }
 
-function applyForSlide() {
+async function applyForSlide() {
+  const token = ++applyToken
   const useSession = cameraAdjustmentTarget(slideCamera(), configs.camera) === 'session'
-  canvasPlacement.value = resolveCamera({
+  const next = resolveCamera({
     slide: slideCamera(),
     global: configs.camera,
     session: useSession ? sessionPlacements.get(currentSlideNo.value) : null,
@@ -132,7 +154,19 @@ function applyForSlide() {
     },
     canvas: canvas.value,
   })
+  const moved = next.x !== canvasPlacement.value.x
+    || next.y !== canvasPlacement.value.y
+    || next.size !== canvasPlacement.value.size
+  // Turn the transition on while the bubble is still at the old spot, then move it.
+  if (moved && hasPlaced) {
+    beginMotion()
+    await nextTick()
+    if (token !== applyToken || isDragging.value || handlerDown.value)
+      return
+  }
+  canvasPlacement.value = next
   syncScreen()
+  hasPlaced = true
 }
 
 watch(
@@ -140,7 +174,7 @@ watch(
   () => {
     if (isDragging.value || handlerDown.value)
       return
-    applyForSlide()
+    void applyForSlide()
   },
   { immediate: true, deep: true },
 )
@@ -175,12 +209,12 @@ const handleStyle = computed(() => ({
   <div
     v-if="streamCamera && showAvatar && currentCamera !== 'none' && hasSlideBox"
     class="fixed z-camera"
-    :style="containerStyle"
+    :style="[containerStyle, { transition: motion ? `left ${CAMERA_MOVE_MS}ms ease, top ${CAMERA_MOVE_MS}ms ease` : 'none' }]"
   >
     <div
       ref="frame"
       class="rounded-full shadow bg-gray-400 bg-opacity-10 overflow-hidden object-cover"
-      :style="frameStyle"
+      :style="[frameStyle, { transition: motion ? `width ${CAMERA_MOVE_MS}ms ease, height ${CAMERA_MOVE_MS}ms ease` : 'none' }]"
     >
       <video
         ref="video"
@@ -195,7 +229,7 @@ const handleStyle = computed(() => ({
     <div
       ref="handler"
       class="absolute bottom-0 right-0 rounded-full bg-main shadow opacity-0 shadow z-dragging hover:opacity-100 dark:border dark:border-true-gray-700"
-      :style="handleStyle"
+      :style="[handleStyle, { transition: motion ? `left ${CAMERA_MOVE_MS}ms ease, top ${CAMERA_MOVE_MS}ms ease` : 'none' }]"
       :class="handlerDown ? '!opacity-100' : ''"
     />
   </div>

@@ -38,6 +38,8 @@ camera:
 
 When `camera` is set on the deck or the slide, dragging the bubble affects that slide until the page reloads. With no `camera` config, dragging still updates the shared position saved in the browser.
 
+Moving to a slide with a different `camera` position eases the bubble into place. Dragging it yourself does not.
+
 <TheTweet id="1395006771027120133" />
 
 ## Start Recording {#start-recording}
