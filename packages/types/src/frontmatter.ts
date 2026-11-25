@@ -1,6 +1,47 @@
 import type { BuiltinLayouts } from './builtin-layouts'
 import type { SlidevThemeConfig } from './types'
 
+/**
+ * Corner of the viewport for the camera bubble.
+ * The bubble is inset by 30px so it lines up with the built-in default.
+ */
+export type CameraAnchor = 'top-left' | 'top-right' | 'bottom-left' | 'bottom-right'
+
+/**
+ * Position and size of the camera view overlay.
+ *
+ * Slide frontmatter overrides the deck headmatter, which overrides the position
+ * saved in the browser. Named anchors stay in that corner when the window resizes.
+ *
+ * @example
+ * ```yaml
+ * camera:
+ *   position: bottom-left
+ *   size: 160
+ * ```
+ */
+export interface CameraConfig {
+  /**
+   * Horizontal position in pixels from the left of the viewport.
+   *
+   * Also accepts a named anchor (`top-left`, `top-right`, `bottom-left`, `bottom-right`).
+   * Use `position` when both axes share the same anchor.
+   */
+  x?: number | CameraAnchor
+  /**
+   * Vertical position in pixels from the top of the viewport.
+   */
+  y?: number
+  /**
+   * Diameter of the camera bubble, in pixels.
+   */
+  size?: number
+  /**
+   * Place the bubble in a corner of the viewport.
+   */
+  position?: CameraAnchor
+}
+
 export interface Headmatter extends HeadmatterConfig, Omit<Frontmatter, 'title' | 'transition'> {
   /**
    * Default frontmatter options applied to all slides
@@ -167,6 +208,24 @@ export interface HeadmatterConfig extends TransitionOptions {
    * @default 'dev'
    */
   record?: boolean | 'dev' | 'build'
+  /**
+   * Default position and size of the camera view overlay.
+   *
+   * A slide can override this in its own frontmatter.
+   * Manual drags on a configured deck last for the current page load;
+   * with no `camera` config, drags are saved in the browser as before.
+   *
+   * @example
+   * ```yaml
+   * camera:
+   *   x: 40
+   *   y: 40
+   *   size: 200
+   * ```
+   *
+   * @default {}
+   */
+  camera?: CameraConfig
   /**
    * Expose the server to inbound requests (listen to `0.0.0.0`)
    *
@@ -416,6 +475,20 @@ export interface Frontmatter extends TransitionOptions {
    * @default 1
    */
   zoom?: number
+  /**
+   * Position and size of the camera view.
+   *
+   * In the deck headmatter this is the default for every slide.
+   * On a slide, fields set here override that default.
+   *
+   * @example
+   * ```yaml
+   * camera:
+   *   position: bottom-left
+   *   size: 160
+   * ```
+   */
+  camera?: CameraConfig
   /**
    * Default click animation for the slide
    */

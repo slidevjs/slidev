@@ -60,6 +60,13 @@ remoteAssets: false
 selectable: true
 # enable slide recording, can be boolean, 'dev' or 'build'
 record: dev
+# default camera bubble position and size
+# Learn more: https://sli.dev/features/recording.html#camera-view
+camera:
+  x: undefined # number (px), or top-left | top-right | bottom-left | bottom-right
+  y: undefined # number (px)
+  size: undefined # number (px)
+  position: undefined # top-left | top-right | bottom-left | bottom-right
 # enable Slidev's context menu, can be boolean, 'dev' or 'build'
 contextMenu: true
 # enable wake lock, can be boolean, 'dev' or 'build'
@@ -180,6 +187,12 @@ clickAnimation: undefined # or comma-delimited string
 # custom zoom scale
 # useful for slides with a lot of content
 zoom: 1
+# camera bubble position and size for this slide
+# overrides the deck-level camera for the fields that are set
+# Learn more: https://sli.dev/features/recording.html#camera-view
+camera:
+  position: undefined # top-left | top-right | bottom-left | bottom-right
+  size: undefined # number (px)
 # used as positions of draggable elements
 # Learn more: https://sli.dev/features/draggable.html
 dragPos: {} # type: Record<string, string>

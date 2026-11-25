@@ -39,6 +39,7 @@ export function getDefaultConfig(): SlidevConfig {
     magicMoveCopy: true,
     author: '',
     record: 'dev',
+    camera: {},
     css: 'unocss',
     presenter: true,
     browserExporter: 'dev',
@@ -102,6 +103,12 @@ export function resolveConfig(headmatter: any, themeMeta: SlidevThemeMeta = {}, 
       ...themeMeta.defaults?.themeConfig,
       ...headmatter.config?.themeConfig,
       ...headmatter?.themeConfig,
+    },
+    camera: {
+      ...defaultConfig.camera,
+      ...themeMeta.defaults?.camera,
+      ...headmatter.config?.camera,
+      ...headmatter?.camera,
     },
   }
 

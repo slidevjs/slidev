@@ -107,6 +107,11 @@
           "markdownDescription": "Custom zoom level for the slide",
           "default": 1
         },
+        "camera": {
+          "$ref": "#/definitions/CameraConfig",
+          "description": "Position and size of the camera view.\n\nIn the deck headmatter this is the default for every slide. On a slide, fields set here override that default.",
+          "markdownDescription": "Position and size of the camera view.\n\nIn the deck headmatter this is the default for every slide.\nOn a slide, fields set here override that default."
+        },
         "clickAnimation": {
           "type": "string",
           "description": "Default click animation for the slide",
@@ -233,6 +238,51 @@
         "two-cols-header",
         "two-cols"
       ]
+    },
+    "CameraConfig": {
+      "type": "object",
+      "properties": {
+        "x": {
+          "anyOf": [
+            {
+              "type": "number"
+            },
+            {
+              "$ref": "#/definitions/CameraAnchor"
+            }
+          ],
+          "description": "Horizontal position in pixels from the left of the viewport.\n\nAlso accepts a named anchor (`top-left`, `top-right`, `bottom-left`, `bottom-right`). Use `position` when both axes share the same anchor.",
+          "markdownDescription": "Horizontal position in pixels from the left of the viewport.\n\nAlso accepts a named anchor (`top-left`, `top-right`, `bottom-left`, `bottom-right`).\nUse `position` when both axes share the same anchor."
+        },
+        "y": {
+          "type": "number",
+          "description": "Vertical position in pixels from the top of the viewport.",
+          "markdownDescription": "Vertical position in pixels from the top of the viewport."
+        },
+        "size": {
+          "type": "number",
+          "description": "Diameter of the camera bubble, in pixels.",
+          "markdownDescription": "Diameter of the camera bubble, in pixels."
+        },
+        "position": {
+          "$ref": "#/definitions/CameraAnchor",
+          "description": "Place the bubble in a corner of the viewport.",
+          "markdownDescription": "Place the bubble in a corner of the viewport."
+        }
+      },
+      "description": "Position and size of the camera view overlay.\n\nSlide frontmatter overrides the deck headmatter, which overrides the position saved in the browser. Named anchors stay in that corner when the window resizes.",
+      "markdownDescription": "Position and size of the camera view overlay.\n\nSlide frontmatter overrides the deck headmatter, which overrides the position\nsaved in the browser. Named anchors stay in that corner when the window resizes."
+    },
+    "CameraAnchor": {
+      "type": "string",
+      "enum": [
+        "top-left",
+        "top-right",
+        "bottom-left",
+        "bottom-right"
+      ],
+      "description": "Corner of the viewport for the camera bubble. The bubble is inset by 30px so it lines up with the built-in default.",
+      "markdownDescription": "Corner of the viewport for the camera bubble.\nThe bubble is inset by 30px so it lines up with the built-in default."
     }
   }
 }

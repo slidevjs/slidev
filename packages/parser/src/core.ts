@@ -2,6 +2,8 @@ import type { FrontmatterStyle, SlidevDetectedFeatures, SlidevMarkdown, SlidevPr
 import { ensurePrefix } from '@antfu/utils'
 import YAML from 'yaml'
 
+export { mergeCameraConfig } from './camera'
+
 const RE_FRONTMATTER = /^---.*\r?\n([\s\S]*?)---/
 const RE_YAML_CODEBLOCK = /^\s*```ya?ml([\s\S]*?)```/
 const RE_DOLLAR_INLINE = /\$.*?\$/

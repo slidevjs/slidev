@@ -1,33 +1,96 @@
 <script setup lang="ts">
+import type { CameraConfig } from '@slidev/types'
+import type { CameraPlacement } from '../logic/camera'
 import { useDraggable, useEventListener, useLocalStorage } from '@vueuse/core'
-import { computed, onMounted, ref, watchEffect } from 'vue'
+import { computed, ref, watch, watchEffect } from 'vue'
+import { useNav } from '../composables/useNav'
+import { configs } from '../env'
+import { builtinCameraSize, CAMERA_EDGE_MARGIN, CAMERA_MIN_SIZE, cameraAdjustmentTarget, clampCameraToViewport, resolveCamera } from '../logic/camera'
 import { recorder } from '../logic/recording'
 import { currentCamera } from '../state'
 
-const size = useLocalStorage('slidev-webcam-size', Math.round(Math.min(window.innerHeight, (window.innerWidth) / 8)))
-const position = useLocalStorage('slidev-webcam-pos', {
-  x: window.innerWidth - size.value - 30,
-  y: window.innerHeight - size.value - 30,
+const { currentSlideNo, currentFrontmatter } = useNav()
+const { streamCamera, showAvatar } = recorder
+
+function viewport() {
+  return {
+    width: window.innerWidth,
+    height: window.innerHeight,
+  }
+}
+
+const storedSize = useLocalStorage('slidev-webcam-size', builtinCameraSize(viewport()))
+const storedPosition = useLocalStorage('slidev-webcam-pos', {
+  x: window.innerWidth - storedSize.value - CAMERA_EDGE_MARGIN,
+  y: window.innerHeight - storedSize.value - CAMERA_EDGE_MARGIN,
 }, { deep: true })
+
+const size = ref(storedSize.value)
+/** Drag and resize kept per slide until the page reloads. */
+const sessionPlacements = new Map<number, CameraPlacement>()
 
 const frame = ref<HTMLDivElement | undefined>()
 const handler = ref<HTMLDivElement | undefined>()
 const video = ref<HTMLVideoElement | undefined>()
 
-const { streamCamera, showAvatar } = recorder
-
-const { style: containerStyle } = useDraggable(frame, {
-  initialValue: position,
+const { x: dragX, y: dragY, style: containerStyle, isDragging } = useDraggable(frame, {
+  initialValue: () => ({ x: storedPosition.value.x, y: storedPosition.value.y }),
   onMove({ x, y }) {
-    position.value.x = x
-    position.value.y = y
+    remember(x, y, size.value)
   },
 })
 const { isDragging: handlerDown } = useDraggable(handler, {
   onMove({ x, y }) {
-    size.value = Math.max(10, Math.min(x - position.value.x, y - position.value.y) / 0.8536)
+    const nextSize = Math.max(CAMERA_MIN_SIZE, Math.min(x - dragX.value, y - dragY.value) / 0.8536)
+    size.value = nextSize
+    remember(dragX.value, dragY.value, nextSize)
   },
 })
+
+function slideCamera(): CameraConfig | undefined {
+  return currentFrontmatter.value?.camera as CameraConfig | undefined
+}
+
+function remember(x: number, y: number, nextSize: number) {
+  if (cameraAdjustmentTarget(slideCamera(), configs.camera) === 'session') {
+    sessionPlacements.set(currentSlideNo.value, { x, y, size: nextSize })
+    return
+  }
+  storedPosition.value = { x, y }
+  storedSize.value = nextSize
+}
+
+function applyForSlide() {
+  const view = viewport()
+  const useSession = cameraAdjustmentTarget(slideCamera(), configs.camera) === 'session'
+  const resolved = resolveCamera({
+    slide: slideCamera(),
+    global: configs.camera,
+    session: useSession ? sessionPlacements.get(currentSlideNo.value) : null,
+    stored: {
+      x: storedPosition.value.x,
+      y: storedPosition.value.y,
+      size: storedSize.value,
+    },
+    viewport: view,
+  })
+  const next = clampCameraToViewport(resolved, view)
+  size.value = next.size
+  dragX.value = next.x
+  dragY.value = next.y
+  if (next.x !== resolved.x || next.y !== resolved.y)
+    remember(next.x, next.y, next.size)
+}
+
+watch(
+  [currentSlideNo, () => currentFrontmatter.value?.camera, () => configs.camera],
+  () => {
+    if (isDragging.value || handlerDown.value)
+      return
+    applyForSlide()
+  },
+  { immediate: true, deep: true },
+)
 
 watchEffect(() => {
   if (video.value)
@@ -49,15 +112,24 @@ const handleStyle = computed(() => ({
 }))
 
 function fixPosition() {
-  // move back if the camera is outside of the canvas
-  if (position.value.x >= window.innerWidth)
-    position.value.x = window.innerWidth - size.value - 30
-  if (position.value.y >= window.innerHeight)
-    position.value.y = window.innerHeight - size.value - 30
+  // A configured anchor is resolution-independent until the presenter drags it.
+  if (!sessionPlacements.has(currentSlideNo.value)) {
+    applyForSlide()
+    return
+  }
+  const next = clampCameraToViewport({
+    x: dragX.value,
+    y: dragY.value,
+    size: size.value,
+  }, viewport())
+  if (next.x === dragX.value && next.y === dragY.value)
+    return
+  dragX.value = next.x
+  dragY.value = next.y
+  remember(next.x, next.y, next.size)
 }
 
 useEventListener('resize', fixPosition)
-onMounted(fixPosition)
 </script>
 
 <template>

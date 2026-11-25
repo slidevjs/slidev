@@ -15,7 +15,28 @@ Slidev comes with a built-in camera view and recording feature. They make it sim
 
 ## Camera View {#camera-view}
 
-Click the <carbon-user-avatar class="inline-icon-btn"/> button in the [navigation bar](../guide/ui#navigation-bar) to show your camera view in the presentation. You can drag it to move it, and use the handler on the right bottom corner to resize it. The size and position will persist across reloads.
+Click the <carbon-user-avatar class="inline-icon-btn"/> button in the [navigation bar](../guide/ui#navigation-bar) to show your camera view in the presentation. You can drag it to move it, and use the handler on the right bottom corner to resize it. The size and position persist across reloads.
+
+Set a default in the deck headmatter, and override it on any slide. A slide only needs the fields it wants to change. Values are pixels. `position` (or `x`) can also be `top-left`, `top-right`, `bottom-left`, or `bottom-right`, inset 30px from that corner so the bubble stays put when the window resizes.
+
+```yaml
+---
+camera:
+  x: 40
+  y: 40
+  size: 200
+---
+```
+
+```yaml
+---
+camera:
+  position: bottom-left
+  size: 160
+---
+```
+
+When `camera` is set on the deck or the slide, dragging the bubble affects that slide until the page reloads. With no `camera` config, dragging still updates the shared position saved in the browser.
 
 <TheTweet id="1395006771027120133" />
 

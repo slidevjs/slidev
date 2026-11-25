@@ -2,6 +2,7 @@ import type { ResolvedSlidevOptions, SlideInfo, SlidePatch, SlidevData, SlidevSe
 import type { ModuleNode, Plugin, Rolldown, ViteDevServer } from 'vite'
 import type { VirtualModuleContext } from '../virtual/types'
 import { notNullish, range } from '@antfu/utils'
+import { mergeCameraConfig } from '@slidev/parser/core'
 import * as parser from '@slidev/parser/fs'
 import equal from 'fast-deep-equal'
 import MarkdownExit from 'markdown-exit'
@@ -60,10 +61,18 @@ export function createSlidesLoader(
   }
 
   function getFrontmatter(pageNo: number) {
-    return {
-      ...(data.headmatter?.defaults as object || {}),
-      ...(data.slides[pageNo]?.frontmatter || {}),
+    const defaults = (data.headmatter?.defaults || {}) as Record<string, any>
+    const slide = data.slides[pageNo]?.frontmatter || {}
+    const camera = mergeCameraConfig(defaults.camera, slide.camera)
+    const frontmatter: Record<string, any> = {
+      ...defaults,
+      ...slide,
     }
+    if (camera)
+      frontmatter.camera = camera
+    else
+      delete frontmatter.camera
+    return frontmatter
   }
 
   return {
