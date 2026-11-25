@@ -4,15 +4,23 @@ import type { CameraAnchor, CameraConfig } from '@slidev/types'
 export const CAMERA_ANCHORS = ['top-left', 'top-right', 'bottom-left', 'bottom-right'] as const
 
 /**
- * Inset from the viewport edge for named anchors and the built-in default.
- * Same gap the overlay used before camera config existed.
+ * Inset from the slide edge for named anchors and the built-in default, in canvas pixels.
  */
 export const CAMERA_EDGE_MARGIN = 30
 
-/** Smallest diameter the resize handle can produce. */
+/** Smallest diameter the resize handle can produce, in canvas pixels. */
 export const CAMERA_MIN_SIZE = 10
 
-export interface CameraViewport {
+/** Slide canvas size, in the same pixels as `canvasWidth`. */
+export interface CameraCanvas {
+  width: number
+  height: number
+}
+
+/** On-screen box of the main slide, from `getBoundingClientRect`. */
+export interface CameraScreenRect {
+  left: number
+  top: number
   width: number
   height: number
 }
@@ -38,55 +46,119 @@ interface NormalizedCamera {
 
 /**
  * Default bubble diameter when nothing else specifies a size.
- * Matches the historical `slidev-webcam-size` initial value.
+ * Uses the slide canvas, so the on-screen size matches the old window default when the slide fills the window.
  *
- * @param viewport - Current viewport size, in pixels
- * @returns Diameter in pixels
+ * @param canvas - Slide canvas size, in pixels
+ * @returns Diameter in canvas pixels
  */
-export function builtinCameraSize(viewport: CameraViewport): number {
-  return Math.round(Math.min(viewport.height, viewport.width / 8))
+export function builtinCameraSize(canvas: CameraCanvas): number {
+  return Math.round(Math.min(canvas.height, canvas.width / 8))
 }
 
 /**
- * Viewport coordinates for a named corner.
+ * Canvas coordinates for a named corner of the slide.
  *
  * @param anchor - Corner name
- * @param viewport - Current viewport size, in pixels
- * @param size - Bubble diameter, in pixels
- * @param margin - Inset from the edges. Defaults to {@link CAMERA_EDGE_MARGIN}
- * @returns Top-left of the bubble, in pixels
+ * @param canvas - Slide canvas size, in pixels
+ * @param size - Bubble diameter, in canvas pixels
+ * @param margin - Inset from the slide edges. Defaults to {@link CAMERA_EDGE_MARGIN}
+ * @returns Top-left of the bubble, in canvas pixels
  */
 export function cameraAnchorPosition(
   anchor: CameraAnchor,
-  viewport: CameraViewport,
+  canvas: CameraCanvas,
   size: number,
   margin = CAMERA_EDGE_MARGIN,
 ): Pick<CameraPlacement, 'x' | 'y'> {
   return {
-    x: anchor.endsWith('right') ? viewport.width - size - margin : margin,
-    y: anchor.startsWith('bottom') ? viewport.height - size - margin : margin,
+    x: anchor.endsWith('right') ? canvas.width - size - margin : margin,
+    y: anchor.startsWith('bottom') ? canvas.height - size - margin : margin,
+  }
+}
+
+/** Browser viewport size, in screen pixels. */
+export interface CameraWindow {
+  width: number
+  height: number
+}
+
+/**
+ * Pull the bubble back when its top-left passes the right or bottom of the window.
+ * It may still sit outside the slide, or hang off the left and top.
+ *
+ * @param placement - Position and size in screen pixels
+ * @param windowSize - Browser viewport size, in screen pixels
+ * @param margin - Inset used when pulling back. Defaults to {@link CAMERA_EDGE_MARGIN}
+ * @returns The placement, moved only if it left the window
+ */
+export function clampCameraToWindow(
+  placement: CameraPlacement,
+  windowSize: CameraWindow,
+  margin = CAMERA_EDGE_MARGIN,
+): CameraPlacement {
+  let { x, y } = placement
+  if (x >= windowSize.width)
+    x = windowSize.width - placement.size - margin
+  if (y >= windowSize.height)
+    y = windowSize.height - placement.size - margin
+  return { x, y, size: placement.size }
+}
+
+/**
+ * Scale from slide-canvas pixels to the main slide's on-screen box.
+ *
+ * @param rect - Main slide bounding box, in screen pixels
+ * @param canvas - Slide canvas size, in pixels
+ * @returns Screen pixels per canvas pixel, or `0` when either box is empty
+ */
+export function cameraScale(rect: CameraScreenRect, canvas: CameraCanvas): number {
+  if (canvas.width <= 0 || rect.width <= 0)
+    return 0
+  return rect.width / canvas.width
+}
+
+/**
+ * Map a canvas placement onto the screen using the main slide's bounding box.
+ *
+ * @param placement - Position and size in canvas pixels
+ * @param rect - Main slide bounding box, in screen pixels
+ * @param canvas - Slide canvas size, in pixels
+ * @returns Position and size in screen pixels
+ */
+export function projectCamera(
+  placement: CameraPlacement,
+  rect: CameraScreenRect,
+  canvas: CameraCanvas,
+): CameraPlacement {
+  const scale = cameraScale(rect, canvas)
+  return {
+    x: rect.left + placement.x * scale,
+    y: rect.top + placement.y * scale,
+    size: placement.size * scale,
   }
 }
 
 /**
- * Pull the bubble back inside the viewport when a resize leaves it past the right or bottom edge.
+ * Map a screen placement back into slide-canvas pixels.
  *
- * @param placement - Current position and size
- * @param viewport - Current viewport size, in pixels
- * @param margin - Inset used when clamping. Defaults to {@link CAMERA_EDGE_MARGIN}
- * @returns The placement, moved if it sat outside the viewport
+ * @param placement - Position and size in screen pixels
+ * @param rect - Main slide bounding box, in screen pixels
+ * @param canvas - Slide canvas size, in pixels
+ * @returns Position and size in canvas pixels. Returns `placement` unchanged when the slide box is empty
  */
-export function clampCameraToViewport(
+export function unprojectCamera(
   placement: CameraPlacement,
-  viewport: CameraViewport,
-  margin = CAMERA_EDGE_MARGIN,
+  rect: CameraScreenRect,
+  canvas: CameraCanvas,
 ): CameraPlacement {
-  let { x, y } = placement
-  if (x >= viewport.width)
-    x = viewport.width - placement.size - margin
-  if (y >= viewport.height)
-    y = viewport.height - placement.size - margin
-  return { x, y, size: placement.size }
+  const scale = cameraScale(rect, canvas)
+  if (scale === 0)
+    return { ...placement }
+  return {
+    x: (placement.x - rect.left) / scale,
+    y: (placement.y - rect.top) / scale,
+    size: placement.size / scale,
+  }
 }
 
 function normalizeAnchor(value: unknown): CameraAnchor | undefined {
@@ -156,22 +228,22 @@ export interface ResolveCameraOptions {
   global?: CameraConfig | null
   /** Drag or resize remembered for this slide during the current page load. */
   session?: Partial<CameraPlacement> | null
-  /** Browser fallback (`slidev-webcam-pos` / `slidev-webcam-size`). */
+  /** Saved drag (`slidev-webcam-slide-pos` / `slidev-webcam-slide-size`), in canvas pixels. */
   stored?: Partial<CameraPlacement> | null
-  /** Current viewport size, in pixels. */
-  viewport: CameraViewport
+  /** Slide canvas size, in pixels. */
+  canvas: CameraCanvas
   /** Inset for named anchors. Defaults to {@link CAMERA_EDGE_MARGIN}. */
   margin?: number
 }
 
 /**
- * Resolve the camera bubble's viewport position and diameter.
+ * Resolve the camera bubble's position and diameter on the slide canvas.
  *
  * Each of `x`, `y`, and `size` uses the first value that is set, in this order:
- * session override, slide frontmatter, headmatter, the saved browser value, then the built-in bottom-right default.
+ * session override, slide frontmatter, headmatter, the saved position, then the built-in bottom-right default.
  *
- * @param options - Config layers and the current viewport
- * @returns Top-left position and diameter, in pixels
+ * @param options - Config layers and the slide canvas
+ * @returns Top-left position and diameter, in canvas pixels
  */
 export function resolveCamera(options: ResolveCameraOptions): CameraPlacement {
   const margin = options.margin ?? CAMERA_EDGE_MARGIN
@@ -183,8 +255,8 @@ export function resolveCamera(options: ResolveCameraOptions): CameraPlacement {
     ?? slide.size
     ?? global.size
     ?? finite(stored.size)
-    ?? builtinCameraSize(options.viewport)
-  const fallback = cameraAnchorPosition('bottom-right', options.viewport, size, margin)
+    ?? builtinCameraSize(options.canvas)
+  const fallback = cameraAnchorPosition('bottom-right', options.canvas, size, margin)
 
   function axis(
     which: 'x' | 'y',
@@ -200,8 +272,8 @@ export function resolveCamera(options: ResolveCameraOptions): CameraPlacement {
   }
 
   return {
-    x: axis('x', anchor => cameraAnchorPosition(anchor, options.viewport, size, margin).x),
-    y: axis('y', anchor => cameraAnchorPosition(anchor, options.viewport, size, margin).y),
+    x: axis('x', anchor => cameraAnchorPosition(anchor, options.canvas, size, margin).x),
+    y: axis('y', anchor => cameraAnchorPosition(anchor, options.canvas, size, margin).y),
     size,
   }
 }
