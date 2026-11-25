@@ -54,34 +54,36 @@ async function createReproServer(entry: string) {
   const server = await createServer(
     options,
     {
-      plugins: [{
-        name: 'slidev-title-renderer-hmr-capture',
-        hotUpdate: {
-          order: 'post',
-          handler(ctx) {
-            if (!ctx.modules.length)
-              return
-            capture.moduleSnapshots.push(
-              ctx.modules.map(m => ({
-                id: m.id,
-                isSelfAccepting: m.isSelfAccepting,
-              })),
-            )
+      plugins: [
+        {
+          name: 'slidev-title-renderer-hmr-capture',
+          hotUpdate: {
+            order: 'post',
+            handler(ctx) {
+              if (!ctx.modules.length)
+                return
+              capture.moduleSnapshots.push(
+                ctx.modules.map(m => ({
+                  id: m.id,
+                  isSelfAccepting: m.isSelfAccepting,
+                })),
+              )
+            },
+          },
+          configureServer(s) {
+            const hot = s.environments.client.hot
+            const send = hot.send.bind(hot)
+            hot.send = ((...args: Parameters<typeof hot.send>) => {
+              const payload = args[0]
+              if (payload && typeof payload === 'object' && payload.type === 'full-reload')
+                capture.fullReloads.push(payload)
+              if (typeof payload === 'string' && payload === 'slidev:update-slide')
+                capture.slideUpdates += 1
+              return send(...args)
+            }) as typeof hot.send
           },
         },
-        configureServer(s) {
-          const hot = s.environments.client.hot
-          const send = hot.send.bind(hot)
-          hot.send = ((...args: Parameters<typeof hot.send>) => {
-            const payload = args[0]
-            if (payload && typeof payload === 'object' && payload.type === 'full-reload')
-              capture.fullReloads.push(payload)
-            if (typeof payload === 'string' && payload === 'slidev:update-slide')
-              capture.slideUpdates += 1
-            return send(...args)
-          }) as typeof hot.send
-        },
-      }],
+      ],
       server: { middlewareMode: true },
       clearScreen: false,
       logLevel: 'error',
