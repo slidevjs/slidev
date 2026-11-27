@@ -41,13 +41,18 @@ export default defineComponent({
     for (const [range, slot] of slotEntries) {
       const elRef = ref<HTMLElement>()
       if (Number.isFinite(+range)) {
-        contents.push([+range, lastStart ?? +range + 1, slot, elRef])
+        contents.push([
+          +range,
+          lastStart ?? +range + 1,
+          slot,
+          elRef,
+        ])
         lastStart = +range
       }
       else {
         const [start, end] = range.split('-').map(Number)
         if (!Number.isFinite(start) || !Number.isFinite(end))
-          throw new Error(`Invalid range for v-switch: ${range}`)
+          throw new TypeError(`Invalid range for v-switch: ${range}`)
         contents.push([start, end, slot, elRef])
         lastStart = start
       }
@@ -107,7 +112,9 @@ export default defineComponent({
         }, slot?.()))
       }
       return transitionProps
-        ? h(TransitionGroup, hmrSkipTransition.value ? {} : transitionProps, () => children)
+        ? h(TransitionGroup, hmrSkipTransition.value
+            ? {}
+            : transitionProps, () => children)
         : h(tag, children)
     }
   },

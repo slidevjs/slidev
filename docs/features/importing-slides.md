@@ -66,4 +66,6 @@ This will import the slides 2, 5, 6, and 7 from `./another-presentation.md`.
 
 ## Frontmatter Merging
 
+Frontmatter next to `src` applies to every slide imported from that file. To configure only its first slide, put the frontmatter in the imported file itself. See the following page for examples and merge priority:
+
 <LinkCard link="features/frontmatter-merging" />

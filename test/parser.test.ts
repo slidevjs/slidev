@@ -29,7 +29,10 @@ describe('md parser', () => {
 
   for (const file of files) {
     it(basename(file), async () => {
-      const data = await load({ userRoot, roots: [userRoot] }, file)
+      const data = await load({
+        userRoot,
+        roots: [userRoot],
+      }, file)
 
       expect(stringify(data.entry).trim()).toEqual(replaceCRLF(data.entry.raw.trim()))
 
@@ -135,6 +138,22 @@ f
     expect(data.slides[1].title).toBe(undefined)
   })
 
+  it('ignores a leading UTF-8 BOM', async () => {
+    const markdown = '﻿---\ntheme: seriph\ntitle: Hello\n---\n\n# Slide 1\n\n---\n\n# Slide 2\n'
+
+    const data = await parse(markdown, 'file.md')
+    expect(data.slides.map(i => i.content.trim())).toEqual(['# Slide 1', '# Slide 2'])
+    expect(data.slides[0].frontmatter).toEqual({ theme: 'seriph', title: 'Hello' })
+
+    const userRoot = resolve(__dirname, 'fixtures/markdown')
+    const filepath = slash(resolve(userRoot, 'bom.md'))
+    const loaded = await load({
+      userRoot,
+      roots: [userRoot],
+    }, filepath, { [filepath]: markdown })
+    expect(loaded.headmatter).toEqual({ theme: 'seriph', title: 'Hello' })
+  })
+
   it('ignores slide separators inside HTML comments', async () => {
     const data = await parse(`---
 src: ./pages/one.md
@@ -154,6 +173,57 @@ src: ./pages/three.md
     expect(data.slides).toHaveLength(2)
     expect(data.slides.map(slide => slide.frontmatter.src))
       .toEqual(['./pages/one.md', './pages/three.md'])
+  })
+
+  describe('missing blank line after `---`', () => {
+    const cases = {
+      'a multi-line comment': '<!--\nnote\n-->',
+      'a comment containing a colon': '<!-- note: something -->',
+      'plain text': 'hello',
+      'a list': '- a\n- b',
+    }
+
+    for (const [name, body] of Object.entries(cases)) {
+      it(`records an error for ${name}`, async () => {
+        const data = await parse(`# Slide 1\n\n---\n${body}\n\n---\n\n# Slide 3\n`, 'slides.md')
+
+        expect(data.slides).toHaveLength(2)
+        expect(data.slides[1].frontmatter).toEqual({})
+        expect(data.errors).toEqual([
+          {
+            row: 2,
+            message: expect.stringContaining('blank line'),
+          },
+        ])
+      })
+    }
+
+    it('does not record an error when the blank line exists', async () => {
+      const data = await parse(`# Slide 1\n\n---\n\n<!--\nnote\n-->\n\n---\n\n# Slide 3\n`, 'slides.md')
+
+      expect(data.slides[1].note).toBe('note')
+      expect(data.errors).toBeUndefined()
+    })
+
+    it('does not record an error for a valid or comment-only frontmatter', async () => {
+      const data = await parse(`# Slide 1\n\n---\nlayout: center\n---\n\n# Slide 2\n\n---\n# layout: center\n---\n\n# Slide 3\n`, 'slides.md')
+
+      expect(data.slides[1].frontmatter).toEqual({ layout: 'center' })
+      expect(data.slides[2].frontmatter).toEqual({})
+      expect(data.errors).toBeUndefined()
+    })
+  })
+
+  it('ignores an HTML comment inside frontmatter and records an error', async () => {
+    const data = await parse(`# Slide 1\n\n---\nlayout: center\n<!-- note -->\n---\n\n# Slide 2\n`, 'slides.md')
+
+    expect(data.slides[1].frontmatter).toEqual({ layout: 'center' })
+    expect(data.errors).toEqual([
+      {
+        row: 2,
+        message: expect.stringContaining('HTML comments are not supported in frontmatter'),
+      },
+    ])
   })
 
   it('detects slide separator even when comment opens on the same line', async () => {
@@ -179,7 +249,10 @@ b
     return await parse(
       src,
       'file.md',
-      [{ transformRawLines, ...more }, ...moreExts] as any,
+      [
+        { transformRawLines, ...more },
+        ...moreExts,
+      ] as any,
     )
   }
 
@@ -245,7 +318,9 @@ background: ${i}${more}
       let i = 0
       while (i < lines.length) {
         if (lines[i].startsWith('@cov ')) {
-          const repl = [...cov(lines[i].substring(5), '').split('\n')]
+          const repl = [
+            ...cov(lines[i].substring(5), '').split('\n'),
+          ]
           lines.splice(i, 1, ...repl)
         }
         i++
@@ -267,19 +342,22 @@ background: ${i}${more}
 a..A
 a.a.A.A
 .a.A.
-`, undefined, {}, [{
-      name: 'test',
-      transformRawLines(lines: string[]) {
-        for (const i in lines)
-          lines[i] = lines[i].replace(/A/g, 'B').replace(/a/g, 'A')
+`, undefined, {}, [
+      {
+        name: 'test',
+        transformRawLines(lines: string[]) {
+          for (const i in lines)
+            lines[i] = lines[i].replace(/A/g, 'B').replace(/a/g, 'A')
+        },
       },
-    }, {
-      name: 'test',
-      transformRawLines(lines: string[]) {
-        for (const i in lines)
-          lines[i] = lines[i].replace(/A/g, 'C')
+      {
+        name: 'test',
+        transformRawLines(lines: string[]) {
+          for (const i in lines)
+            lines[i] = lines[i].replace(/A/g, 'C')
+        },
       },
-    }])
+    ])
     expect(data.slides.map(i => i.content.trim().replace(/\n/g, '%')).join('/'))
       .toEqual('C..B%C.C.B.B%.C.B.')
   })
@@ -287,7 +365,9 @@ a.a.A.A
   // Generate cartesian product of given iterables:
   function* cartesian(...all: any[]): Generator<any[], void, void> {
     const [head, ...tail] = all
-    const remainder = tail.length ? cartesian(...tail) : [[]]
+    const remainder = tail.length
+      ? cartesian(...tail)
+      : [[]]
     for (const r of remainder) {
       for (const h of head)
         yield [h, ...r]
@@ -371,18 +451,30 @@ a.a.A.A
       }
       expect(project(data.slides.map(i => i.content.replace(/\n/g, '%')).join('/')))
         .toEqual(project([
-          ...withSlideBefore ? ['./'] : [],
-          ...prependContent ? ['<a>%<b>%'] : [],
+          ...withSlideBefore
+            ? ['./']
+            : [],
+          ...prependContent
+            ? ['<a>%<b>%']
+            : [],
           'ccc%ddd',
-          ...appendContent ? ['%</b>%</a>'] : [],
-          ...withSlideAfter ? ['/..'] : [],
+          ...appendContent
+            ? ['%</b>%</a>']
+            : [],
+          ...withSlideAfter
+            ? ['/..']
+            : [],
         ].join('')))
 
       if (withFrontmatter || addFrontmatter) {
         expect(data.slides[withSlideBefore ? 1 : 0].frontmatter)
           .toEqual({
-            ...withFrontmatter ? { m: 'M', n: 'N' } : {},
-            ...addFrontmatter ? { adda: 'add', addb: 'add' } : {},
+            ...withFrontmatter
+              ? { m: 'M', n: 'N' }
+              : {},
+            ...addFrontmatter
+              ? { adda: 'add', addb: 'add' }
+              : {},
           })
       }
     })
@@ -584,7 +676,11 @@ Some content
 
   describe('resolveConfig drawings', () => {
     it('applies drawings defaults from the theme', () => {
-      const config = resolveConfig({}, { defaults: { drawings: { presenterOnly: true } } } as any)
+      const config = resolveConfig({}, {
+        defaults: {
+          drawings: { presenterOnly: true },
+        },
+      } as any)
       expect(config.drawings).toEqual({
         enabled: true,
         persist: false,
@@ -594,14 +690,24 @@ Some content
     })
 
     it('applies drawings from the nested `config` headmatter key', () => {
-      const config = resolveConfig({ config: { drawings: { syncAll: false } } })
+      const config = resolveConfig({
+        config: {
+          drawings: { syncAll: false },
+        },
+      })
       expect(config.drawings.syncAll).toBe(false)
     })
 
     it('lets headmatter override the theme defaults', () => {
       const config = resolveConfig(
-        { drawings: { enabled: false } },
-        { defaults: { drawings: { enabled: true, presenterOnly: true } } } as any,
+        {
+          drawings: { enabled: false },
+        },
+        {
+          defaults: {
+            drawings: { enabled: true, presenterOnly: true },
+          },
+        } as any,
       )
       expect(config.drawings.enabled).toBe(false)
       expect(config.drawings.presenterOnly).toBe(true)
@@ -610,7 +716,10 @@ Some content
 
   it('detects circular src imports without overflowing', async () => {
     const root = resolve(__dirname, 'fixtures/markdown/circular')
-    const data = await load({ userRoot: root, roots: [root] }, resolve(root, 'a.md'))
+    const data = await load({
+      userRoot: root,
+      roots: [root],
+    }, resolve(root, 'a.md'))
     // Must return (not hang / overflow) and record a circular-import diagnostic
     const errors = Object.values(data.markdownFiles).flatMap(md => md.errors ?? [])
     expect(errors.some(e => /circular/i.test(e.message))).toBe(true)
@@ -618,7 +727,10 @@ Some content
 
   it('records an error when a src: import selects a slide below the first one', async () => {
     const root = resolve(__dirname, 'fixtures/markdown/out-of-range')
-    const data = await load({ userRoot: root, roots: [root] }, resolve(root, 'entry.md'))
+    const data = await load({
+      userRoot: root,
+      roots: [root],
+    }, resolve(root, 'entry.md'))
     const errors = Object.values(data.markdownFiles).flatMap(md => md.errors ?? [])
     expect(errors.map(e => e.message)).toEqual([
       expect.stringContaining('Slide 0 does not exist'),
@@ -627,7 +739,11 @@ Some content
 
   it('records an error when a src: import escapes the allowed roots', async () => {
     const root = resolve(__dirname, 'fixtures/markdown/escaping/root')
-    const data = await load({ userRoot: root, roots: [root], allowedRoots: [root] }, resolve(root, 'entry.md'))
+    const data = await load({
+      userRoot: root,
+      roots: [root],
+      allowedRoots: [root],
+    }, resolve(root, 'entry.md'))
     const errors = Object.values(data.markdownFiles).flatMap(md => md.errors ?? [])
     expect(errors.some(e => /escapes the project root/i.test(e.message))).toBe(true)
   })

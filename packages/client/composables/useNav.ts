@@ -105,7 +105,9 @@ export function useNavBase(
 
   const currentPath = computed(() => getSlidePath(currentSlideRoute.value, isPresenter.value))
   const currentSlideNo = computed(() => currentSlideRoute.value.no)
-  const currentLayout = computed(() => currentSlideRoute.value.meta?.layout || (currentSlideNo.value === 1 ? 'cover' : 'default'))
+  const currentLayout = computed(() => currentSlideRoute.value.meta?.layout || (currentSlideNo.value === 1
+    ? 'cover'
+    : 'default'))
   const currentFrontmatter = computed(() => currentSlideRoute.value.meta.slide.frontmatter)
 
   const clicks = computed(() => clicksContext.value.current)
@@ -116,7 +118,9 @@ export function useNavBase(
   const hasNext = computed(() => currentSlideNo.value < slides.value.length || clicks.value < clicksTotal.value)
   const hasPrev = computed(() => currentSlideNo.value > 1 || clicks.value > 0)
 
-  const currentTransition = computed(() => isPrint.value ? undefined : getCurrentTransition(navDirection.value, currentSlideRoute.value, prevRoute.value))
+  const currentTransition = computed(() => isPrint.value
+    ? undefined
+    : getCurrentTransition(navDirection.value, currentSlideRoute.value, prevRoute.value))
 
   watch(currentSlideRoute, (next, prev) => {
     navDirection.value = next.no - prev.no
@@ -162,7 +166,9 @@ export function useNavBase(
     if (currentSlideNo.value < slides.value.length) {
       await go(
         currentSlideNo.value + 1,
-        lastClicks && !isPrint.value ? CLICKS_MAX : undefined,
+        lastClicks && !isPrint.value
+          ? CLICKS_MAX
+          : undefined,
       )
     }
   }
@@ -172,7 +178,9 @@ export function useNavBase(
     if (currentSlideNo.value > 1) {
       await go(
         currentSlideNo.value - 1,
-        lastClicks && !isPrint.value ? CLICKS_MAX : undefined,
+        lastClicks && !isPrint.value
+          ? CLICKS_MAX
+          : undefined,
       )
     }
   }
@@ -197,8 +205,12 @@ export function useNavBase(
         path: getSlidePath(no, isPresenter.value, router.currentRoute.value.name === 'export'),
         query: {
           ...router.currentRoute.value.query,
-          clicks: clicks === 0 ? undefined : clicks.toString(),
-          embedded: location.search.includes('embedded') ? 'true' : undefined,
+          clicks: clicks === 0
+            ? undefined
+            : clicks.toString(),
+          embedded: location.search.includes('embedded')
+            ? 'true'
+            : undefined,
         },
       })
     }
@@ -291,7 +303,9 @@ const useNavState = createSharedComposable((): SlidevContextNavState => {
   const isNotesViewer = computed(() => currentRoute.name === 'notes')
   const isPresenterAvailable = computed(() => !isPresenter.value && (!configs.remote || query.value.get('password') === configs.remote))
   const hasPrimarySlide = computed(() => !!currentRoute.params.no)
-  const currentSlideNo = computed(() => hasPrimarySlide.value ? getSlide(currentRoute.params.no as string)?.no ?? 1 : 1)
+  const currentSlideNo = computed(() => hasPrimarySlide.value
+    ? getSlide(currentRoute.params.no as string)?.no ?? 1
+    : 1)
   const currentSlideRoute = computed(() => slides.value[currentSlideNo.value - 1])
   const printRange = ref(parseRangeString(slides.value.length, currentRoute?.query?.range as string | undefined))
 

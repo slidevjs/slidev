@@ -115,8 +115,15 @@ export function resolveConfig(headmatter: any, themeMeta: SlidevThemeMeta = {}, 
   if (config.highlighter === 'prism')
     throw new Error(`[slidev] "prism" support has been dropped. Please use "highlighter: shiki" instead`)
 
-  if (!['dark', 'light', 'auto', 'light dark', 'dark light'].includes(config.colorSchema))
+  if (![
+    'dark',
+    'light',
+    'auto',
+    'light dark',
+    'dark light',
+  ].includes(config.colorSchema)) {
     config.colorSchema = 'auto'
+  }
   if (themeColorSchema && config.colorSchema === 'auto')
     config.colorSchema = themeColorSchema
 
@@ -168,7 +175,12 @@ export function resolveFonts(fonts: FontOptions = {}): ResolvedFontOptions {
   const webfonts = fonts.webfonts
     ? fonts.webfonts
     : fallbacks
-      ? uniq([...sans, ...serif, ...mono, ...custom]).filter(i => !local.includes(i))
+      ? uniq([
+          ...sans,
+          ...serif,
+          ...mono,
+          ...custom,
+        ]).filter(i => !local.includes(i))
       : []
 
   function toQuoted(font: string) {
@@ -240,7 +252,9 @@ function resolveDrawings(options: DrawingsOptions = {}, filepath?: string): Reso
   const persistPath = typeof persist === 'string'
     ? persist
     : persist
-      ? `.slidev/drawings${filepath ? `/${filepath.match(RE_FILENAME_STEM)?.[1]}` : ''}`
+      ? `.slidev/drawings${filepath
+        ? `/${filepath.match(RE_FILENAME_STEM)?.[1]}`
+        : ''}`
       : false
 
   return {

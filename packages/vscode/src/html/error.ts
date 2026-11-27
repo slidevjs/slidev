@@ -11,7 +11,9 @@ export function generateErrorHtml(message: string) {
     : projects.size
       ? `No active project`
       : `No projects found`
-  const errorMessage = message ? `(${message})` : ``
+  const errorMessage = message
+    ? `(${message})`
+    : ``
   const instruction = project
     ? project.port.value
       ? `Please check the server status.`
