@@ -42,7 +42,9 @@ function filterTreeDepth(tree: TocItem[], level = 1): TocItem[] {
   }
   else if (level < Number(props.minDepth)) {
     const activeItem = tree.find((item: TocItem) => item.active || item.activeParent)
-    return activeItem ? filterTreeDepth(activeItem.children, level + 1) : []
+    return activeItem
+      ? filterTreeDepth(activeItem.children, level + 1)
+      : []
   }
   return tree
     .map((item: TocItem) => ({

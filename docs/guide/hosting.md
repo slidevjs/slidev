@@ -190,6 +190,29 @@ Create `vercel.json` in your project root with the following content:
 
 Then go to your [Vercel dashboard](https://vercel.com/) and create a new site with the repository.
 
+### Cloudflare Workers {#cloudflare-workers}
+
+Create `wrangler.jsonc` in your project root with the following content, so that Workers serves `index.html` for paths like `/2` or `/presenter/1`:
+
+::: details wrangler.jsonc
+
+```jsonc
+{
+  "name": "my-slides",
+  "compatibility_date": "2026-11-01",
+  "assets": {
+    "directory": "./dist",
+    "not_found_handling": "single-page-application"
+  }
+}
+```
+
+:::
+
+`slidev build` also writes a `_redirects` file with a catch-all rule for hosts that read it. Workers rejects that rule as an infinite loop, so the deploy fails with `Invalid _redirects configuration`. Slidev does not write the file when the build output already has one, so add an empty `public/_redirects` to your project.
+
+Then build your slides and deploy them with `npx wrangler deploy`, or connect the repository in your [Cloudflare dashboard](https://dash.cloudflare.com/).
+
 ### Zephyr Cloud {#zephyr-cloud}
 
 To deploy your Slidev deck on [Zephyr Cloud](https://zephyr-cloud.io/), you can add Zephyr support to an existing Slidev project with:
@@ -211,6 +234,18 @@ When the build runs with Zephyr enabled, your app is deployed and Zephyr Cloud r
 ::: info
 Zephyr Cloud is a bit different from most hosting providers: every `build` run triggers a deployment.
 :::
+
+### deed.page {#deed-page}
+
+[deed.page](https://deed.page) hosts static sites without an account. Build your slides, pack the `dist` folder and upload it with one HTTP `PUT`:
+
+```bash
+npm run build
+tar -C dist -czf slides.tar.gz .
+curl -T slides.tar.gz -H "X-Spa: 1" "https://deed.page/v1/sites?slug=my-slides"
+```
+
+The `X-Spa: 1` header serves `index.html` for unknown paths, so links to individual slides such as `/2` or `/presenter/1` keep working. The response contains the live `https://my-slides.deed.page/` URL and a token; send the token as `Authorization: Bearer <token>` to publish updates to the same slug. See the [deed.page docs](https://deed.page/docs) for limits and larger uploads.
 
 ### Host on Docker {#docker}
 

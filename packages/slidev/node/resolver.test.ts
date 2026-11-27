@@ -60,7 +60,9 @@ const fsMocks = vi.hoisted(() => {
       const node = tree.get(path)
       if (!node || node.kind !== 'dir')
         throw Object.assign(new Error(`ENOTDIR: scandir '${path}'`), { code: 'ENOTDIR' })
-      const prefix = path.endsWith(sep) ? path : `${path}${sep}`
+      const prefix = path.endsWith(sep)
+        ? path
+        : `${path}${sep}`
       const children = new Set<string>()
       for (const key of tree.keys()) {
         if (key === path)

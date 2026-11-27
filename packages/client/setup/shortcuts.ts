@@ -36,27 +36,121 @@ export default function setupShortcuts() {
   const navViaArrowKeys = and(not(showOverview), not(activeDragElement))
 
   let shortcuts: ShortcutOptions[] = [
-    { name: 'next_space', key: and(space, not(shift)), fn: next, autoRepeat: true },
-    { name: 'prev_space', key: and(space, shift), fn: prev, autoRepeat: true },
+    {
+      name: 'next_space',
+      key: and(space, not(shift)),
+      fn: next,
+      autoRepeat: true,
+    },
+    {
+      name: 'prev_space',
+      key: and(space, shift),
+      fn: prev,
+      autoRepeat: true,
+    },
     // In grid mode: left/right navigate between columns; up/down navigate within a column.
     // In linear mode: left/right navigate clicks/slides; up/down jump between slides.
-    { name: 'next_right', key: and(right, not(shift), navViaArrowKeys), fn: () => hasGrid.value ? goRight() : next(), autoRepeat: true },
-    { name: 'prev_left', key: and(left, not(shift), navViaArrowKeys), fn: () => hasGrid.value ? goLeft() : prev(), autoRepeat: true },
-    { name: 'next_page_key', key: 'pageDown', fn: next, autoRepeat: true },
-    { name: 'prev_page_key', key: 'pageUp', fn: prev, autoRepeat: true },
-    { name: 'next_down', key: and(down, navViaArrowKeys), fn: () => hasGrid.value ? goDown() : nextSlide(), autoRepeat: true },
-    { name: 'prev_up', key: and(up, navViaArrowKeys), fn: () => hasGrid.value ? goUp() : prevSlide(), autoRepeat: true },
+    {
+      name: 'next_right',
+      key: and(right, not(shift), navViaArrowKeys),
+      fn: () => hasGrid.value
+        ? goRight()
+        : next(),
+      autoRepeat: true,
+    },
+    {
+      name: 'prev_left',
+      key: and(left, not(shift), navViaArrowKeys),
+      fn: () => hasGrid.value
+        ? goLeft()
+        : prev(),
+      autoRepeat: true,
+    },
+    {
+      name: 'next_page_key',
+      key: 'pageDown',
+      fn: next,
+      autoRepeat: true,
+    },
+    {
+      name: 'prev_page_key',
+      key: 'pageUp',
+      fn: prev,
+      autoRepeat: true,
+    },
+    {
+      name: 'next_down',
+      key: and(down, navViaArrowKeys),
+      fn: () => hasGrid.value
+        ? goDown()
+        : nextSlide(),
+      autoRepeat: true,
+    },
+    {
+      name: 'prev_up',
+      key: and(up, navViaArrowKeys),
+      fn: () => hasGrid.value
+        ? goUp()
+        : prevSlide(),
+      autoRepeat: true,
+    },
     // In grid mode: shift+right/left do linear next/prev (click-aware); in linear mode: jump to next/prev slide
-    { name: 'next_shift', key: and(right, shift, navViaArrowKeys), fn: () => hasGrid.value ? next() : nextSlide(), autoRepeat: true },
-    { name: 'prev_shift', key: and(left, shift, navViaArrowKeys), fn: () => hasGrid.value ? prev() : prevSlide(), autoRepeat: true },
-    { name: 'toggle_dark', key: and(d, not(drawingEnabled)), fn: toggleDark },
-    { name: 'toggle_overview', key: and(or(o, backtick), not(drawingEnabled)), fn: toggleOverview },
-    { name: 'hide_overview', key: and(escape, not(drawingEnabled)), fn: () => showOverview.value = false },
-    { name: 'goto', key: and(g, not(drawingEnabled)), fn: () => showGotoDialog.value = !showGotoDialog.value },
-    { name: 'next_overview', key: and(right, showOverview), fn: nextOverviewPage },
-    { name: 'prev_overview', key: and(left, showOverview), fn: prevOverviewPage },
-    { name: 'up_overview', key: and(up, showOverview), fn: upOverviewPage },
-    { name: 'down_overview', key: and(down, showOverview), fn: downOverviewPage },
+    {
+      name: 'next_shift',
+      key: and(right, shift, navViaArrowKeys),
+      fn: () => hasGrid.value
+        ? next()
+        : nextSlide(),
+      autoRepeat: true,
+    },
+    {
+      name: 'prev_shift',
+      key: and(left, shift, navViaArrowKeys),
+      fn: () => hasGrid.value
+        ? prev()
+        : prevSlide(),
+      autoRepeat: true,
+    },
+    {
+      name: 'toggle_dark',
+      key: and(d, not(drawingEnabled)),
+      fn: toggleDark,
+    },
+    {
+      name: 'toggle_overview',
+      key: and(or(o, backtick), not(drawingEnabled)),
+      fn: toggleOverview,
+    },
+    {
+      name: 'hide_overview',
+      key: and(escape, not(drawingEnabled)),
+      fn: () => showOverview.value = false,
+    },
+    {
+      name: 'goto',
+      key: and(g, not(drawingEnabled)),
+      fn: () => showGotoDialog.value = !showGotoDialog.value,
+    },
+    {
+      name: 'next_overview',
+      key: and(right, showOverview),
+      fn: nextOverviewPage,
+    },
+    {
+      name: 'prev_overview',
+      key: and(left, showOverview),
+      fn: prevOverviewPage,
+    },
+    {
+      name: 'up_overview',
+      key: and(up, showOverview),
+      fn: upOverviewPage,
+    },
+    {
+      name: 'down_overview',
+      key: and(down, showOverview),
+      fn: downOverviewPage,
+    },
     {
       name: 'goto_from_overview',
       key: and(enter, showOverview),

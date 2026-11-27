@@ -78,7 +78,9 @@ function createPWARegisterStubPlugin(): Plugin {
   return {
     name: 'slidev:pwa-register-stub',
     resolveId(id) {
-      return id === VIRTUAL_ID ? RESOLVED_ID : undefined
+      return id === VIRTUAL_ID
+        ? RESOLVED_ID
+        : undefined
     },
     load(id) {
       if (id === RESOLVED_ID)

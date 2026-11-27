@@ -14,6 +14,7 @@ const RE_HEADING = /^(#+) (.*)$/m
 const RE_CODE_BLOCK = /^```[\s\S]+?^```/gm
 const RE_LEADING_BACKTICKS = /^\s*`+/
 const RE_CRLF = /\r?\n/g
+const RE_BOM = /^\uFEFF/
 
 export interface SlidevParserOptions {
   noParseYAML?: boolean
@@ -62,7 +63,9 @@ export function stringifySlide(data: SourceSlideInfo, idx = 0) {
 
 export function prettifySlide(data: SourceSlideInfo) {
   const trimed = data.content.trim()
-  data.content = trimed ? `\n${data.content.trim()}\n` : ''
+  data.content = trimed
+    ? `\n${data.content.trim()}\n`
+    : ''
   data.raw = data.frontmatterDoc?.contents
     ? data.frontmatterStyle === 'yaml'
       ? `\`\`\`yaml\n${data.frontmatterDoc.toString().trim()}\n\`\`\`\n${data.content}`
@@ -98,7 +101,9 @@ function matter(code: string, options: SlidevParserOptions) {
       })
   }
 
-  const doc = raw && !options.noParseYAML ? YAML.parseDocument(raw) : undefined
+  const doc = raw && !options.noParseYAML
+    ? YAML.parseDocument(raw)
+    : undefined
 
   return {
     type,
@@ -179,17 +184,72 @@ export function extractImagesUsage(content: string, frontmatter: Record<string, 
 export function detectFeatures(code: string): SlidevDetectedFeatures {
   return {
     katex: !!code.match(RE_DOLLAR_INLINE) || !!code.match(RE_DOLLAR_BLOCK),
-    monaco: RE_MONACO_BLOCK.test(code) ? scanMonacoReferencedMods(code) : false,
+    monaco: RE_MONACO_BLOCK.test(code)
+      ? scanMonacoReferencedMods(code)
+      : false,
     tweet: !!code.match(RE_TWEET_TAG),
     bluesky: !!code.match(RE_BLUESKY_TAG),
     mermaid: !!code.match(RE_MERMAID_CODEBLOCK),
   }
 }
 
+/**
+ * Detect slide content that was parsed as frontmatter because the blank line
+ * after `---` is missing, e.g. `---\n<!-- note -->\n\n---`.
+ */
+function isMisplacedFrontmatter(type: FrontmatterStyle | undefined, raw: string | undefined, data: unknown) {
+  if (type !== 'frontmatter' || !raw?.trim())
+    return false
+  if (raw.trimStart().startsWith('<!--'))
+    return true
+  return data != null && (typeof data !== 'object' || Array.isArray(data))
+}
+
+/**
+ * Keys produced by an HTML comment written inside frontmatter,
+ * e.g. `layout: center\n<!-- note -->` gives `{ "<!-- note -->": null }`.
+ */
+function getHtmlCommentKeys(data: unknown) {
+  if (data == null || typeof data !== 'object' || Array.isArray(data))
+    return []
+  return Object.keys(data).filter(key => key.trimStart().startsWith('<!--'))
+}
+
+function resolveFrontmatter(type: FrontmatterStyle | undefined, raw: string | undefined, data: any): Record<string, any> {
+  if (isMisplacedFrontmatter(type, raw, data))
+    return {}
+  const commentKeys = getHtmlCommentKeys(data)
+  if (!commentKeys.length)
+    return data || {}
+  const frontmatter = { ...data }
+  for (const key of commentKeys)
+    delete frontmatter[key]
+  return frontmatter
+}
+
+const MISPLACED_FRONTMATTER_MESSAGE = 'Missing blank line after "---": the content below it was parsed as frontmatter and ignored. Add a blank line after "---" if it is slide content.'
+const HTML_COMMENT_IN_FRONTMATTER_MESSAGE = 'HTML comments are not supported in frontmatter and were ignored. Use "#" for YAML comments.'
+
+function checkMisplacedFrontmatter(slide: SourceSlideInfo, md: SlidevMarkdown) {
+  const data = slide.frontmatterDoc?.toJSON()
+  let message: string | undefined
+  if (isMisplacedFrontmatter(slide.frontmatterStyle, slide.frontmatterRaw, data))
+    message = MISPLACED_FRONTMATTER_MESSAGE
+  else if (slide.frontmatterStyle === 'frontmatter' && getHtmlCommentKeys(data).length)
+    message = HTML_COMMENT_IN_FRONTMATTER_MESSAGE
+  if (!message)
+    return
+  md.errors ??= []
+  md.errors.push({
+    row: slide.start,
+    message,
+  })
+}
+
 export function parseSlide(raw: string, options: SlidevParserOptions = {}): Omit<SourceSlideInfo, 'filepath' | 'index' | 'start' | 'contentStart' | 'end'> {
   const matterResult = matter(raw, options)
   let note: string | undefined
-  const frontmatter = matterResult.data || {}
+  const frontmatter = resolveFrontmatter(matterResult.type, matterResult.raw, matterResult.data)
   let content = matterResult.content.trim()
   const revision = hash(raw.trim())
 
@@ -240,6 +300,8 @@ export async function parse(
   extensions?: SlidevPreparserExtension[],
   options: SlidevParserOptions = {},
 ): Promise<SlidevMarkdown> {
+  // a leading UTF-8 BOM would hide the headmatter, as the first line no longer starts with `---`
+  markdown = markdown.replace(RE_BOM, '')
   const lines = markdown.split(options.preserveCR ? '\n' : RE_CRLF)
   const slides: SourceSlideInfo[] = []
 
@@ -341,11 +403,14 @@ export async function parse(
   if (start <= lines.length - 1)
     await slice(lines.length)
 
-  return {
+  const md: SlidevMarkdown = {
     filepath,
     raw: markdown,
     slides,
   }
+  for (const slide of slides)
+    checkMisplacedFrontmatter(slide, md)
+  return md
 }
 
 export function parseSync(
@@ -353,6 +418,7 @@ export function parseSync(
   filepath: string,
   options: SlidevParserOptions = {},
 ): SlidevMarkdown {
+  markdown = markdown.replace(RE_BOM, '')
   const lines = markdown.split(options.preserveCR ? '\n' : RE_CRLF)
   const slides: SourceSlideInfo[] = []
 
@@ -426,11 +492,14 @@ export function parseSync(
   if (start <= lines.length - 1)
     slice(lines.length)
 
-  return {
+  const md: SlidevMarkdown = {
     filepath,
     raw: markdown,
     slides,
   }
+  for (const slide of slides)
+    checkMisplacedFrontmatter(slide, md)
+  return md
 }
 
 function scanMonacoReferencedMods(md: string) {
