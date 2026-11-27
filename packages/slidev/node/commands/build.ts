@@ -15,6 +15,7 @@ export async function build(
   args: BuildArgs,
 ) {
   const indexHtmlId = resolve(options.userRoot, 'index.html')
+  const indexHtmlIdRe = new RegExp(`^${indexHtmlId.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')}$`)
 
   let config: ResolvedConfig = undefined!
 
@@ -29,6 +30,7 @@ export async function build(
           },
           resolveId: {
             order: 'pre',
+            filter: { id: indexHtmlIdRe },
             handler(id) {
               if (id === indexHtmlId)
                 return id
@@ -37,6 +39,7 @@ export async function build(
           },
           load: {
             order: 'pre',
+            filter: { id: indexHtmlIdRe },
             handler(id) {
               if (id === indexHtmlId) {
                 return options.utils.indexHtml

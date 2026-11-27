@@ -1,6 +1,7 @@
 import type { Plugin } from 'vite'
 import { readFile } from 'node:fs/promises'
 
+const RE_MONACO_BASE = /node_modules\/monaco-editor\/esm\/vs\/base/
 const postfixRE = /[?#].*$/
 function cleanUrl(url: string) {
   return url.replace(postfixRE, '')
@@ -14,10 +15,13 @@ export function createPatchMonacoSourceMapPlugin(
   return {
     name: 'slidev:patch-monaco-sourcemap',
     enforce: 'pre',
-    load(id) {
-      if (!id.includes('node_modules/monaco-editor/esm/vs/base'))
-        return
-      return readFile(cleanUrl(id), 'utf-8')
+    load: {
+      filter: { id: RE_MONACO_BASE },
+      handler(id) {
+        if (!RE_MONACO_BASE.test(id))
+          return
+        return readFile(cleanUrl(id), 'utf-8')
+      },
     },
   }
 }
