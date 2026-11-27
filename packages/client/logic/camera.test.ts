@@ -138,7 +138,12 @@ describe('clampCameraToWindow', () => {
 })
 
 describe('projectCamera', () => {
-  const rect = { left: 100, top: 50, width: 1960, height: 1102 }
+  const rect = {
+    left: 100,
+    top: 50,
+    width: 1960,
+    height: 1102,
+  }
 
   it('maps canvas pixels through the main slide box and back', () => {
     const placement = { x: 40, y: 40, size: 100 }

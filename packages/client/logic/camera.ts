@@ -1,7 +1,12 @@
 import type { CameraAnchor, CameraConfig } from '@slidev/types'
 
 /** Named corners accepted by `camera.position` and `camera.x`. */
-export const CAMERA_ANCHORS = ['top-left', 'top-right', 'bottom-left', 'bottom-right'] as const
+export const CAMERA_ANCHORS = [
+  'top-left',
+  'top-right',
+  'bottom-left',
+  'bottom-right',
+] as const
 
 /**
  * Inset from the slide edge for named anchors and the built-in default, in canvas pixels.
@@ -71,8 +76,12 @@ export function cameraAnchorPosition(
   margin = CAMERA_EDGE_MARGIN,
 ): Pick<CameraPlacement, 'x' | 'y'> {
   return {
-    x: anchor.endsWith('right') ? canvas.width - size - margin : margin,
-    y: anchor.startsWith('bottom') ? canvas.height - size - margin : margin,
+    x: anchor.endsWith('right')
+      ? canvas.width - size - margin
+      : margin,
+    y: anchor.startsWith('bottom')
+      ? canvas.height - size - margin
+      : margin,
   }
 }
 
@@ -171,7 +180,9 @@ function normalizeAnchor(value: unknown): CameraAnchor | undefined {
 }
 
 function finite(value: unknown): number | undefined {
-  return typeof value === 'number' && Number.isFinite(value) ? value : undefined
+  return typeof value === 'number' && Number.isFinite(value)
+    ? value
+    : undefined
 }
 
 /**
@@ -184,13 +195,17 @@ function finite(value: unknown): number | undefined {
 export function normalizeCameraConfig(config?: CameraConfig | null): NormalizedCamera {
   if (!config || typeof config !== 'object')
     return {}
-  const anchor = normalizeAnchor(config.position) ?? (typeof config.x === 'string' ? normalizeAnchor(config.x) : undefined)
+  const anchor = normalizeAnchor(config.position) ?? (typeof config.x === 'string'
+    ? normalizeAnchor(config.x)
+    : undefined)
   const size = finite(config.size)
   return {
     x: finite(config.x),
     y: finite(config.y),
     anchor,
-    size: size == null ? undefined : Math.max(CAMERA_MIN_SIZE, size),
+    size: size == null
+      ? undefined
+      : Math.max(CAMERA_MIN_SIZE, size),
   }
 }
 
@@ -218,7 +233,9 @@ export function cameraAdjustmentTarget(
   slide?: CameraConfig | null,
   global?: CameraConfig | null,
 ): CameraAdjustmentTarget {
-  return hasCameraConfig(slide) || hasCameraConfig(global) ? 'session' : 'storage'
+  return hasCameraConfig(slide) || hasCameraConfig(global)
+    ? 'session'
+    : 'storage'
 }
 
 export interface ResolveCameraOptions {
@@ -264,9 +281,13 @@ export function resolveCamera(options: ResolveCameraOptions): CameraPlacement {
   ): number {
     return finite(session[which])
       ?? slide[which]
-      ?? (slide.anchor ? fromAnchor(slide.anchor) : undefined)
+      ?? (slide.anchor
+        ? fromAnchor(slide.anchor)
+        : undefined)
       ?? global[which]
-      ?? (global.anchor ? fromAnchor(global.anchor) : undefined)
+      ?? (global.anchor
+        ? fromAnchor(global.anchor)
+        : undefined)
       ?? finite(stored[which])
       ?? fallback[which]
   }

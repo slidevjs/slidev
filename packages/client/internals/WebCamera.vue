@@ -146,7 +146,9 @@ async function applyForSlide() {
   const next = resolveCamera({
     slide: slideCamera(),
     global: configs.camera,
-    session: useSession ? sessionPlacements.get(currentSlideNo.value) : null,
+    session: useSession
+      ? sessionPlacements.get(currentSlideNo.value)
+      : null,
     stored: {
       x: storedPosition.value.x,
       y: storedPosition.value.y,
@@ -170,7 +172,12 @@ async function applyForSlide() {
 }
 
 watch(
-  [currentSlideNo, () => currentFrontmatter.value?.camera, () => configs.camera, canvas],
+  [
+    currentSlideNo,
+    () => currentFrontmatter.value?.camera,
+    () => configs.camera,
+    canvas,
+  ],
   () => {
     if (isDragging.value || handlerDown.value)
       return

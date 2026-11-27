@@ -25,5 +25,7 @@ export function mergeCameraConfig(
         merged[key] = value as never
     }
   }
-  return Object.keys(merged).length ? merged : undefined
+  return Object.keys(merged).length
+    ? merged
+    : undefined
 }
