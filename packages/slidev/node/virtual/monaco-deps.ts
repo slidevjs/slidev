@@ -1,13 +1,17 @@
 import type { VirtualModuleTemplate } from './types'
-import { resolve } from 'node:path'
 import { uniq } from '@antfu/utils'
+import { resolve } from 'pathe'
 
 export const templateMonacoRunDeps: VirtualModuleTemplate = {
   id: '/@slidev/monaco-run-deps',
   async getContent({ userRoot, data }) {
     if (!data.features.monaco)
       return ''
-    const deps = uniq(data.features.monaco.deps.concat(data.config.monacoTypesAdditionalPackages))
+    const deps = uniq([
+      ...data.features.monaco.deps,
+      ...(data.config.monacoTypesAdditionalPackages || []),
+      ...(data.config.monacoRunAdditionalDeps || []),
+    ])
     const importerPath = resolve(userRoot, './snippets/__importer__.ts')
     let result = ''
     for (let i = 0; i < deps.length; i++) {

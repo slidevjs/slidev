@@ -27,12 +27,12 @@ defineProps<{
     </div>
     <div class="mt-2 flex">
       <a
-        v-if="addon.author.link"
+        v-if="addon.author?.link"
         :href="addon.author.link"
         class="text-current text-sm opacity-60 hover:opacity-100"
         target="_blank"
       >{{ addon.author.name }}</a>
-      <div v-else class="text-current text-sm opacity-60 hover:opacity-100">
+      <div v-else-if="addon.author?.name" class="text-current text-sm opacity-60 hover:opacity-100">
         {{ addon.author.name }}
       </div>
       <div class="flex-auto" />

@@ -8,7 +8,9 @@ const props = defineProps({
   },
 })
 
-const addons = computed(() => props.collection === 'official' ? official : community)
+const addons = computed(() => props.collection === 'official'
+  ? official
+  : community)
 </script>
 
 <template>

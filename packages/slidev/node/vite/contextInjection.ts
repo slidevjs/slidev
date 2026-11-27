@@ -1,6 +1,11 @@
 import type { Plugin } from 'vite'
 import { templateImportContextUtils, templateInitContext, templateInjectionMarker } from './common'
 
+const RE_EXPORT_DEFAULT_OBJECT = /export\s+default\s+\{/
+const RE_INJECT_OPTION = /.*inject\s*:\s*([[{])/
+const RE_VUE_FILE = /\.vue$/
+const RE_CLIENT_FILE = /\/(?:@slidev\/client|packages\/client)\//
+
 /**
  * Inject `$slidev` into the script block of a Vue component
  */
@@ -8,9 +13,11 @@ export function createContextInjectionPlugin(): Plugin {
   return {
     name: 'slidev:context-injection',
     transform: {
-      // TODO: static filter
+      filter: {
+        id: { include: RE_VUE_FILE, exclude: RE_CLIENT_FILE },
+      },
       async handler(code, id) {
-        if (!id.endsWith('.vue') || id.includes('/@slidev/client/') || id.includes('/packages/client/'))
+        if (!RE_VUE_FILE.test(id) || RE_CLIENT_FILE.test(id))
           return
         if (code.includes(templateInjectionMarker) || code.includes('useSlideContext()'))
           return code // Assume that the context is already imported and used
@@ -21,9 +28,13 @@ export function createContextInjectionPlugin(): Plugin {
         ]
 
         // Find all <script> blocks
-        const matchScripts = [...code.matchAll(/<script([^>]*)>/g)]
+        const matchScripts = [
+          ...code.matchAll(/<script([^>]*)>/g),
+        ]
         // Find the <script ... setup> block
-        const setupScriptMatch = [...code.matchAll(/<script([^>]*)setup([^>]*)>/g)].at(0)
+        const setupScriptMatch = [
+          ...code.matchAll(/<script([^>]*)setup([^>]*)>/g),
+        ].at(0)
         if (setupScriptMatch) {
         // Only inject into the <script setup> block
           const setupTag = setupScriptMatch[0]
@@ -34,7 +45,7 @@ export function createContextInjectionPlugin(): Plugin {
         }
         else if (!setupScriptMatch && matchScripts.length === 1) {
         // not a setup script
-          const matchExport = code.match(/export\s+default\s+\{/)
+          const matchExport = code.match(RE_EXPORT_DEFAULT_OBJECT)
           if (matchExport) {
           // script exports a component
             const exportIndex = (matchExport.index || 0) + matchExport[0].length
@@ -47,7 +58,7 @@ export function createContextInjectionPlugin(): Plugin {
 
             let injectIndex = exportIndex + provideImport.length
             let injectObject = '$slidev: { from: injectionSlidevContext },'
-            const matchInject = component.match(/.*inject\s*:\s*([[{])/)
+            const matchInject = component.match(RE_INJECT_OPTION)
             if (matchInject) {
             // component has a inject option
               injectIndex += (matchInject.index || 0) + matchInject[0].length

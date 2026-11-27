@@ -8,6 +8,7 @@ const props = defineProps<{
   markdownSource?: DragElementMarkdownSource
 }>()
 
+// @ts-expect-error TS6133 container is used as template ref
 const { dragId, container, containerStyle, mounted, unmounted, startDragging } = useDragElement(null, props.pos, props.markdownSource)
 
 onMounted(mounted)

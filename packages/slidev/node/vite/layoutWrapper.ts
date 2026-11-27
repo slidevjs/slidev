@@ -4,6 +4,8 @@ import { bold, gray, red, yellow } from 'ansis'
 import { toAtFS } from '../resolver'
 import { regexSlideSourceId, templateImportContextUtils, templateInitContext, templateInjectionMarker } from './common'
 
+const RE_SCRIPT_SETUP_TAG = /^<script setup.*>/m
+
 export function createLayoutWrapperPlugin(
   { data, utils }: ResolvedSlidevOptions,
 ): Plugin {
@@ -23,17 +25,21 @@ export function createLayoutWrapperPlugin(
         if (type !== 'md')
           return
         const index = +no - 1
-        const layouts = utils.getLayouts()
+        const layouts = await utils.getLayouts()
         const rawLayoutName = data.slides[index]?.frontmatter?.layout ?? data.slides[0]?.frontmatter?.defaults?.layout
-        let layoutName = rawLayoutName || (index === 0 ? 'cover' : 'default')
+        let layoutName = rawLayoutName || (index === 0
+          ? 'cover'
+          : 'default')
         if (!layouts[layoutName]) {
           console.error(red(`\nUnknown layout "${bold(layoutName)}".${yellow(' Available layouts are:')}`)
-            + Object.keys(layouts).map((i, idx) => (idx % 3 === 0 ? '\n    ' : '') + gray(i.padEnd(15, ' '))).join('  '))
+            + Object.keys(layouts).map((i, idx) => (idx % 3 === 0
+              ? '\n    '
+              : '') + gray(i.padEnd(15, ' '))).join('  '))
           console.error()
           layoutName = 'default'
         }
 
-        const setupTag = code.match(/^<script setup.*>/m)
+        const setupTag = code.match(RE_SCRIPT_SETUP_TAG)
         if (!setupTag)
           throw new Error(`[Slidev] Internal error: <script setup> block not found in slide ${index + 1}.`)
 

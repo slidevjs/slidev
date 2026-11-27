@@ -19,7 +19,7 @@ Documentation for [Slidev](https://github.com/slidevjs/slidev)
 | <del>Deutsch</del>        | [docs-de](https://github.com/slidevjs/docs-de) | [de.sli.dev](https://de.sli.dev) | [@fabiankachlock](https://github.com/fabiankachlock)                  |
 | <del>Português (BR)</del> | [docs-br](https://github.com/slidevjs/docs-br) | [br.sli.dev](https://br.sli.dev) | [@luisfelipesdn12](https://github.com/luisfelipesdn12)                |
 | <del>Ελληνικά</del>       | [docs-el](https://github.com/slidevjs/docs-el) | [el.sli.dev](https://el.sli.dev) | [@GeopJr](https://github.com/GeopJr)                                  |
-| <del>日本語</del>         | [docs-ja](https://github.com/slidevjs/docs-el) | [ja.sli.dev](https://ja.sli.dev) | [@IkumaTadokoro](https://github.com/IkumaTadokoro)                    |
+| <del>日本語</del>         | [docs-ja](https://github.com/slidevjs/docs-ja) | [ja.sli.dev](https://ja.sli.dev) | [@IkumaTadokoro](https://github.com/IkumaTadokoro)                    |
 
 ## Start Server Locally
 

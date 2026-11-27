@@ -1,10 +1,10 @@
 <script setup lang="ts">
-import type { KeyedTokensInfo } from 'shiki-magic-move/types'
+import type { KeyedTokensInfo } from '@shikijs/magic-move/types'
 import type { PropType } from 'vue'
 import { sleep } from '@antfu/utils'
+import { ShikiMagicMovePrecompiled } from '@shikijs/magic-move/vue'
 import { useClipboard } from '@vueuse/core'
 import lz from 'lz-string'
-import { ShikiMagicMovePrecompiled } from 'shiki-magic-move/vue'
 import { computed, nextTick, onMounted, onUnmounted, ref, watch } from 'vue'
 import { useNav } from '../composables/useNav'
 import { CLICKS_MAX } from '../constants'
@@ -34,21 +34,28 @@ const props = defineProps({
     type: String,
     default: '',
   },
+  duration: {
+    type: Number,
+    default: configs.magicMoveDuration,
+  },
 })
 
 const steps = JSON.parse(lz.decompressFromBase64(props.stepsLz)) as KeyedTokensInfo[]
-const { $clicksContext: clicks, $scale: scale, $zoom: zoom } = useSlideContext()
+const { $clicksContext: clicks, $scale: scale, $zoom: zoom, $frontmatter } = useSlideContext()
 const { isPrintMode } = useNav()
 const id = makeId()
 
 const stepIndex = ref(0)
+// Used to skip the animation on the first tick.
+const isFirstTick = ref(true)
 const container = ref<HTMLElement>()
 
 const showCopyButton = computed(() => {
-  if (!configs.codeCopy)
+  const codeCopy = $frontmatter?.codeCopy ?? configs.codeCopy
+  if (!codeCopy)
     return false
 
-  const magicCopy = configs.magicMoveCopy
+  const magicCopy = $frontmatter?.magicMoveCopy ?? configs.magicMoveCopy
   if (!magicCopy)
     return false
 
@@ -72,7 +79,9 @@ function copyCode() {
 }
 
 // Normalized the ranges, to at least have one range
-const ranges = computed(() => props.stepRanges.map(i => i.length ? i : ['all']))
+const ranges = computed(() => props.stepRanges.map(i => i.length
+  ? i
+  : ['all']))
 
 onUnmounted(() => {
   clicks?.unregister(id)
@@ -89,11 +98,14 @@ onMounted(() => {
   const clickInfo = clicks.calculateSince(props.at, clickCounts - 1)
   clicks.register(id, clickInfo)
 
+  let cancelTick: () => void = () => { }
   watch(
     () => clicks.current,
     () => {
       // Calculate the step and rangeStr based on the current click count
-      const clickCount = clickInfo ? clicks.current - clickInfo.start : CLICKS_MAX
+      const clickCount = clickInfo
+        ? clicks.current - clickInfo.start
+        : CLICKS_MAX
       let step = steps.length - 1
       let currentClickSum = 0
       let rangeStr = 'all'
@@ -107,9 +119,24 @@ onMounted(() => {
         currentClickSum += current.length || 1
       }
 
-      nextTick(async () => {
-        stepIndex.value = step
+      // It seems ticks may not be executed in order. Cancel previous ones, because
+      // clicks.current is first 0 then immediately updated when refreshing the slide.
+      cancelTick()
+      let isCanceled = false
+      cancelTick = () => {
+        isCanceled = true
+      }
 
+      nextTick(async () => {
+        if (isCanceled) {
+          return
+        }
+        stepIndex.value = step
+        if (isFirstTick.value) {
+          nextTick(() => {
+            isFirstTick.value = false
+          })
+        }
         await sleep(0)
 
         const pre = container.value?.querySelector('.shiki') as HTMLElement
@@ -157,10 +184,13 @@ onMounted(() => {
       :step="stepIndex"
       :animate="!isPrintMode"
       :options="{
-        globalScale: scale * zoom,
-        // TODO: make this configurable later
-        duration: 800,
         stagger: 1,
+        ...configs.shiki?.magicMove,
+        globalScale: scale * zoom,
+        // Use duration 0 to skip animation instead of using the animate prop,
+        // because moving from non-animated to animated causes issues with
+        // new elements. Unfortunately, this causes a flash.
+        duration: isFirstTick ? 0 : $props.duration,
       }"
     />
     <button

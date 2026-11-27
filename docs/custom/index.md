@@ -64,17 +64,31 @@ record: dev
 contextMenu: true
 # enable wake lock, can be boolean, 'dev' or 'build'
 wakeLock: true
+# enable PWA support to precache assets for offline use, can be boolean, 'dev' or 'build'
+# Learn more: https://sli.dev/features/pwa.html
+pwa: false
 # take snapshot for each slide in the overview
 overviewSnapshots: false
-
-# force color schema for the slides, can be 'auto', 'light', or 'dark'
-colorSchema: auto
-# router mode for vue-router, can be "history" or "hash"
+# router mode for vue-router, can be "history", "hash", or "memory"
 routerMode: history
+# ignore duplicate forward navigation within this many milliseconds (0 disables it)
+advanceDebounce: 0
+
+# color scheme for the slides:
+# - 'auto' follows the system preference and allows switching
+# - 'light' or 'dark' forces that scheme and disables switching
+# - 'light dark' or 'dark light' sets the default and allows switching
+colorSchema: auto
 # aspect ratio for the slides
 aspectRatio: 16/9
 # real width of the canvas, unit in px
 canvasWidth: 980
+# defines the default transition between slides
+# Learn more: https://sli.dev/guide/animations.html#slide-transitions
+transition: undefined # or BuiltinSlideTransition | string | TransitionGroupProps | null
+# defines the default animation presets for click animations
+# Learn more: https://sli.dev/guide/animations.html#click-animation-presets
+clickAnimation: undefined # or comma-delimited string
 # used for theme customization, will inject root styles as `--slidev-theme-x` for attribute `x`
 themeConfig:
   primary: '#5d8392'
@@ -126,6 +140,8 @@ seoMeta:
 
 Check out the [type definitions](https://github.com/slidevjs/slidev/blob/main/packages/types/src/config.ts) for more details.
 
+For `colorSchema`, `auto` follows the system preference and allows switching, while `light` and `dark` force that scheme. Use `light dark` or `dark light` to allow switching while choosing the initial default: the first scheme is the default when there is no saved manual preference. Manual selections are saved in browser local storage and shared by presentations on the same origin.
+
 ## Per-slide Configs {#frontmatter}
 
 Also every slide accepts the following configuration in its frontmatter block. The following shows the default value for each option:
@@ -137,6 +153,8 @@ Also every slide accepts the following configuration in its frontmatter block. T
 clicks: 0
 # custom start clicks count
 clicksStart: 0
+# background image URL, local asset path, or color/gradient
+background: undefined # or string (e.g. 'https://cover.sli.dev' or '/image.png')
 # completely disable and hide the slide
 disabled: false
 # the same as `disabled`
@@ -145,6 +163,8 @@ hide: false
 hideInToc: false
 # defines the layout component applied to the slide
 layout: <"cover" if the slide is the first slide, otherwise "default">
+# custom class(es) added to the slide root element
+class: undefined # or string | string[] | Record<string, unknown>
 # override the title level for the <TitleRenderer> and <Toc> components
 # only if `title` has also been declared
 level: 1
@@ -161,6 +181,9 @@ title: undefined # or string
 # defines the transition between the slide and the next one
 # Learn more: https://sli.dev/guide/animations.html#slide-transitions
 transition: undefined # or BuiltinSlideTransition | string | TransitionGroupProps | null
+# defines the default animation presets for click animations in this slide
+# Learn more: https://sli.dev/guide/animations.html#click-animation-presets
+clickAnimation: undefined # or comma-delimited string
 # custom zoom scale
 # useful for slides with a lot of content
 zoom: 1

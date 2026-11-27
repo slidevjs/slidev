@@ -1,15 +1,15 @@
 import type { ResolvedSlidevOptions, SlideInfo, SlidePatch, SlidevData, SlidevServerOptions } from '@slidev/types'
-import type { LoadResult } from 'rollup'
-import type { Plugin, ViteDevServer } from 'vite'
+import type { ModuleNode, Plugin, Rolldown, ViteDevServer } from 'vite'
+import type { VirtualModuleContext } from '../virtual/types'
 import { notNullish, range } from '@antfu/utils'
 import * as parser from '@slidev/parser/fs'
 import equal from 'fast-deep-equal'
-import MarkdownIt from 'markdown-it'
+import MarkdownExit from 'markdown-exit'
 import YAML from 'yaml'
 import { createDataUtils } from '../options'
-import MarkdownItKatex from '../syntax/markdown-it/markdown-it-katex'
-import markdownItLink from '../syntax/markdown-it/markdown-it-link'
-import { getBodyJson, updateFrontmatterPatch } from '../utils'
+import MarkdownItKatex from '../syntax/katex'
+import markdownItLink from '../syntax/link'
+import { applyNotesAutoRuby, createMakeAbsoluteImportGlob, getBodyJson, updateFrontmatterPatch } from '../utils'
 import { templates } from '../virtual'
 import { templateConfigs } from '../virtual/configs'
 import { templateMonacoRunDeps } from '../virtual/monaco-deps'
@@ -22,9 +22,9 @@ export function createSlidesLoader(
   options: ResolvedSlidevOptions,
   serverOptions: SlidevServerOptions,
 ): Plugin {
-  const { data, mode, utils } = options
+  const { data, mode, utils, withoutNotes } = options
 
-  const notesMd = MarkdownIt({ html: true })
+  const notesMd = MarkdownExit({ html: true })
   notesMd.use(markdownItLink)
   if (data.features.katex)
     notesMd.use(MarkdownItKatex, utils.katexOptions)
@@ -32,6 +32,7 @@ export function createSlidesLoader(
   const hmrSlidesIndexes = new Set<number>()
   let server: ViteDevServer | undefined
   let skipHmr: { filePath: string, fileContent: string } | null = null
+  const makeAbsoluteImportGlob = createMakeAbsoluteImportGlob(options.userRoot)
 
   interface ResolvedSourceIds {
     md: string[]
@@ -80,13 +81,19 @@ export function createSlidesLoader(
 
         const [, no] = match
         const idx = Number.parseInt(no) - 1
+        const targetSlide = data.slides[idx]
+        if (!targetSlide) {
+          res.statusCode = 404
+          return res.end()
+        }
+
         if (req.method === 'GET') {
-          res.write(JSON.stringify(withRenderedNote(data.slides[idx])))
+          res.write(JSON.stringify(withRenderedNote(targetSlide)))
           return res.end()
         }
         else if (req.method === 'POST') {
           const body: SlidePatch = await getBodyJson(req)
-          const slide = data.slides[idx]
+          const slide = targetSlide
 
           if (body.content && body.content !== slide.source.content)
             hmrSlidesIndexes.add(idx)
@@ -105,7 +112,7 @@ export function createSlidesLoader(
                 slide.source.frontmatterDoc = parsed
             }
           }
-          if (body.note)
+          if (body.note != null)
             slide.note = slide.source.note = body.note
           if (body.frontmatter) {
             updateFrontmatterPatch(slide.source, body.frontmatter)
@@ -193,6 +200,12 @@ export function createSlidesLoader(
 
       const length = Math.min(data.slides.length, newData.slides.length)
 
+      // Only titles are baked into `/@slidev/title-renderer.md`. Invalidating that
+      // virtual module on every content change dead-ends HMR under Vite 8 when the
+      // module is not self-accepting (#2784). Skip it unless a title (or slide count) changed.
+      const titlesChanged = data.slides.length !== newData.slides.length
+        || range(length).some(i => data.slides[i].title?.trim() !== newData.slides[i].title?.trim())
+
       for (let i = 0; i < length; i++) {
         const a = data.slides[i]
         const b = newData.slides[i]
@@ -226,25 +239,45 @@ export function createSlidesLoader(
         hmrSlidesIndexes.add(i)
       }
 
+      // Snippet imports (`<<<` and inside magic-move) add their files to `watchFiles`
+      // when a slide is rendered, not when it is parsed, so the reloaded data does
+      // not have them. Keep them, or later edits to those files are ignored.
+      for (const [file, indexes] of Object.entries(data.watchFiles)) {
+        if (!data.markdownFiles[file] && !newData.watchFiles[file])
+          newData.watchFiles[file] = indexes
+      }
+
       Object.assign(data, newData)
       Object.assign(utils, createDataUtils(options))
 
-      if (hmrSlidesIndexes.size > 0)
+      if (titlesChanged)
         moduleIds.add(templateTitleRendererMd.id)
 
-      const vueModules = Array.from(hmrSlidesIndexes)
-        .flatMap((idx) => {
-          const frontmatter = ctx.server.moduleGraph.getModuleById(sourceIds.frontmatter[idx])
-          const main = ctx.server.moduleGraph.getModuleById(sourceIds.md[idx])
-          const styles = main ? [...main.clientImportedModules].find(m => m.id?.includes(`&type=style`)) : undefined
-          return [
-            frontmatter,
-            main,
-            styles,
-          ]
-        })
+      for (const idx of hmrSlidesIndexes) {
+        moduleIds.add(sourceIds.frontmatter[idx])
+      }
+
+      const reloadBeforeOthers: ModuleNode[] = []
+      const vueModules: ModuleNode[] = []
+      for (const idx of hmrSlidesIndexes) {
+        const main = ctx.server.moduleGraph.getModuleById(sourceIds.md[idx])
+        if (main) {
+          const styles = [...main.clientImportedModules].filter(m => m.id?.includes(`&type=style`))
+          if (styles.length) {
+            // `pluginVue.transform(mainModule)` must be called before `pluginVue.load(styleModule)`
+            // to refresh the internal descriptor cache of `@vitejs/plugin-vue`
+            reloadBeforeOthers.push(main)
+            vueModules.push(...styles)
+          }
+          else {
+            vueModules.push(main)
+          }
+        }
+      }
 
       hmrSlidesIndexes.clear()
+
+      await Promise.all(reloadBeforeOthers.map(m => ctx.server.reloadModule(m)))
 
       const moduleEntries = [
         ...ctx.modules.filter(i => i.id === templateMonacoRunDeps.id || i.id === templateMonacoTypes.id),
@@ -261,6 +294,7 @@ export function createSlidesLoader(
 
     resolveId: {
       order: 'pre',
+      filter: { id: /^\/@slidev\/|__slidev_/ },
       handler(id) {
         if (id.startsWith('/@slidev/') || id.includes('__slidev_'))
           return id
@@ -268,11 +302,25 @@ export function createSlidesLoader(
       },
     },
 
-    async load(id): Promise<LoadResult> {
+    transform: {
+      // Snippet imports register their files in `watchFiles` while the slide is
+      // rendered by the Markdown plugin, so watch them once that has happened.
+      order: 'post',
+      handler(_code, id) {
+        if (regexSlideSourceId.test(id))
+          updateServerWatcher()
+      },
+    },
+
+    async load(id): Promise<Rolldown.LoadResult> {
       const template = templates.find(i => i.id === id)
       if (template) {
+        const templateContext: VirtualModuleContext = {
+          resolve: this.resolve.bind(this),
+          makeAbsoluteImportGlob,
+        }
         return {
-          code: await template.getContent.call(this, options),
+          code: await template.getContent.call(templateContext, options),
           map: { mappings: '' },
         }
       }
@@ -308,8 +356,14 @@ export function createSlidesLoader(
             frontmatter: undefined,
             source: undefined,
             importChain: undefined,
+            // The runtime image preloader reads `slide.images`, but `source` is
+            // stripped just above — carry the extracted image URLs onto the client
+            // slide so runtime preloading actually receives them.
+            images: slide.images ?? slide.source?.images,
             // remove raw content in build, optimize the bundle size
-            ...(mode === 'build' ? { raw: '', content: '', note: '' } : {}),
+            ...(mode === 'build'
+              ? { raw: '', content: '', note: '' }
+              : {}),
           }
           const fontmatter = getFrontmatter(idx)
 
@@ -320,10 +374,8 @@ export function createSlidesLoader(
               `export const frontmatterData = ${JSON.stringify(fontmatter)}`,
               // handle HMR, update frontmatter with update
               'if (import.meta.hot) {',
-              '  const firstLoad = !import.meta.hot.data.frontmatter',
               '  import.meta.hot.data.frontmatter ??= reactive(frontmatterData)',
               '  import.meta.hot.accept(({ frontmatterData: update }) => {',
-              '    if (firstLoad) return',
               '    const frontmatter = import.meta.hot.data.frontmatter',
               '    Object.keys(frontmatter).forEach(key => {',
               '      if (!(key in update)) delete frontmatter[key]',
@@ -344,8 +396,11 @@ export function createSlidesLoader(
               '  slide: {',
               `    ...(${JSON.stringify(slideBase)}),`,
               `    frontmatter,`,
-              `    filepath: ${JSON.stringify(mode === 'dev' ? slide.source.filepath : '')},`,
+              `    filepath: ${JSON.stringify(mode === 'dev'
+                ? slide.source.filepath
+                : '')},`,
               `    start: ${JSON.stringify(slide.source.start)},`,
+              `    sourceIndex: ${JSON.stringify(slide.source.index)},`,
               `    id: ${idx},`,
               `    no: ${no},`,
               '  },',
@@ -365,21 +420,28 @@ export function createSlidesLoader(
   }
 
   function renderNote(text: string = '') {
+    if (withoutNotes)
+      return ''
+
     let clickCount = 0
-    const html = notesMd.render(text
-    // replace [click] marker with span
+    const notesAutoRuby: Record<string, string | undefined> = (data.headmatter as any).notesAutoRuby || {}
+
+    // Apply [click] marker
+    const md = text
+      // replace [click] marker with span
       .replace(/\[click(?::(\d+))?\]/gi, (_, count = 1) => {
         clickCount += Number(count)
         return `<span class="slidev-note-click-mark" data-clicks="${clickCount}"></span>`
-      }),
-    )
+      })
 
+    const html = notesMd.render(applyNotesAutoRuby(md, notesAutoRuby))
     return html
   }
 
   function withRenderedNote(data: SlideInfo): SlideInfo {
     return {
       ...data,
+      ...withoutNotes && { note: '' },
       noteHTML: renderNote(data?.note),
     }
   }

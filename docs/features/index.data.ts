@@ -1,6 +1,9 @@
 import { basename } from 'node:path'
 import { createContentLoader } from 'vitepress'
 
+const RE_FEATURE_NAME = /\/([\w-]+)($|#)/
+const RE_HEADING1 = /^# (.*)$/m
+
 export interface Feature {
   name: string
   title: string
@@ -22,7 +25,7 @@ export default createContentLoader('features/*.md', {
       if (name === 'index' || name === 'features')
         continue
       for (const depend of md.frontmatter.depends ?? []) {
-        const dependName = depend.match(/\/([\w-]+)($|#)/)?.[1]
+        const dependName = depend.match(RE_FEATURE_NAME)?.[1]
         if (dependName) {
           derivesMap[dependName] ??= []
           derivesMap[dependName].push(`features/${name}`)
@@ -35,7 +38,7 @@ export default createContentLoader('features/*.md', {
       const name = basename(md.url, '.md')
       if (name === 'index' || name === 'features')
         continue
-      const title = md.src?.match(/^# (.*)$/m)?.[1]?.trim() ?? name
+      const title = md.src?.match(RE_HEADING1)?.[1]?.trim() ?? name
       const derives = md.frontmatter.derives ?? []
       for (const d of derivesMap[name] ?? []) {
         if (!derives.includes(d)) {

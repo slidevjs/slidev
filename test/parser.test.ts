@@ -3,6 +3,7 @@ import { basename, relative, resolve } from 'node:path'
 import { objectMap, slash } from '@antfu/utils'
 import fg from 'fast-glob'
 import { describe, expect, it } from 'vitest'
+import { extractImagesUsage } from '../packages/parser/src/core'
 import { getDefaultConfig, load, parse, prettify, resolveConfig, stringify } from '../packages/parser/src/fs'
 
 function configDiff(v: SlidevConfig) {
@@ -19,6 +20,17 @@ function replaceCRLF(s: string) {
   return s.replace(/\r\n/g, '\n')
 }
 
+describe('advance debounce config', () => {
+  it('is disabled by default and resolves deck and nested config values', () => {
+    expect(getDefaultConfig().advanceDebounce).toBe(0)
+    expect(resolveConfig({}).advanceDebounce).toBe(0)
+    expect(resolveConfig({ advanceDebounce: 100 }).advanceDebounce).toBe(100)
+    expect(resolveConfig({
+      config: { advanceDebounce: 250 },
+    }).advanceDebounce).toBe(250)
+  })
+})
+
 describe('md parser', () => {
   const userRoot = resolve(__dirname, 'fixtures/markdown')
   const files = fg.sync('*.md', {
@@ -28,7 +40,10 @@ describe('md parser', () => {
 
   for (const file of files) {
     it(basename(file), async () => {
-      const data = await load(userRoot, file)
+      const data = await load({
+        userRoot,
+        roots: [userRoot],
+      }, file)
 
       expect(stringify(data.entry).trim()).toEqual(replaceCRLF(data.entry.raw.trim()))
 
@@ -112,6 +127,130 @@ f
       .toEqual({ })
   })
 
+  it('does not take the slide title from a heading inside a code block', async () => {
+    const data = await parse([
+      '```bash',
+      '# Install the CLI',
+      'npm i -g @slidev/cli',
+      '```',
+      '',
+      '## Getting started',
+      '',
+      '---',
+      '',
+      '```bash',
+      '# Only a code comment',
+      '```',
+      '',
+    ].join('\n'), 'file.md')
+
+    expect(data.slides[0].title).toBe('Getting started')
+    expect(data.slides[0].level).toBe(2)
+    expect(data.slides[1].title).toBe(undefined)
+  })
+
+  it('ignores a leading UTF-8 BOM', async () => {
+    const markdown = '﻿---\ntheme: seriph\ntitle: Hello\n---\n\n# Slide 1\n\n---\n\n# Slide 2\n'
+
+    const data = await parse(markdown, 'file.md')
+    expect(data.slides.map(i => i.content.trim())).toEqual(['# Slide 1', '# Slide 2'])
+    expect(data.slides[0].frontmatter).toEqual({ theme: 'seriph', title: 'Hello' })
+
+    const userRoot = resolve(__dirname, 'fixtures/markdown')
+    const filepath = slash(resolve(userRoot, 'bom.md'))
+    const loaded = await load({
+      userRoot,
+      roots: [userRoot],
+    }, filepath, { [filepath]: markdown })
+    expect(loaded.headmatter).toEqual({ theme: 'seriph', title: 'Hello' })
+  })
+
+  it('ignores slide separators inside HTML comments', async () => {
+    const data = await parse(`---
+src: ./pages/one.md
+---
+
+<!--
+---
+src: ./pages/two.md
+---
+-->
+
+---
+src: ./pages/three.md
+---
+`, 'slides.md')
+
+    expect(data.slides).toHaveLength(2)
+    expect(data.slides.map(slide => slide.frontmatter.src))
+      .toEqual(['./pages/one.md', './pages/three.md'])
+  })
+
+  describe('missing blank line after `---`', () => {
+    const cases = {
+      'a multi-line comment': '<!--\nnote\n-->',
+      'a comment containing a colon': '<!-- note: something -->',
+      'plain text': 'hello',
+      'a list': '- a\n- b',
+    }
+
+    for (const [name, body] of Object.entries(cases)) {
+      it(`records an error for ${name}`, async () => {
+        const data = await parse(`# Slide 1\n\n---\n${body}\n\n---\n\n# Slide 3\n`, 'slides.md')
+
+        expect(data.slides).toHaveLength(2)
+        expect(data.slides[1].frontmatter).toEqual({})
+        expect(data.errors).toEqual([
+          {
+            row: 2,
+            message: expect.stringContaining('blank line'),
+          },
+        ])
+      })
+    }
+
+    it('does not record an error when the blank line exists', async () => {
+      const data = await parse(`# Slide 1\n\n---\n\n<!--\nnote\n-->\n\n---\n\n# Slide 3\n`, 'slides.md')
+
+      expect(data.slides[1].note).toBe('note')
+      expect(data.errors).toBeUndefined()
+    })
+
+    it('does not record an error for a valid or comment-only frontmatter', async () => {
+      const data = await parse(`# Slide 1\n\n---\nlayout: center\n---\n\n# Slide 2\n\n---\n# layout: center\n---\n\n# Slide 3\n`, 'slides.md')
+
+      expect(data.slides[1].frontmatter).toEqual({ layout: 'center' })
+      expect(data.slides[2].frontmatter).toEqual({})
+      expect(data.errors).toBeUndefined()
+    })
+  })
+
+  it('ignores an HTML comment inside frontmatter and records an error', async () => {
+    const data = await parse(`# Slide 1\n\n---\nlayout: center\n<!-- note -->\n---\n\n# Slide 2\n`, 'slides.md')
+
+    expect(data.slides[1].frontmatter).toEqual({ layout: 'center' })
+    expect(data.errors).toEqual([
+      {
+        row: 2,
+        message: expect.stringContaining('HTML comments are not supported in frontmatter'),
+      },
+    ])
+  })
+
+  it('detects slide separator even when comment opens on the same line', async () => {
+    const data = await parse(`a
+
+----<!--
+hidden
+-->
+
+b
+`, 'file.md')
+
+    expect(data.slides).toHaveLength(2)
+    expect(data.slides.map(s => s.content.trim())).toEqual(['a', 'hidden\n-->\n\nb'])
+  })
+
   async function parseWithExtension(
     src: string,
     transformRawLines: (lines: string[]) => void | Promise<void> = () => {},
@@ -121,7 +260,10 @@ f
     return await parse(
       src,
       'file.md',
-      [{ transformRawLines, ...more }, ...moreExts] as any,
+      [
+        { transformRawLines, ...more },
+        ...moreExts,
+      ] as any,
     )
   }
 
@@ -187,7 +329,9 @@ background: ${i}${more}
       let i = 0
       while (i < lines.length) {
         if (lines[i].startsWith('@cov ')) {
-          const repl = [...cov(lines[i].substring(5), '').split('\n')]
+          const repl = [
+            ...cov(lines[i].substring(5), '').split('\n'),
+          ]
           lines.splice(i, 1, ...repl)
         }
         i++
@@ -209,19 +353,22 @@ background: ${i}${more}
 a..A
 a.a.A.A
 .a.A.
-`, undefined, {}, [{
-      name: 'test',
-      transformRawLines(lines: string[]) {
-        for (const i in lines)
-          lines[i] = lines[i].replace(/A/g, 'B').replace(/a/g, 'A')
+`, undefined, {}, [
+      {
+        name: 'test',
+        transformRawLines(lines: string[]) {
+          for (const i in lines)
+            lines[i] = lines[i].replace(/A/g, 'B').replace(/a/g, 'A')
+        },
       },
-    }, {
-      name: 'test',
-      transformRawLines(lines: string[]) {
-        for (const i in lines)
-          lines[i] = lines[i].replace(/A/g, 'C')
+      {
+        name: 'test',
+        transformRawLines(lines: string[]) {
+          for (const i in lines)
+            lines[i] = lines[i].replace(/A/g, 'C')
+        },
       },
-    }])
+    ])
     expect(data.slides.map(i => i.content.trim().replace(/\n/g, '%')).join('/'))
       .toEqual('C..B%C.C.B.B%.C.B.')
   })
@@ -229,7 +376,9 @@ a.a.A.A
   // Generate cartesian product of given iterables:
   function* cartesian(...all: any[]): Generator<any[], void, void> {
     const [head, ...tail] = all
-    const remainder = tail.length ? cartesian(...tail) : [[]]
+    const remainder = tail.length
+      ? cartesian(...tail)
+      : [[]]
     for (const r of remainder) {
       for (const h of head)
         yield [h, ...r]
@@ -313,20 +462,300 @@ a.a.A.A
       }
       expect(project(data.slides.map(i => i.content.replace(/\n/g, '%')).join('/')))
         .toEqual(project([
-          ...withSlideBefore ? ['./'] : [],
-          ...prependContent ? ['<a>%<b>%'] : [],
+          ...withSlideBefore
+            ? ['./']
+            : [],
+          ...prependContent
+            ? ['<a>%<b>%']
+            : [],
           'ccc%ddd',
-          ...appendContent ? ['%</b>%</a>'] : [],
-          ...withSlideAfter ? ['/..'] : [],
+          ...appendContent
+            ? ['%</b>%</a>']
+            : [],
+          ...withSlideAfter
+            ? ['/..']
+            : [],
         ].join('')))
 
       if (withFrontmatter || addFrontmatter) {
         expect(data.slides[withSlideBefore ? 1 : 0].frontmatter)
           .toEqual({
-            ...withFrontmatter ? { m: 'M', n: 'N' } : {},
-            ...addFrontmatter ? { adda: 'add', addb: 'add' } : {},
+            ...withFrontmatter
+              ? { m: 'M', n: 'N' }
+              : {},
+            ...addFrontmatter
+              ? { adda: 'add', addb: 'add' }
+              : {},
           })
       }
     })
   }
+
+  describe('extractImagesUsage', () => {
+    it('extracts from frontmatter image key', () => {
+      const images = extractImagesUsage('', { image: '/path/to/image.png' })
+      expect(images).toEqual(['/path/to/image.png'])
+    })
+
+    it('extracts from frontmatter backgroundImage key', () => {
+      const images = extractImagesUsage('', { backgroundImage: 'https://example.com/bg.jpg' })
+      expect(images).toEqual(['https://example.com/bg.jpg'])
+    })
+
+    it('extracts from frontmatter background key with image extension', () => {
+      const images = extractImagesUsage('', { background: '/assets/bg.webp' })
+      expect(images).toEqual(['/assets/bg.webp'])
+    })
+
+    it('extracts from frontmatter background key with URL', () => {
+      const images = extractImagesUsage('', { background: 'https://example.com/image.png' })
+      expect(images).toEqual(['https://example.com/image.png'])
+    })
+
+    it('ignores frontmatter background key without image extension or URL', () => {
+      const images = extractImagesUsage('', { background: 'gradient-to-r' })
+      expect(images).toEqual([])
+    })
+
+    it('ignores data URLs in frontmatter', () => {
+      const images = extractImagesUsage('', { image: 'data:image/png;base64,abc123' })
+      expect(images).toEqual([])
+    })
+
+    it('extracts markdown image syntax', () => {
+      const content = '![alt text](/images/photo.jpg)'
+      const images = extractImagesUsage(content, {})
+      expect(images).toEqual(['/images/photo.jpg'])
+    })
+
+    it('extracts multiple markdown images', () => {
+      const content = `
+![first](/img1.png)
+Some text
+![second](https://example.com/img2.jpg)
+![third](./relative/path.svg)
+      `
+      const images = extractImagesUsage(content, {})
+      expect(images).toEqual(['/img1.png', 'https://example.com/img2.jpg', './relative/path.svg'])
+    })
+
+    it('ignores the optional title in markdown images', () => {
+      const content = `![alt](/images/photo.jpg "A photo")
+![alt](/images/other.png 'Another')`
+      const images = extractImagesUsage(content, {})
+      expect(images).toEqual(['/images/photo.jpg', '/images/other.png'])
+    })
+
+    it('unwraps angle-bracketed markdown image destinations', () => {
+      const content = '![alt](</images/my photo.jpg>)'
+      const images = extractImagesUsage(content, {})
+      expect(images).toEqual(['/images/my photo.jpg'])
+    })
+
+    it('ignores data URLs in markdown images', () => {
+      const content = '![inline](data:image/png;base64,abc123)'
+      const images = extractImagesUsage(content, {})
+      expect(images).toEqual([])
+    })
+
+    it('extracts Vue component src prop', () => {
+      const content = '<img src="/assets/logo.png" />'
+      const images = extractImagesUsage(content, {})
+      expect(images).toEqual(['/assets/logo.png'])
+    })
+
+    it('extracts Vue component image prop', () => {
+      const content = '<MyImage image="/path/to/image.jpg" />'
+      const images = extractImagesUsage(content, {})
+      expect(images).toEqual(['/path/to/image.jpg'])
+    })
+
+    it('ignores Vue props without image extensions', () => {
+      const content = '<div src="/some/path" />'
+      const images = extractImagesUsage(content, {})
+      expect(images).toEqual([])
+    })
+
+    it('ignores Vue props with template expressions', () => {
+      const content = '<img src="{{imagePath}}.png" />'
+      const images = extractImagesUsage(content, {})
+      expect(images).toEqual([])
+    })
+
+    it('extracts Vue bound props with string literals', () => {
+      const content = `<img :src="'/static/image.png'" />`
+      const images = extractImagesUsage(content, {})
+      expect(images).toEqual(['/static/image.png'])
+    })
+
+    it('extracts CSS url()', () => {
+      const content = `
+<div style="background: url(/bg/image.png)">
+<style>
+  .class { background-image: url('/another/image.jpg'); }
+</style>
+      `
+      const images = extractImagesUsage(content, {})
+      expect(images).toEqual(['/bg/image.png', '/another/image.jpg'])
+    })
+
+    it('ignores CSS url() without image extensions', () => {
+      const content = `<div style="background: url(/fonts/font.woff2)">`
+      const images = extractImagesUsage(content, {})
+      expect(images).toEqual([])
+    })
+
+    it('strips code blocks to avoid false positives', () => {
+      const content = `
+Some content
+![real image](/real.png)
+
+\`\`\`markdown
+![fake image](/fake.png)
+<img src="/also-fake.jpg" />
+\`\`\`
+
+![another real](/real2.jpg)
+      `
+      const images = extractImagesUsage(content, {})
+      expect(images).toEqual(['/real.png', '/real2.jpg'])
+    })
+
+    it('handles multiple sources combined', () => {
+      const content = `
+# Title
+![markdown](/md.png)
+<img src="/vue.jpg" />
+<div style="background: url(/css.webp)">
+      `
+      const frontmatter = {
+        image: '/frontmatter.png',
+        background: 'https://example.com/bg.svg',
+      }
+      const images = extractImagesUsage(content, frontmatter)
+      expect(images).toContain('/frontmatter.png')
+      expect(images).toContain('https://example.com/bg.svg')
+      expect(images).toContain('/md.png')
+      expect(images).toContain('/vue.jpg')
+      expect(images).toContain('/css.webp')
+      expect(images).toHaveLength(5)
+    })
+
+    it('deduplicates identical URLs', () => {
+      const content = `
+![img](/same.png)
+![img2](/same.png)
+<img src="/same.png" />
+      `
+      const images = extractImagesUsage(content, {})
+      expect(images).toEqual(['/same.png'])
+    })
+
+    it('trims whitespace from extracted URLs', () => {
+      const content = '![img]( /path/with/spaces.png )'
+      const images = extractImagesUsage(content, {})
+      expect(images).toEqual(['/path/with/spaces.png'])
+    })
+
+    it('handles various image extensions', () => {
+      const content = `
+![png](/img.png)
+![jpg](/img.jpg)
+![jpeg](/img.jpeg)
+![gif](/img.gif)
+![svg](/img.svg)
+![webp](/img.webp)
+![avif](/img.avif)
+![ico](/img.ico)
+![bmp](/img.bmp)
+![tiff](/img.tiff)
+      `
+      const images = extractImagesUsage(content, {})
+      expect(images).toHaveLength(10)
+    })
+
+    it('handles case-insensitive image extensions', () => {
+      const content = `
+<img src="/image.PNG" />
+<img src="/image.JpG" />
+<img src="/image.WEBP" />
+      `
+      const images = extractImagesUsage(content, {})
+      expect(images).toEqual(['/image.PNG', '/image.JpG', '/image.WEBP'])
+    })
+  })
+
+  describe('resolveConfig drawings', () => {
+    it('applies drawings defaults from the theme', () => {
+      const config = resolveConfig({}, {
+        defaults: {
+          drawings: { presenterOnly: true },
+        },
+      } as any)
+      expect(config.drawings).toEqual({
+        enabled: true,
+        persist: false,
+        presenterOnly: true,
+        syncAll: true,
+      })
+    })
+
+    it('applies drawings from the nested `config` headmatter key', () => {
+      const config = resolveConfig({
+        config: {
+          drawings: { syncAll: false },
+        },
+      })
+      expect(config.drawings.syncAll).toBe(false)
+    })
+
+    it('lets headmatter override the theme defaults', () => {
+      const config = resolveConfig(
+        {
+          drawings: { enabled: false },
+        },
+        {
+          defaults: {
+            drawings: { enabled: true, presenterOnly: true },
+          },
+        } as any,
+      )
+      expect(config.drawings.enabled).toBe(false)
+      expect(config.drawings.presenterOnly).toBe(true)
+    })
+  })
+
+  it('detects circular src imports without overflowing', async () => {
+    const root = resolve(__dirname, 'fixtures/markdown/circular')
+    const data = await load({
+      userRoot: root,
+      roots: [root],
+    }, resolve(root, 'a.md'))
+    // Must return (not hang / overflow) and record a circular-import diagnostic
+    const errors = Object.values(data.markdownFiles).flatMap(md => md.errors ?? [])
+    expect(errors.some(e => /circular/i.test(e.message))).toBe(true)
+  })
+
+  it('records an error when a src: import selects a slide below the first one', async () => {
+    const root = resolve(__dirname, 'fixtures/markdown/out-of-range')
+    const data = await load({
+      userRoot: root,
+      roots: [root],
+    }, resolve(root, 'entry.md'))
+    const errors = Object.values(data.markdownFiles).flatMap(md => md.errors ?? [])
+    expect(errors.map(e => e.message)).toEqual([
+      expect.stringContaining('Slide 0 does not exist'),
+    ])
+  })
+
+  it('records an error when a src: import escapes the allowed roots', async () => {
+    const root = resolve(__dirname, 'fixtures/markdown/escaping/root')
+    const data = await load({
+      userRoot: root,
+      roots: [root],
+      allowedRoots: [root],
+    }, resolve(root, 'entry.md'))
+    const errors = Object.values(data.markdownFiles).flatMap(md => md.errors ?? [])
+    expect(errors.some(e => /escapes the project root/i.test(e.message))).toBe(true)
+  })
 })

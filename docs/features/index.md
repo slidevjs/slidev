@@ -17,7 +17,7 @@ const query = useUrlSearchParams('hash-params', { removeFalsyValues: true })
 const search = toRef(query, 'search') as Ref<string | null>
 const tags = toRef(query, 'tags') as Ref<string | null>
 const tagsArr = computed({
-  get: () => tags.value?.toLowerCase().split(',').map(t => t.trim()).filter(Boolean) ?? [],
+  get: () => tags.value?.split(',').map(t => t.trim()).filter(Boolean) ?? [],
   set: (val: string[]) => query.tags = val.join(','),
 })
 
@@ -25,8 +25,17 @@ const filteredFeatures = computed(() => {
   const s = search.value?.toLowerCase().trim()
   const t = tagsArr.value
   return Object.values(features).filter(feature => {
-    return (!s || feature.title.toLowerCase().includes(s) || feature.description.toLowerCase().includes(s))
-      && (!t?.length || t.every(tag => feature.tags?.includes(tag)))
+    const matchSearch = !s ||
+      feature.name.toLowerCase().includes(s) ||
+      feature.title.toLowerCase().includes(s) ||
+      feature.description.toLowerCase().includes(s)
+
+    const matchTags = !t?.length || t.every(tag =>
+      feature.tags?.some(featureTag =>
+        featureTag.toLowerCase() === tag.toLowerCase()
+      )
+    )
+    return matchSearch && matchTags
   })
 })
 

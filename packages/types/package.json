@@ -1,6 +1,6 @@
 {
   "name": "@slidev/types",
-  "version": "52.2.4",
+  "version": "53.1.0",
   "description": "Shared types declarations for Slidev",
   "author": "Anthony Fu <anthonyfu117@hotmail.com>",
   "license": "MIT",
@@ -20,7 +20,7 @@
     "index.d.ts"
   ],
   "engines": {
-    "node": ">=18.0.0"
+    "node": ">=22.12.0"
   },
   "scripts": {
     "build": "tsdown src/index.ts",
@@ -45,5 +45,8 @@
     "vite-plugin-vue-server-ref": "catalog:prod",
     "vue": "catalog:frontend",
     "vue-router": "catalog:frontend"
+  },
+  "devDependencies": {
+    "tsdown-stale-guard": "catalog:dev"
   }
 }
