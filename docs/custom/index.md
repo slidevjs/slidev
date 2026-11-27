@@ -74,7 +74,10 @@ routerMode: history
 # ignore duplicate forward navigation within this many milliseconds (0 disables it)
 advanceDebounce: 0
 
-# force color schema for the slides, can be 'auto', 'light', or 'dark'
+# color scheme for the slides:
+# - 'auto' follows the system preference and allows switching
+# - 'light' or 'dark' forces that scheme and disables switching
+# - 'light dark' or 'dark light' sets the default and allows switching
 colorSchema: auto
 # aspect ratio for the slides
 aspectRatio: 16/9
@@ -136,6 +139,8 @@ seoMeta:
 ```
 
 Check out the [type definitions](https://github.com/slidevjs/slidev/blob/main/packages/types/src/config.ts) for more details.
+
+For `colorSchema`, `auto` follows the system preference and allows switching, while `light` and `dark` force that scheme. Use `light dark` or `dark light` to allow switching while choosing the initial default: the first scheme is the default when there is no saved manual preference. Manual selections are saved in browser local storage and shared by presentations on the same origin.
 
 ## Per-slide Configs {#frontmatter}
 

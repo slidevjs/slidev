@@ -30,7 +30,7 @@ Animate list items:
 </v-clicks>
 ```
 
-With depth for nested lists:
+With depth for a nested list that is the only child:
 
 ```md
 <v-clicks depth="2">
@@ -39,6 +39,24 @@ With depth for nested lists:
   - Child 1
   - Child 2
 - Parent 2
+
+</v-clicks>
+```
+
+`lists` and `tables` do the same when lists and tables sit next to paragraphs or each other. The number is the depth. `lists="1"` reveals top-level items, `lists="2"` also reveals nested items, `tables="1"` reveals body rows, and `tables="2"` reveals body cells.
+
+```md
+<v-clicks lists="2" tables="1">
+
+Intro paragraph.
+
+- Item 1
+  - Nested item
+- Item 2
+
+| Name | Priority |
+| ---- | -------- |
+| Alpha | High |
 
 </v-clicks>
 ```

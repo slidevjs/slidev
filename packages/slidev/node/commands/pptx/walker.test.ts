@@ -52,11 +52,20 @@ function measureTextStub(): { width: number } {
  */
 function installedFonts(...families: string[]) {
   return function (this: { font: string }): { width: number } {
-    return { width: families.some(f => this.font.includes(`"${f}"`)) ? 140 : 100 }
+    return {
+      width: families.some(f => this.font.includes(`"${f}"`))
+        ? 140
+        : 100,
+    }
   }
 }
 
-const RECT = { left: 0, top: 0, width: 100, height: 20 }
+const RECT = {
+  left: 0,
+  top: 0,
+  width: 100,
+  height: 20,
+}
 
 /**
  * A slide container with one element and one text node under it.
@@ -74,7 +83,9 @@ function containerStub() {
     id: '',
     childNodes: [text],
     children: [],
-    classList: { contains: () => false },
+    classList: {
+      contains: () => false,
+    },
     shadowRoot: null,
     parentElement: null,
     setAttribute: () => {},
@@ -88,7 +99,9 @@ function containerStub() {
     id: '003-02',
     childNodes: [child],
     children: [child],
-    classList: { contains: () => false },
+    classList: {
+      contains: () => false,
+    },
     shadowRoot: null,
     parentElement: null,
     setAttribute: () => {},
@@ -110,7 +123,9 @@ function domStub(querySelectorAllResult: unknown[], measureText = measureTextStu
         measureText,
         clearRect: () => {},
         fillRect: () => {},
-        getImageData: () => ({ data: [0, 0, 0, 0] }),
+        getImageData: () => ({
+          data: [0, 0, 0, 0],
+        }),
       }),
     }),
     querySelectorAll: () => querySelectorAllResult,
@@ -188,7 +203,9 @@ describe('walker self-containedness', () => {
 
   it('runs to completion over a real container, not just an empty page', () => {
     // The empty-page case exercises none of `walk`, which is most of the file.
-    const snapshot = runInSandbox(collectSnapshot.toString(), [containerStub()]) as any
+    const snapshot = runInSandbox(collectSnapshot.toString(), [
+      containerStub(),
+    ]) as any
     expect(snapshot.slides).toHaveLength(1)
     expect(snapshot.slides[0].nodes.length).toBeGreaterThan(0)
   })
@@ -202,7 +219,9 @@ describe('walker self-containedness', () => {
       // two other `const record` declarations, in the style interners, which a
       // page with no pseudo-elements never runs.
       .replace(/const record\s*(?:(: any)\s*)?=\s*\{\s*id,/, 'const record = { leaked: LEAKED_FROM_WALK, id,')
-    expect(() => runInSandbox(leaked, [containerStub()])).toThrow(/LEAKED_FROM_WALK/)
+    expect(() => runInSandbox(leaked, [
+      containerStub(),
+    ])).toThrow(/LEAKED_FROM_WALK/)
   })
 
   it('fails when the walker closes over module scope', () => {
@@ -227,7 +246,9 @@ describe('walker self-containedness', () => {
     // installed. On a machine with no such copy, which is the normal case for
     // a webfont, nothing in the stack matched and every run in the deck was
     // written out as a system fallback instead of the theme's own face.
-    const snapshot = runInSandbox(collectSnapshot.toString(), [containerStub()], {
+    const snapshot = runInSandbox(collectSnapshot.toString(), [
+      containerStub(),
+    ], {
       fontFamily: '"Inter Variable", Inter, sans-serif',
       measureText: installedFonts('Inter Variable'),
     }) as any
@@ -238,7 +259,9 @@ describe('walker self-containedness', () => {
     // The Google Fonts path, which registers "Inter" with no suffix. Every
     // Slidev-themed deck takes it, which is why the bug above stayed invisible
     // until a theme shipped its font through `@fontsource`.
-    const snapshot = runInSandbox(collectSnapshot.toString(), [containerStub()], {
+    const snapshot = runInSandbox(collectSnapshot.toString(), [
+      containerStub(),
+    ], {
       fontFamily: 'Inter, sans-serif',
       measureText: installedFonts('Inter'),
     }) as any
@@ -246,7 +269,9 @@ describe('walker self-containedness', () => {
   })
 
   it('reports no family when nothing in the stack resolves', () => {
-    const snapshot = runInSandbox(collectSnapshot.toString(), [containerStub()], {
+    const snapshot = runInSandbox(collectSnapshot.toString(), [
+      containerStub(),
+    ], {
       fontFamily: '"Human Sans", sans-serif',
       measureText: installedFonts('Something Else'),
     }) as any
@@ -261,7 +286,12 @@ describe('walker self-containedness', () => {
 
   it('does not reference the module registry', () => {
     const source = collectSnapshot.toString()
-    for (const forbidden of ['require(', 'import(', 'exports.', 'module.exports'])
+    for (const forbidden of [
+      'require(',
+      'import(',
+      'exports.',
+      'module.exports',
+    ])
       expect(source).not.toContain(forbidden)
   })
 })
@@ -310,7 +340,9 @@ function withoutComments(source: string): string {
 
 describe('the built bundle keeps the walker self-contained', () => {
   it('runs to completion using only browser globals', () => {
-    expect(() => runInSandbox(bundledWalker(), [containerStub()])).not.toThrow()
+    expect(() => runInSandbox(bundledWalker(), [
+      containerStub(),
+    ])).not.toThrow()
   })
 
   it('carries no bundler-injected identifiers', () => {
@@ -324,7 +356,12 @@ describe('the built bundle keeps the walker self-contained', () => {
 
   it('does not reference the module registry', () => {
     const source = withoutComments(bundledWalker())
-    for (const forbidden of ['require(', 'import(', 'exports.', 'module.exports'])
+    for (const forbidden of [
+      'require(',
+      'import(',
+      'exports.',
+      'module.exports',
+    ])
       expect(source).not.toContain(forbidden)
   })
 
@@ -332,6 +369,8 @@ describe('the built bundle keeps the walker self-contained', () => {
     // The guard pinned against the mutation it exists to catch, so it cannot
     // quietly stop working the next time the bundler changes.
     const leaked = bundledWalker().replace(/const nodes = \[\]/, 'const nodes = __name([])')
-    expect(() => runInSandbox(leaked, [containerStub()])).toThrow(/__name/)
+    expect(() => runInSandbox(leaked, [
+      containerStub(),
+    ])).toThrow(/__name/)
   })
 })

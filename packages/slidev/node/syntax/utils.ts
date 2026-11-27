@@ -1,5 +1,7 @@
 export function normalizeRangeStr(rangeStr = '') {
-  return !rangeStr.trim() ? [] : rangeStr.trim().split(/\|/g).map(i => i.trim())
+  return !rangeStr.trim()
+    ? []
+    : rangeStr.trim().split(/\|/g).map(i => i.trim())
 }
 /**
  * Escape `{{` in code block to prevent Vue interpret it, #99, #1316
