@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import type { ClicksContext, SlideRoute } from '@slidev/types'
 import { useHead } from '@unhead/vue'
-import { computed, nextTick, onMounted, onUnmounted, reactive, ref, shallowRef } from 'vue'
+import { computed, nextTick, onMounted, onUnmounted, reactive, ref, shallowRef, watch } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
 import { createFixedClicks } from '../composables/useClicks'
 import { useNav } from '../composables/useNav'
@@ -43,6 +43,7 @@ const edittingNote = ref<number | null>(null)
 let ignoreOverviewScrollUntil = 0
 let pendingOverviewScrollNo: number | undefined
 let overviewScrollTimer: ReturnType<typeof setTimeout> | undefined
+const skipHashScroll = ref<string>()
 const wordCounts = computed(() => slides.value.map(route => wordCount(route.meta?.slide?.note || '')))
 const totalWords = computed(() => wordCounts.value.reduce((a, b) => a + b, 0))
 const totalClicks = computed(() => slides.value.map(route => getSlideClicks(route)).reduce((a, b) => a + b, 0))
@@ -129,10 +130,56 @@ function openSlideInBrowser(path: string) {
   openSlideInNewTab(path)
 }
 
-function scrollToSlide(idx: number) {
+function getSlideHashId(no: number) {
+  return `slide-${no}`
+}
+
+function getSlideHash(no: number) {
+  return `#${getSlideHashId(no)}`
+}
+
+function getSlideIndexFromHash(hash: string) {
+  const match = hash.match(/^#(?:slide-)?(\d+)$/)
+  if (!match)
+    return
+
+  const no = Number.parseInt(match[1], 10)
+  const idx = slides.value.findIndex(route => route.no === no)
+  return idx >= 0
+    ? idx
+    : undefined
+}
+
+function scrollToSlide(idx: number, behavior: ScrollBehavior = 'smooth') {
   const el = blocks.get(idx)
-  if (el)
-    el.scrollIntoView({ behavior: 'smooth', block: 'start' })
+  if (el) {
+    el.scrollIntoView({ behavior, block: 'start' })
+    checkActiveBlocks()
+  }
+}
+
+async function scrollToSlideAndUpdateHash(idx: number) {
+  const target = slides.value[idx]
+  if (!target)
+    return
+
+  const hash = getSlideHash(target.no)
+  if (currentRoute.hash !== hash) {
+    skipHashScroll.value = hash // Used to bypass the scroll triggered by hash change
+    await router.replace({
+      path: currentRoute.path,
+      query: currentRoute.query,
+      hash,
+    })
+  }
+
+  scrollToSlide(idx)
+}
+
+function scrollToRouteHash(behavior: ScrollBehavior = 'auto') {
+  const idx = getSlideIndexFromHash(currentRoute.hash)
+  if (idx != null)
+    scrollToSlide(idx, behavior)
 }
 
 function getSlidePreviewTop(idx: number) {
@@ -283,6 +330,24 @@ function openOverviewSlideSource(e: MouseEvent, route: SlideRoute) {
   }, '*')
 }
 
+// Handle browser back/forward and hash change
+watch(
+  () => currentRoute.hash,
+  async (hash) => {
+    if (!hash)
+      return
+
+    await nextTick()
+
+    if (skipHashScroll.value === hash) {
+      skipHashScroll.value = undefined
+      return
+    }
+
+    scrollToRouteHash('smooth')
+  },
+)
+
 onMounted(() => {
   window.addEventListener('message', onOverviewMessage)
   const initialSlideNo = isEmbeddedPreviewMode.value
@@ -295,6 +360,8 @@ onMounted(() => {
   nextTick(() => {
     if (initialSlideNo != null)
       scrollSlideNoIntoCenter(initialSlideNo)
+    else
+      scrollToRouteHash()
     checkActiveBlocks()
   })
 })
@@ -323,7 +390,7 @@ onUnmounted(() => {
             <button
               class="relative transition duration-300 w-8 h-8 rounded hover:bg-active hover:op100"
               :class="activeBlocks.includes(idx) ? 'op100 text-primary bg-gray:5' : 'op20'"
-              @click="scrollToSlide(idx)"
+              @click="scrollToSlideAndUpdateHash(idx)"
             >
               <div>{{ idx + 1 }}</div>
             </button>
@@ -364,6 +431,7 @@ onUnmounted(() => {
     >
       <div
         v-for="(route, idx) of slides"
+        :id="getSlideHashId(route.no)"
         :key="route.no"
         :ref="el => blocks.set(idx, el as any)"
         class="overview-slide-block relative of-hidden flex gap-4 min-h-50"
