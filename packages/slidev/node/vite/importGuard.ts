@@ -17,6 +17,12 @@ const virtualSlideMarkdownIds = new Set([
   templateLegacyTitles.id,
 ])
 
+const RE_SLIDE_MARKDOWN_ID = new RegExp(
+  `^(?:[^?#]*__slidev_\\d+\\.(?:md|frontmatter)|${
+    [...virtualSlideMarkdownIds].map(id => id.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')).join('|')
+  })(?:$|[?#])`,
+)
+
 export function createSlideImportGuardPlugin(): Plugin {
   let config: ResolvedConfig
   let allowRoots: string[] = []
@@ -29,40 +35,43 @@ export function createSlideImportGuardPlugin(): Plugin {
       allowRoots = config.server.fs.allow.map(normalizeFsPath)
     },
 
-    async transform(code, id) {
-      if (!isSlideMarkdownId(id) || !config?.server.fs.strict)
+    transform: {
+      filter: { id: RE_SLIDE_MARKDOWN_ID },
+      async handler(code, id) {
+        if (!isSlideMarkdownId(id) || !config?.server.fs.strict)
+          return null
+
+        const importer = filePathFromId(id) ?? id
+        await Promise.all(extractImportSources(code, id).map(async ({ value, start }) => {
+          // Public-directory assets are referenced by root-absolute URL (`/foo.png`)
+          // and served by Vite's public-dir middleware, not module-resolved. Such a
+          // URL is a Vite URL, not a filesystem-absolute path, so exempt it from the
+          // fs.allow check when it maps to an existing file under `config.publicDir`.
+          if (isPublicAsset(value, config))
+            return
+
+          const resolved = await this.resolve(value, importer, { skipSelf: true })
+          if (!resolved || resolved.external)
+            return
+
+          const filePath = filePathFromId(resolved.id)
+          if (!filePath)
+            return
+
+          const normalized = normalizeFsPath(filePath)
+          if (isAllowedFile(normalized, allowRoots))
+            return
+          if (isBareImport(value) && isDependencyFile(normalized))
+            return
+
+          this.error(
+            `[slidev] Import "${value}" from slide Markdown resolves outside of Vite server.fs.allow: ${normalized}`,
+            start,
+          )
+        }))
+
         return null
-
-      const importer = filePathFromId(id) ?? id
-      await Promise.all(extractImportSources(code, id).map(async ({ value, start }) => {
-        // Public-directory assets are referenced by root-absolute URL (`/foo.png`)
-        // and served by Vite's public-dir middleware, not module-resolved. Such a
-        // URL is a Vite URL, not a filesystem-absolute path, so exempt it from the
-        // fs.allow check when it maps to an existing file under `config.publicDir`.
-        if (isPublicAsset(value, config))
-          return
-
-        const resolved = await this.resolve(value, importer, { skipSelf: true })
-        if (!resolved || resolved.external)
-          return
-
-        const filePath = filePathFromId(resolved.id)
-        if (!filePath)
-          return
-
-        const normalized = normalizeFsPath(filePath)
-        if (isAllowedFile(normalized, allowRoots))
-          return
-        if (isBareImport(value) && isDependencyFile(normalized))
-          return
-
-        this.error(
-          `[slidev] Import "${value}" from slide Markdown resolves outside of Vite server.fs.allow: ${normalized}`,
-          start,
-        )
-      }))
-
-      return null
+      },
     },
   }
 }

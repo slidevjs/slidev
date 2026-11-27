@@ -306,6 +306,9 @@ export function createSlidesLoader(
       // Snippet imports register their files in `watchFiles` while the slide is
       // rendered by the Markdown plugin, so watch them once that has happened.
       order: 'post',
+      filter: {
+        id: regexSlideSourceId,
+      },
       handler(_code, id) {
         if (regexSlideSourceId.test(id))
           updateServerWatcher()

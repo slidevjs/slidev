@@ -66,6 +66,11 @@ async function resolveVitePWA(): Promise<VitePWAFn> {
   return VitePWA
 }
 
+const PWA_VIRTUAL_ID = 'virtual:pwa-register'
+const PWA_RESOLVED_ID = `\0${PWA_VIRTUAL_ID}`
+const RE_PWA_VIRTUAL_ID = /^virtual:pwa-register$/
+const RE_PWA_RESOLVED_ID = /^\0virtual:pwa-register$/
+
 /**
  * When PWA is disabled, resolve `virtual:pwa-register` to a no-op module. The
  * client only imports it behind the `__SLIDEV_FEATURE_PWA__` guard (stripped
@@ -73,18 +78,22 @@ async function resolveVitePWA(): Promise<VitePWAFn> {
  * during dev — without pulling in the optional `vite-plugin-pwa` dependency.
  */
 function createPWARegisterStubPlugin(): Plugin {
-  const VIRTUAL_ID = 'virtual:pwa-register'
-  const RESOLVED_ID = `\0${VIRTUAL_ID}`
   return {
     name: 'slidev:pwa-register-stub',
-    resolveId(id) {
-      return id === VIRTUAL_ID
-        ? RESOLVED_ID
-        : undefined
+    resolveId: {
+      filter: { id: RE_PWA_VIRTUAL_ID },
+      handler(id) {
+        return id === PWA_VIRTUAL_ID
+          ? PWA_RESOLVED_ID
+          : undefined
+      },
     },
-    load(id) {
-      if (id === RESOLVED_ID)
-        return 'export function registerSW() { return () => Promise.resolve() }'
+    load: {
+      filter: { id: RE_PWA_RESOLVED_ID },
+      handler(id) {
+        if (id === PWA_RESOLVED_ID)
+          return 'export function registerSW() { return () => Promise.resolve() }'
+      },
     },
   }
 }
