@@ -1,8 +1,8 @@
 import type { ResolvedSlidevOptions, ResolvedSlidevUtils, SlidevData, SlidevEntryOptions } from '@slidev/types'
-import path from 'node:path'
 import { objectMap, uniq } from '@antfu/utils'
 import fg from 'fast-glob'
 import { createDebug } from 'obug'
+import path from 'pathe'
 import pm from 'picomatch'
 import { resolveAddons } from './integrations/addons'
 import { getThemeMeta, resolveTheme } from './integrations/themes'
@@ -22,18 +22,54 @@ export async function resolveOptions(
 ): Promise<ResolvedSlidevOptions> {
   const entry = await resolveEntry(entryOptions.entry)
   const rootsInfo = await getRoots(entry)
-  const loaded = await parser.load({ userRoot: rootsInfo.userRoot, roots: [rootsInfo.userRoot] }, entry, undefined, mode)
+  const initialLoaded = await parser.load(
+    {
+      userRoot: rootsInfo.userRoot,
+      roots: [rootsInfo.userRoot],
+      allowedRoots: uniq([rootsInfo.userWorkspaceRoot, rootsInfo.userRoot]),
+    },
+    entry,
+    undefined,
+    mode,
+  )
 
   // Load theme data first, because it may affect the config
-  let themeRaw = entryOptions.theme || loaded.headmatter.theme as string | null | undefined
-  themeRaw = themeRaw === null ? 'none' : (themeRaw || 'default')
+  let themeRaw = entryOptions.theme || initialLoaded.headmatter.theme as string | null | undefined
+  themeRaw = themeRaw === null
+    ? 'none'
+    : (themeRaw || 'default')
   const [theme, themeRoot] = await resolveTheme(themeRaw, entry)
-  const themeRoots = themeRoot ? [themeRoot] : []
-  const themeMeta = themeRoot ? await getThemeMeta(theme, themeRoot) : undefined
+  const themeRoots = themeRoot
+    ? [themeRoot]
+    : []
+  const themeMeta = themeRoot
+    ? await getThemeMeta(theme, themeRoot)
+    : undefined
 
+  const initialConfig = parser.resolveConfig(initialLoaded.headmatter, themeMeta, entryOptions.entry)
+  const addonRoots = await resolveAddons(initialConfig.addons)
+  const roots = uniq([
+    ...themeRoots,
+    ...addonRoots,
+    rootsInfo.userRoot,
+  ])
+  const loaded = await parser.load(
+    {
+      userRoot: rootsInfo.userRoot,
+      roots,
+      allowedRoots: uniq([rootsInfo.userWorkspaceRoot, ...roots]),
+    },
+    entry,
+    undefined,
+    mode,
+  )
   const config = parser.resolveConfig(loaded.headmatter, themeMeta, entryOptions.entry)
-  const addonRoots = await resolveAddons(config.addons)
-  const roots = uniq([...themeRoots, ...addonRoots, rootsInfo.userRoot])
+
+  // These fields selected the roots used for the final load. Keep the
+  // returned config aligned with the graph that was actually loaded if a
+  // preparser changes them.
+  config.theme = themeRaw
+  config.addons = initialConfig.addons
 
   if (entryOptions.download)
     config.download ||= entryOptions.download
@@ -127,6 +163,9 @@ function getDefine(options: Omit<ResolvedSlidevOptions, 'utils'>): Record<string
       __DEV__: options.mode === 'dev',
       __SLIDEV_CLIENT_ROOT__: toAtFS(options.clientRoot),
       __SLIDEV_HASH_ROUTE__: options.data.config.routerMode === 'hash',
+      // Export navigates by URL, so memory routing (which ignores the URL) is
+      // disabled during export and falls back to history.
+      __SLIDEV_MEMORY_ROUTE__: options.data.config.routerMode === 'memory' && options.mode !== 'export',
       __SLIDEV_FEATURE_DRAWINGS__: matchMode(options.data.config.drawings.enabled),
       __SLIDEV_FEATURE_EDITOR__: options.mode === 'dev' && options.data.config.editor !== false,
       __SLIDEV_FEATURE_DRAWINGS_PERSIST__: !!options.data.config.drawings.persist,
@@ -135,8 +174,12 @@ function getDefine(options: Omit<ResolvedSlidevOptions, 'utils'>): Record<string
       __SLIDEV_FEATURE_PRINT__: options.mode === 'export' || (options.mode === 'build' && [true, 'true', 'auto'].includes(options.data.config.download)),
       __SLIDEV_FEATURE_BROWSER_EXPORTER__: matchMode(options.data.config.browserExporter),
       __SLIDEV_FEATURE_WAKE_LOCK__: matchMode(options.data.config.wakeLock),
+      __SLIDEV_FEATURE_PWA__: matchMode(options.data.config.pwa),
       __SLIDEV_HAS_SERVER__: options.mode !== 'build',
     },
-    (v, k) => [v, JSON.stringify(k)],
+    (v, k) => [
+      v,
+      JSON.stringify(k),
+    ],
   )
 }

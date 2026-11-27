@@ -92,17 +92,30 @@ export interface HeadmatterConfig extends TransitionOptions {
    */
   lineNumbers?: boolean
   /**
-   * Force slides color schema
+   * Color scheme for slides. Use `auto` to follow the system preference,
+   * `light` or `dark` to force a scheme, or `light dark` / `dark light`
+   * to choose a default while allowing users to switch.
    *
    * @default 'auto'
    */
-  colorSchema?: 'dark' | 'light' | 'all' | 'auto'
+  colorSchema?: 'dark' | 'light' | 'all' | 'auto' | 'light dark' | 'dark light'
   /**
    * Router mode for vue-router
    *
+   * - `history`: the slide number is reflected in the URL path
+   * - `hash`: hash-based routing, for static hosts or subdirectory deploys
+   * - `memory`: routing is kept in memory, so the URL never reflects the slide number and cannot be used to navigate — useful for kiosk or externally driven "follower" decks (deep-links, `/presenter`, `/overview` and export-by-URL are unavailable)
+   *
    * @default 'history'
    */
-  routerMode?: 'hash' | 'history'
+  routerMode?: 'hash' | 'history' | 'memory'
+  /**
+   * Ignore repeated forward navigation within this many milliseconds.
+   * The first advance is immediate. Set to 0 to disable.
+   *
+   * @default 0
+   */
+  advanceDebounce?: number
   /**
    * Aspect ratio for slides
    * should be like `16/9` or `1:1`
@@ -217,6 +230,13 @@ export interface HeadmatterConfig extends TransitionOptions {
    */
   editor?: boolean
   /**
+   * Enable the MCP (Model Context Protocol) server endpoint on the dev server,
+   * allowing AI agents to inspect and edit the slides
+   *
+   * @default true
+   */
+  mcp?: boolean
+  /**
    * Enable context menu
    *
    * @default true
@@ -226,6 +246,12 @@ export interface HeadmatterConfig extends TransitionOptions {
    * Enable wake lock
    */
   wakeLock?: boolean | 'dev' | 'build'
+  /**
+   * Enable PWA support: a service worker precaches all deck assets on first
+   * load so a served deck works fully offline afterward. Heavy; opt-in.
+   * @default false
+   */
+  pwa?: boolean | 'dev' | 'build'
   /**
    * Force the filename used when exporting the presentation.
    * The extension, e.g. .pdf, gets automatically added.
@@ -314,6 +340,12 @@ export interface HeadmatterConfig extends TransitionOptions {
    * @default 800
    */
   magicMoveDuration?: number
+  /**
+   * Configure Shiki
+   *
+   * @default {}
+   */
+  shiki?: ShikiOptions
   /**
    * Default click animation for the slides
    */
@@ -503,6 +535,78 @@ export interface FontOptions {
    * @default true
    */
   fallbacks?: boolean
+}
+
+export interface ShikiOptions {
+  /**
+   * Options passed to Shiki Magic Move for customizing code transition animations
+   *
+   * See https://shiki.style/packages/magic-move#options for the full list of options
+   *
+   * @default {}
+   */
+  magicMove?: ShikiMagicMoveOptions
+}
+
+export interface ShikiMagicMoveOptions {
+  /**
+   * Ratio of the duration to delay the move animation
+   *
+   * @default 0.3
+   */
+  delayMove?: number
+  /**
+   * Ratio of the duration to delay the leave animation
+   *
+   * @default 0
+   */
+  delayLeave?: number
+  /**
+   * Ratio of the duration to delay the enter animation
+   *
+   * @default 0.7
+   */
+  delayEnter?: number
+  /**
+   * Ratio of the duration to delay the container animation
+   *
+   * @default 0.4
+   */
+  delayContainer?: number
+  /**
+   * Easing function, in the CSS `transition-timing-function` format
+   *
+   * @default 'ease'
+   */
+  easing?: string
+  /**
+   * Apply animation to the container
+   *
+   * @default false
+   */
+  animateContainer?: boolean
+  /**
+   * Apply styles (color and background) to the container
+   *
+   * @default true
+   */
+  containerStyle?: boolean
+  /**
+   * Stagger the animation of the tokens, in milliseconds
+   *
+   * @default 1
+   */
+  stagger?: number
+  /**
+   * Split the tokens at the edge of diff chunks
+   *
+   * @default false
+   */
+  splitTokens?: boolean
+  /**
+   * Enhance the matching algorithm to match tokens that has same content
+   */
+  enhanceMatching?: boolean
 }
 
 export type BuiltinSlideTransition = 'fade' | 'fade-out' | 'slide-up' | 'slide-down' | 'slide-left' | 'slide-right' | 'view-transition'

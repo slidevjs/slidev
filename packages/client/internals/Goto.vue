@@ -25,8 +25,12 @@ const fuse = computed(() => new Fuse(slides.value.map(i => i.meta?.slide).filter
   minMatchCharLength: 1,
 }))
 
-const path = computed(() => text.value.startsWith('/') ? text.value.substring(1) : text.value)
-const result = computed(() => path.value ? fuse.value.search(path.value).map(result => result.item) : [])
+const path = computed(() => text.value.startsWith('/')
+  ? text.value.substring(1)
+  : text.value)
+const result = computed(() => path.value
+  ? fuse.value.search(path.value).map(result => result.item)
+  : [])
 const valid = computed(() => !!result.value.length)
 
 function goTo() {
@@ -111,7 +115,7 @@ watch(activeElement, () => {
     ref="container"
     class="fixed right-5 transition-all"
     w-90 max-w-90 min-w-90
-    :class="showGotoDialog ? 'top-5' : '-top-20'"
+    :class="showGotoDialog ? 'top-5' : '-top-20 op0 pointer-events-none'"
   >
     <div
       class="bg-main transform"

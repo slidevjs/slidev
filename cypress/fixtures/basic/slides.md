@@ -210,3 +210,36 @@ clickAnimation: foo
   <div v-click.none>modifier-none-overrides-frontmatter</div>
   <div v-click.scale>modifier-scale-overrides-frontmatter</div>
 </div>
+
+---
+
+# Page 17
+
+<div class="cy-code-in-vclick">
+<v-click>
+
+```ts {*}
+const answer = 42
+```
+
+</v-click>
+</div>
+
+---
+layout: iframe
+url: about:blank
+---
+
+---
+
+# Page 19
+
+<div class="cy-mount">
+  <div v-click>A</div>
+  <div v-click.mount class="cy-mount-b">B</div>
+  <div v-after.mount class="cy-mount-c">C</div>
+  <div v-click.mount="[3, 5]" class="cy-mount-d">D</div>
+  <div v-click.mount.hide="3" class="cy-mount-e">E</div>
+  <v-click mount at="4" animation="up"><div class="cy-mount-f">F</div></v-click>
+  <template v-click.mount="4"><div class="cy-mount-g">G</div><div class="cy-mount-h">H</div></template>
+</div>

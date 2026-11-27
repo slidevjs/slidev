@@ -65,6 +65,16 @@ describe('utils', () => {
     ).toMatchSnapshot()
   })
 
+  it('google-fonts with quoted family names', () => {
+    expect(
+      generateGoogleFontsUrl({
+        webfonts: ['"Helvetica Neue"', '\'PT Serif\''],
+        weights: ['400'],
+        provider: 'google',
+      } as ResolvedFontOptions),
+    ).toBe('https://fonts.googleapis.com/css2?family=Helvetica+Neue:wght@400&family=PT+Serif:wght@400&display=swap')
+  })
+
   it('coollabs-fonts', () => {
     expect(
       generateCoollabsFontsUrl({
@@ -177,22 +187,5 @@ describe('utils', () => {
         bar: 5,6,7,8
       "
     `)
-  })
-
-  it('getSlidePath with base path', () => {
-    const originalBaseUrl = import.meta.env.BASE_URL
-    import.meta.env.BASE_URL = '/my_monorepo/my_prez/'
-
-    // Inline the fixed getSlidePath logic for isolated testing
-    function getSlidePathFixed(no: number, presenter: boolean, exporting: boolean): string {
-      const path = exporting ? `export/${no}` : presenter ? `presenter/${no}` : `${no}`
-      return `${import.meta.env.BASE_URL}${path}`
-    }
-
-    expect(getSlidePathFixed(2, false, false)).toBe('/my_monorepo/my_prez/2')
-    expect(getSlidePathFixed(2, true, false)).toBe('/my_monorepo/my_prez/presenter/2')
-    expect(getSlidePathFixed(2, false, true)).toBe('/my_monorepo/my_prez/export/2')
-
-    import.meta.env.BASE_URL = originalBaseUrl
   })
 })

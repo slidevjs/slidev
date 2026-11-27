@@ -1,7 +1,7 @@
 import type { EffectScope, ShallowRef } from 'reactive-vscode'
 import type { Terminal } from 'vscode'
 import type { SlidevProject } from '../projects'
-import { basename } from 'node:path'
+import { basename } from 'pathe'
 import { effectScope, onScopeDispose, shallowRef, useAbsoluteUri, useDisposable } from 'reactive-vscode'
 import { env, window } from 'vscode'
 import { config } from '../configs'
@@ -43,7 +43,9 @@ export function useDevServer(project: SlidevProject) {
       const args = [
         JSON.stringify(basename(project.entry)),
         `--port ${p}`,
-        env.remoteName != null ? '--remote' : '',
+        env.remoteName != null
+          ? '--remote'
+          : '',
       ].filter(Boolean).join(' ')
       // eslint-disable-next-line no-template-curly-in-string
       terminal.value.sendText(config['dev-command'].replaceAll('${args}', args).replaceAll('${port}', `${p}`))

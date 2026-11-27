@@ -3,12 +3,22 @@ import type MarkdownExit from 'markdown-exit'
 import type { Connect, GeneralImportGlobOptions } from 'vite'
 import { createHash } from 'node:crypto'
 import { mkdirSync, writeFileSync } from 'node:fs'
-import { dirname, join, relative, win32 } from 'node:path'
 import { fileURLToPath } from 'node:url'
 import { slash } from '@antfu/utils'
 import { createJiti } from 'jiti'
+import { dirname, join, relative, win32 } from 'pathe'
 import YAML from 'yaml'
 import { toAtFS } from './resolver'
+import { isAllowedFile } from './vite/importGuard'
+
+/**
+ * Whether `filePath` resolves inside any of `roots` (no `..` escape). Shared
+ * containment predicate reused by the snippet (`<<<`) and `src:` deck-file
+ * reads, and by the Vite slide-import guard (`isAllowedFile`).
+ */
+export function isPathInsideRoots(filePath: string, roots: string[]): boolean {
+  return isAllowedFile(filePath, roots)
+}
 
 const RE_WHITESPACE_ONLY = /^\s*$/
 const RE_QUOTED_STRING = /^(['"])(.*)\1$/
@@ -36,13 +46,40 @@ export function stringifyMarkdownTokens(tokens: Token[]) {
     .join(' ')
 }
 
+const RE_WORD_CHARS_ONLY = /^[\w-]+$/
+const RE_REGEXP_CHARS = /[.*+?^${}()|[\]\\]/g
+
+export function applyNotesAutoRuby(md: string, notesAutoRuby: Record<string, string | undefined>) {
+  const keys = Object.keys(notesAutoRuby)
+    // Longest first, otherwise a shorter key shadows every key starting with it
+    .sort((a, b) => b.length - a.length)
+    // Add word boundaries to the keys when they are simple alphabets or numbers
+    .map(i => RE_WORD_CHARS_ONLY.test(i)
+      ? `\\b${i}\\b`
+      : i.replace(RE_REGEXP_CHARS, '\\$&'))
+
+  if (!keys.length)
+    return md
+
+  return md.replace(
+    new RegExp(`(${keys.join('|')})`, 'g'),
+    (match) => {
+      if (notesAutoRuby[match])
+        return `<ruby>${match}<rt>${notesAutoRuby[match]}</rt></ruby>`
+      return match
+    },
+  )
+}
+
 export function generateFontParams(options: ResolvedFontOptions) {
   const weights = options.weights
-    .flatMap(i => options.italic ? [`0,${i}`, `1,${i}`] : [`${i}`])
+    .flatMap(i => options.italic
+      ? [`0,${i}`, `1,${i}`]
+      : [`${i}`])
     .sort()
     .join(';')
   const fontParams = options.webfonts
-    .map(i => `family=${i.replace(RE_QUOTED_STRING, '$1').replace(RE_WHITESPACE, '+')}:${options.italic ? 'ital,' : ''}wght@${weights}`)
+    .map(i => `family=${i.replace(RE_QUOTED_STRING, '$2').replace(RE_WHITESPACE, '+')}:${options.italic ? 'ital,' : ''}wght@${weights}`)
     .join('&')
   return fontParams
 }
@@ -95,6 +132,8 @@ export function updateFrontmatterPatch(source: SourceSlideInfo, frontmatter: Rec
 export function getBodyJson(req: Connect.IncomingMessage) {
   return new Promise<any>((resolve, reject) => {
     let body = ''
+    // A chunk can end in the middle of a character
+    req.setEncoding('utf8')
     req.on('data', chunk => body += chunk)
     req.on('error', reject)
     req.on('end', () => {

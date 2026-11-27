@@ -8,12 +8,24 @@ import type {
 } from '@slidev/types'
 import { existsSync } from 'node:fs'
 import { readFile, writeFile } from 'node:fs/promises'
-import { dirname, resolve } from 'node:path'
 import { slash } from '@antfu/utils'
+import { dirname, isAbsolute, relative, resolve } from 'pathe'
 import YAML from 'yaml'
 import { detectFeatures, parse, parseRangeString, stringify } from './core'
 
-const RE_FRONTMATTER_START = /^---(?:[^-].*)?$/
+/**
+ * Whether `filePath` resolves inside any of `roots` (no `..` escape).
+ * Inlined here (rather than imported from the `slidev` package) because
+ * `@slidev/parser` must stay independent of `@slidev/slidev`.
+ */
+export function isPathInsideRoots(filePath: string, roots: string[]): boolean {
+  return roots.some((root) => {
+    const rel = relative(root, filePath)
+    return rel === '' || (!!rel && !rel.startsWith('..') && !isAbsolute(rel))
+  })
+}
+
+const RE_FRONTMATTER_START = /^\uFEFF?---(?:[^-].*)?$/
 const RE_BLANK_LINE = /^\s*$/
 const RE_FRONTMATTER_END = /^---$/
 const RE_CRLF = /\r?\n/g
@@ -29,6 +41,12 @@ export function injectPreparserExtensionLoader(fn: PreparserExtensionLoader) {
 export interface LoadRootsInfo {
   roots: string[]
   userRoot: string
+  /**
+   * When provided, `src:` includes resolving outside these roots are
+   * rejected (recorded as an error) instead of being loaded. Optional for
+   * backward compatibility with other `@slidev/parser` consumers.
+   */
+  allowedRoots?: string[]
 }
 
 /**
@@ -43,7 +61,9 @@ export async function load(
   sources: Record<string, string> | ((path: string) => Promise<string>) = {},
   mode?: string,
 ): Promise<LoadedSlidevData> {
-  const loadSource = typeof sources === 'function' ? sources : async (path: string) => sources[path] ?? readFile(path, 'utf-8')
+  const loadSource = typeof sources === 'function'
+    ? sources
+    : async (path: string) => sources[path] ?? readFile(path, 'utf-8')
 
   const markdown = await loadSource(filepath)
 
@@ -80,6 +100,16 @@ export async function load(
     const directImporter = importers?.at(-1)
     for (const index of parseRangeString(md.slides.length, range)) {
       const subSlide = md.slides[index - 1]
+      if (!subSlide) {
+        // `parseRangeString` only drops indexes above the total, so a range
+        // such as `#0` or `#-3` still reaches here and has no slide.
+        md.errors ??= []
+        md.errors.push({
+          row: 0,
+          message: `Slide ${index} does not exist in "${path}", which has ${md.slides.length} slides`,
+        })
+        continue
+      }
       try {
         await loadSlide(md, subSlide, frontmatterOverride, importers)
       }
@@ -115,7 +145,24 @@ export async function load(
       }
       delete frontmatterOverride.src
 
-      if (!existsSync(path)) {
+      const ancestorPaths = new Set((importChain ?? []).map(s => s.filepath))
+      if (path === slide.filepath || ancestorPaths.has(path)) {
+        md.errors ??= []
+        md.errors.push({
+          row: slide.start,
+          message: `Circular import detected for "${slide.frontmatter.src}" (${path})`,
+        })
+        return
+      }
+
+      if (options.allowedRoots && !isPathInsideRoots(path, options.allowedRoots)) {
+        md.errors ??= []
+        md.errors.push({
+          row: slide.start,
+          message: `Imported markdown escapes the project root: ${path}`,
+        })
+      }
+      else if (!existsSync(path)) {
         md.errors ??= []
         md.errors.push({
           row: slide.start,
@@ -123,12 +170,17 @@ export async function load(
         })
       }
       else {
-        await loadMarkdown(path, rangeRaw, frontmatterOverride, importChain ? [...importChain, slide] : [slide])
+        await loadMarkdown(path, rangeRaw, frontmatterOverride, importChain
+          ? [...importChain, slide]
+          : [slide])
       }
     }
     else {
       slides.push({
-        frontmatter: { ...slide.frontmatter, ...frontmatterOverride },
+        frontmatter: {
+          ...slide.frontmatter,
+          ...frontmatterOverride,
+        },
         content: slide.content,
         revision: slide.revision,
         frontmatterRaw: slide.frontmatterRaw,

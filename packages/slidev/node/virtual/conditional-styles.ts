@@ -1,5 +1,5 @@
 import type { VirtualModuleTemplate } from './types'
-import { join } from 'node:path'
+import { join } from 'pathe'
 import { resolveImportUrl } from '../resolver'
 
 const id = '/@slidev/conditional-styles'

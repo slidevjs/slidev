@@ -26,6 +26,7 @@ export function getDefaultConfig(): SlidevConfig {
     lineNumbers: false,
     colorSchema: 'auto',
     routerMode: 'history',
+    advanceDebounce: 0,
     aspectRatio: 16 / 9,
     canvasWidth: 980,
     exportFilename: '',
@@ -45,8 +46,10 @@ export function getDefaultConfig(): SlidevConfig {
     htmlAttrs: {},
     transition: null,
     editor: true,
+    mcp: true,
     contextMenu: null,
     wakeLock: true,
+    pwa: false,
     remote: false,
     mdc: false,
     comark: false,
@@ -55,6 +58,7 @@ export function getDefaultConfig(): SlidevConfig {
     duration: '30min',
     timer: 'stopwatch',
     magicMoveDuration: 800,
+    shiki: {},
     preloadImages: true,
     clickAnimation: '',
   }
@@ -83,7 +87,11 @@ export function resolveConfig(headmatter: any, themeMeta: SlidevThemeMeta = {}, 
       ...headmatter.config?.fonts,
       ...headmatter?.fonts,
     }),
-    drawings: resolveDrawings(headmatter.drawings, filepath),
+    drawings: resolveDrawings({
+      ...themeMeta.defaults?.drawings,
+      ...headmatter.config?.drawings,
+      ...headmatter?.drawings,
+    }, filepath),
     htmlAttrs: {
       ...defaultConfig.htmlAttrs,
       ...themeMeta.defaults?.htmlAttrs,
@@ -108,8 +116,15 @@ export function resolveConfig(headmatter: any, themeMeta: SlidevThemeMeta = {}, 
   if (config.highlighter === 'prism')
     throw new Error(`[slidev] "prism" support has been dropped. Please use "highlighter: shiki" instead`)
 
-  if (config.colorSchema !== 'dark' && config.colorSchema !== 'light')
+  if (![
+    'dark',
+    'light',
+    'auto',
+    'light dark',
+    'dark light',
+  ].includes(config.colorSchema)) {
     config.colorSchema = 'auto'
+  }
   if (themeColorSchema && config.colorSchema === 'auto')
     config.colorSchema = themeColorSchema
 
@@ -134,7 +149,7 @@ export function verifyConfig(
     : undefined
 
   if (themeColorSchema && config.colorSchema !== themeColorSchema)
-    warn(`Color schema "${config.colorSchema}" does not supported by the theme`)
+    warn(`Color schema "${config.colorSchema}" is not supported by the theme`)
 
   if (themeHightlighter && config.highlighter !== themeHightlighter)
     warn(`Syntax highlighter "${config.highlighter}" does not supported by the theme`)
@@ -161,7 +176,12 @@ export function resolveFonts(fonts: FontOptions = {}): ResolvedFontOptions {
   const webfonts = fonts.webfonts
     ? fonts.webfonts
     : fallbacks
-      ? uniq([...sans, ...serif, ...mono, ...custom]).filter(i => !local.includes(i))
+      ? uniq([
+          ...sans,
+          ...serif,
+          ...mono,
+          ...custom,
+        ]).filter(i => !local.includes(i))
       : []
 
   function toQuoted(font: string) {
@@ -233,7 +253,9 @@ function resolveDrawings(options: DrawingsOptions = {}, filepath?: string): Reso
   const persistPath = typeof persist === 'string'
     ? persist
     : persist
-      ? `.slidev/drawings${filepath ? `/${filepath.match(RE_FILENAME_STEM)?.[1]}` : ''}`
+      ? `.slidev/drawings${filepath
+        ? `/${filepath.match(RE_FILENAME_STEM)?.[1]}`
+        : ''}`
       : false
 
   return {

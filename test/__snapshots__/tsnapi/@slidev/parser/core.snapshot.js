@@ -6,8 +6,12 @@ export function detectFeatures(_) {}
 export function extractImagesUsage(_, _) {}
 export function getDefaultConfig() {}
 export async function parse(_, _, _, _) {}
+export function parseAspectRatio(_) {}
+export function parseRangeString(_, _) {}
 export function parseSlide(_, _) {}
 export function parseSync(_, _, _) {}
+export function parseTimesplits(_) {}
+export function parseTimeString(_) {}
 export function prettify(_) {}
 export function prettifySlide(_) {}
 export function resolveConfig(_, _, _, _) {}
@@ -15,11 +19,4 @@ export function resolveFonts(_) {}
 export function stringify(_) {}
 export function stringifySlide(_, _) {}
 export function verifyConfig(_, _, _) {}
-// #endregion
-
-// #region Other
-export { parseAspectRatio }
-export { parseRangeString }
-export { parseTimesplits }
-export { parseTimeString }
 // #endregion

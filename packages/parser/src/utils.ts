@@ -22,7 +22,9 @@ export function parseRangeString(total: number, rangeStr?: string) {
     else {
       const [start, end] = part.split('-', 2)
       indexes.push(
-        ...range(+start, !end ? (total + 1) : (+end + 1)),
+        ...range(+start, !end
+          ? (total + 1)
+          : (+end + 1)),
       )
     }
   }

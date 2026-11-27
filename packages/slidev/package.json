@@ -1,7 +1,7 @@
 {
   "name": "@slidev/cli",
   "type": "module",
-  "version": "52.16.0",
+  "version": "53.1.0",
   "description": "Presentation slides for developers",
   "author": "Anthony Fu <anthonyfu117@hotmail.com>",
   "license": "MIT",
@@ -32,7 +32,7 @@
     "template.md"
   ],
   "engines": {
-    "node": ">=20.12.0"
+    "node": ">=22.22.0"
   },
   "scripts": {
     "build": "tsdown node/index.ts node/cli.ts",
@@ -41,10 +41,14 @@
     "start": "tsx node/cli.ts"
   },
   "peerDependencies": {
-    "playwright-chromium": "^1.10.0"
+    "playwright-chromium": "^1.10.0",
+    "vite-plugin-pwa": "^1.0.0 || ^2.0.0"
   },
   "peerDependenciesMeta": {
     "playwright-chromium": {
+      "optional": true
+    },
+    "vite-plugin-pwa": {
       "optional": true
     }
   },
@@ -56,6 +60,8 @@
     "@iconify-json/ph": "catalog:icons",
     "@iconify-json/svg-spinners": "catalog:icons",
     "@lillallol/outline-pdf": "catalog:prod",
+    "@modelcontextprotocol/node": "catalog:prod",
+    "@modelcontextprotocol/server": "catalog:prod",
     "@shikijs/magic-move": "catalog:frontend",
     "@shikijs/markdown-it": "catalog:frontend",
     "@shikijs/twoslash": "catalog:prod",
@@ -75,11 +81,9 @@
     "fast-glob": "catalog:prod",
     "get-port-please": "catalog:prod",
     "global-directory": "catalog:prod",
-    "htmlparser2": "catalog:prod",
     "is-installed-globally": "catalog:prod",
     "jiti": "catalog:prod",
     "katex": "catalog:frontend",
-    "local-pkg": "catalog:prod",
     "lz-string": "catalog:frontend",
     "magic-string": "catalog:prod",
     "magic-string-stack": "catalog:prod",
@@ -90,16 +94,15 @@
     "monaco-editor": "catalog:monaco",
     "obug": "catalog:prod",
     "open": "catalog:prod",
+    "pathe": "catalog:prod",
     "pdf-lib": "catalog:prod",
     "picomatch": "catalog:prod",
     "plantuml-encoder": "catalog:frontend",
-    "postcss-nested": "catalog:dev",
+    "postcss-nested": "catalog:prod",
     "pptxgenjs": "catalog:prod",
     "prompts": "catalog:prod",
     "public-ip": "catalog:prod",
-    "resolve-from": "catalog:prod",
     "resolve-global": "catalog:prod",
-    "semver": "catalog:prod",
     "shiki": "catalog:frontend",
     "sirv": "catalog:prod",
     "source-map-js": "catalog:prod",
@@ -111,19 +114,22 @@
     "unplugin-vue-markdown": "catalog:prod",
     "untun": "catalog:prod",
     "uqr": "catalog:prod",
+    "verkit": "catalog:prod",
     "vite": "catalog:prod",
     "vite-plugin-inspect": "catalog:prod",
     "vite-plugin-remote-assets": "catalog:prod",
     "vite-plugin-static-copy": "catalog:prod",
     "vite-plugin-vue-server-ref": "catalog:prod",
-    "vitefu": "catalog:dev",
+    "vitefu": "catalog:prod",
     "vue": "catalog:frontend",
     "yaml": "catalog:prod",
-    "yargs": "catalog:prod"
+    "yargs": "catalog:prod",
+    "zod": "catalog:prod"
   },
   "devDependencies": {
     "@hedgedoc/markdown-it-plugins": "catalog:prod",
     "@types/picomatch": "catalog:types",
-    "@types/plantuml-encoder": "catalog:types"
+    "@types/plantuml-encoder": "catalog:types",
+    "jszip": "catalog:dev"
   }
 }

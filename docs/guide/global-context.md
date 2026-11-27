@@ -35,7 +35,7 @@ If you want to get the context programmatically (also type-safely), you can impo
 import { onSlideEnter, onSlideLeave, useDarkMode, useIsSlideActive, useNav, useSlideContext } from '@slidev/client'
 
 const { $slidev } = useSlideContext()
-const { currentPage, currentLayout, currentSlideRoute } = useNav()
+const { currentPage, currentLayout, currentFrontmatter, currentSlideRoute } = useNav()
 const { isDark } = useDarkMode()
 const isActive = useIsSlideActive()
 onSlideEnter((to, from) => { /* ... */ })
@@ -86,6 +86,7 @@ $nav.go(10) // go slide #10
 
 $nav.currentPage // current slide number
 $nav.currentLayout // current layout name
+$nav.currentFrontmatter // current slide frontmatter, including custom fields
 ```
 
 For more properties available, refer to the [`SlidevContextNav` interface](https://github.com/slidevjs/slidev/blob/main/packages/client/composables/useNav.ts).

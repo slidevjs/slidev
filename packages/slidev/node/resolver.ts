@@ -1,14 +1,14 @@
 import type { RootsInfo } from '@slidev/types'
 import { existsSync, lstatSync, readdirSync, readlinkSync } from 'node:fs'
 import { copyFile, readFile } from 'node:fs/promises'
-import { dirname, join, relative, resolve, sep } from 'node:path'
 import process from 'node:process'
 import { fileURLToPath, pathToFileURL } from 'node:url'
 import { parseNi, run } from '@antfu/ni'
 import { ensurePrefix, slash } from '@antfu/utils'
 import { underline, yellow } from 'ansis'
 import globalDirs from 'global-directory'
-import { resolvePath } from 'mlly'
+import { resolve as resolveModuleUrl, resolvePath } from 'mlly'
+import { dirname, join, relative, resolve, sep } from 'pathe'
 import prompts from 'prompts'
 import { resolveGlobal } from 'resolve-global'
 import { findClosestPkgJsonPath, findDepPkgJsonPath } from 'vitefu'
@@ -167,13 +167,89 @@ export async function resolveImportPath(importName: string, ensure = false) {
 }
 
 /**
+ * Import an optional dependency (typically an optional peer dependency such as
+ * `vite-plugin-pwa`) that the user may or may not have installed. Resolution is
+ * attempted, in order, from the user's project root, the workspace root, the
+ * global registry (when Slidev runs globally), and finally the cli's own
+ * dependencies. Returns `undefined` when the package can't be resolved anywhere.
+ */
+export async function importOptionalDependency<T = any>(name: string): Promise<T | undefined> {
+  const roots: string[] = []
+  try {
+    const { userRoot, userWorkspaceRoot } = await getRoots()
+    roots.push(userRoot)
+    if (userWorkspaceRoot !== userRoot)
+      roots.push(userWorkspaceRoot)
+  }
+  catch { }
+
+  for (const root of roots) {
+    try {
+      return await import(await resolveModuleUrl(name, { url: pathToFileURL(`${root}${sep}`).href }))
+    }
+    catch { }
+  }
+
+  if (isInstalledGlobally.value) {
+    try {
+      return await import(resolveGlobal(name))
+    }
+    catch { }
+  }
+
+  try {
+    return await import(name)
+  }
+  catch { }
+
+  return undefined
+}
+
+/**
+ * Prompt the user to install a missing optional dependency, then install it
+ * with the detected package manager. Exits the process when the user declines
+ * or when stdin isn't interactive (so it can't prompt).
+ *
+ * `purpose` describes why the package is needed, e.g. `The "pwa" option`.
+ */
+export async function promptForOptionalInstallation(pkgName: string, purpose: string): Promise<void> {
+  // Check if stdin is available for prompts (i.e., is a TTY)
+  if (!process.stdin.isTTY) {
+    console.error(
+      `${purpose} requires the "${pkgName}" package, which is not installed, and cannot prompt for installation. `
+      + `Install it with \`npm i -D ${pkgName}\` (or your package manager's equivalent) and try again.`,
+    )
+    process.exit(1)
+  }
+
+  const { confirm } = await prompts({
+    name: 'confirm',
+    initial: 'Y',
+    type: 'confirm',
+    message: `${purpose} requires the "${yellow(pkgName)}" package, which is not installed ${underline(isInstalledGlobally.value ? 'globally' : 'in your project')}. Install it now?`,
+  })
+
+  if (!confirm)
+    process.exit(1)
+
+  if (isInstalledGlobally.value)
+    await run(parseNi, ['-g', pkgName])
+  else
+    await run(parseNi, [pkgName])
+}
+
+/**
  * Find the root of the package. If Slidev is installed globally, it will also search globally.
  */
 export async function findPkgRoot(dep: string, parent: string, ensure: true): Promise<string>
 export async function findPkgRoot(dep: string, parent: string, ensure?: boolean): Promise<string | undefined>
 export async function findPkgRoot(dep: string, parent: string, ensure = false) {
   const pkgJsonPath = await findDepPkgJsonPath(dep, parent)
-  const path = pkgJsonPath ? dirname(pkgJsonPath) : isInstalledGlobally.value ? await findGlobalPkgRoot(dep, false) : undefined
+  const path = pkgJsonPath
+    ? dirname(pkgJsonPath)
+    : isInstalledGlobally.value
+      ? await findGlobalPkgRoot(dep, false)
+      : undefined
   if (ensure && !path)
     throw new Error(`Failed to resolve package "${dep}"`)
   return path
@@ -263,10 +339,18 @@ export function createResolver(type: 'theme' | 'addon', officials: Record<string
     // local path
     if (name[0] === '/')
       return [name, name]
-    if (name.startsWith('@/'))
-      return [name, resolve(userRoot, name.slice(2))]
-    if (name[0] === '.' || (name[0] !== '@' && name.includes('/')))
-      return [name, resolve(dirname(importer), name)]
+    if (name.startsWith('@/')) {
+      return [
+        name,
+        resolve(userRoot, name.slice(2)),
+      ]
+    }
+    if (name[0] === '.' || (name[0] !== '@' && name.includes('/'))) {
+      return [
+        name,
+        resolve(dirname(importer), name),
+      ]
+    }
 
     // Validate that the name is a safe npm package name before resolving
     if (!RE_SAFE_PKG_NAME.test(name))
@@ -291,7 +375,9 @@ export function createResolver(type: 'theme' | 'addon', officials: Record<string
     }
 
     // fallback to prompt install
-    const pkgName = officials[name] ?? (name[0] === '@' ? name : `slidev-${type}-${name}`)
+    const pkgName = officials[name] ?? (name[0] === '@'
+      ? name
+      : `slidev-${type}-${name}`)
     await promptForInstallation(pkgName)
     return [pkgName, await findPkgRoot(pkgName, importer, true)]
   }

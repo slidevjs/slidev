@@ -3,12 +3,12 @@
 
 import fs from 'node:fs'
 import { createRequire } from 'node:module'
-import path from 'node:path'
 // @ts-check
 import process from 'node:process'
 import { fileURLToPath } from 'node:url'
 import { blue, bold, cyan, dim, green, yellow } from 'ansis'
 import minimist from 'minimist'
+import path from 'pathe'
 import prompts from 'prompts'
 
 const argv = minimist(process.argv.slice(2))
@@ -78,7 +78,9 @@ async function init() {
 
   const pkgManager = (RE_PNPM.test(process.env.npm_execpath) || RE_PNPM.test(process.env.npm_config_user_agent))
     ? 'pnpm'
-    : RE_YARN.test(process.env.npm_execpath) ? 'yarn' : 'npm'
+    : RE_YARN.test(process.env.npm_execpath)
+      ? 'yarn'
+      : 'npm'
 
   const related = path.relative(cwd, root)
 
@@ -88,8 +90,12 @@ async function init() {
   if (root !== cwd)
     console.log(blue(`  cd ${bold(related)}`))
 
-  console.log(blue(`  ${pkgManager === 'yarn' ? 'yarn' : `${pkgManager} install`}`))
-  console.log(blue(`  ${pkgManager === 'yarn' ? 'yarn dev' : `${pkgManager} run dev`}`))
+  console.log(blue(`  ${pkgManager === 'yarn'
+    ? 'yarn'
+    : `${pkgManager} install`}`))
+  console.log(blue(`  ${pkgManager === 'yarn'
+    ? 'yarn dev'
+    : `${pkgManager} run dev`}`))
   console.log()
   console.log(`  ${cyan('●')} ${blue('■')} ${yellow('▲')}`)
   console.log()
