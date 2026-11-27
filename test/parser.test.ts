@@ -147,7 +147,10 @@ f
 
     const userRoot = resolve(__dirname, 'fixtures/markdown')
     const filepath = slash(resolve(userRoot, 'bom.md'))
-    const loaded = await load({ userRoot, roots: [userRoot] }, filepath, { [filepath]: markdown })
+    const loaded = await load({
+      userRoot,
+      roots: [userRoot],
+    }, filepath, { [filepath]: markdown })
     expect(loaded.headmatter).toEqual({ theme: 'seriph', title: 'Hello' })
   })
 

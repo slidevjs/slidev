@@ -21,14 +21,13 @@ To configure the built-in plugins listed above, create a `vite.config.ts` with t
 
 ```ts twoslash [vite.config.ts]
 /* eslint-disable import/first */
-/// <reference types="@slidev/types" />
 import type MarkdownExit from 'markdown-exit'
 
 declare const MyPlugin: (md: any) => void
 // ---cut---
-import { defineConfig } from 'vite'
+import { defineViteConfig } from '@slidev/types'
 
-export default defineConfig({
+export default defineViteConfig({
   slidev: {
     vue: {
       /* vue options */
@@ -46,6 +45,12 @@ export default defineConfig({
 ```
 
 See the [type declarations](https://github.com/slidevjs/slidev/blob/main/packages/types/src/vite.ts#L11) for more options.
+
+`defineViteConfig` is a drop-in replacement for Vite's `defineConfig`. The `slidev` field is declared by `@slidev/types`, and TypeScript only picks that declaration up when the package is part of your program, which is what importing the helper does. If you prefer Vite's own `defineConfig`, reference the types at the top of the file instead:
+
+```ts
+/// <reference types="@slidev/types" />
+```
 
 ::: warning
 It is not allowed to re-add plugins that has been used internally be Slidev. For example, instead of
