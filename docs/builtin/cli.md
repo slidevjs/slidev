@@ -78,6 +78,18 @@ Options:
 - `--theme`, `-t` (`string`): override theme.
 - `--omit-background` (`boolean`, default: `false`): remove the default browser background
 
+## `slidev export-notes [...entry]` {#export-notes}
+
+Export presenter notes to PDF. Only slides with notes are included, with their titles and slide numbers, but without slide previews. See [Exporting Presenter Notes](../guide/exporting#presenter-notes) for examples and prerequisites.
+
+- `[entry]` (`string`, default: `slides.md`): path to the slides markdown entry.
+
+Options:
+
+- `--output` (`string`, default: `[exportFilename]-notes.pdf` if `exportFilename` is configured, otherwise `[entry]-export-notes.pdf`): path to the output. The `.pdf` extension is added if omitted.
+- `--timeout` (`number`, default: `30000`): timeout in milliseconds for rendering the print page.
+- `--wait` (`number`, default: `0`): extra delay in milliseconds before exporting.
+
 ## `slidev format [entry]` {#format}
 
 Format the markdown file. Note that this won't format the content of the slides, only the organization of the markdown file.

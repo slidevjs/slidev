@@ -325,4 +325,113 @@ context('Basic', () => {
     cy.rightArrow()
     cy.get(wrapper).should('not.have.class', 'slidev-vclick-hidden')
   })
+
+  it('v-click.mount', () => {
+    goPage(19)
+
+    const expectMounted = (mounted: string[]) => {
+      for (const name of ['b', 'c', 'd', 'e', 'f', 'g', 'h']) {
+        cy.get(`#slideshow .slidev-page-19 .cy-mount-${name}`).should(mounted.includes(name)
+          ? 'exist'
+          : 'not.exist')
+      }
+    }
+
+    expectMounted(['e'])
+
+    cy.rightArrow()
+    expectMounted(['e'])
+
+    cy.rightArrow()
+    expectMounted(['b', 'c', 'e'])
+    // mounted hidden, then shown with the same classes as `v-click`
+    cy.get('#slideshow .slidev-page-19 .cy-mount-b')
+      .should('have.class', 'slidev-vclick-target')
+      .and('not.have.class', 'slidev-vclick-hidden')
+      .and('have.css', 'opacity', '1')
+
+    cy.rightArrow()
+    expectMounted(['b', 'c', 'd'])
+
+    cy.rightArrow()
+    cy.url()
+      .should('eq', `${BASE}/19?clicks=4`)
+    expectMounted(['b', 'c', 'd', 'f', 'g', 'h'])
+    cy.get('#slideshow .slidev-page-19 .cy-mount-f')
+      .should('have.class', 'slidev-vclick-anim-up')
+      .and('not.have.class', 'slidev-vclick-hidden')
+
+    cy.rightArrow()
+    cy.url()
+      .should('eq', `${BASE}/19?clicks=5`)
+    expectMounted(['b', 'c', 'f', 'g', 'h'])
+  })
+
+  it('marks only the currently visible slide with slidev-page-active', () => {
+    cy.url().should('eq', `${BASE}/1`)
+
+    // Initial state on slide 1 with preloaded slide 2 mounted in the DOM
+    cy.get('#slideshow .slidev-page-active').should('have.length', 1)
+    cy.get('#slideshow .slidev-page-1')
+      .should('have.class', 'slidev-page')
+      .and('have.class', 'slidev-page-active')
+      .and('be.visible')
+    cy.get('#slideshow .slidev-page-2')
+      .should('exist')
+      .and('not.be.visible')
+      .and('have.class', 'slidev-page')
+      .and('not.have.class', 'slidev-page-active')
+
+    // Forward navigation transfers the active class to slide 2
+    cy.get('body').type('{RightArrow}')
+    cy.url().should('eq', `${BASE}/2`)
+    cy.get('#slideshow .slidev-page-active').should('have.length', 1)
+    cy.get('#slideshow .slidev-page-2')
+      .should('have.class', 'slidev-page')
+      .and('have.class', 'slidev-page-active')
+      .and('be.visible')
+    cy.get('#slideshow .slidev-page-1')
+      .should('exist')
+      .and('not.be.visible')
+      .and('not.have.class', 'slidev-page-active')
+
+    // Backward navigation restores the active class to slide 1
+    cy.get('body').type('{LeftArrow}')
+    cy.url().should('eq', `${BASE}/1`)
+    cy.get('#slideshow .slidev-page-active').should('have.length', 1)
+    cy.get('#slideshow .slidev-page-1')
+      .should('have.class', 'slidev-page-active')
+    cy.get('#slideshow .slidev-page-2')
+      .should('not.have.class', 'slidev-page-active')
+
+    // v-click progression keeps the active class on the current slide
+    goPage(9)
+    cy.get('#slideshow .slidev-page-active').should('have.length', 1)
+    cy.get('#slideshow .slidev-page-9')
+      .should('have.class', 'slidev-page')
+      .and('have.class', 'slidev-page-active')
+
+    cy.get('body').type('{RightArrow}')
+    cy.url().should('eq', `${BASE}/9?clicks=1`)
+    cy.get('#slideshow .slidev-page-active').should('have.length', 1)
+    cy.get('#slideshow .slidev-page-9')
+      .should('have.class', 'slidev-page-active')
+  })
+
+  it('marks the main slide active in presenter mode without marking Next preview', () => {
+    cy.visit('/presenter/9')
+    cy.url().should('eq', `${BASE}/presenter/9`)
+
+    cy.get('.grid-section.main #slideshow .slidev-page-active').should('have.length', 1)
+    cy.get('.grid-section.main #slideshow .slidev-page-9')
+      .should('have.class', 'slidev-page')
+      .and('have.class', 'slidev-page-active')
+
+    // Slide 9 has unrevealed clicks, so Next preview renders slide 9 as well
+    cy.get('.grid-section.next .slidev-page-9')
+      .should('exist')
+      .and('have.class', 'slidev-page')
+      .and('not.have.class', 'slidev-page-active')
+    cy.get('.grid-section.next .slidev-page-active').should('not.exist')
+  })
 })

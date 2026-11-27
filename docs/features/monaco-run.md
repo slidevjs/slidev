@@ -41,4 +41,22 @@ console.log('Shown after 1 click')
 ```
 ````
 
+## Font Size
+
+When you customize the editor's [`fontSize` option](/custom/config-monaco#configure-the-editor), the runner output uses the same font size. This works both with per-instance `editorOptions` and with the global Monaco setup:
+
+````md
+```ts {monaco-run} {editorOptions: {fontSize:16}}
+console.log('Both the editor and the output are 16px')
+```
+````
+
+You can also set the output font size independently with `outputFontSize`. It accepts a number (in pixels) or any CSS length:
+
+````md
+```ts {monaco-run} {outputFontSize:18}
+console.log('Only the output is 18px')
+```
+````
+
 Currently, Slidev supports running JavaScript and TypeScript code out-of-box. Refer to [Custom Code Runners](/custom/config-code-runners) for custom language support.

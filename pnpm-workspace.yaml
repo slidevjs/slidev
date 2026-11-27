@@ -26,7 +26,7 @@ packages:
 
 overrides:
   markdown-exit: catalog:prod
-  rollup: ^4.67.5
+  rollup: ^4.68.8
   semver: ^7.8.6
   # vscode-languageserver / vscode-languageclient pin these to exact 3.17.5, which prevents
   # pnpm from deduping against the ^3.17.5 range used elsewhere (resolving to 3.18.3), causing
@@ -52,40 +52,40 @@ allowBuilds:
 catalogs:
   agentic:
     '@antfu/skills': ^0.1.3
-    skills: ^1.7.6
+    skills: ^1.9.0
   demo:
-    '@vue/compiler-sfc': ^3.5.44
+    '@vue/compiler-sfc': ^3.5.46
   dev:
     '@antfu/eslint-config': ^10.0.0
     bumpp: ^12.3.0
-    cypress: ^16.2.1
-    eslint: ^10.14.0
+    cypress: ^16.4.0
+    eslint: ^10.15.0
     eslint-plugin-format: ^2.0.1
     jszip: ^3.10.2
-    lint-staged: ^17.6.0
+    lint-staged: ^17.6.2
     nodemon: ^3.1.14
-    ovsx: ^1.3.0
-    playwright-chromium: ^1.64.1
+    ovsx: ^1.4.0
+    playwright-chromium: ^1.65.1
     prettier: ^3.9.10
     prettier-plugin-slidev: ^1.0.5
     rimraf: ^6.1.4
     simple-git-hooks: ^2.14.0
     taze: ^21.3.0
-    tsdown: ^0.23.5
+    tsdown: ^0.23.7
     tsdown-stale-guard: ^0.1.3
     tsnapi: ^1.6.1
     tsx: ^4.23.15
-    turbo: ^2.11.10
+    turbo: ^2.11.13
     typescript: ^6.0.3
-    vitest: ^5.1.0
+    vitest: ^5.1.2
     vue-tsc: ^3.3.14
     zx: ^8.8.5
   docs:
-    oxc-minify: ^0.157.0
+    oxc-minify: ^0.160.0
     typeit: 8.1.0
     vitepress: ^2.0.0-alpha.21
-    vitepress-plugin-group-icons: ^1.8.1
-    vitepress-plugin-llms: ^1.14.0
+    vitepress-plugin-group-icons: ^1.8.2
+    vitepress-plugin-llms: ^1.15.0
   frontend:
     '@antfu/utils': ^9.3.0
     '@fix-webm-duration/fix': ^1.0.1
@@ -93,10 +93,10 @@ catalogs:
     '@shikijs/magic-move': ^4.6.0
     '@shikijs/markdown-it': ^4.6.0
     '@slidev/rough-notation': ^0.1.0
-    '@unhead/vue': ^3.4.3
-    '@unocss/reset': ^66.12.0
-    '@vueuse/core': ^15.0.0
-    '@vueuse/math': ^15.0.0
+    '@unhead/vue': ^3.5.3
+    '@unocss/reset': ^66.13.0
+    '@vueuse/core': ^15.1.0
+    '@vueuse/math': ^15.1.0
     '@vueuse/motion': ^3.0.3
     drauu: ^1.0.0
     file-saver: ^2.0.5
@@ -111,20 +111,20 @@ catalogs:
     recordrtc: ^5.6.2
     shiki: ^4.6.0
     tm-grammars: ^1.32.22
-    unhead: ^3.4.3
-    vue: ^3.5.44
-    vue-router: ^5.4.0
+    unhead: ^3.5.3
+    vue: ^3.5.46
+    vue-router: ^5.5.3
   icons:
-    '@iconify-json/carbon': ^1.2.29
+    '@iconify-json/carbon': ^1.2.30
     '@iconify-json/mdi': ^1.2.3
     '@iconify-json/ph': ^1.2.2
     '@iconify-json/ri': ^1.2.10
     '@iconify-json/svg-spinners': ^1.2.4
-    '@iconify/json': ^2.2.553
+    '@iconify/json': ^2.2.562
   monaco:
     '@shikijs/monaco': ^4.6.0
     '@typescript/ata': ^0.9.8
-    monaco-editor: ^0.57.0
+    monaco-editor: ^0.58.0
   prod:
     '@antfu/ni': ^30.6.0
     '@comark/markdown-it': ^0.4.0
@@ -136,9 +136,9 @@ catalogs:
     '@myriaddreamin/typst-ts-node-compiler': 0.8.0-rc4
     '@shikijs/twoslash': ^4.6.0
     '@shikijs/vitepress-twoslash': ^4.6.0
-    '@unocss/extractor-mdc': ^66.12.0
-    '@unocss/preset-mini': ^66.12.0
-    '@vitejs/plugin-vue': ^6.0.10
+    '@unocss/extractor-mdc': ^66.13.0
+    '@unocss/preset-mini': ^66.13.0
+    '@vitejs/plugin-vue': ^6.0.11
     '@vitejs/plugin-vue-jsx': ^5.1.6
     ansis: ^4.5.0
     chokidar: ^6.0.0
@@ -170,22 +170,22 @@ catalogs:
     public-ip: ^8.0.0
     resolve-global: ^2.0.0
     sirv: ^3.0.2
-    source-map-js: ^1.2.2
-    tinyexec: ^1.3.1
-    unocss: ^66.12.0
+    source-map-js: ^1.2.4
+    tinyexec: ^1.4.0
+    unocss: ^66.13.0
     unplugin-icons: ^24.0.0
     unplugin-vue-components: ^32.1.0
     unplugin-vue-markdown: ^32.1.1
     untun: ^0.2.2
     uqr: ^0.1.3
     verkit: ^0.5.0
-    vite: ^8.3.6
+    vite: ^8.4.0
     vite-plugin-inspect: ^12.1.0
     vite-plugin-pwa: ^2.0.0
     vite-plugin-remote-assets: ^2.1.0
     vite-plugin-static-copy: ^4.1.1
     vite-plugin-vue-server-ref: ^1.0.0
-    vitefu: ^1.1.3
+    vitefu: ^1.1.4
     yaml: ^2.9.1
     yargs: ^18.2.0
     zod: ^4.6.7
@@ -198,7 +198,7 @@ catalogs:
     '@types/file-saver': ^2.0.7
     '@types/js-yaml': ^4.0.9
     '@types/katex': ^0.16.8
-    '@types/node': ^26.6.6
+    '@types/node': ^26.6.11
     '@types/picomatch': ^4.0.3
     '@types/plantuml-encoder': ^1.4.2
     '@types/prompts': ^2.4.9
@@ -206,12 +206,13 @@ catalogs:
     '@types/resolve': ^1.20.6
     '@types/yargs': ^17.0.35
   vscode:
-    '@volar/language-server': ~2.4.30
+    # Keep in sync with the `@volar/typescript` version pinned by `vue-tsc`
+    '@volar/language-server': 2.4.30
     '@volar/vscode': ^2.4.30
     picomatch: ^4.0.7
     prettier: ^2.8.8
     reactive-vscode: ^1.0.2
-    ts-json-schema-generator: ^2.9.0
+    ts-json-schema-generator: ^2.10.0
     volar-service-prettier: ^0.0.71
     vscode-uri: ^3.2.0
     yaml-language-server: ^2.0.0
