@@ -29,10 +29,14 @@ export interface SlidevMcpContext {
 
 function result(data: any) {
   return {
-    content: [{
-      type: 'text' as const,
-      text: typeof data === 'string' ? data : JSON.stringify(data, null, 2),
-    }],
+    content: [
+      {
+        type: 'text' as const,
+        text: typeof data === 'string'
+          ? data
+          : JSON.stringify(data, null, 2),
+      },
+    ],
   }
 }
 
@@ -40,10 +44,14 @@ function slideSummary(slide: SlideInfo) {
   return {
     no: slide.index + 1,
     title: slide.title ?? null,
-    ...slide.frontmatter.layout ? { layout: slide.frontmatter.layout } : {},
+    ...slide.frontmatter.layout
+      ? { layout: slide.frontmatter.layout }
+      : {},
     file: slide.source.filepath,
     hasNote: !!slide.source.note,
-    ...slide.importChain?.length ? { importedBySrcDirective: true } : {},
+    ...slide.importChain?.length
+      ? { importedBySrcDirective: true }
+      : {},
   }
 }
 
@@ -137,7 +145,9 @@ export function createSlidevMcpServer(ctx: SlidevMcpContext): McpServer {
         content: slide.source.content.trim(),
         note: slide.source.note ?? null,
         ...slide.importChain?.length
-          ? { importedBy: slide.importChain.map(s => `${s.filepath}#${s.index + 1}`) }
+          ? {
+              importedBy: slide.importChain.map(s => `${s.filepath}#${s.index + 1}`),
+            }
           : {},
       })
     },
@@ -194,7 +204,9 @@ export function createSlidevMcpServer(ctx: SlidevMcpContext): McpServer {
     async ({ no }) => {
       const data = await ctx.getData()
       const { removed, filepath } = await removeSlide(data, no)
-      return result(`Removed slide ${no}${removed.title ? ` ("${removed.title}")` : ''} from ${filepath}. Slide numbers after it have shifted; list the slides again if needed.`)
+      return result(`Removed slide ${no}${removed.title
+        ? ` ("${removed.title}")`
+        : ''} from ${filepath}. Slide numbers after it have shifted; list the slides again if needed.`)
     },
   )
 
@@ -212,7 +224,9 @@ export function createSlidevMcpServer(ctx: SlidevMcpContext): McpServer {
     async ({ from, before, after }) => {
       const data = await ctx.getData()
       const { filepath } = await moveSlide(data, { from, before, after })
-      return result(`Moved slide ${from} ${before != null ? `before slide ${before}` : `after slide ${after}`} in ${filepath}. Slide numbers have shifted; list the slides again if needed.`)
+      return result(`Moved slide ${from} ${before != null
+        ? `before slide ${before}`
+        : `after slide ${after}`} in ${filepath}. Slide numbers have shifted; list the slides again if needed.`)
     },
   )
 
@@ -233,7 +247,9 @@ export function createSlidevMcpServer(ctx: SlidevMcpContext): McpServer {
         const data = await ctx.getData()
         resolveSlide(data, no) // range check
         nav.go(no, clicks ?? 0)
-        return result(`Navigated the presentation to slide ${no}${clicks ? ` (click ${clicks})` : ''}.`)
+        return result(`Navigated the presentation to slide ${no}${clicks
+          ? ` (click ${clicks})`
+          : ''}.`)
       },
     )
   }

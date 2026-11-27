@@ -26,7 +26,14 @@ export default function MarkdownItSlotSugar(md: MarkdownExit) {
     state.env.hasSlotMarker = true
 
     return true
-  }, { alt: ['paragraph', 'reference', 'blockquote', 'list'] })
+  }, {
+    alt: [
+      'paragraph',
+      'reference',
+      'blockquote',
+      'list',
+    ],
+  })
 
   md.core.ruler.push('slot_sugar_compiler', (state) => {
     if (!state.env.hasSlotMarker)

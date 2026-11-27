@@ -47,7 +47,9 @@ export const useServerDetector = defineService(() => {
         state.compatMode = !text.match(versionRE)
         const detectedEntry = text.match(entryRE)?.[1]
         if (detectedEntry) {
-          const entry = [...projects.keys()]
+          const entry = [
+            ...projects.keys(),
+          ]
             .find(projectEntry => isSamePath(projectEntry, detectedEntry)) ?? detectedEntry
           state.entry = entry
           logger.info(`[Slidev] Detected Slidev server entry: ${detectedEntry} on port ${port}`)
@@ -108,7 +110,9 @@ export const useServerDetector = defineService(() => {
   }
 
   async function allocPort() {
-    const usedPorts = [...projects.values()].map(project => project.port.value ?? 0)
+    const usedPorts = [
+      ...projects.values(),
+    ].map(project => project.port.value ?? 0)
     const minPort = Math.max(3029, ...usedPorts) + 1
     return await getPortPlease({
       portRange: [minPort, 4000],

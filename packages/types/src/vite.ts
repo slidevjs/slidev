@@ -5,6 +5,7 @@ import type { VitePluginConfig as UnoCSSConfig } from 'unocss/vite'
 import type Icons from 'unplugin-icons/vite'
 import type Components from 'unplugin-vue-components/vite'
 import type Markdown from 'unplugin-vue-markdown/vite'
+import type { UserConfigExport } from 'vite'
 import type { ViteInspectOptions } from 'vite-plugin-inspect'
 import type RemoteAssets from 'vite-plugin-remote-assets'
 import type { ViteStaticCopyOptions } from 'vite-plugin-static-copy'
@@ -33,4 +34,27 @@ declare module 'vite' {
      */
     slidev?: SlidevPluginOptions
   }
+}
+
+/**
+ * Drop-in replacement for Vite's `defineConfig` in a Slidev project.
+ *
+ * Vite's own `defineConfig` does not know about the `slidev` field above
+ * unless `@slidev/types` happens to be in the TypeScript program already.
+ * Importing this helper pulls the declaration in, so the `slidev` field is
+ * always recognized and type checked.
+ *
+ * @example
+ * ```ts
+ * import { defineViteConfig } from '@slidev/types'
+ *
+ * export default defineViteConfig({
+ *   slidev: {
+ *     vue: { ... },
+ *   },
+ * })
+ * ```
+ */
+export function defineViteConfig<T extends UserConfigExport>(config: T): T {
+  return config
 }

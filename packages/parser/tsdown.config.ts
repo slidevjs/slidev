@@ -10,5 +10,7 @@ export default defineConfig({
     fs: 'src/fs.ts',
     utils: 'src/utils.ts',
   },
-  plugins: [StaleGuardRecorder()],
+  plugins: [
+    StaleGuardRecorder(),
+  ],
 })

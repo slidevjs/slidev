@@ -6,5 +6,13 @@ export function getSlideRoutePath(
   exporting: boolean = false,
 ) {
   const no = route.meta.slide?.frontmatter.routeAlias ?? route.no
-  return exporting ? `/export/${no}` : presenter ? `/presenter/${no}` : `/${no}`
+  return exporting
+    ? `/export/${no}`
+    : presenter
+      ? `/presenter/${no}`
+      : `/${no}`
+}
+
+export function getPrintSlideAnchorId(no: number | string) {
+  return `slide-${no}`
 }

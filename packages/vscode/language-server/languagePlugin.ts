@@ -19,7 +19,9 @@ export const slidevLanguagePlugin: LanguagePlugin<URI> = {
         id: 'root',
         languageId: 'markdown',
         mappings: [],
-        embeddedCodes: [...getEmbeddedCodes(parsed)],
+        embeddedCodes: [
+          ...getEmbeddedCodes(parsed),
+        ],
         snapshot,
       }
     }
@@ -45,19 +47,23 @@ function* getEmbeddedCodes(parsed: SlidevMarkdown): Generator<VirtualCode> {
           getLength: () => frontmatterRaw.length,
           getChangeRange: () => undefined,
         },
-        mappings: [{
-          sourceOffsets: [lineToPos(start)],
-          generatedOffsets: [0],
-          lengths: [frontmatterRaw.length],
-          data: {
-            verification: true,
-            completion: true,
-            semantic: true,
-            navigation: true,
-            structure: true,
-            format: true,
+        mappings: [
+          {
+            sourceOffsets: [
+              lineToPos(start),
+            ],
+            generatedOffsets: [0],
+            lengths: [frontmatterRaw.length],
+            data: {
+              verification: true,
+              completion: true,
+              semantic: true,
+              navigation: true,
+              structure: true,
+              format: true,
+            },
           },
-        }],
+        ],
         embeddedCodes: [],
       }
     }
@@ -70,19 +76,23 @@ function* getEmbeddedCodes(parsed: SlidevMarkdown): Generator<VirtualCode> {
           getLength: () => content.length,
           getChangeRange: () => undefined,
         },
-        mappings: [{
-          sourceOffsets: [lineToPos(contentStart)],
-          generatedOffsets: [0],
-          lengths: [content.length],
-          data: {
-            verification: true,
-            completion: true,
-            semantic: true,
-            navigation: true,
-            structure: true,
-            format: false,
+        mappings: [
+          {
+            sourceOffsets: [
+              lineToPos(contentStart),
+            ],
+            generatedOffsets: [0],
+            lengths: [content.length],
+            data: {
+              verification: true,
+              completion: true,
+              semantic: true,
+              navigation: true,
+              structure: true,
+              format: false,
+            },
           },
-        }],
+        ],
         embeddedCodes: [],
       }
     }
