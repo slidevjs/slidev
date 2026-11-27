@@ -97,6 +97,10 @@ describe('snippet import HMR (#2241)', () => {
     })
 
     await renderSlides(server, options)
+    await waitForWatched(server, [
+      join(dir, 'snippets/one.ts'),
+      join(dir, 'snippets/two.ts'),
+    ])
 
     await writeFile(join(dir, 'snippets/one.ts'), 'export const one = 10\n')
     await waitFor(() => updatedSlides.includes(1))
@@ -128,6 +132,10 @@ describe('snippet import HMR (#2241)', () => {
     })
 
     await renderSlides(server, options)
+    await waitForWatched(server, [
+      entry,
+      join(dir, 'snippets/two.ts'),
+    ])
 
     await writeFile(entry, ENTRY_MD.replace('# One', '# One edited'))
     await waitFor(() => updatedSlides.includes(1))
@@ -147,4 +155,17 @@ async function waitFor(predicate: () => boolean, timeout = 5_000, interval = 50)
     await new Promise(r => setTimeout(r, interval))
   }
   throw new Error(`Timed out after ${timeout}ms waiting for HMR activity`)
+}
+
+// Chokidar starts watching asynchronously (notably on macOS and Windows), so an
+// edit made right after the server starts can be missed.
+async function waitForWatched(server: Awaited<ReturnType<typeof createServer>>, files: string[]) {
+  const slash = (p: string) => p.replace(/\\/g, '/')
+  await waitFor(() => {
+    const watched = new Set(
+      Object.entries(server.watcher.getWatched())
+        .flatMap(([dir, names]) => names.map(name => slash(join(dir, name)))),
+    )
+    return files.every(file => watched.has(slash(file)))
+  })
 }
