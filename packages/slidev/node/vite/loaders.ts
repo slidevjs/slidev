@@ -17,14 +17,24 @@ import { templateMonacoTypes } from '../virtual/monaco-types'
 import { templateSlides, VIRTUAL_SLIDE_PREFIX } from '../virtual/slides'
 import { templateTitleRendererMd } from '../virtual/titles'
 import { regexSlideFacadeId, regexSlideReqPath, regexSlideSourceId } from './common'
+import { createNoteHighlight, NOTE_SHIKI_LANGS, NOTE_SHIKI_THEMES } from './note-highlight'
 
-export function createSlidesLoader(
+export async function createSlidesLoader(
   options: ResolvedSlidevOptions,
   serverOptions: SlidevServerOptions,
-): Plugin {
+): Promise<Plugin> {
   const { data, mode, utils, withoutNotes } = options
 
-  const notesMd = MarkdownExit({ html: true })
+  // Pre-load a Shiki highlighter for note code blocks.
+  const noteHighlighter: any = await utils.shiki.getSingletonHighlighter({
+    langs: NOTE_SHIKI_LANGS,
+    themes: Object.values(NOTE_SHIKI_THEMES),
+  })
+
+  const notesMd = MarkdownExit({
+    html: true,
+    highlight: createNoteHighlight(noteHighlighter),
+  })
   notesMd.use(markdownItLink)
   if (data.features.katex)
     notesMd.use(MarkdownItKatex, utils.katexOptions)

@@ -4,17 +4,25 @@ html.dark:root {
 
 /* Shiki */
 html.dark .shiki {
-  color: var(--shiki-dark, inherit);
+  color: var(--shiki-dark, inherit) !important;
+  background-color: var(--shiki-dark-bg, inherit) !important;
   --twoslash-popup-bg: var(--shiki-dark-bg, inherit);
+  white-space: pre-wrap;
+  word-break: break-word;
+  overflow-x: hidden;
 }
 
 html.dark .shiki span {
-  color: var(--shiki-dark);
+  color: var(--shiki-dark) !important;
 }
 
 html:not(.dark) .shiki {
   color: var(--shiki-light, inherit);
+  background-color: var(--shiki-light-bg, inherit);
   --twoslash-popup-bg: var(--shiki-light-bg, inherit);
+  white-space: pre-wrap;
+  word-break: break-word;
+  overflow-x: hidden;
 }
 
 html:not(.dark) .shiki span {
@@ -42,6 +50,9 @@ html:not(.dark) .shiki span {
   border-radius: var(--slidev-code-radius) !important;
   background: var(--slidev-code-background);
   overflow: auto;
+  white-space: pre-wrap;
+  word-break: break-word;
+  overflow-x: hidden;
 }
 
 .slidev-code-block-title,
