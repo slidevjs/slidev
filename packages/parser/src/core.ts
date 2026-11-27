@@ -11,7 +11,8 @@ const RE_TWEET_TAG = /<Tweet\b/
 const RE_BLUESKY_TAG = /<BlueSky\b/
 const RE_MERMAID_CODEBLOCK = /^```mermaid/m
 const RE_HEADING = /^(#+) (.*)$/m
-const RE_CODE_BLOCK = /^```[\s\S]+?^```/gm
+const RE_CODE_FENCE_START = /^ {0,3}(`{3,}|~{3,})/
+const RE_CODE_FENCE_END = /^ {0,3}(`+|~+)[ \t]*$/
 const RE_LEADING_FENCE = /^\s*(?:`+|~+)/
 const RE_TILDE_FENCE = /^ {0,3}~~~/
 const RE_CRLF = /\r?\n/g
@@ -45,6 +46,26 @@ function advanceHtmlCommentState(line: string, inHtmlComment: boolean) {
   }
 
   return inHtmlComment
+}
+
+/** Remove top-level fenced examples before extracting slide metadata. */
+function stripCodeBlocks(content: string) {
+  let fence = ''
+  return content.split(RE_CRLF).map((line) => {
+    if (fence) {
+      const closing = line.match(RE_CODE_FENCE_END)?.[1]
+      if (closing && closing[0] === fence[0] && closing.length >= fence.length)
+        fence = ''
+      return ''
+    }
+
+    const opening = line.match(RE_CODE_FENCE_START)
+    if (opening && (opening[1][0] !== '`' || !line.slice(opening[0].length).includes('`'))) {
+      fence = opening[1]
+      return ''
+    }
+    return line
+  }).join('\n')
 }
 
 export function stringify(data: SlidevMarkdown) {
@@ -147,7 +168,7 @@ export function extractImagesUsage(content: string, frontmatter: Record<string, 
   }
 
   // Strip code blocks to avoid false positives
-  const stripped = content.replace(RE_CODE_BLOCK, '')
+  const stripped = stripCodeBlocks(content)
 
   // Markdown images: ![alt](url), ![alt](url "title"), ![alt](<url>)
   for (const [, target] of stripped.matchAll(/!\[[^\]]*\]\(([^)]+)\)/g)) {
@@ -265,7 +286,7 @@ export function parseSlide(raw: string, options: SlidevParserOptions = {}): Omit
   }
   else {
     // `#` lines inside a fenced block are code comments, not the slide title
-    const match = content.replace(RE_CODE_BLOCK, '').match(RE_HEADING)
+    const match = stripCodeBlocks(content).match(RE_HEADING)
     title = match?.[2]?.trim()
     level = match?.[1]?.length
   }

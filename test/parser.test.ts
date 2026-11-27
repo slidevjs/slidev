@@ -149,6 +149,63 @@ f
     expect(data.slides[1].title).toBe(undefined)
   })
 
+  it.each([
+    ['tilde', '~~~md', '~~~', []],
+    [
+      'indented tilde',
+      '  ~~~md',
+      ' ~~~',
+      [],
+    ],
+    [
+      'longer closing tilde',
+      '~~~md',
+      '~~~~',
+      [],
+    ],
+    [
+      'closing fence followed by code',
+      '~~~md',
+      '~~~',
+      ['~~~not-a-closing-fence', '# Still inside the example'],
+    ],
+    [
+      'nested shorter backticks',
+      '````md',
+      '````',
+      ['```', '# Nested example', '```'],
+    ],
+    [
+      'mismatched fences',
+      '~~~md',
+      '~~~',
+      ['```', '# Still inside the example', '```'],
+    ],
+  ])('ignores %s code blocks when extracting slide metadata', async (_, opening, closing, inner) => {
+    const markdown = [
+      '![before](/before.png)',
+      opening,
+      '# Example heading',
+      '![example](/example.png)',
+      ...inner,
+      closing,
+      '## Actual heading',
+      '![after](/after.png)',
+    ].join('\n')
+
+    for (const data of [
+      await parse(markdown, 'file.md'),
+      parseSync(markdown, 'file.md'),
+    ]) {
+      const { title, level, images } = data.slides[0]
+      expect({ title, level, images }).toEqual({
+        title: 'Actual heading',
+        level: 2,
+        images: ['/before.png', '/after.png'],
+      })
+    }
+  })
+
   it('ignores slide separators inside tilde code blocks', async () => {
     const markdown = '# A\n\n~~~md\n---\ntitle: x\n---\n~~~\n\n---\n\n# B\n'
 
