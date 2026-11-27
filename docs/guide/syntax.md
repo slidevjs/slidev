@@ -163,11 +163,11 @@ Slidev supports [Mermaid](https://mermaid.js.org/) and [PlantUML](https://plantu
 <LinkCard link="features/mermaid" />
 <LinkCard link="features/plantuml" />
 
-## MDC Syntax {#mdc-syntax}
+## Comark Syntax {#comark-syntax}
 
-MDC Syntax is the easiest way to apply styles and classes to elements:
+Comark Syntax is the easiest way to apply styles and classes to elements:
 
-<LinkCard link="features/mdc" />
+<LinkCard link="features/comark" />
 
 ## Scoped CSS {#scoped-css}
 

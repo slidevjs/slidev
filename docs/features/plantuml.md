@@ -2,7 +2,7 @@
 relates:
   - Plant UML: https://plantuml.com/
   - Plant UML Live Editor: https://plantuml.com/plantuml
-  - Example side: https://sli.dev/demo/starter/12
+  - Example Slide: https://sli.dev/demo/starter/12
   - features/mermaid
 tags: [diagram]
 description: |

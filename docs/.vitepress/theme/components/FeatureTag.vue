@@ -33,8 +33,11 @@ function getHsla(
 }
 
 const formattedTag = computed(() => {
-  const tag = props.tag
-    .replace(/\b(API|CLI)\b/gi, m => m.toUpperCase())
+  let tag = props.tag
+  if (tag === tag.toUpperCase()) {
+    return tag
+  }
+  tag = tag.replace(/\b(API|CLI)\b/gi, m => m.toUpperCase())
     .replace(/-/g, ' ')
   return tag[0].toUpperCase() + tag.slice(1)
 })

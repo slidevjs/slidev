@@ -5,4 +5,8 @@ language-server/**
 scripts/**
 src/**
 tsdown.config.ts
-*.map
+**/*.map
+syntaxes/codeblock-patch.ts
+syntaxes/slidev.example.md
+syntaxes/tsconfig.json
+syntaxes/.vscode

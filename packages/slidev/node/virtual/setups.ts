@@ -1,26 +1,35 @@
 import type { VirtualModuleTemplate } from './types'
-import { resolveSourceFiles, toAtFS } from '../resolver'
+import { join } from 'pathe'
 
 function createSetupTemplate(name: string): VirtualModuleTemplate {
+  const id = `/@slidev/setups/${name}`
   return {
-    id: `/@slidev/setups/${name}`,
+    id,
     getContent({ roots }) {
-      const setups = resolveSourceFiles(roots, `setup/${name}`)
-
       const imports: string[] = []
-
-      setups.forEach((path, idx) => {
-        imports.push(`import __n${idx} from '${toAtFS(path)}'`)
+      const globs = roots.map((root) => {
+        const glob = join(root, `setup/${name}.{ts,js,mts,mjs}`)
+        const importName = `__slidev_setup_${imports.length}`
+        imports.push(`import ${importName} from ${JSON.stringify(this.makeAbsoluteImportGlob([glob], { import: 'default' }))}`)
+        return `Object.values(${importName})[0]`
       })
-
-      imports.push(`export default [${setups.map((_, idx) => `__n${idx}`).join(',')}]`)
-
-      return imports.join('\n')
+      return `${imports.join('\n')}\n\nexport default [${globs.join(', ')}].filter(Boolean)`
     },
   }
 }
 
 // setups
-const setupModules = ['shiki', 'code-runners', 'monaco', 'mermaid', 'main', 'root', 'routes', 'shortcuts', 'context-menu']
+const setupModules = [
+  'shiki',
+  'code-runners',
+  'monaco',
+  'mermaid',
+  'mermaid-renderer',
+  'main',
+  'root',
+  'routes',
+  'shortcuts',
+  'context-menu',
+]
 
 export const templateSetups = setupModules.map(createSetupTemplate)

@@ -3,7 +3,7 @@ foo: a
 bar: 1
 ---
 
-# Title
+# Example Slides
 
 **Hello** World
 
@@ -14,17 +14,12 @@ console.log('Hello World')
 ```
 
 ---
-src: ../../../demo/starter/slides.md
-s: 1
----
-
----
 
 # Import Snippets
 
-<<< @/snippets/snippet.js {2,3|5}
-<<< @/snippets/snippet.js {2,3|5}{lines:true}
-<<< @/snippets/snippet.js ts {monaco-run}{lines: true}
+---
+src: ./pages.md
+---
 
 ---
 
@@ -45,9 +40,9 @@ text: 1
 
 # Code block
 
-```ts {1,2|3}
-const a = 1
-```
+  ```ts {1,2|3}
+  const a = 1
+  ```
 
 ```ts twoslash
 const a = 1
@@ -84,7 +79,5 @@ const a = 1
 const a = 1
 const b = 2
 const c = 3
-
-1
 ```
 ````

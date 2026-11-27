@@ -1,21 +1,27 @@
 import type { ResolvedSlidevOptions } from '@slidev/types'
 import type { Plugin, UserConfig } from 'vite'
-import { join } from 'node:path'
 import { fileURLToPath, pathToFileURL } from 'node:url'
 import { slash, uniq } from '@antfu/utils'
 import { createResolve } from 'mlly'
+import { join } from 'pathe'
 import { mergeConfig } from 'vite'
 import { isInstalledGlobally, resolveImportPath, toAtFS } from '../resolver'
 
+const RE_SLIDEV_CLIENT = /^@slidev\/client$/
+const RE_SLIDEV_CLIENT_SUBPATH = /^@slidev\/client\/(.*)/
+const RE_SLIDEV_VIRTUAL = /^#slidev\/(.*)/
+const RE_MONACO_EDITOR = /\/monaco-editor(?:-core)?\//
+
 const INCLUDE_GLOBAL = [
+  '@fix-webm-duration/fix',
   '@typescript/ata',
   'file-saver',
   'lz-string',
-  'prettier',
   'recordrtc',
   'typescript',
   'yaml',
   'pptxgenjs',
+  'ansis',
 ]
 
 const INCLUDE_LOCAL = INCLUDE_GLOBAL.map(i => `@slidev/cli > @slidev/client > ${i}`)
@@ -23,6 +29,7 @@ const INCLUDE_LOCAL = INCLUDE_GLOBAL.map(i => `@slidev/cli > @slidev/client > ${
 // @keep-sorted
 const EXCLUDE_GLOBAL = [
   '@antfu/utils',
+  '@shikijs/magic-move/vue',
   '@shikijs/monaco',
   '@shikijs/vitepress-twoslash/client',
   '@slidev/client',
@@ -44,7 +51,6 @@ const EXCLUDE_GLOBAL = [
   'fuse.js',
   'mermaid',
   'monaco-editor',
-  'shiki-magic-move/vue',
   'shiki',
   'shiki/core',
   'vue-demi',
@@ -63,7 +69,15 @@ const ASYNC_MODULES = [
 export function createConfigPlugin(options: ResolvedSlidevOptions): Plugin {
   const resolveClientDep = createResolve({
     // Same as Vite's default resolve conditions
-    conditions: ['import', 'module', 'browser', 'default', options.mode === 'build' ? 'production' : 'development'],
+    conditions: [
+      'import',
+      'module',
+      'browser',
+      'default',
+      options.mode === 'build'
+        ? 'production'
+        : 'development',
+    ],
     url: pathToFileURL(options.clientRoot),
   })
   return {
@@ -74,15 +88,15 @@ export function createConfigPlugin(options: ResolvedSlidevOptions): Plugin {
         resolve: {
           alias: [
             {
-              find: /^@slidev\/client$/,
+              find: RE_SLIDEV_CLIENT,
               replacement: `${toAtFS(options.clientRoot)}/index.ts`,
             },
             {
-              find: /^@slidev\/client\/(.*)/,
+              find: RE_SLIDEV_CLIENT_SUBPATH,
               replacement: `${toAtFS(options.clientRoot)}/$1`,
             },
             {
-              find: /^#slidev\/(.*)/,
+              find: RE_SLIDEV_VIRTUAL,
               replacement: '/@slidev/$1',
             },
             {
@@ -146,7 +160,7 @@ export function createConfigPlugin(options: ResolvedSlidevOptions): Plugin {
                   return 'assets/slidev/[name]-[hash].js'
 
                 // Monaco Editor
-                if (chunkInfo.moduleIds.filter(i => i.match(/\/monaco-editor(-core)?\//)).length > chunkInfo.moduleIds.length * 0.6)
+                if (chunkInfo.moduleIds.filter(i => i.match(RE_MONACO_EDITOR)).length > chunkInfo.moduleIds.length * 0.6)
                   return 'assets/monaco/[name]-[hash].js'
 
                 return DEFAULT
@@ -171,7 +185,9 @@ export function createConfigPlugin(options: ResolvedSlidevOptions): Plugin {
             },
           },
         },
-        cacheDir: isInstalledGlobally.value ? join(options.cliRoot, 'node_modules/.vite') : undefined,
+        cacheDir: isInstalledGlobally.value
+          ? join(options.cliRoot, 'node_modules/.vite')
+          : undefined,
       }
 
       function isSlidevClient(id: string) {
@@ -191,6 +207,16 @@ export function createConfigPlugin(options: ResolvedSlidevOptions): Plugin {
       return () => {
         server.middlewares.use(async (req, res, next) => {
           if (req.url === '/index.html') {
+            let html: string
+            try {
+              // Inject `/@vite/client` and run other plugins' `transformIndexHtml` hooks.
+              // Vite 8 relies on `/@vite/client` to install `define` globals in the browser.
+              html = await server.transformIndexHtml(req.url, options.utils.indexHtml, req.originalUrl)
+            }
+            catch (e) {
+              return next(e)
+            }
+
             const headers = server.config.server.headers ?? {}
 
             for (const header in headers) {
@@ -199,7 +225,7 @@ export function createConfigPlugin(options: ResolvedSlidevOptions): Plugin {
 
             res.setHeader('Content-Type', 'text/html')
             res.statusCode = 200
-            res.end(options.utils.indexHtml)
+            res.end(html)
             return
           }
           next()

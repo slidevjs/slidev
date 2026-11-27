@@ -20,8 +20,9 @@ export interface ExportArgs extends CommonArgs {
 }
 
 export interface BuildArgs extends ExportArgs {
-  out: string
-  base?: string
-  download?: boolean
-  inspect: boolean
+  'out': string
+  'base'?: string
+  'download'?: boolean
+  'inspect': boolean
+  'without-notes'?: boolean
 }

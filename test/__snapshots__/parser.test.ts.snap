@@ -69,6 +69,7 @@ exports[`md parser > frontmatter.md > config 1`] = `
 
 exports[`md parser > frontmatter.md > features 1`] = `
 {
+  "bluesky": false,
   "katex": false,
   "mermaid": false,
   "monaco": false,
@@ -130,6 +131,7 @@ fonts:
   mono: Fira Code
 ",
       "frontmatterStyle": "frontmatter",
+      "images": [],
       "index": 0,
       "level": 1,
       "note": undefined,
@@ -196,6 +198,7 @@ layout: center
 layout: center
 ",
       "frontmatterStyle": "frontmatter",
+      "images": [],
       "index": 1,
       "level": 1,
       "note": "This is note",
@@ -239,6 +242,7 @@ This is note
       "frontmatterDoc": undefined,
       "frontmatterRaw": undefined,
       "frontmatterStyle": undefined,
+      "images": [],
       "index": 2,
       "level": 1,
       "note": undefined,
@@ -283,6 +287,7 @@ Hey",
       "frontmatterRaw": "layout: text
 ",
       "frontmatterStyle": "frontmatter",
+      "images": [],
       "index": 3,
       "level": undefined,
       "note": "This is note",
@@ -348,6 +353,7 @@ Also part of the code block
       "frontmatterDoc": undefined,
       "frontmatterRaw": undefined,
       "frontmatterStyle": undefined,
+      "images": [],
       "index": 4,
       "level": undefined,
       "note": undefined,
@@ -401,6 +407,7 @@ Content 1
 layout: from yaml
 ",
       "frontmatterStyle": "yaml",
+      "images": [],
       "index": 5,
       "level": undefined,
       "note": undefined,
@@ -431,7 +438,7 @@ Content 2",
 ",
     "importChain": undefined,
     "index": 6,
-    "level": 1,
+    "level": undefined,
     "note": undefined,
     "revision": "-vfy6yo",
     "source": {
@@ -461,8 +468,9 @@ Content 2",
       "frontmatterRaw": "layout: cover
 ",
       "frontmatterStyle": "frontmatter",
+      "images": [],
       "index": 6,
-      "level": 1,
+      "level": undefined,
       "note": undefined,
       "raw": "---
 layout: cover
@@ -477,9 +485,9 @@ Content 2
 ",
       "revision": "-vfy6yo",
       "start": 59,
-      "title": "When there is already a frontmatter, the first yaml block should be treated as content",
+      "title": undefined,
     },
-    "title": "When there is already a frontmatter, the first yaml block should be treated as content",
+    "title": undefined,
   },
   {
     "content": "# Title
@@ -523,6 +531,7 @@ Content 3",
       "frontmatterDoc": undefined,
       "frontmatterRaw": undefined,
       "frontmatterStyle": undefined,
+      "images": [],
       "index": 7,
       "level": 1,
       "note": undefined,
@@ -547,6 +556,7 @@ Content 3
 
 exports[`md parser > mdc.md > config 1`] = `
 {
+  "comark": true,
   "drawings": {
     "enabled": true,
     "persist": false,
@@ -598,13 +608,13 @@ exports[`md parser > mdc.md > config 1`] = `
       "600",
     ],
   },
-  "mdc": true,
-  "title": "MDC{style="color:red"}",
+  "title": "Comark{style="color:red"}",
 }
 `;
 
 exports[`md parser > mdc.md > features 1`] = `
 {
+  "bluesky": false,
   "katex": false,
   "mermaid": false,
   "monaco": false,
@@ -615,56 +625,57 @@ exports[`md parser > mdc.md > features 1`] = `
 exports[`md parser > mdc.md > slides 1`] = `
 [
   {
-    "content": "# MDC{style="color:red"}
+    "content": "# Comark{style="color:red"}
 
 :arrow{x1=1 y1=1 x2=2 y2=2}",
     "frontmatter": {
-      "mdc": true,
+      "comark": true,
     },
-    "frontmatterRaw": "mdc: true
+    "frontmatterRaw": "comark: true
 ",
     "importChain": undefined,
     "index": 0,
     "level": 1,
     "note": undefined,
-    "revision": "kb2y4a",
+    "revision": "hmgmac",
     "source": {
       "content": "
-# MDC{style="color:red"}
+# Comark{style="color:red"}
 
 :arrow{x1=1 y1=1 x2=2 y2=2}
 ",
-      "contentRaw": "# MDC{style="color:red"}
+      "contentRaw": "# Comark{style="color:red"}
 
 :arrow{x1=1 y1=1 x2=2 y2=2}",
       "contentStart": 3,
       "end": 8,
       "filepath": "mdc.md",
       "frontmatter": {
-        "mdc": true,
+        "comark": true,
       },
       "frontmatterDoc": {
-        "mdc": true,
+        "comark": true,
       },
-      "frontmatterRaw": "mdc: true
+      "frontmatterRaw": "comark: true
 ",
       "frontmatterStyle": "frontmatter",
+      "images": [],
       "index": 0,
       "level": 1,
       "note": undefined,
       "raw": "---
-mdc: true
+comark: true
 ---
 
-# MDC{style="color:red"}
+# Comark{style="color:red"}
 
 :arrow{x1=1 y1=1 x2=2 y2=2}
 ",
-      "revision": "kb2y4a",
+      "revision": "hmgmac",
       "start": 0,
-      "title": "MDC{style="color:red"}",
+      "title": "Comark{style="color:red"}",
     },
-    "title": "MDC{style="color:red"}",
+    "title": "Comark{style="color:red"}",
   },
 ]
 `;
@@ -728,6 +739,7 @@ exports[`md parser > minimal.md > config 1`] = `
 
 exports[`md parser > minimal.md > features 1`] = `
 {
+  "bluesky": false,
   "katex": false,
   "mermaid": false,
   "monaco": false,
@@ -782,6 +794,7 @@ console.log('Hello World')
       "frontmatterDoc": undefined,
       "frontmatterRaw": undefined,
       "frontmatterStyle": undefined,
+      "images": [],
       "index": 0,
       "level": 1,
       "note": undefined,
@@ -838,6 +851,7 @@ console.log('Hello World')
       "frontmatterDoc": undefined,
       "frontmatterRaw": undefined,
       "frontmatterStyle": undefined,
+      "images": [],
       "index": 1,
       "level": 1,
       "note": undefined,
@@ -876,6 +890,7 @@ Nice to meet you
       "frontmatterDoc": undefined,
       "frontmatterRaw": undefined,
       "frontmatterStyle": undefined,
+      "images": [],
       "index": 2,
       "level": undefined,
       "note": undefined,
@@ -951,6 +966,7 @@ exports[`md parser > multi-entries.md > config 1`] = `
 
 exports[`md parser > multi-entries.md > features 1`] = `
 {
+  "bluesky": false,
   "katex": true,
   "mermaid": false,
   "monaco": false,
@@ -980,6 +996,7 @@ exports[`md parser > multi-entries.md > slides 1`] = `
         "frontmatterRaw": "src: sub/page1.md
 ",
         "frontmatterStyle": "frontmatter",
+        "images": [],
         "imports": [
           {
             "content": "# Page 1",
@@ -991,6 +1008,7 @@ exports[`md parser > multi-entries.md > slides 1`] = `
             "frontmatterDoc": undefined,
             "frontmatterRaw": undefined,
             "frontmatterStyle": undefined,
+            "images": [],
             "index": 0,
             "level": 1,
             "note": undefined,
@@ -1027,6 +1045,7 @@ src: sub/page1.md
       "frontmatterDoc": undefined,
       "frontmatterRaw": undefined,
       "frontmatterStyle": undefined,
+      "images": [],
       "index": 0,
       "level": 1,
       "note": undefined,
@@ -1067,6 +1086,9 @@ src: sub/page1.md
 background: https://sli.dev/demo-cover.png#2
 ",
         "frontmatterStyle": "frontmatter",
+        "images": [
+          "https://sli.dev/demo-cover.png#2",
+        ],
         "imports": [
           {
             "content": "# Page 2
@@ -1087,6 +1109,7 @@ background: https://sli.dev/demo-cover.png#2
             "frontmatterRaw": "layout: cover
 ",
             "frontmatterStyle": "frontmatter",
+            "images": [],
             "index": 0,
             "level": 1,
             "note": undefined,
@@ -1139,6 +1162,7 @@ background: https://sli.dev/demo-cover.png#2
       "frontmatterRaw": "layout: cover
 ",
       "frontmatterStyle": "frontmatter",
+      "images": [],
       "index": 0,
       "level": 1,
       "note": undefined,
@@ -1181,6 +1205,9 @@ layout: cover
 background: https://sli.dev/demo-cover.png#34
 ",
         "frontmatterStyle": "frontmatter",
+        "images": [
+          "https://sli.dev/demo-cover.png#34",
+        ],
         "imports": [
           {
             "content": "# Page 3",
@@ -1192,6 +1219,7 @@ background: https://sli.dev/demo-cover.png#34
             "frontmatterDoc": undefined,
             "frontmatterRaw": undefined,
             "frontmatterStyle": undefined,
+            "images": [],
             "index": 0,
             "level": 1,
             "note": undefined,
@@ -1220,6 +1248,7 @@ background: https://sli.dev/demo-cover.png#34
             "frontmatterRaw": "layout: cover
 ",
             "frontmatterStyle": "frontmatter",
+            "images": [],
             "index": 1,
             "level": 1,
             "note": undefined,
@@ -1263,6 +1292,7 @@ background: https://sli.dev/demo-cover.png#34
       "frontmatterDoc": undefined,
       "frontmatterRaw": undefined,
       "frontmatterStyle": undefined,
+      "images": [],
       "index": 0,
       "level": 1,
       "note": undefined,
@@ -1303,6 +1333,9 @@ background: https://sli.dev/demo-cover.png#34
 background: https://sli.dev/demo-cover.png#34
 ",
         "frontmatterStyle": "frontmatter",
+        "images": [
+          "https://sli.dev/demo-cover.png#34",
+        ],
         "imports": [
           {
             "content": "# Page 3",
@@ -1314,6 +1347,7 @@ background: https://sli.dev/demo-cover.png#34
             "frontmatterDoc": undefined,
             "frontmatterRaw": undefined,
             "frontmatterStyle": undefined,
+            "images": [],
             "index": 0,
             "level": 1,
             "note": undefined,
@@ -1342,6 +1376,7 @@ background: https://sli.dev/demo-cover.png#34
             "frontmatterRaw": "layout: cover
 ",
             "frontmatterStyle": "frontmatter",
+            "images": [],
             "index": 1,
             "level": 1,
             "note": undefined,
@@ -1394,6 +1429,7 @@ background: https://sli.dev/demo-cover.png#34
       "frontmatterRaw": "layout: cover
 ",
       "frontmatterStyle": "frontmatter",
+      "images": [],
       "index": 1,
       "level": 1,
       "note": undefined,
@@ -1436,6 +1472,9 @@ layout: cover
 background: https://sli.dev/demo-cover.png#14
 ",
         "frontmatterStyle": "frontmatter",
+        "images": [
+          "https://sli.dev/demo-cover.png#14",
+        ],
         "imports": [
           {
             "content": "",
@@ -1452,6 +1491,7 @@ background: https://sli.dev/demo-cover.png#14
             "frontmatterRaw": "src: /sub/page1.md
 ",
             "frontmatterStyle": "frontmatter",
+            "images": [],
             "imports": [
               {
                 "content": "# Page 1",
@@ -1463,6 +1503,7 @@ background: https://sli.dev/demo-cover.png#14
                 "frontmatterDoc": undefined,
                 "frontmatterRaw": undefined,
                 "frontmatterStyle": undefined,
+                "images": [],
                 "index": 0,
                 "level": 1,
                 "note": undefined,
@@ -1499,6 +1540,7 @@ src: /sub/page1.md
             "frontmatterRaw": "src: page2.md
 ",
             "frontmatterStyle": "frontmatter",
+            "images": [],
             "imports": [
               {
                 "content": "# Page 2
@@ -1519,6 +1561,7 @@ src: /sub/page1.md
                 "frontmatterRaw": "layout: cover
 ",
                 "frontmatterStyle": "frontmatter",
+                "images": [],
                 "index": 0,
                 "level": 1,
                 "note": undefined,
@@ -1561,6 +1604,7 @@ src: page2.md
             "frontmatterRaw": "src: ../sub/pages3-4.md
 ",
             "frontmatterStyle": "frontmatter",
+            "images": [],
             "imports": [
               {
                 "content": "# Page 3",
@@ -1572,6 +1616,7 @@ src: page2.md
                 "frontmatterDoc": undefined,
                 "frontmatterRaw": undefined,
                 "frontmatterStyle": undefined,
+                "images": [],
                 "index": 0,
                 "level": 1,
                 "note": undefined,
@@ -1600,6 +1645,7 @@ src: page2.md
                 "frontmatterRaw": "layout: cover
 ",
                 "frontmatterStyle": "frontmatter",
+                "images": [],
                 "index": 1,
                 "level": 1,
                 "note": undefined,
@@ -1655,6 +1701,7 @@ background: https://sli.dev/demo-cover.png#14
         "frontmatterRaw": "src: /sub/page1.md
 ",
         "frontmatterStyle": "frontmatter",
+        "images": [],
         "imports": [
           {
             "content": "# Page 1",
@@ -1666,6 +1713,7 @@ background: https://sli.dev/demo-cover.png#14
             "frontmatterDoc": undefined,
             "frontmatterRaw": undefined,
             "frontmatterStyle": undefined,
+            "images": [],
             "index": 0,
             "level": 1,
             "note": undefined,
@@ -1702,6 +1750,7 @@ src: /sub/page1.md
       "frontmatterDoc": undefined,
       "frontmatterRaw": undefined,
       "frontmatterStyle": undefined,
+      "images": [],
       "index": 0,
       "level": 1,
       "note": undefined,
@@ -1742,6 +1791,9 @@ src: /sub/page1.md
 background: https://sli.dev/demo-cover.png#14
 ",
         "frontmatterStyle": "frontmatter",
+        "images": [
+          "https://sli.dev/demo-cover.png#14",
+        ],
         "imports": [
           {
             "content": "",
@@ -1758,6 +1810,7 @@ background: https://sli.dev/demo-cover.png#14
             "frontmatterRaw": "src: /sub/page1.md
 ",
             "frontmatterStyle": "frontmatter",
+            "images": [],
             "imports": [
               {
                 "content": "# Page 1",
@@ -1769,6 +1822,7 @@ background: https://sli.dev/demo-cover.png#14
                 "frontmatterDoc": undefined,
                 "frontmatterRaw": undefined,
                 "frontmatterStyle": undefined,
+                "images": [],
                 "index": 0,
                 "level": 1,
                 "note": undefined,
@@ -1805,6 +1859,7 @@ src: /sub/page1.md
             "frontmatterRaw": "src: page2.md
 ",
             "frontmatterStyle": "frontmatter",
+            "images": [],
             "imports": [
               {
                 "content": "# Page 2
@@ -1825,6 +1880,7 @@ src: /sub/page1.md
                 "frontmatterRaw": "layout: cover
 ",
                 "frontmatterStyle": "frontmatter",
+                "images": [],
                 "index": 0,
                 "level": 1,
                 "note": undefined,
@@ -1867,6 +1923,7 @@ src: page2.md
             "frontmatterRaw": "src: ../sub/pages3-4.md
 ",
             "frontmatterStyle": "frontmatter",
+            "images": [],
             "imports": [
               {
                 "content": "# Page 3",
@@ -1878,6 +1935,7 @@ src: page2.md
                 "frontmatterDoc": undefined,
                 "frontmatterRaw": undefined,
                 "frontmatterStyle": undefined,
+                "images": [],
                 "index": 0,
                 "level": 1,
                 "note": undefined,
@@ -1906,6 +1964,7 @@ src: page2.md
                 "frontmatterRaw": "layout: cover
 ",
                 "frontmatterStyle": "frontmatter",
+                "images": [],
                 "index": 1,
                 "level": 1,
                 "note": undefined,
@@ -1961,6 +2020,7 @@ background: https://sli.dev/demo-cover.png#14
         "frontmatterRaw": "src: page2.md
 ",
         "frontmatterStyle": "frontmatter",
+        "images": [],
         "imports": [
           {
             "content": "# Page 2
@@ -1981,6 +2041,7 @@ background: https://sli.dev/demo-cover.png#14
             "frontmatterRaw": "layout: cover
 ",
             "frontmatterStyle": "frontmatter",
+            "images": [],
             "index": 0,
             "level": 1,
             "note": undefined,
@@ -2032,6 +2093,7 @@ src: page2.md
       "frontmatterRaw": "layout: cover
 ",
       "frontmatterStyle": "frontmatter",
+      "images": [],
       "index": 0,
       "level": 1,
       "note": undefined,
@@ -2074,6 +2136,9 @@ layout: cover
 background: https://sli.dev/demo-cover.png#14
 ",
         "frontmatterStyle": "frontmatter",
+        "images": [
+          "https://sli.dev/demo-cover.png#14",
+        ],
         "imports": [
           {
             "content": "",
@@ -2090,6 +2155,7 @@ background: https://sli.dev/demo-cover.png#14
             "frontmatterRaw": "src: /sub/page1.md
 ",
             "frontmatterStyle": "frontmatter",
+            "images": [],
             "imports": [
               {
                 "content": "# Page 1",
@@ -2101,6 +2167,7 @@ background: https://sli.dev/demo-cover.png#14
                 "frontmatterDoc": undefined,
                 "frontmatterRaw": undefined,
                 "frontmatterStyle": undefined,
+                "images": [],
                 "index": 0,
                 "level": 1,
                 "note": undefined,
@@ -2137,6 +2204,7 @@ src: /sub/page1.md
             "frontmatterRaw": "src: page2.md
 ",
             "frontmatterStyle": "frontmatter",
+            "images": [],
             "imports": [
               {
                 "content": "# Page 2
@@ -2157,6 +2225,7 @@ src: /sub/page1.md
                 "frontmatterRaw": "layout: cover
 ",
                 "frontmatterStyle": "frontmatter",
+                "images": [],
                 "index": 0,
                 "level": 1,
                 "note": undefined,
@@ -2199,6 +2268,7 @@ src: page2.md
             "frontmatterRaw": "src: ../sub/pages3-4.md
 ",
             "frontmatterStyle": "frontmatter",
+            "images": [],
             "imports": [
               {
                 "content": "# Page 3",
@@ -2210,6 +2280,7 @@ src: page2.md
                 "frontmatterDoc": undefined,
                 "frontmatterRaw": undefined,
                 "frontmatterStyle": undefined,
+                "images": [],
                 "index": 0,
                 "level": 1,
                 "note": undefined,
@@ -2238,6 +2309,7 @@ src: page2.md
                 "frontmatterRaw": "layout: cover
 ",
                 "frontmatterStyle": "frontmatter",
+                "images": [],
                 "index": 1,
                 "level": 1,
                 "note": undefined,
@@ -2293,6 +2365,7 @@ background: https://sli.dev/demo-cover.png#14
         "frontmatterRaw": "src: ../sub/pages3-4.md
 ",
         "frontmatterStyle": "frontmatter",
+        "images": [],
         "imports": [
           {
             "content": "# Page 3",
@@ -2304,6 +2377,7 @@ background: https://sli.dev/demo-cover.png#14
             "frontmatterDoc": undefined,
             "frontmatterRaw": undefined,
             "frontmatterStyle": undefined,
+            "images": [],
             "index": 0,
             "level": 1,
             "note": undefined,
@@ -2332,6 +2406,7 @@ background: https://sli.dev/demo-cover.png#14
             "frontmatterRaw": "layout: cover
 ",
             "frontmatterStyle": "frontmatter",
+            "images": [],
             "index": 1,
             "level": 1,
             "note": undefined,
@@ -2374,6 +2449,7 @@ src: ../sub/pages3-4.md
       "frontmatterDoc": undefined,
       "frontmatterRaw": undefined,
       "frontmatterStyle": undefined,
+      "images": [],
       "index": 0,
       "level": 1,
       "note": undefined,
@@ -2414,6 +2490,9 @@ src: ../sub/pages3-4.md
 background: https://sli.dev/demo-cover.png#14
 ",
         "frontmatterStyle": "frontmatter",
+        "images": [
+          "https://sli.dev/demo-cover.png#14",
+        ],
         "imports": [
           {
             "content": "",
@@ -2430,6 +2509,7 @@ background: https://sli.dev/demo-cover.png#14
             "frontmatterRaw": "src: /sub/page1.md
 ",
             "frontmatterStyle": "frontmatter",
+            "images": [],
             "imports": [
               {
                 "content": "# Page 1",
@@ -2441,6 +2521,7 @@ background: https://sli.dev/demo-cover.png#14
                 "frontmatterDoc": undefined,
                 "frontmatterRaw": undefined,
                 "frontmatterStyle": undefined,
+                "images": [],
                 "index": 0,
                 "level": 1,
                 "note": undefined,
@@ -2477,6 +2558,7 @@ src: /sub/page1.md
             "frontmatterRaw": "src: page2.md
 ",
             "frontmatterStyle": "frontmatter",
+            "images": [],
             "imports": [
               {
                 "content": "# Page 2
@@ -2497,6 +2579,7 @@ src: /sub/page1.md
                 "frontmatterRaw": "layout: cover
 ",
                 "frontmatterStyle": "frontmatter",
+                "images": [],
                 "index": 0,
                 "level": 1,
                 "note": undefined,
@@ -2539,6 +2622,7 @@ src: page2.md
             "frontmatterRaw": "src: ../sub/pages3-4.md
 ",
             "frontmatterStyle": "frontmatter",
+            "images": [],
             "imports": [
               {
                 "content": "# Page 3",
@@ -2550,6 +2634,7 @@ src: page2.md
                 "frontmatterDoc": undefined,
                 "frontmatterRaw": undefined,
                 "frontmatterStyle": undefined,
+                "images": [],
                 "index": 0,
                 "level": 1,
                 "note": undefined,
@@ -2578,6 +2663,7 @@ src: page2.md
                 "frontmatterRaw": "layout: cover
 ",
                 "frontmatterStyle": "frontmatter",
+                "images": [],
                 "index": 1,
                 "level": 1,
                 "note": undefined,
@@ -2633,6 +2719,7 @@ background: https://sli.dev/demo-cover.png#14
         "frontmatterRaw": "src: ../sub/pages3-4.md
 ",
         "frontmatterStyle": "frontmatter",
+        "images": [],
         "imports": [
           {
             "content": "# Page 3",
@@ -2644,6 +2731,7 @@ background: https://sli.dev/demo-cover.png#14
             "frontmatterDoc": undefined,
             "frontmatterRaw": undefined,
             "frontmatterStyle": undefined,
+            "images": [],
             "index": 0,
             "level": 1,
             "note": undefined,
@@ -2672,6 +2760,7 @@ background: https://sli.dev/demo-cover.png#14
             "frontmatterRaw": "layout: cover
 ",
             "frontmatterStyle": "frontmatter",
+            "images": [],
             "index": 1,
             "level": 1,
             "note": undefined,
@@ -2723,6 +2812,7 @@ src: ../sub/pages3-4.md
       "frontmatterRaw": "layout: cover
 ",
       "frontmatterStyle": "frontmatter",
+      "images": [],
       "index": 1,
       "level": 1,
       "note": undefined,
@@ -2767,6 +2857,7 @@ $x+2$",
       "frontmatterDoc": undefined,
       "frontmatterRaw": undefined,
       "frontmatterStyle": undefined,
+      "images": [],
       "index": 4,
       "level": 1,
       "note": undefined,

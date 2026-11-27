@@ -2,6 +2,8 @@ import { isNumber, range, uniq } from '@antfu/utils'
 
 export * from './timesplit'
 
+const RE_ASPECT_RATIO_SEPARATOR = /[:/x|]/
+
 /**
  * 1,3-5,8 => [1, 3, 4, 5, 8]
  */
@@ -20,7 +22,9 @@ export function parseRangeString(total: number, rangeStr?: string) {
     else {
       const [start, end] = part.split('-', 2)
       indexes.push(
-        ...range(+start, !end ? (total + 1) : (+end + 1)),
+        ...range(+start, !end
+          ? (total + 1)
+          : (+end + 1)),
       )
     }
   }
@@ -36,7 +40,7 @@ export function parseAspectRatio(str: string | number) {
     return str
   if (!Number.isNaN(+str))
     return +str
-  const [wStr = '', hStr = ''] = str.split(/[:/x|]/)
+  const [wStr = '', hStr = ''] = str.split(RE_ASPECT_RATIO_SEPARATOR)
   const w = Number.parseFloat(wStr.trim())
   const h = Number.parseFloat(hStr.trim())
 

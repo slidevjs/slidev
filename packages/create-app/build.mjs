@@ -1,7 +1,7 @@
 import { existsSync } from 'node:fs'
 import fs from 'node:fs/promises'
-import { dirname, resolve } from 'node:path'
 import { fileURLToPath } from 'node:url'
+import { dirname, resolve } from 'pathe'
 
 const __dirname = fileURLToPath(new URL('.', import.meta.url))
 const __templateDir = resolve(__dirname, 'template')
