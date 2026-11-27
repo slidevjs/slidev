@@ -135,11 +135,13 @@ export interface HeadmatterConfig extends TransitionOptions {
    */
   lineNumbers?: boolean
   /**
-   * Force slides color schema
+   * Color scheme for slides. Use `auto` to follow the system preference,
+   * `light` or `dark` to force a scheme, or `light dark` / `dark light`
+   * to choose a default while allowing users to switch.
    *
    * @default 'auto'
    */
-  colorSchema?: 'dark' | 'light' | 'all' | 'auto'
+  colorSchema?: 'dark' | 'light' | 'all' | 'auto' | 'light dark' | 'dark light'
   /**
    * Router mode for vue-router
    *
@@ -150,6 +152,13 @@ export interface HeadmatterConfig extends TransitionOptions {
    * @default 'history'
    */
   routerMode?: 'hash' | 'history' | 'memory'
+  /**
+   * Ignore repeated forward navigation within this many milliseconds.
+   * The first advance is immediate. Set to 0 to disable.
+   *
+   * @default 0
+   */
+  advanceDebounce?: number
   /**
    * Aspect ratio for slides
    * should be like `16/9` or `1:1`
