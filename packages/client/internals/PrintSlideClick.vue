@@ -63,4 +63,9 @@ provideLocal(injectionSlideElement, useTemplateRef('slide-element'))
 .print-slide-container {
   @apply relative overflow-hidden break-after-page translate-0 bg-main;
 }
+
+.print-slide-container > .slidev-page {
+  /* Keep the unscaled slide box from being split across PDF pages. */
+  contain: size;
+}
 </style>
