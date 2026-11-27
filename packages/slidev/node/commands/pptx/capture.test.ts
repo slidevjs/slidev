@@ -49,23 +49,37 @@ function domSnapshot(list: SnapshotNode[]): DomSnapshot {
   const strings: string[] = []
   const intern = (value: string): number => {
     const at = strings.indexOf(value)
-    return at >= 0 ? at : strings.push(value) - 1
+    return at >= 0
+      ? at
+      : strings.push(value) - 1
   }
-  const pseudoNodes = list.flatMap((node, i) => node.pseudo ? [i] : [])
+  const pseudoNodes = list.flatMap((node, i) => node.pseudo
+    ? [i]
+    : [])
   const layout = list.flatMap((node, i) => (node.layout ?? []).map(text => ({ node: i, text })))
   return {
     strings,
-    documents: [{
-      nodes: {
-        parentIndex: list.map(node => node.parent ?? -1),
-        attributes: list.map(node => Object.entries(node.attrs ?? {}).flatMap(([k, v]) => [intern(k), intern(v)])),
-        pseudoType: { index: pseudoNodes, value: pseudoNodes.map(i => intern(list[i].pseudo!)) },
+    documents: [
+      {
+        nodes: {
+          parentIndex: list.map(node => node.parent ?? -1),
+          attributes: list.map(node => Object.entries(node.attrs ?? {}).flatMap(([k, v]) => [
+            intern(k),
+            intern(v),
+          ])),
+          pseudoType: {
+            index: pseudoNodes,
+            value: pseudoNodes.map(i => intern(list[i].pseudo!)),
+          },
+        },
+        layout: {
+          nodeIndex: layout.map(entry => entry.node),
+          text: layout.map(entry => entry.text === null
+            ? -1
+            : intern(entry.text)),
+        },
       },
-      layout: {
-        nodeIndex: layout.map(entry => entry.node),
-        text: layout.map(entry => entry.text === null ? -1 : intern(entry.text)),
-      },
-    }],
+    ],
   }
 }
 
@@ -80,32 +94,88 @@ describe('generatedTextFrom', () => {
   it('reads a counter by the id of the element that owns it', () => {
     const snapshot = domSnapshot([
       { name: 'OL' },
-      { name: 'LI', parent: 0, attrs: { [ID]: '7' } },
-      { name: '::before', parent: 1, pseudo: 'before', layout: [null, '1'] },
-      { name: 'LI', parent: 0, attrs: { [ID]: '9' } },
-      { name: '::before', parent: 3, pseudo: 'before', layout: [null, '2'] },
+      {
+        name: 'LI',
+        parent: 0,
+        attrs: { [ID]: '7' },
+      },
+      {
+        name: '::before',
+        parent: 1,
+        pseudo: 'before',
+        layout: [null, '1'],
+      },
+      {
+        name: 'LI',
+        parent: 0,
+        attrs: { [ID]: '9' },
+      },
+      {
+        name: '::before',
+        parent: 3,
+        pseudo: 'before',
+        layout: [null, '2'],
+      },
     ])
-    expect(generatedTextFrom(snapshot, ID)).toEqual(new Map([['7::BEFORE', '1'], ['9::BEFORE', '2']]))
+    expect(generatedTextFrom(snapshot, ID)).toEqual(new Map([
+      ['7::BEFORE', '1'],
+      ['9::BEFORE', '2'],
+    ]))
   })
 
   it('keeps two lists apart when their items read the same', () => {
     // A second list restarts at 1, and its first item says "Run" like the first
     // list's second item: neither the text nor the order may decide the match.
     const snapshot = domSnapshot([
-      { name: 'LI', attrs: { [ID]: '2' } },
-      { name: '::before', parent: 0, pseudo: 'before', layout: [null, '2'] },
-      { name: '#text', parent: 0, layout: ['Run'] },
-      { name: 'LI', attrs: { [ID]: '5' } },
-      { name: '::before', parent: 3, pseudo: 'before', layout: [null, '1'] },
-      { name: '#text', parent: 3, layout: ['Run'] },
+      {
+        name: 'LI',
+        attrs: { [ID]: '2' },
+      },
+      {
+        name: '::before',
+        parent: 0,
+        pseudo: 'before',
+        layout: [null, '2'],
+      },
+      {
+        name: '#text',
+        parent: 0,
+        layout: ['Run'],
+      },
+      {
+        name: 'LI',
+        attrs: { [ID]: '5' },
+      },
+      {
+        name: '::before',
+        parent: 3,
+        pseudo: 'before',
+        layout: [null, '1'],
+      },
+      {
+        name: '#text',
+        parent: 3,
+        layout: ['Run'],
+      },
     ])
-    expect(generatedTextFrom(snapshot, ID)).toEqual(new Map([['2::BEFORE', '2'], ['5::BEFORE', '1']]))
+    expect(generatedTextFrom(snapshot, ID)).toEqual(new Map([
+      ['2::BEFORE', '2'],
+      ['5::BEFORE', '1'],
+    ]))
   })
 
   it('joins the pieces of a string and a counter', () => {
     const snapshot = domSnapshot([
-      { name: 'DIV', attrs: { [ID]: '3' } },
-      { name: '::before', parent: 0, pseudo: 'before', layout: [null, 'Step ', '7'] },
+      {
+        name: 'DIV',
+        attrs: { [ID]: '3' },
+      },
+      {
+        name: '::before',
+        parent: 0,
+        pseudo: 'before',
+        layout: [null, 'Step ', '7'],
+      },
     ])
     expect(generatedTextFrom(snapshot, ID).get('3::BEFORE')).toBe('Step 7')
   })
@@ -114,34 +184,86 @@ describe('generatedTextFrom', () => {
     // A `::before` with `display: list-item` owns a `::marker` of its own; its
     // bullet is a separate box, and read as text it landed after the label.
     const snapshot = domSnapshot([
-      { name: 'P', attrs: { [ID]: '3' } },
-      { name: '::before', parent: 0, pseudo: 'before', layout: [null, 'label'] },
-      { name: '::marker', parent: 1, pseudo: 'marker', layout: [null, '• '] },
+      {
+        name: 'P',
+        attrs: { [ID]: '3' },
+      },
+      {
+        name: '::before',
+        parent: 0,
+        pseudo: 'before',
+        layout: [null, 'label'],
+      },
+      {
+        name: '::marker',
+        parent: 1,
+        pseudo: 'marker',
+        layout: [null, '• '],
+      },
     ])
     expect(generatedTextFrom(snapshot, ID).get('3::BEFORE')).toBe('label')
   })
 
   it('keys ::after apart from ::before', () => {
     const snapshot = domSnapshot([
-      { name: 'A', attrs: { [ID]: '4' } },
-      { name: '::before', parent: 0, pseudo: 'before', layout: [null, '['] },
-      { name: '::after', parent: 0, pseudo: 'after', layout: [null, '↗'] },
+      {
+        name: 'A',
+        attrs: { [ID]: '4' },
+      },
+      {
+        name: '::before',
+        parent: 0,
+        pseudo: 'before',
+        layout: [null, '['],
+      },
+      {
+        name: '::after',
+        parent: 0,
+        pseudo: 'after',
+        layout: [null, '↗'],
+      },
     ])
-    expect(generatedTextFrom(snapshot, ID)).toEqual(new Map([['4::BEFORE', '['], ['4::AFTER', '↗']]))
+    expect(generatedTextFrom(snapshot, ID)).toEqual(new Map([
+      ['4::BEFORE', '['],
+      ['4::AFTER', '↗'],
+    ]))
   })
 
   it('skips pseudo-elements the walker never stamped, and other pseudo types', () => {
     const snapshot = domSnapshot([
       { name: 'LI' },
-      { name: '::before', parent: 0, pseudo: 'before', layout: [null, '1'] },
-      { name: 'LI', attrs: { [ID]: '6' } },
-      { name: '::marker', parent: 2, pseudo: 'marker', layout: [null, '1. '] },
+      {
+        name: '::before',
+        parent: 0,
+        pseudo: 'before',
+        layout: [null, '1'],
+      },
+      {
+        name: 'LI',
+        attrs: { [ID]: '6' },
+      },
+      {
+        name: '::marker',
+        parent: 2,
+        pseudo: 'marker',
+        layout: [null, '1. '],
+      },
     ])
     expect(generatedTextFrom(snapshot, ID).size).toBe(0)
   })
 
   it('returns nothing for a page without pseudo-elements', () => {
-    const snapshot = domSnapshot([{ name: 'P', attrs: { [ID]: '0' } }, { name: '#text', parent: 0, layout: ['hi'] }])
+    const snapshot = domSnapshot([
+      {
+        name: 'P',
+        attrs: { [ID]: '0' },
+      },
+      {
+        name: '#text',
+        parent: 0,
+        layout: ['hi'],
+      },
+    ])
     delete snapshot.documents[0].nodes.pseudoType
     expect(generatedTextFrom(snapshot, ID).size).toBe(0)
   })
@@ -149,7 +271,11 @@ describe('generatedTextFrom', () => {
 
 /** A page whose CDP session answers `send` and `detach` with the promises given. */
 function cdpPage(send: () => Promise<unknown>, detach: () => Promise<void> = async () => {}): Page {
-  return { context: () => ({ newCDPSession: async () => ({ send, detach }) }) } as unknown as Page
+  return {
+    context: () => ({
+      newCDPSession: async () => ({ send, detach }),
+    }),
+  } as unknown as Page
 }
 
 /**
@@ -172,25 +298,42 @@ describe('readGeneratedText', () => {
   it('still detaches a session that arrives after the deadline', async () => {
     let resolveSession!: (session: unknown) => void
     let detached = 0
-    const page = { context: () => ({ newCDPSession: () => new Promise((resolve) => {
-      resolveSession = resolve
-    }) }) } as unknown as Page
+    const page = {
+      context: () => ({
+        newCDPSession: () => new Promise((resolve) => {
+          resolveSession = resolve
+        }),
+      }),
+    } as unknown as Page
     expect(await readGeneratedText(page, { snapshotMs: 20, detachMs: 20 })).toBeUndefined()
     // Left attached, it would hold a CDP session open until the page closes.
-    resolveSession({ send: async () => ({}), detach: async () => {
-      detached++
-    } })
+    resolveSession({
+      send: async () => ({}),
+      detach: async () => {
+        detached++
+      },
+    })
     await new Promise(resolve => setTimeout(resolve, 0))
     expect(detached).toBe(1)
   })
 
   it('returns the snapshot even when detaching never finishes', async () => {
     const snapshot = domSnapshot([
-      { name: 'LI', attrs: { [ID]: '1' } },
-      { name: '::before', parent: 0, pseudo: 'before', layout: [null, '1'] },
+      {
+        name: 'LI',
+        attrs: { [ID]: '1' },
+      },
+      {
+        name: '::before',
+        parent: 0,
+        pseudo: 'before',
+        layout: [null, '1'],
+      },
     ])
     const page = cdpPage(async () => snapshot, () => new Promise(() => {}))
-    expect(await readGeneratedText(page, { snapshotMs: 20, detachMs: 20 })).toEqual(new Map([['1::BEFORE', '1']]))
+    expect(await readGeneratedText(page, { snapshotMs: 20, detachMs: 20 })).toEqual(new Map([
+      ['1::BEFORE', '1'],
+    ]))
   })
 })
 
@@ -204,7 +347,12 @@ function fakePage(options: { documentHeight: number, viewportHeight: number, box
     viewports: number[]
     locators: string[]
     elementShots: number
-  } = { clips: [], viewports: [], locators: [], elementShots: 0 }
+  } = {
+    clips: [],
+    viewports: [],
+    locators: [],
+    elementShots: 0,
+  }
   let scrollY = 0
   let viewportHeight = options.viewportHeight
   const page = {
@@ -237,7 +385,9 @@ function fakePage(options: { documentHeight: number, viewportHeight: number, box
         first: () => ({
           count: async () => (options.box ? 1 : 0),
           // Viewport-relative, exactly as Playwright reports it.
-          boundingBox: async () => (options.box ? { ...options.box, y: options.box.y - scrollY } : null),
+          boundingBox: async () => (options.box
+            ? { ...options.box, y: options.box.y - scrollY }
+            : null),
           screenshot: async () => {
             calls.elementShots++
             return Buffer.from('png')
@@ -246,7 +396,11 @@ function fakePage(options: { documentHeight: number, viewportHeight: number, box
       }
     },
   }
-  return { page: page as unknown as Page, calls, scrollY: () => scrollY }
+  return {
+    page: page as unknown as Page,
+    calls,
+    scrollY: () => scrollY,
+  }
 }
 
 describe('a clip is taken relative to the scroll the page actually reached', () => {
@@ -256,7 +410,14 @@ describe('a clip is taken relative to the scroll the page actually reached', () 
     // ended up, not from where it was asked to go.
     const { page, calls } = fakePage({ documentHeight: 28152, viewportHeight: 2000 })
     return shootClip(page, { x: 100, y: 20000, w: 300, h: 150 }).then(() => {
-      expect(calls.clips).toEqual([{ x: 100, y: 1, width: 300, height: 150 }])
+      expect(calls.clips).toEqual([
+        {
+          x: 100,
+          y: 1,
+          width: 300,
+          height: 150,
+        },
+      ])
     })
   })
 
@@ -268,14 +429,28 @@ describe('a clip is taken relative to the scroll the page actually reached', () 
     const { page, calls } = fakePage({ documentHeight: 28152, viewportHeight: 2000 })
     return shootClip(page, { x: 0, y: 28100, w: 100, h: 50 }).then(() => {
       // Scroll stops at 26152, so the region is 1948 down the viewport.
-      expect(calls.clips).toEqual([{ x: 0, y: 1948, width: 100, height: 50 }])
+      expect(calls.clips).toEqual([
+        {
+          x: 0,
+          y: 1948,
+          width: 100,
+          height: 50,
+        },
+      ])
     })
   })
 })
 
 describe('clip captures run through a shortened viewport', () => {
   const request = (sourceId: number, clip?: { x: number, y: number, w: number, h: number }): RasterRequest =>
-    ({ sourceId, isolate: false, hideDescendants: false, ...(clip ? { clip } : {}) })
+    ({
+      sourceId,
+      isolate: false,
+      hideDescendants: false,
+      ...(clip
+        ? { clip }
+        : {}),
+    })
 
   it('shortens the viewport for the clips and puts it back', async () => {
     // The print route sizes its viewport to the WHOLE deck, and past roughly
@@ -283,14 +458,28 @@ describe('clip captures run through a shortened viewport', () => {
     // clip in the last third of a long deck failed and its picture vanished
     // with nothing in the log to say so.
     const { page, calls } = fakePage({ documentHeight: 28152, viewportHeight: 28152 })
-    const slides = [{
-      no: 1,
-      clickIndex: 0,
-      containerId: '001-01',
-      size: { w: 980, h: 552 },
-      nodes: [{ kind: 'raster' as const, sourceId: 1, rect: { x: 0, y: 0, w: 10, h: 10 }, data: '', reason: 'svg' as const, isolate: false, hideDescendants: false }],
-    }]
-    const report = await capture(page, slides as any, [request(1, { x: 0, y: 20000, w: 10, h: 10 })])
+    const slides = [
+      {
+        no: 1,
+        clickIndex: 0,
+        containerId: '001-01',
+        size: { w: 980, h: 552 },
+        nodes: [
+          {
+            kind: 'raster' as const,
+            sourceId: 1,
+            rect: { x: 0, y: 0, w: 10, h: 10 },
+            data: '',
+            reason: 'svg' as const,
+            isolate: false,
+            hideDescendants: false,
+          },
+        ],
+      },
+    ]
+    const report = await capture(page, slides as any, [
+      request(1, { x: 0, y: 20000, w: 10, h: 10 }),
+    ])
     expect(calls.viewports).toEqual([2000, 28152])
     expect(report.rastersCaptured).toBe(1)
     expect(report.rastersFailed).toBe(0)
@@ -310,7 +499,17 @@ describe('an element is captured by clipping the page at its box', () => {
     clickIndex: 0,
     containerId: '001-01',
     size: { w: 980, h: 552 },
-    nodes: [{ kind: 'raster' as const, sourceId, rect: { x: 0, y: 0, w: 10, h: 10 }, data: '', reason: 'svg' as const, isolate: false, hideDescendants: false }],
+    nodes: [
+      {
+        kind: 'raster' as const,
+        sourceId,
+        rect: { x: 0, y: 0, w: 10, h: 10 },
+        data: '',
+        reason: 'svg' as const,
+        isolate: false,
+        hideDescendants: false,
+      },
+    ],
   })
 
   it('clips rather than calling locator.screenshot', async () => {
@@ -321,17 +520,37 @@ describe('an element is captured by clipping the page at its box', () => {
     const { page, calls } = fakePage({
       documentHeight: 28152,
       viewportHeight: 28152,
-      box: { x: 100, y: 2049, width: 320, height: 194 },
+      box: {
+        x: 100,
+        y: 2049,
+        width: 320,
+        height: 194,
+      },
     })
-    const report = await capture(page, [slide(166)] as any, [request(166)])
+    const report = await capture(page, [
+      slide(166),
+    ] as any, [
+      request(166),
+    ])
     expect(calls.elementShots).toBe(0)
-    expect(calls.clips).toEqual([{ x: 100, y: 1, width: 320, height: 194 }])
+    expect(calls.clips).toEqual([
+      {
+        x: 100,
+        y: 1,
+        width: 320,
+        height: 194,
+      },
+    ])
     expect(report.rastersCaptured).toBe(1)
   })
 
   it('reports a failure when the element is not there', async () => {
     const { page } = fakePage({ documentHeight: 28152, viewportHeight: 28152 })
-    const report = await capture(page, [slide(166)] as any, [request(166)])
+    const report = await capture(page, [
+      slide(166),
+    ] as any, [
+      request(166),
+    ])
     expect(report.rastersFailed).toBe(1)
   })
 })
@@ -347,27 +566,49 @@ describe('generated-content pictures are counted when they reach the file', () =
     clickIndex: 0,
     containerId: '001-01',
     size: { w: 980, h: 552 },
-    nodes: [{ kind: 'raster' as const, sourceId: 7, rect: { x: 0, y: 0, w: 10, h: 10 }, data: '', reason, isolate: false, hideDescendants: false }],
+    nodes: [
+      {
+        kind: 'raster' as const,
+        sourceId: 7,
+        rect: { x: 0, y: 0, w: 10, h: 10 },
+        data: '',
+        reason,
+        isolate: false,
+        hideDescendants: false,
+      },
+    ],
     ...extra,
   })
   const box = { x: 0, y: 0, width: 10, height: 10 }
 
   it('counts a captured counter', async () => {
     const { page } = fakePage({ documentHeight: 552, viewportHeight: 552, box })
-    const report = await capture(page, [slide('generated-content')] as SlideIr[], [request(7)])
+    const report = await capture(page, [
+      slide('generated-content'),
+    ] as SlideIr[], [
+      request(7),
+    ])
     expect(report.generatedContentPictures).toBe(1)
   })
 
   it('does not count a counter whose capture failed', async () => {
     const { page } = fakePage({ documentHeight: 552, viewportHeight: 552 })
-    const report = await capture(page, [slide('generated-content')] as SlideIr[], [request(7)])
+    const report = await capture(page, [
+      slide('generated-content'),
+    ] as SlideIr[], [
+      request(7),
+    ])
     expect(report.rastersFailed).toBe(1)
     expect(report.generatedContentPictures).toBe(0)
   })
 
   it('does not count pictures taken for other reasons', async () => {
     const { page } = fakePage({ documentHeight: 552, viewportHeight: 552, box })
-    const report = await capture(page, [slide('svg')] as SlideIr[], [request(7)])
+    const report = await capture(page, [
+      slide('svg'),
+    ] as SlideIr[], [
+      request(7),
+    ])
     expect(report.generatedContentPictures).toBe(0)
   })
 
@@ -388,7 +629,9 @@ describe('shootClip', () => {
     // screenshot, so the picture went missing rather than being trimmed.
     const { page, calls } = fakePage({ documentHeight: 5000, viewportHeight: 2000 })
     await shootClip(page, { x: -28, y: 100, w: 320, h: 194 })
-    expect(calls.clips).toEqual([{ x: 0, y: 1, width: 292, height: 194 }])
+    expect(calls.clips).toEqual([
+      { x: 0, y: 1, width: 292, height: 194 },
+    ])
   })
 
   it('gives up on a box with nothing left to capture', async () => {

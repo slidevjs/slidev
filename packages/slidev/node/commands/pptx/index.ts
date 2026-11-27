@@ -73,7 +73,9 @@ export async function exportPptxEditable(
   const generated = await readGeneratedText(ctx.page)
   for (const slide of snapshot.slides) {
     for (const node of slide.nodes) {
-      const text = (node.tag === '::BEFORE' || node.tag === '::AFTER') ? generated?.get(`${node.parent}${node.tag}`) : undefined
+      const text = (node.tag === '::BEFORE' || node.tag === '::AFTER')
+        ? generated?.get(`${node.parent}${node.tag}`)
+        : undefined
       if (text !== undefined)
         node.generatedText = text
     }
@@ -105,7 +107,9 @@ export async function exportPptxEditable(
   )
 
   // Return the path actually written: `exportSlides` prints the path it was given.
-  const written = output.endsWith('.pptx') ? output : `${output}.pptx`
+  const written = output.endsWith('.pptx')
+    ? output
+    : `${output}.pptx`
   await fs.writeFile(written, buffer)
 
   return {
@@ -116,10 +120,14 @@ export async function exportPptxEditable(
     isolationMissed: report.isolationMissed,
     rastersFailed: report.rastersFailed,
     unparsedColors,
-    unplaceablePseudos: [...new Set(snapshot.unplaceablePseudos ?? [])].sort(),
+    unplaceablePseudos: [
+      ...new Set(snapshot.unplaceablePseudos ?? []),
+    ].sort(),
     generatedContentPictures: report.generatedContentPictures,
     // A pptx names fonts, it does not carry them; report what recipients need installed.
-    fontsNamed: [...new Set(Object.values(snapshot.fontResolution).filter(Boolean))].sort(),
+    fontsNamed: [
+      ...new Set(Object.values(snapshot.fontResolution).filter(Boolean)),
+    ].sort(),
   }
 }
 

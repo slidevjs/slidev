@@ -8,7 +8,9 @@ export default defineConfig({
   dts: true,
   clean: true,
   shims: false,
-  external: [
-    /@slidev/,
-  ],
+  deps: {
+    neverBundle: [
+      /@slidev/,
+    ],
+  },
 })
