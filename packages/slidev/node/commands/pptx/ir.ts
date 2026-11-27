@@ -114,6 +114,10 @@ export interface RawNode {
   opacity?: number
   /** A `::marker` list bullet, which is a pseudo-element and has no text node. */
   marker?: string
+  /** `::BEFORE` and `::AFTER` only: the computed `content` as Chromium serializes it. A string arrives quoted; a `counter()` arrives as written, never as the number drawn. */
+  content?: string
+  /** `::BEFORE` and `::AFTER` only: the text Chromium laid out for it, read from the layout tree after the walk. The only source of a counter's number. */
+  generatedText?: string
   /** Page coordinates. A `::before` or `::after` has no element of its own, so a screenshot clips the page instead of targeting a locator. */
   pageRect?: Rect
 }
@@ -248,6 +252,7 @@ export type RasterReason
     | 'clip-path'
     | 'transform'
     | 'writing-mode'
+    | 'generated-content'
 
 export interface IrRaster extends IrBase {
   kind: 'raster'
