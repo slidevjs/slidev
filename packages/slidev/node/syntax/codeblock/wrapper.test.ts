@@ -30,6 +30,31 @@ it('keeps languages containing `#` or `+`', async () => {
   expect(result).toContain('<span style="color:#81A1C1">using</span>')
 })
 
+it('keeps nested objects in code block options', async () => {
+  const md = MarkdownExit({ html: true })
+  const options = {
+    data: { config: {} },
+    mode: 'dev',
+    utils: {
+      shiki,
+      shikiOptions: { theme: 'nord' },
+    },
+  } as any
+
+  md.use(await MarkdownItShiki(options))
+  md.use(MarkdownItCodeblocks, options, [])
+
+  const result = await md.renderAsync([
+    '```ts {1} { maxHeight: \'100px\', foo: { bar: \'}\' } }',
+    'const a = 1',
+    '```',
+  ].join('\n'))
+
+  expect(result).toContain('v-bind="{ maxHeight: \'100px\', foo: { bar: \'}\' } }"')
+  expect(result).toContain(':ranges=\'["1"]\'')
+  expect(result).toContain('<code class="language-ts">')
+})
+
 describe('twoslash', { timeout: 20_000 }, () => {
   const md = MarkdownExit({ html: true })
 
