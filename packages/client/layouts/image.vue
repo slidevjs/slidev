@@ -1,4 +1,6 @@
 <script setup lang="ts">
+import type { PropType } from 'vue'
+import type { ImageForeground } from '../layoutHelper'
 import { computed } from 'vue'
 import { handleBackground } from '../layoutHelper'
 
@@ -10,9 +12,14 @@ const props = defineProps({
     type: String,
     default: 'cover',
   },
+  imageForeground: {
+    type: String as PropType<ImageForeground>,
+    default: 'light',
+    validator: (value: string) => ['light', 'dark'].includes(value),
+  },
 })
 
-const style = computed(() => handleBackground(props.image, false, props.backgroundSize))
+const style = computed(() => handleBackground(props.image, false, props.backgroundSize, props.imageForeground))
 </script>
 
 <template>
