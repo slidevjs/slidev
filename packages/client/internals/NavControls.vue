@@ -3,12 +3,14 @@ import { computed, ref, shallowRef } from 'vue'
 import CustomNavControls from '#slidev/custom-nav-controls'
 import { useDrawings } from '../composables/useDrawings'
 import { useNav } from '../composables/useNav'
+import { usePresenterDriver } from '../composables/usePresenterDriver'
 import { configs } from '../env'
 import { isColorSchemaConfigured, isDark, toggleDark } from '../logic/dark'
 import { activeElement, breakpoints, cursorStyle, fullscreen, hasViewerCssFilter, presenterLayout, showEditor, showInfoDialog, showPresenterCursor, toggleOverview, togglePresenterCursor, togglePresenterLayout } from '../state'
 import { downloadPDF } from '../utils'
 import IconButton from './IconButton.vue'
 import MenuButton from './MenuButton.vue'
+import PresenterDriverControls from './PresenterDriverControls.vue'
 import Settings from './Settings.vue'
 import SyncControls from './SyncControls.vue'
 
@@ -37,6 +39,7 @@ const {
   brush,
   drawingEnabled,
 } = useDrawings()
+const { canDrive } = usePresenterDriver()
 
 const md = breakpoints.smaller('md')
 const { isFullscreen, toggle: toggleFullscreen } = fullscreen
@@ -50,6 +53,17 @@ function onMouseLeave() {
 const barStyle = computed(() => props.persist
   ? 'text-$slidev-controls-foreground bg-transparent'
   : 'rounded-md bg-main shadow-xl border border-main')
+const canNavigate = computed(() => !isPresenter.value || canDrive.value)
+
+function goPrev() {
+  if (canNavigate.value)
+    prev()
+}
+
+function goNext() {
+  if (canNavigate.value)
+    next()
+}
 
 const RecordingControls = shallowRef<any>()
 if (__SLIDEV_FEATURE_RECORD__)
@@ -67,10 +81,10 @@ if (__SLIDEV_FEATURE_RECORD__)
         <div v-if="isFullscreen" class="i-carbon:minimize" />
         <div v-else class="i-carbon:maximize" />
       </IconButton>
-      <IconButton :disabled="!hasPrev" title="Go to previous slide" @click="prev">
+      <IconButton :disabled="!hasPrev || !canNavigate" title="Go to previous slide" @click="goPrev">
         <div class="i-carbon:arrow-left" />
       </IconButton>
-      <IconButton :disabled="!hasNext" title="Go to next slide" @click="next">
+      <IconButton :disabled="!hasNext || !canNavigate" title="Go to next slide" @click="goNext">
         <div class="i-carbon:arrow-right" />
       </IconButton>
       <IconButton v-if="!isEmbedded" title="Show slide overview" @click="toggleOverview()">
@@ -171,6 +185,7 @@ if (__SLIDEV_FEATURE_RECORD__)
           {{ presenterLayout }}
         </IconButton>
 
+        <PresenterDriverControls v-if="isPresenter" />
         <SyncControls v-if="__SLIDEV_FEATURE_PRESENTER__" />
 
         <MenuButton>

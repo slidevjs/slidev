@@ -3,24 +3,41 @@ import { and, not, or } from '@vueuse/math'
 import setups from '#slidev/setups/shortcuts'
 import { useDrawings } from '../composables/useDrawings'
 import { useNav } from '../composables/useNav'
+import { canDrivePresenter } from '../composables/usePresenterDriver'
 import { toggleDark } from '../logic/dark'
 import { activeDragElement, magicKeys, showGotoDialog, showOverview, toggleOverview } from '../state'
 import { downloadPDF } from '../utils'
 import { currentOverviewPage, downOverviewPage, nextOverviewPage, prevOverviewPage, upOverviewPage } from './../logic/overview'
 
 export default function setupShortcuts() {
-  const { go, goFirst, goLast, next, nextSlide, prev, prevSlide } = useNav()
+  const { go, goFirst, goLast, isPresenter, next, nextSlide, prev, prevSlide } = useNav()
   const { drawingEnabled } = useDrawings()
   const { escape, space, shift, left, right, up, down, enter, d, g, o, '`': backtick } = magicKeys
 
+  function withPresenterDriver<T extends (...args: any[]) => any>(fn: T): T {
+    return ((...args: Parameters<T>) => {
+      if (isPresenter.value && !canDrivePresenter())
+        return
+      return fn(...args)
+    }) as T
+  }
+
+  const guardedGo = withPresenterDriver(go)
+  const guardedGoFirst = withPresenterDriver(goFirst)
+  const guardedGoLast = withPresenterDriver(goLast)
+  const guardedNext = withPresenterDriver(next)
+  const guardedNextSlide = withPresenterDriver(nextSlide)
+  const guardedPrev = withPresenterDriver(prev)
+  const guardedPrevSlide = withPresenterDriver(prevSlide)
+
   const context: NavOperations = {
-    next,
-    prev,
-    nextSlide,
-    prevSlide,
-    go,
-    goFirst,
-    goLast,
+    next: guardedNext,
+    prev: guardedPrev,
+    nextSlide: guardedNextSlide,
+    prevSlide: guardedPrevSlide,
+    go: guardedGo,
+    goFirst: guardedGoFirst,
+    goLast: guardedGoLast,
     downloadPDF,
     toggleDark,
     toggleOverview,
@@ -35,61 +52,61 @@ export default function setupShortcuts() {
     {
       name: 'next_space',
       key: and(space, not(shift)),
-      fn: next,
+      fn: guardedNext,
       autoRepeat: true,
     },
     {
       name: 'prev_space',
       key: and(space, shift),
-      fn: prev,
+      fn: guardedPrev,
       autoRepeat: true,
     },
     {
       name: 'next_right',
       key: and(right, not(shift), navViaArrowKeys),
-      fn: next,
+      fn: guardedNext,
       autoRepeat: true,
     },
     {
       name: 'prev_left',
       key: and(left, not(shift), navViaArrowKeys),
-      fn: prev,
+      fn: guardedPrev,
       autoRepeat: true,
     },
     {
       name: 'next_page_key',
       key: 'pageDown',
-      fn: next,
+      fn: guardedNext,
       autoRepeat: true,
     },
     {
       name: 'prev_page_key',
       key: 'pageUp',
-      fn: prev,
+      fn: guardedPrev,
       autoRepeat: true,
     },
     {
       name: 'next_down',
       key: and(down, navViaArrowKeys),
-      fn: nextSlide,
+      fn: guardedNextSlide,
       autoRepeat: true,
     },
     {
       name: 'prev_up',
       key: and(up, navViaArrowKeys),
-      fn: prevSlide,
+      fn: guardedPrevSlide,
       autoRepeat: true,
     },
     {
       name: 'next_shift',
       key: and(right, shift),
-      fn: nextSlide,
+      fn: guardedNextSlide,
       autoRepeat: true,
     },
     {
       name: 'prev_shift',
       key: and(left, shift),
-      fn: prevSlide,
+      fn: guardedPrevSlide,
       autoRepeat: true,
     },
     {
@@ -136,7 +153,7 @@ export default function setupShortcuts() {
       name: 'goto_from_overview',
       key: and(enter, showOverview),
       fn: () => {
-        go(currentOverviewPage.value)
+        guardedGo(currentOverviewPage.value)
         showOverview.value = false
       },
     },

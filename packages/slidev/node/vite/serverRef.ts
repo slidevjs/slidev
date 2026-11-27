@@ -23,6 +23,8 @@ export async function createServerRefPlugin(
     nav: {
       page: 0,
       clicks: 0,
+      activeDriver: undefined,
+      driverRequest: undefined,
       timer: {
         status: 'stopped',
         slides: {},

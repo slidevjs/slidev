@@ -1,3 +1,4 @@
+import type { PresenterDriver, PresenterDriverRequest } from '../composables/usePresenterDriver'
 // @ts-expect-error - virtual module
 import serverState from 'server-reactive:nav'
 import { createSyncState } from './syncState'
@@ -22,6 +23,9 @@ export interface SharedState {
     y: number
     style?: 'cursor' | 'laser'
   }
+
+  activeDriver?: PresenterDriver
+  driverRequest?: PresenterDriverRequest
 
   lastUpdate?: {
     id: string
