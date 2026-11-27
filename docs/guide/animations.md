@@ -356,7 +356,7 @@ To specify animations for only certain slides or layouts:
 }
 ```
 
-Learn more about [customizing styles](/custom/directory-structure#style).
+Learn more about [customizing styles](/custom/directory-structure#style). To target whichever slide is currently visible instead of a fixed slide number, you can use `.slidev-page-active` (see [Targeting the Active Slide](/custom/directory-structure#targeting-the-active-slide)).
 
 ## Motion {#motion}
 
