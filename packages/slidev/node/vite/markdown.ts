@@ -36,6 +36,8 @@ export async function createMarkdownPlugin(
     },
     ...mdOptions,
     async markdownSetup(md) {
+      // linkify-it v6 (markdown-exit v2) disables fuzzy links by default; keep auto-linking bare domains like `example.com`
+      md.linkify.set({ fuzzyLink: true })
       await useMarkdownItPlugins(md, options, markdownTransformMap, extras.codeblocks)
       await mdOptions?.markdownSetup?.(md)
     },

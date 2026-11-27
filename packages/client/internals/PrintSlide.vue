@@ -3,6 +3,7 @@ import type { SlideRoute } from '@slidev/types'
 import { createFixedClicks } from '../composables/useClicks'
 import { useFixedNav, useNav } from '../composables/useNav'
 import { CLICKS_MAX } from '../constants'
+import { getPrintSlideAnchorId } from '../logic/slidePath'
 import PrintSlideClick from './PrintSlideClick.vue'
 
 const { route } = defineProps<{ hidden?: boolean, route: SlideRoute }>()
@@ -11,6 +12,7 @@ const clicks0 = createFixedClicks(route, () => isPrintWithClicks.value ? 0 : CLI
 </script>
 
 <template>
+  <span :id="getPrintSlideAnchorId(route.no)" />
   <PrintSlideClick
     v-show="!hidden"
     :nav="useFixedNav(route, clicks0)"

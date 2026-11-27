@@ -12,6 +12,7 @@ Export presentations to PDF, PPTX, PNG, or Markdown.
 Access at `http://localhost:3030/export`:
 - Select format and options
 - Preview and download
+- PPTX here is image-based; use the CLI for `pptx-editable`
 
 ## CLI Export
 
@@ -53,7 +54,7 @@ slidev export --format md
 
 ### With Click Steps
 
-Export each click as separate page:
+Export each click as separate page (default for PPTX formats):
 ```bash
 slidev export --with-clicks
 ```
@@ -137,7 +138,7 @@ slidev export --wait 3000 --timeout 60000
 
 ### Wrong Global Layer State
 
-Use `--per-slide` or use `slide-top.vue` instead of `global-top.vue`.
+Use `--per-slide` (not supported with `pptx-editable`) or use `slide-top.vue` instead of `global-top.vue`.
 
 ### Broken Emojis
 

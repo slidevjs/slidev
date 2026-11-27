@@ -47,4 +47,4 @@ Create in project root:
 
 ## Export Note
 
-Use `--per-slide` export option when global layers depend on navigation state.
+Use `--per-slide` export option when global layers depend on navigation state (not supported with `pptx-editable`; use `slide-top.vue`/`slide-bottom.vue` instead).

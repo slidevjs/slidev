@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import type { CodeRunnerOutputs, RawAtValue } from '@slidev/types'
+import type { CSSProperties } from 'vue'
 import { debounce, toArray } from '@antfu/utils'
 import { useVModel } from '@vueuse/core'
 import { computed, onMounted, onUnmounted, ref, shallowRef, toValue, watch, watchSyncEffect } from 'vue'
@@ -15,6 +16,7 @@ const props = defineProps<{
   lang: string
   autorun: boolean | 'once'
   height?: string
+  fontSize?: number | string
   showOutputAt?: RawAtValue
   highlightOutput: boolean
   runnerOptions?: Record<string, unknown>
@@ -34,6 +36,17 @@ const isRunning = ref(autorun)
 const outputs = shallowRef<CodeRunnerOutputs>()
 const runCount = ref(0)
 const highlightFn = ref<(code: string, lang: string) => string>()
+
+const outputStyle = computed<CSSProperties>(() => {
+  if (props.fontSize == null || props.fontSize === '')
+    return {}
+  return {
+    fontSize: typeof props.fontSize === 'number'
+      ? `${props.fontSize}px`
+      : props.fontSize,
+    lineHeight: 1.1,
+  }
+})
 
 const hidden = ref(props.showOutputAt)
 if (props.showOutputAt) {
@@ -93,7 +106,7 @@ else if (autorun)
     <div v-else-if="!outputs" class="text-sm text-center opacity-50">
       Click the play button to run the code
     </div>
-    <div v-else :key="`run-${runCount}`" class="slidev-runner-output">
+    <div v-else :key="`run-${runCount}`" class="slidev-runner-output" :style="outputStyle">
       <template v-for="output, _idx1 of toArray(toValue(outputs))" :key="_idx1">
         <div v-if="'html' in output" v-html="output.html" />
         <div v-else-if="'error' in output" class="text-red-500">

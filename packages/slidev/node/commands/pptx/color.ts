@@ -10,13 +10,17 @@ export type UnparsedColors = Set<string> | undefined
 function numbers(body: string): number[] {
   return body.split(/[\s,/]+/).filter(Boolean).map((token) => {
     const n = Number.parseFloat(token)
-    return token.endsWith('%') ? n / 100 : n
+    return token.endsWith('%')
+      ? n / 100
+      : n
   })
 }
 
 function srgbChannel(v: number): number {
   // The sRGB transfer function, for converting linear light back to 0-255.
-  const c = v <= 0.0031308 ? v * 12.92 : 1.055 * v ** (1 / 2.4) - 0.055
+  const c = v <= 0.0031308
+    ? v * 12.92
+    : 1.055 * v ** (1 / 2.4) - 0.055
   return Math.max(0, Math.min(255, Math.round(c * 255)))
 }
 
@@ -50,7 +54,11 @@ function hueToRgb(h: number, s: number, l: number): [number, number, number] {
               : [c, 0, x]
   const m = l - c / 2
   const to255 = (v: number) => Math.max(0, Math.min(255, Math.round((v + m) * 255)))
-  return [to255(r), to255(g), to255(b)]
+  return [
+    to255(r),
+    to255(g),
+    to255(b),
+  ]
 }
 
 /**
@@ -82,7 +90,9 @@ export function parseColor(value: string | undefined, unparsed?: UnparsedColors)
         r: Math.round(channels[0] * 255),
         g: Math.round(channels[1] * 255),
         b: Math.round(channels[2] * 255),
-        a: channels.length > 3 && !Number.isNaN(channels[3]) ? channels[3] : 1,
+        a: channels.length > 3 && !Number.isNaN(channels[3])
+          ? channels[3]
+          : 1,
       }
     }
     unparsed?.add(text)
@@ -94,13 +104,17 @@ export function parseColor(value: string | undefined, unparsed?: UnparsedColors)
     unparsed?.add(text)
     return undefined
   }
-  const alpha = (index: number) => (parts.length > index ? parts[index] : 1)
+  const alpha = (index: number) => (parts.length > index
+    ? parts[index]
+    : 1)
 
   if (name === 'rgb' || name === 'rgba') {
     if (parts.length < 3)
       return undefined
     // Percentage channels were divided by 100 above, so scale them back.
-    const channel = (v: number, raw: string) => (raw.includes('%') ? v * 255 : v)
+    const channel = (v: number, raw: string) => (raw.includes('%')
+      ? v * 255
+      : v)
     const raw = fn[2].split(/[\s,/]+/).filter(Boolean)
     return {
       r: channel(parts[0], raw[0] ?? ''),
@@ -114,7 +128,12 @@ export function parseColor(value: string | undefined, unparsed?: UnparsedColors)
     if (parts.length < 3)
       return undefined
     const [r, g, b] = hueToRgb(parts[0], parts[1], parts[2])
-    return { r, g, b, a: alpha(3) }
+    return {
+      r,
+      g,
+      b,
+      a: alpha(3),
+    }
   }
 
   if (name === 'oklch' || name === 'oklab') {
@@ -125,7 +144,12 @@ export function parseColor(value: string | undefined, unparsed?: UnparsedColors)
       ? [parts[1] * Math.cos((parts[2] * Math.PI) / 180), parts[1] * Math.sin((parts[2] * Math.PI) / 180)]
       : [parts[1], parts[2]]
     const [r, g, bb] = oklabToRgb(L, a, b)
-    return { r, g, b: bb, a: alpha(3) }
+    return {
+      r,
+      g,
+      b: bb,
+      a: alpha(3),
+    }
   }
 
   unparsed?.add(text)
