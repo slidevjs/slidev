@@ -789,6 +789,17 @@
           "description": "Monospace fonts, for code blocks and etc.",
           "markdownDescription": "Monospace fonts, for code blocks and etc."
         },
+        "body": {
+          "type": "string",
+          "enum": [
+            "sans",
+            "serif",
+            "mono"
+          ],
+          "description": "Font family role to use by default for the page body",
+          "markdownDescription": "Font family role to use by default for the page body",
+          "default": "sans"
+        },
         "custom": {
           "anyOf": [
             {

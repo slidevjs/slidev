@@ -10,7 +10,7 @@ body,
   overflow: hidden;
   print-color-adjust: exact;
   -webkit-print-color-adjust: exact;
-  --uno: font-sans bg-main;
+  --uno: font-body bg-main;
 }
 
 html {
