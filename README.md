@@ -19,7 +19,7 @@ Presentation <b>slide</b>s for <b>dev</b>elopers 🧑‍💻👩‍💻👨‍�
 </p>
 
 <p align="center">
-  <a href="https://twitter.com/antfu7/status/1389604687502995457">Video Preview</a> | <a href="https://sli.dev">Documentation</a>
+  <a href="https://x.com/antfu7/status/1389604687502995457">Video Preview</a> | <a href="https://sli.dev">Documentation</a>
 </p>
 
 <div align="center">
@@ -62,7 +62,7 @@ Presentation <b>slide</b>s for <b>dev</b>elopers 🧑‍💻👩‍💻👨‍�
 
 ### Init Project Locally
 
-Install [Node.js >= 20.12.0](https://nodejs.org/) and run the following command:
+Install [Node.js >= 22.12.0](https://nodejs.org/) and run the following command:
 
 ```bash
 npm init slidev

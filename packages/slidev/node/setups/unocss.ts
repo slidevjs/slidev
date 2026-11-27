@@ -3,7 +3,7 @@ import type { Theme } from '@unocss/preset-uno'
 import type { VitePluginConfig } from 'unocss/vite'
 import { existsSync } from 'node:fs'
 import { readFile } from 'node:fs/promises'
-import { resolve } from 'node:path'
+import { resolve } from 'pathe'
 import { mergeConfigs, presetIcons } from 'unocss'
 import { loadSetups } from '../setups/load'
 import { loadModule } from '../utils'
@@ -19,7 +19,9 @@ export default async function setupUnocss(
       if (!existsSync(i))
         return undefined
       const loaded = await loadModule(i) as VitePluginConfig | { default: VitePluginConfig }
-      return 'default' in loaded ? loaded.default : loaded
+      return 'default' in loaded
+        ? loaded.default
+        : loaded
     })
   }
 

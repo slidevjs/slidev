@@ -17,6 +17,7 @@ export default antfu({
   },
   ignores: [
     'skills/**/*.md',
+    'plans/**',
   ],
 })
   .removeRules(
@@ -34,3 +35,10 @@ export default antfu({
     ],
   })
   .remove('antfu/markdown/rules')
+  .append({
+    // Keep code in slides as authored for presentation
+    files: ['**/*.md/**'],
+    rules: {
+      'antfu/reasonable-newline': 'off',
+    },
+  })

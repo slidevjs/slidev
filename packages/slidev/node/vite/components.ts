@@ -1,5 +1,5 @@
 import type { ResolvedSlidevOptions, SlidevPluginOptions } from '@slidev/types'
-import { join } from 'node:path'
+import { join } from 'pathe'
 import IconsResolver from 'unplugin-icons/resolver'
 import Components from 'unplugin-vue-components/vite'
 
@@ -22,7 +22,13 @@ export function createComponentsPlugin(
     ],
     globsExclude: [],
 
-    include: [RE_VUE_EXT, RE_VUE_QUERY_VUE, RE_VUE_QUERY_V, RE_MD_EXT, RE_MD_QUERY_VUE],
+    include: [
+      RE_VUE_EXT,
+      RE_VUE_QUERY_VUE,
+      RE_VUE_QUERY_V,
+      RE_MD_EXT,
+      RE_MD_QUERY_VUE,
+    ],
     exclude: [],
 
     resolvers: [

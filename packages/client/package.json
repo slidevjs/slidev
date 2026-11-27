@@ -1,7 +1,7 @@
 {
   "name": "@slidev/client",
   "type": "module",
-  "version": "52.15.2",
+  "version": "53.1.0",
   "description": "Presentation slides for developers",
   "author": "Anthony Fu <anthonyfu117@hotmail.com>",
   "license": "MIT",
@@ -25,7 +25,7 @@
   },
   "main": "./public.ts",
   "engines": {
-    "node": ">=20.12.0"
+    "node": ">=22.12.0"
   },
   "dependencies": {
     "@antfu/utils": "catalog:frontend",
@@ -34,6 +34,7 @@
     "@iconify-json/ph": "catalog:icons",
     "@iconify-json/svg-spinners": "catalog:icons",
     "@shikijs/engine-javascript": "catalog:frontend",
+    "@shikijs/magic-move": "catalog:frontend",
     "@shikijs/monaco": "catalog:monaco",
     "@shikijs/vitepress-twoslash": "catalog:prod",
     "@slidev/parser": "workspace:*",
@@ -50,17 +51,18 @@
     "ansis": "catalog:prod",
     "drauu": "catalog:frontend",
     "file-saver": "catalog:frontend",
+    "fitty": "catalog:frontend",
     "floating-vue": "catalog:frontend",
     "fuse.js": "catalog:frontend",
     "katex": "catalog:frontend",
     "lz-string": "catalog:frontend",
+    "markdown-it-github-alerts": "catalog:prod",
     "mermaid": "catalog:frontend",
     "monaco-editor": "catalog:monaco",
     "nanotar": "catalog:frontend",
     "pptxgenjs": "catalog:prod",
     "recordrtc": "catalog:frontend",
     "shiki": "catalog:frontend",
-    "shiki-magic-move": "catalog:frontend",
     "typescript": "catalog:dev",
     "unocss": "catalog:prod",
     "vue": "catalog:frontend",

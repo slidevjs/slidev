@@ -1,10 +1,11 @@
 import type { ResolvedSlidevOptions, SlideInfo } from '@slidev/types'
 import type { MarkdownExit } from 'markdown-exit'
 import fs from 'node:fs'
-import path from 'node:path'
 import { slash } from '@antfu/utils'
 import { yellow } from 'ansis'
 import lz from 'lz-string'
+import path from 'pathe'
+import { isPathInsideRoots } from '../utils'
 import { regexSlideSourceId } from '../vite/common'
 import { monacoWriterWhitelist } from '../vite/monacoWrite'
 
@@ -107,7 +108,7 @@ function findRegion(lines: Array<string>, regionName: string) {
 // eslint-disable-next-line regexp/no-super-linear-backtracking
 export const RE_SNIPPET_IMPORT = /^<<<[ \t]*(\S.*?)(#[\w-]+)?[ \t]*(?:[ \t](\S+?))?[ \t]*(\{.*)?$/
 
-export function resolveSnippetImport(lineText: string, userRoot: string, slide: SlideInfo) {
+export function resolveSnippetImport(lineText: string, userRoot: string, slide: SlideInfo, allowedRoots: string[] = [userRoot]) {
   const match = lineText.trimStart().match(RE_SNIPPET_IMPORT)
   if (!match)
     return null
@@ -122,6 +123,10 @@ export function resolveSnippetImport(lineText: string, userRoot: string, slide: 
 
   lang = lang.trim() || path.extname(filepath).slice(1)
   meta = meta.trim()
+
+  if (!isPathInsideRoots(src, allowedRoots)) {
+    throw new Error(`Code snippet path escapes the project root: ${src}`)
+  }
 
   const isAFile = fs.existsSync(src) && fs.statSync(src).isFile()
   if (!isAFile) {
@@ -146,7 +151,14 @@ export function resolveSnippetImport(lineText: string, userRoot: string, slide: 
   return { content, filepath, lang, meta, src }
 }
 
-export default function MarkdownItSnippet(md: MarkdownExit, { userRoot, data: { watchFiles, slides } }: ResolvedSlidevOptions) {
+export default function MarkdownItSnippet(md: MarkdownExit, { userRoot, userWorkspaceRoot, roots, data }: ResolvedSlidevOptions) {
+  const allowedRoots = [
+    ...new Set([
+      userWorkspaceRoot,
+      userRoot,
+      ...(roots ?? []),
+    ].filter(Boolean)),
+  ]
   md.block.ruler.before('fence', 'snippet_import', (state, startLine, _endLine, silent) => {
     const pos = state.bMarks[startLine] + state.tShift[startLine]
     const max = state.eMarks[startLine]
@@ -160,25 +172,34 @@ export default function MarkdownItSnippet(md: MarkdownExit, { userRoot, data: { 
       return true
 
     const slideNo = state.env.id?.match(regexSlideSourceId)
-    const slide = slideNo ? slides[slideNo[1] - 1] : null
+    // Read `data` on every render: the dev server replaces `data.slides` and
+    // `data.watchFiles` with fresh objects each time it reloads the slides.
+    const slide = slideNo
+      ? data.slides[slideNo[1] - 1]
+      : null
 
     if (!slide) {
       console.warn(yellow(`[markdown-it-snippet] Snippet syntax is not supported in ${state.env.id || 'unknown source'}. Skipped.`))
       return false
     }
 
-    const snippet = resolveSnippetImport(lineText, userRoot, slide)
+    const snippet = resolveSnippetImport(lineText, userRoot, slide, allowedRoots)
     if (!snippet)
       return false
 
-    const { content, filepath, src } = snippet
+    const { content, src } = snippet
     let { lang, meta } = snippet
 
     if (meta.includes('{monaco-write}')) {
-      monacoWriterWhitelist.add(filepath)
+      // The writer resolves whatever it receives against `userRoot`, so hand it
+      // a userRoot-relative path. `filepath` is the raw specifier as typed, and
+      // an `@/` alias or a path relative to the slide resolves elsewhere for
+      // reading than it would for writing.
+      const writePath = slash(path.relative(userRoot, src))
+      monacoWriterWhitelist.add(writePath)
       lang = lang.trim()
       meta = meta.replace('{monaco-write}', '').trim() || '{}'
-      const safeFilepath = JSON.stringify(filepath).slice(1, -1)
+      const safeFilepath = JSON.stringify(writePath).slice(1, -1)
       const encoded = lz.compressToBase64(content)
 
       const token = state.push('html_block', '', 0)
@@ -186,16 +207,25 @@ export default function MarkdownItSnippet(md: MarkdownExit, { userRoot, data: { 
       token.map = [startLine, startLine + 1]
     }
     else {
-      watchFiles[src] ??= new Set()
-      watchFiles[src].add(slide.index)
+      data.watchFiles[src] ??= new Set()
+      data.watchFiles[src].add(slide.index)
 
       const token = state.push('fence', 'code', 0)
       token.info = `${lang} ${meta}`.trim()
-      token.content = content.endsWith('\n') ? content : `${content}\n`
+      token.content = content.endsWith('\n')
+        ? content
+        : `${content}\n`
       token.map = [startLine, startLine + 1]
     }
 
     state.line = startLine + 1
     return true
-  }, { alt: ['paragraph', 'reference', 'blockquote', 'list'] })
+  }, {
+    alt: [
+      'paragraph',
+      'reference',
+      'blockquote',
+      'list',
+    ],
+  })
 }
