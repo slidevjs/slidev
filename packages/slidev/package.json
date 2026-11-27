@@ -42,7 +42,7 @@
   },
   "peerDependencies": {
     "playwright-chromium": "^1.10.0",
-    "vite-plugin-pwa": "^1.0.0"
+    "vite-plugin-pwa": "^1.0.0 || ^2.0.0"
   },
   "peerDependenciesMeta": {
     "playwright-chromium": {

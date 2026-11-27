@@ -2,8 +2,10 @@ import type { RoughAnnotationConfig } from '@slidev/rough-notation'
 import type { RawAtValue } from '@slidev/types'
 import type { App } from 'vue'
 import { annotate } from '@slidev/rough-notation'
-import { computed, watchEffect } from 'vue'
+import { computed, nextTick, watch, watchEffect } from 'vue'
 import { useNav } from '../composables/useNav'
+import { injectionCurrentPage } from '../constants'
+import { directiveInject } from '../utils'
 import { resolveClick } from './v-click'
 
 export interface RoughDirectiveOptions extends Partial<RoughAnnotationConfig> {
@@ -89,7 +91,8 @@ export function createVMarkDirective() {
         name: 'v-mark',
 
         mounted: (el, binding) => {
-          const { isPrintMode } = useNav()
+          const { currentPage, isPrintMode } = useNav()
+          const thisPage = directiveInject(binding, injectionCurrentPage)
 
           const options = computed(() => {
             const bindingOptions = (typeof binding.value === 'object' && !Array.isArray(binding.value))
@@ -130,6 +133,20 @@ export function createVMarkDirective() {
 
           const annotation = annotate(el, options.value as RoughAnnotationConfig)
 
+          // Preloaded slides are hidden, so marks shown there are drawn with zero size.
+          // Redraw them once the slide becomes visible, after `v-show` has been applied.
+          // @ts-expect-error extra prop
+          el.redrawStopHandle = watch(
+            () => thisPage?.value === currentPage.value,
+            async (isCurrent) => {
+              if (!isCurrent)
+                return
+              await nextTick()
+              if (annotation.isShowing())
+                annotation.show()
+            },
+          )
+
           const resolvedClick = resolveClick(el, binding, options.value.at)
           if (!resolvedClick) {
             // No click animation, just show the mark
@@ -168,6 +185,8 @@ export function createVMarkDirective() {
         unmounted: (el) => {
           // @ts-expect-error extra prop
           el.watchStopHandle?.()
+          // @ts-expect-error extra prop
+          el.redrawStopHandle?.()
         },
       })
     },

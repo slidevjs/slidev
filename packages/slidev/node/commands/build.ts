@@ -96,7 +96,7 @@ export async function build(
       )
       server.listen(port)
 
-      const { exportSlides } = await import('./export')
+      const { exportSlides, resolveExportDarkMode } = await import('./export')
       const tempDir = resolve(outDir, 'temp')
       await fs.mkdir(tempDir, { recursive: true })
 
@@ -118,7 +118,7 @@ export async function build(
         timeout: args.timeout || 30000,
         perSlide: true,
         omitBackground: false,
-        dark: args.dark,
+        dark: resolveExportDarkMode(args.dark, options.data.config.colorSchema),
       })
 
       const tempFiles = await fs.readdir(tempDir)
