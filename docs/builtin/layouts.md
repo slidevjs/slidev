@@ -97,13 +97,13 @@ backgroundSize: 20em 70%
 ---
 ```
 
-By default, the `image` layout renders the content in white (`text: light`), which reads well on dark images. Set `text: dark` to drop that override and keep the theme's text color instead, for example on a light image. The theme color still follows dark mode, so in dark mode the text stays light:
+By default, the `image` layout renders the content in white (`imageForeground: light`), which reads well on dark images. Set `imageForeground: dark` to drop that override and keep the theme's text color instead, for example on a light image. The theme color still follows dark mode, so in dark mode the text stays light:
 
 ```yaml
 ---
 layout: image
 image: /path/to/the/image
-text: dark
+imageForeground: dark
 ---
 ```
 

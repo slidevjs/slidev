@@ -7,7 +7,7 @@ describe('handleBackground', () => {
     expect(handleBackground('/photo.png', false, 'cover', 'light').color).toBe('white')
   })
 
-  it('keeps the theme text color over an image with text: dark', () => {
+  it('keeps the theme text color over an image with imageForeground: dark', () => {
     const style = handleBackground('/photo.png', false, 'cover', 'dark')
     expect(style.color).toBeUndefined()
     expect(style.backgroundImage).toContain('photo.png')

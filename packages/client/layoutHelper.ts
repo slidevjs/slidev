@@ -14,16 +14,16 @@ export function resolveAssetUrl(url: string) {
  *
  * `light` forces white text, `dark` leaves the theme's text color in place.
  */
-export type BackgroundText = 'light' | 'dark'
+export type ImageForeground = 'light' | 'dark'
 
-export function handleBackground(background?: string, dim = false, backgroundSize = 'cover', text: BackgroundText = 'light'): CSSProperties {
+export function handleBackground(background?: string, dim = false, backgroundSize = 'cover', imageForeground: ImageForeground = 'light'): CSSProperties {
   const isColor = background && (background[0] === '#' || background.startsWith('rgb'))
 
   const style = {
     background: isColor
       ? background
       : undefined,
-    color: (background && !isColor && text !== 'dark')
+    color: (background && !isColor && imageForeground !== 'dark')
       ? 'white'
       : undefined,
     backgroundImage: isColor
