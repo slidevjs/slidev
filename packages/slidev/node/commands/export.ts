@@ -1,4 +1,4 @@
-import type { ExportArgs, ResolvedSlidevOptions, SlideInfo, TocItem } from '@slidev/types'
+import type { ExportArgs, ResolvedSlidevOptions, SlideInfo, SlidevConfig, TocItem } from '@slidev/types'
 import { Buffer } from 'node:buffer'
 import fs from 'node:fs/promises'
 import process from 'node:process'
@@ -40,6 +40,12 @@ export interface ExportOptions {
   omitBackground?: boolean
 }
 
+export function resolveExportDarkMode(dark: boolean | undefined, colorSchema: SlidevConfig['colorSchema']) {
+  if (colorSchema === 'light dark' || colorSchema === 'dark light')
+    return dark ?? colorSchema === 'dark light'
+  return dark || colorSchema === 'dark'
+}
+
 interface ExportPngResult {
   slideIndex: number
   buffer: Buffer
@@ -66,11 +72,15 @@ function addToTree(tree: TocItem[], info: SlideInfo, slideIndexes: Record<number
 
 function makeOutline(tree: TocItem[]): string {
   return tree.map(({ title, path, level, children }) => {
-    const rootOutline = title ? `${path}|${'-'.repeat(level - 1)}|${title}` : null
+    const rootOutline = title
+      ? `${path}|${'-'.repeat(level - 1)}|${title}`
+      : null
 
     const childrenOutline = makeOutline(children)
 
-    return childrenOutline.length > 0 ? `${rootOutline}\n${childrenOutline}` : rootOutline
+    return childrenOutline.length > 0
+      ? `${rootOutline}\n${childrenOutline}`
+      : rootOutline
   }).filter(outline => !!outline).join('\n')
 }
 
@@ -84,7 +94,12 @@ export interface ExportNotesOptions {
 
 function createSlidevProgress(indeterminate = false) {
   function getSpinner(n = 0) {
-    return [cyan('●'), green('◆'), blue('■'), yellow('▲')][n % 4]
+    return [
+      cyan('●'),
+      green('◆'),
+      blue('■'),
+      yellow('▲'),
+    ][n % 4]
   }
   let current = 0
   let spinner = 0
@@ -93,7 +108,9 @@ function createSlidevProgress(indeterminate = false) {
   const progress = new SingleBar({
     clearOnComplete: true,
     hideCursor: true,
-    format: `  {spin} ${yellow('rendering')}${indeterminate ? dim(yellow('...')) : ' {bar} {value}/{total}'}`,
+    format: `  {spin} ${yellow('rendering')}${indeterminate
+      ? dim(yellow('...'))
+      : ' {bar} {value}/{total}'}`,
     linewrap: false,
     barsize: 30,
   }, Presets.shades_grey)
@@ -101,15 +118,21 @@ function createSlidevProgress(indeterminate = false) {
   return {
     bar: progress,
     start(total: number) {
-      progress.start(total, 0, { spin: getSpinner(spinner) })
+      progress.start(total, 0, {
+        spin: getSpinner(spinner),
+      })
       timer = setInterval(() => {
         spinner += 1
-        progress.update(current, { spin: getSpinner(spinner) })
+        progress.update(current, {
+          spin: getSpinner(spinner),
+        })
       }, 200)
     },
     update(v: number) {
       current = v
-      progress.update(v, { spin: getSpinner(spinner) })
+      progress.update(v, {
+        spin: getSpinner(spinner),
+      })
     },
     stop() {
       clearInterval(timer)
@@ -189,6 +212,12 @@ export async function exportSlides({
 }: ExportOptions) {
   const pages: number[] = parseRangeString(total, range)
 
+  // Writers disagree about who creates the parent directory of `--output`, so
+  // the ones calling `fs.writeFile` directly failed with ENOENT on a path like
+  // `dist/slides.pptx`. Create it here, before the browser starts. `png` gets
+  // only the parent: its `--output` is a directory that `genPagePng` creates.
+  await fs.mkdir(dirname(path.resolve(output)), { recursive: true })
+
   const { chromium } = await importPlaywright()
   const browser = await chromium.launch({
     executablePath,
@@ -197,7 +226,9 @@ export async function exportSlides({
     viewport: {
       width,
       // Calculate height for every slides to be in the viewport to trigger the rendering of iframes (twitter, youtube...)
-      height: perSlide ? height : height * pages.length,
+      height: perSlide
+        ? height
+        : height * pages.length,
     },
     deviceScaleFactor: scale,
   })
@@ -232,7 +263,9 @@ export async function exportSlides({
   }
 
   const relativeOutput = slash(relative('.', output))
-  return relativeOutput.startsWith('.') ? relativeOutput : `./${relativeOutput}`
+  return relativeOutput.startsWith('.')
+    ? relativeOutput
+    : `./${relativeOutput}`
 
   async function go(no: number | string, clicks?: string, printClicks = withClicks) {
     const query = new URLSearchParams()
@@ -254,7 +287,10 @@ export async function exportSlides({
     })
     if (waitUntil)
       await page.waitForLoadState(waitUntil)
-    await page.emulateMedia({ colorScheme: dark ? 'dark' : 'light', media: 'screen' })
+    await page.emulateMedia({
+      colorScheme: dark ? 'dark' : 'light',
+      media: 'screen',
+    })
     const slide = no === 'print'
       ? page.locator('body')
       : page.locator(`[data-slidev-no="${no}"]`)
@@ -362,7 +398,9 @@ export async function exportSlides({
     await go(no, undefined, true)
     const total = Math.max(clicksStart, await getClicksTotal(no))
     for (const step of getExportClickSteps(exportClicks, clicksStart, total)) {
-      const clicks = step ? String(step) : undefined
+      const clicks = step
+        ? String(step)
+        : undefined
       // the first step is already shown
       if (step !== clicksStart)
         await go(no, clicks, true)
@@ -471,7 +509,9 @@ export async function exportSlides({
       const buffer = await slideContainers.nth(i).screenshot({
         omitBackground,
       })
-      const filename = `${withClicks || pagesPerSlide[slideNo] > 1 ? id : slideNo}.png`
+      const filename = `${withClicks || pagesPerSlide[slideNo] > 1
+        ? id
+        : slideNo}.png`
       result.push({ slideIndex: slideNo - 1, buffer, filename })
       if (writeToDisk)
         await fs.writeFile(path.join(writeToDisk, filename), buffer)
@@ -485,7 +525,9 @@ export async function exportSlides({
       const buffer = await page.screenshot({
         omitBackground,
       })
-      const filename = `${no.toString().padStart(2, '0')}${clicks ? `-${clicks}` : ''}.png`
+      const filename = `${no.toString().padStart(2, '0')}${clicks
+        ? `-${clicks}`
+        : ''}.png`
       result.push({ slideIndex: no - 1, buffer, filename })
       if (writeToDisk) {
         await fs.writeFile(
@@ -526,7 +568,9 @@ export async function exportSlides({
         pngs.filter(({ slideIndex }) => slideIndex === index)
           .map(({ filename }) => `![${title || (index + 1)}](./${filename})\n\n`)
           .join('')
-          + (note ? `${note.trim()}\n\n` : ''),
+          + (note
+            ? `${note.trim()}\n\n`
+            : ''),
       )
       .join('---\n\n')
     await fs.writeFile(ensureSuffix('.md', output), content)
@@ -582,7 +626,14 @@ export async function exportSlides({
     }
 
     const { exportPptxEditable, reportEditableExport } = await import('./pptx')
-    const result = await exportPptxEditable({ page, slides, width, height, pages, go }, output)
+    const result = await exportPptxEditable({
+      page,
+      slides,
+      width,
+      height,
+      pages,
+      go,
+    }, output)
     // So the "exported to ..." line names the file that was actually written.
     output = result.output
 
@@ -664,10 +715,14 @@ export function getExportOptions(args: ExportArgs, options: ResolvedSlidevOption
     format: (format || 'pdf') as 'pdf' | 'png' | 'pptx' | 'pptx-editable' | 'md',
     timeout: timeout ?? 30000,
     wait: wait ?? 0,
-    waitUntil: waitUntil === 'none' ? undefined : (waitUntil ?? 'networkidle') as 'networkidle' | 'load' | 'domcontentloaded',
-    dark: dark || options.data.config.colorSchema === 'dark',
+    waitUntil: waitUntil === 'none'
+      ? undefined
+      : (waitUntil ?? 'networkidle') as 'networkidle' | 'load' | 'domcontentloaded',
+    dark: resolveExportDarkMode(dark, options.data.config.colorSchema),
     // Export navigates by URL; memory routing ignores the URL, so fall back to history.
-    routerMode: options.data.config.routerMode === 'memory' ? 'history' : options.data.config.routerMode,
+    routerMode: options.data.config.routerMode === 'memory'
+      ? 'history'
+      : options.data.config.routerMode,
     width: options.data.config.canvasWidth,
     height: Math.round(options.data.config.canvasWidth / options.data.config.aspectRatio),
     // Both pptx formats default to one slide per click step. Testing the

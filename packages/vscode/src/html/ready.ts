@@ -1,7 +1,9 @@
 export type PreviewMode = 'slide' | 'overview'
 
 export function generateReadyHtml(port: number, mode: PreviewMode, hashRoute: boolean, initialSlideNo?: number) {
-  const slideNoQuery = initialSlideNo == null ? '' : `&slideNo=${encodeURIComponent(String(initialSlideNo))}`
+  const slideNoQuery = initialSlideNo == null
+    ? ''
+    : `&slideNo=${encodeURIComponent(String(initialSlideNo))}`
   const iframeSrc = mode === 'overview'
     ? hashRoute
       ? `http://localhost:${port}?embedded=true#/overview?mode=preview${slideNoQuery}`

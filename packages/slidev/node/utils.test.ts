@@ -1,5 +1,8 @@
+import type { Connect } from 'vite'
+import { Buffer } from 'node:buffer'
+import { Readable } from 'node:stream'
 import { describe, expect, it } from 'vitest'
-import { applyNotesAutoRuby, isPathInsideRoots } from './utils'
+import { applyNotesAutoRuby, getBodyJson, isPathInsideRoots } from './utils'
 
 describe('isPathInsideRoots', () => {
   it('accepts a path nested inside a root', () => {
@@ -48,5 +51,23 @@ describe('applyNotesAutoRuby', () => {
 
   it('returns the input untouched when there is no key', () => {
     expect(applyNotesAutoRuby('unchanged', {})).toBe('unchanged')
+  })
+})
+
+describe('getBodyJson', () => {
+  function request(...chunks: Buffer[]) {
+    return Readable.from(chunks, { objectMode: false }) as Connect.IncomingMessage
+  }
+
+  it('parses a body that is split inside a character', async () => {
+    const body = Buffer.from(JSON.stringify({ note: '日本語' }))
+    for (let i = 1; i < body.length; i++) {
+      expect(await getBodyJson(request(body.subarray(0, i), body.subarray(i))))
+        .toEqual({ note: '日本語' })
+    }
+  })
+
+  it('rejects a body that is not JSON', async () => {
+    await expect(getBodyJson(request(Buffer.from('{')))).rejects.toThrow(SyntaxError)
   })
 })

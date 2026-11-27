@@ -23,7 +23,9 @@ export function parseRangeString(total: number, rangeStr?: string) {
     else {
       const [start, end] = part.split('-', 2)
       indexes.push(
-        ...range(+start, !end ? (total + 1) : (+end + 1)),
+        ...range(+start, !end
+          ? (total + 1)
+          : (+end + 1)),
       )
     }
   }
@@ -39,7 +41,9 @@ export type ExportClickStep = number | [number, number]
 function parseExportClicks(value: unknown): { steps: boolean | ExportClickStep[], invalid: string[] } {
   if (value === true)
     return { steps: true, invalid: [] }
-  const parts = (Array.isArray(value) ? value : [value])
+  const parts = (Array.isArray(value)
+    ? value
+    : [value])
     .flatMap(part => String(part).split(/[,;]/g))
     .map(part => part.trim())
     .filter(Boolean)
@@ -61,15 +65,26 @@ function parseExportClicks(value: unknown): { steps: boolean | ExportClickStep[]
       continue
     }
     const [, start, end] = match
-    if (end === undefined)
+    if (end === undefined) {
       steps.push(+start)
-    else
-      steps.push([+start, end === '' ? Infinity : +end])
+    }
+    else {
+      steps.push([
+        +start,
+        end === ''
+          ? Infinity
+          : +end,
+      ])
+    }
   }
   // `last` alone is the same as not exporting clicks
   if (steps.length === 1 && steps[0] === Infinity)
     return { steps: false, invalid }
-  steps.sort((a, b) => (typeof a === 'number' ? a : a[0]) - (typeof b === 'number' ? b : b[0]))
+  steps.sort((a, b) => (typeof a === 'number'
+    ? a
+    : a[0]) - (typeof b === 'number'
+    ? b
+    : b[0]))
   return { steps, invalid }
 }
 
@@ -111,8 +126,11 @@ export function getExportClickSteps(exportClicks: boolean | ExportClickStep[], c
   if (exportClicks === true)
     return range(clicksStart, total + 1)
   const steps = exportClicks.flatMap((step) => {
-    if (typeof step === 'number')
-      return [clamp(step, clicksStart, total)]
+    if (typeof step === 'number') {
+      return [
+        clamp(step, clicksStart, total),
+      ]
+    }
     return range(clamp(step[0], clicksStart, total), clamp(step[1], clicksStart, total) + 1)
   })
   return uniq(steps).sort((a, b) => a - b)

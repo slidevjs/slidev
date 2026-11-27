@@ -226,7 +226,7 @@ hideInToc: true
 ---
 ```
 
-Titles are displayed using the [`<Titles>` component](#titles)
+Titles are displayed using the [`<TitleRenderer>` component](#titlerenderer)
 
 ### Usage
 

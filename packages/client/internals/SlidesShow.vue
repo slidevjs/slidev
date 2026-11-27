@@ -93,6 +93,7 @@ function onAfterLeave() {
     <template v-for="route of loadedRoutes" :key="route.no">
       <SlideWrapper
         v-show="route === currentSlideRoute"
+        :class="{ 'slidev-page-active': route === currentSlideRoute }"
         :clicks-context="isPrintMode && resolveExportClicks(route.meta.slide.frontmatter.exportClicks, isPrintWithClicks) === false ? createFixedClicks(route, CLICKS_MAX) : getPrimaryClicks(route)"
         :route="route"
         :render-context="renderContext"

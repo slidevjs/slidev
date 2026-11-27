@@ -34,7 +34,9 @@ provideLocal(injectionSlideZoom, zoom)
 
 const style = computed<CSSProperties>(() => ({
   'user-select': configs.selectable ? undefined : 'none',
-  '--slidev-slide-zoom-scale': zoom.value === 1 ? undefined : zoom.value,
+  '--slidev-slide-zoom-scale': zoom.value === 1
+    ? undefined
+    : zoom.value,
 }))
 </script>
 

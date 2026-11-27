@@ -23,8 +23,12 @@ export function usePrintClicks(route: SlideRoute) {
       return 0
     if (!steps.length)
       return null
-    const first = Math.min(...steps.map(step => typeof step === 'number' ? step : step[0]))
-    return Number.isFinite(first) ? first : CLICKS_MAX
+    const first = Math.min(...steps.map(step => typeof step === 'number'
+      ? step
+      : step[0]))
+    return Number.isFinite(first)
+      ? first
+      : CLICKS_MAX
   })
 
   const clicks0 = createFixedClicks(route, () => firstClick.value ?? CLICKS_MAX)

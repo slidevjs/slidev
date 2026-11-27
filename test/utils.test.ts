@@ -30,11 +30,22 @@ describe('utils', () => {
     expect(resolveExportClicks('last', true)).toBe(false)
     expect(resolveExportClicks(true, false)).toBe(true)
     expect(resolveExportClicks([5, 0, 2, 2], false)).toEqual([0, 2, 2, 5])
-    expect(resolveExportClicks('0,2-3', false)).toEqual([0, [2, 3]])
-    expect(resolveExportClicks('3; 1-2', false)).toEqual([[1, 2], 3])
-    expect(resolveExportClicks(['0', '2-3'], false)).toEqual([0, [2, 3]])
+    expect(resolveExportClicks('0,2-3', false)).toEqual([
+      0,
+      [2, 3],
+    ])
+    expect(resolveExportClicks('3; 1-2', false)).toEqual([
+      [1, 2],
+      3,
+    ])
+    expect(resolveExportClicks(['0', '2-3'], false)).toEqual([
+      0,
+      [2, 3],
+    ])
     expect(resolveExportClicks([0, 'last'], false)).toEqual([0, Infinity])
-    expect(resolveExportClicks('2-', false)).toEqual([[2, Infinity]])
+    expect(resolveExportClicks('2-', false)).toEqual([
+      [2, Infinity],
+    ])
     expect(resolveExportClicks('all', false)).toBe(true)
     expect(resolveExportClicks('none', true)).toEqual([])
     expect(resolveExportClicks([], true)).toEqual([])
@@ -60,8 +71,13 @@ describe('utils', () => {
     expect(getExportClickSteps([0, 2, 5, 99], 1, 3)).toEqual([1, 2, 3])
     expect(getExportClickSteps([0, 2, 5], 0, 0)).toEqual([0])
     expect(getExportClickSteps([0, Infinity], 0, 3)).toEqual([0, 3])
-    expect(getExportClickSteps([[2, Infinity]], 0, 4)).toEqual([2, 3, 4])
-    expect(getExportClickSteps([[0, 1], [1, 2]], 0, 4)).toEqual([0, 1, 2])
+    expect(getExportClickSteps([
+      [2, Infinity],
+    ], 0, 4)).toEqual([2, 3, 4])
+    expect(getExportClickSteps([
+      [0, 1],
+      [1, 2],
+    ], 0, 4)).toEqual([0, 1, 2])
   })
 
   it('aspect-ratio', () => {
@@ -104,6 +120,16 @@ describe('utils', () => {
         provider: 'google',
       } as ResolvedFontOptions),
     ).toMatchSnapshot()
+  })
+
+  it('google-fonts with quoted family names', () => {
+    expect(
+      generateGoogleFontsUrl({
+        webfonts: ['"Helvetica Neue"', '\'PT Serif\''],
+        weights: ['400'],
+        provider: 'google',
+      } as ResolvedFontOptions),
+    ).toBe('https://fonts.googleapis.com/css2?family=Helvetica+Neue:wght@400&family=PT+Serif:wght@400&display=swap')
   })
 
   it('coollabs-fonts', () => {

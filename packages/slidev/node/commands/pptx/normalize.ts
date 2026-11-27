@@ -102,8 +102,11 @@ export function parseLength(value: string | undefined, basis?: number): number {
   const n = Number.parseFloat(value)
   if (Number.isNaN(n))
     return 0
-  if (value.trim().endsWith('%'))
-    return basis === undefined ? 0 : (n / 100) * basis
+  if (value.trim().endsWith('%')) {
+    return basis === undefined
+      ? 0
+      : (n / 100) * basis
+  }
   return n
 }
 
@@ -136,7 +139,11 @@ function borderOf(style: RawStyle, side: 'Top' | 'Right' | 'Bottom' | 'Left', un
   return {
     width,
     color: color!,
-    style: lineStyle === 'dashed' ? 'dashed' : lineStyle === 'dotted' ? 'dotted' : 'solid',
+    style: lineStyle === 'dashed'
+      ? 'dashed'
+      : lineStyle === 'dotted'
+        ? 'dotted'
+        : 'solid',
   }
 }
 
@@ -317,7 +324,9 @@ function lineGroups(rects: Rect[]): { top: number, bottom: number }[] {
   const groups: { top: number, bottom: number }[] = []
   for (const rect of [...rects].sort((a, b) => a.y - b.y)) {
     const current = groups[groups.length - 1]
-    const overlap = current ? Math.min(current.bottom, rect.y + rect.h) - Math.max(current.top, rect.y) : 0
+    const overlap = current
+      ? Math.min(current.bottom, rect.y + rect.h) - Math.max(current.top, rect.y)
+      : 0
     if (current && overlap > 0.5 * Math.min(rect.h, current.bottom - current.top)) {
       current.bottom = Math.max(current.bottom, rect.y + rect.h)
       current.top = Math.min(current.top, rect.y)
@@ -345,7 +354,9 @@ export function measuredLineHeight(rects: Rect[]): number | undefined {
   const gaps = groups.slice(1).map((group, index) => group.top - groups[index].top)
   gaps.sort((a, b) => a - b)
   const median = gaps[Math.floor(gaps.length / 2)]
-  return median > 0 ? median : undefined
+  return median > 0
+    ? median
+    : undefined
 }
 
 /**
@@ -359,7 +370,9 @@ export function parseShadow(value: string | undefined, unparsed?: UnparsedColors
   const color = parseColor(value.match(/^[a-z-]+\([^)]+\)/i)?.[0], unparsed)
   if (!isVisible(color))
     return undefined
-  const lengths = [...value.matchAll(/(-?[\d.]+)px/g)].map(m => Number(m[1]))
+  const lengths = [
+    ...value.matchAll(/(-?[\d.]+)px/g),
+  ].map(m => Number(m[1]))
   if (lengths.length < 2)
     return undefined
   const [x, y, blur = 0] = lengths
@@ -411,7 +424,12 @@ function buildSlideIr(
       const style = styleOf(current)
       if (style && style.position !== 'static' && style.position !== '') {
         const z = Number.parseInt(style.zIndex, 10)
-        return { tier: 1, z: Number.isNaN(z) ? 0 : z }
+        return {
+          tier: 1,
+          z: Number.isNaN(z)
+            ? 0
+            : z,
+        }
       }
       current = byId.get(current.parent)
     }
@@ -424,7 +442,9 @@ function buildSlideIr(
   }
 
   function styleOf(node: RawNode): RawStyle | undefined {
-    return node.style >= 0 ? styles[node.style] : undefined
+    return node.style >= 0
+      ? styles[node.style]
+      : undefined
   }
 
   function childrenOf(id: number): RawNode[] {
@@ -514,7 +534,12 @@ function buildSlideIr(
         rasterArea += visible.w * visible.h
     }
 
-    return { nodes, requests, rasterArea, textCount: texts.length }
+    return {
+      nodes,
+      requests,
+      rasterArea,
+      textCount: texts.length,
+    }
   }
 
   /** Whether a picture was actually emitted for this element. */
@@ -609,7 +634,9 @@ function buildSlideIr(
     const shadow = parseShadow(style.boxShadow, unparsed)
     // One shape per line fragment for a wrapped inline element, as the browser
     // paints; one rect over the union would fill the ragged line ends.
-    const boxes = node.fragments?.length ? node.fragments : [node.rect]
+    const boxes = node.fragments?.length
+      ? node.fragments
+      : [node.rect]
     for (const source of boxes) {
       const rect = clipToSlide(source, size)
       if (!rect)
@@ -647,7 +674,9 @@ function buildSlideIr(
           align: alignOf(style),
           valign: 'middle',
           lineHeight: resolveLineHeight(style),
-          runs: [runFrom(node.text, style, fontResolution, unparsed)],
+          runs: [
+            runFrom(node.text, style, fontResolution, unparsed),
+          ],
         }, node)
       }
       return
@@ -703,7 +732,9 @@ function buildSlideIr(
         // the top it rides above its own item's first line.
         valign: 'middle',
         lineHeight: resolveLineHeight(style),
-        runs: [runFrom(node.marker, style, fontResolution, unparsed, undefined, node.opacity)],
+        runs: [
+          runFrom(node.marker, style, fontResolution, unparsed, undefined, node.opacity),
+        ],
       }, node)
     }
 
@@ -745,7 +776,9 @@ function buildSlideIr(
     // an ordinary sentence carrying one inline `<code>` in one editable box.
     // Glyph bounds for a text node: its element rect is not where its ink is.
     const lineBox = (child: RawNode): Rect =>
-      child.glyphRects?.length ? boundsOf(child.glyphRects) : child.rect
+      child.glyphRects?.length
+        ? boundsOf(child.glyphRects)
+        : child.rect
     const placed = children.filter(child => isInline(child) && lineBox(child).h > 0)
     // By overlap, not by matching tops: a padded chip's box starts above the
     // glyph bounds of the text beside it, so equal tops never held here.
@@ -843,7 +876,11 @@ function buildSlideIr(
       if (borderOf(style, side, unparsed))
         return undefined
     }
-    return bottom.style === 'dashed' ? 'dash' : bottom.style === 'dotted' ? 'dotted' : 'sng'
+    return bottom.style === 'dashed'
+      ? 'dash'
+      : bottom.style === 'dotted'
+        ? 'dotted'
+        : 'sng'
   }
 
   /** The underline rule an ancestor of this text node draws, if any. */
@@ -896,7 +933,10 @@ function buildSlideIr(
     const addRun = (text: string, style: RawStyle, node: RawNode) => {
       // One empty run per surplus break, so the blank lines survive.
       while (pendingBreaks > 1 && runs.length) {
-        runs.push({ ...runFrom('', style, fontResolution, unparsed, undefined, node.opacity), breakBefore: true })
+        runs.push({
+          ...runFrom('', style, fontResolution, unparsed, undefined, node.opacity),
+          breakBefore: true,
+        })
         pendingBreaks--
       }
       const newRun = runFrom(text, style, fontResolution, unparsed, linkFor(node), node.opacity, ruleOver(node))
@@ -966,7 +1006,9 @@ function buildSlideIr(
     }
 
     const container = byId.get(group[0].parent)
-    const containerStyle = container ? styleOf(container) : undefined
+    const containerStyle = container
+      ? styleOf(container)
+      : undefined
     const anchorStyle = containerStyle ?? inheritedStyle(textNodes[0])!
 
     const glyphs = boundsOf(rects)
@@ -990,8 +1032,15 @@ function buildSlideIr(
       // Grown about the anchor, so the text does not slide sideways.
       const x = align === 'center'
         ? box.x - extra / 2
-        : align === 'right' ? box.x - extra : box.x
-      return { x, y: box.y, w: box.w + extra, h: box.h }
+        : align === 'right'
+          ? box.x - extra
+          : box.x
+      return {
+        x,
+        y: box.y,
+        w: box.w + extra,
+        h: box.h,
+      }
     }
     let valign: IrText['valign']
 
@@ -1011,7 +1060,12 @@ function buildSlideIr(
       const right = parseLength(containerStyle.paddingRight)
       const width = container.rect.w - left - right
       if (width > 0) {
-        rect = withHeadroom({ x: container.rect.x + left, y: glyphs.y, w: width, h: glyphs.h })
+        rect = withHeadroom({
+          x: container.rect.x + left,
+          y: glyphs.y,
+          w: width,
+          h: glyphs.h,
+        })
       }
     }
 
@@ -1084,5 +1138,9 @@ export function normalize(snapshot: RawSnapshot, options: NormalizeOptions): Nor
     slides.push(ir)
   }
 
-  return { slides, rasterRequests, unparsedColors: [...unparsedColors].sort() }
+  return {
+    slides,
+    rasterRequests,
+    unparsedColors: [...unparsedColors].sort(),
+  }
 }

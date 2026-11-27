@@ -27,10 +27,14 @@ export function createLayoutWrapperPlugin(
         const index = +no - 1
         const layouts = await utils.getLayouts()
         const rawLayoutName = data.slides[index]?.frontmatter?.layout ?? data.slides[0]?.frontmatter?.defaults?.layout
-        let layoutName = rawLayoutName || (index === 0 ? 'cover' : 'default')
+        let layoutName = rawLayoutName || (index === 0
+          ? 'cover'
+          : 'default')
         if (!layouts[layoutName]) {
           console.error(red(`\nUnknown layout "${bold(layoutName)}".${yellow(' Available layouts are:')}`)
-            + Object.keys(layouts).map((i, idx) => (idx % 3 === 0 ? '\n    ' : '') + gray(i.padEnd(15, ' '))).join('  '))
+            + Object.keys(layouts).map((i, idx) => (idx % 3 === 0
+              ? '\n    '
+              : '') + gray(i.padEnd(15, ' '))).join('  '))
           console.error()
           layoutName = 'default'
         }
