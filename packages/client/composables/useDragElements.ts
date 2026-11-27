@@ -14,6 +14,20 @@ import { useDynamicSlideInfo } from './useSlideInfo'
 const RE_NEWLINE = /\r?\n/g
 const RE_POS_ATTR = /pos=".*?"/
 
+/**
+ * The effective `zoom` of the element itself (e.g. from a UnoCSS class).
+ * CSS zoom scales the element's box, which would otherwise offset the drag box.
+ */
+function getElementZoom(el: HTMLElement): number {
+  const raw = getComputedStyle(el).getPropertyValue('zoom')
+  const zoom = Number.parseFloat(raw) / (raw.endsWith('%')
+    ? 100
+    : 1)
+  if (!Number.isFinite(zoom) || zoom <= 0)
+    return 1
+  return zoom
+}
+
 export type DragElementDataSource = 'frontmatter' | 'prop' | 'directive'
 /**
  * Markdown source position, injected by markdown-it plugin
@@ -160,17 +174,21 @@ export function useDragElement(directive: DirectiveBinding | null, posRaw?: stri
   const width = ref(pos[2])
   const x0 = ref(pos[0] + pos[2] / 2)
 
-  const rotate = ref(isArrow ? 0 : (pos[4] ?? 0))
+  const rotate = ref(isArrow
+    ? 0
+    : (pos[4] ?? 0))
   const rotateRad = computed(() => rotate.value * Math.PI / 180)
   const rotateSin = computed(() => Math.sin(rotateRad.value))
   const rotateCos = computed(() => Math.cos(rotateRad.value))
 
   const container = ref<HTMLElement>()
+  const elementZoom = ref(1)
   const bounds = ref({ left: 0, top: 0, width: 0, height: 0 })
   const actualHeight = ref(0)
   function updateBounds() {
     if (!container.value)
       return
+    elementZoom.value = getElementZoom(container.value)
     const rect = container.value.getBoundingClientRect()
     bounds.value = {
       left: rect.left / zoom.value,
@@ -189,7 +207,9 @@ export function useDragElement(directive: DirectiveBinding | null, posRaw?: stri
         set: v => !autoHeight && (configuredHeight.value = v),
       })
     : configuredHeight
-  const configuredY0 = autoHeight ? ref(pos[1]) : ref(pos[1] + pos[3] / 2)
+  const configuredY0 = autoHeight
+    ? ref(pos[1])
+    : ref(pos[1] + pos[3] / 2)
   const y0 = autoHeight
     ? computed({
         get: () => configuredY0.value + height.value / 2,
@@ -198,14 +218,19 @@ export function useDragElement(directive: DirectiveBinding | null, posRaw?: stri
     : configuredY0
 
   const containerStyle = computed(() => {
+    // x0/y0/width/height are in slide coordinates, while a `zoom` on the
+    // element scales its box in the slide coordinate space as well
+    const zoomScale = elementZoom.value
     return Number.isFinite(x0.value)
       ? {
         position: 'absolute',
         zIndex: 100,
-        left: `${x0.value - width.value / 2}px`,
-        top: `${y0.value - height.value / 2}px`,
-        width: `${width.value}px`,
-        height: autoHeight ? undefined : `${height.value}px`,
+        left: `${(x0.value - width.value / 2) / zoomScale}px`,
+        top: `${(y0.value - height.value / 2) / zoomScale}px`,
+        width: `${width.value / zoomScale}px`,
+        height: autoHeight
+          ? undefined
+          : `${height.value / zoomScale}px`,
         transformOrigin: 'center center',
         transform: `rotate(${rotate.value}deg)`,
       } satisfies CSSProperties
@@ -220,10 +245,14 @@ export function useDragElement(directive: DirectiveBinding | null, posRaw?: stri
       [x0, y0, width, height, rotate],
       ([x0, y0, w, h, r]) => {
         let posStr = [x0 - w / 2, y0 - h / 2, w].map(Math.round).join()
-        if (autoHeight)
-          posStr += dataSource === 'directive' ? ',NaN' : ',_'
-        else
+        if (autoHeight) {
+          posStr += dataSource === 'directive'
+            ? ',NaN'
+            : ',_'
+        }
+        else {
           posStr += `,${Math.round(h)}`
+        }
         if (Math.round(r) !== 0)
           posStr += `,${Math.round(r)}`
 
@@ -271,7 +300,9 @@ export function useDragElement(directive: DirectiveBinding | null, posRaw?: stri
       state.stopDragging()
     },
     startDragging(): void {
-      if (!enabled)
+      // Positions are only saved by the dev editor; elsewhere (static builds)
+      // a stray double-click or double-tap would move an element on screen.
+      if (!enabled || !(__DEV__ && __SLIDEV_FEATURE_EDITOR__))
         return
       updateBounds()
       activeDragElement.value = state

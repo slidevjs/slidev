@@ -1,61 +1,52 @@
 import { describe, expect, it } from 'vitest'
-import { resolveFonts } from './config'
+import { resolveConfig, verifyConfig } from './config'
 
-describe('resolveFonts', () => {
-  it('defaults the body font role to sans', () => {
-    const fonts = resolveFonts()
-
-    expect(fonts.body).toBe('sans')
-    expect(fonts.body && fonts[fonts.body]).toEqual(fonts.sans)
+describe('resolveConfig colorSchema', () => {
+  it.each(['light dark', 'dark light'] as const)('accepts "%s"', (colorSchema) => {
+    expect(resolveConfig({ colorSchema }).colorSchema).toBe(colorSchema)
   })
 
-  it('supports serif as the body font role', () => {
-    const fonts = resolveFonts({
-      body: 'serif',
-      sans: 'Inter',
-      serif: 'Merriweather',
-      mono: 'Fira Code',
-    })
-
-    expect(fonts.body).toBe('serif')
-    expect(fonts[fonts.body]).toEqual(fonts.serif)
-    expect(fonts.serif[0]).toBe('"Merriweather"')
+  it.each(['auto', 'light', 'dark'] as const)('preserves "%s"', (colorSchema) => {
+    expect(resolveConfig({ colorSchema }).colorSchema).toBe(colorSchema)
   })
 
-  it('supports mono as the body font role', () => {
-    const fonts = resolveFonts({
-      body: 'mono',
-      sans: 'Inter',
-      serif: 'Merriweather',
-      mono: 'Fira Code',
-    })
-
-    expect(fonts.body).toBe('mono')
-    expect(fonts[fonts.body]).toEqual(fonts.mono)
-    expect(fonts.mono[0]).toBe('"Fira Code"')
+  it('defaults to auto', () => {
+    expect(resolveConfig({}).colorSchema).toBe('auto')
   })
 
-  it('preserves the sans, serif, and mono stacks independently', () => {
-    const fonts = resolveFonts({
-      body: 'serif',
-      sans: 'Inter',
-      serif: 'Merriweather',
-      mono: 'Fira Code',
-    })
+  it('continues to use a single-scheme theme default when the configured scheme is auto', () => {
+    expect(resolveConfig({ colorSchema: 'auto' }, { colorSchema: 'dark' }).colorSchema).toBe('dark')
+  })
+})
 
-    expect(fonts.sans[0]).toBe('"Inter"')
-    expect(fonts.serif[0]).toBe('"Merriweather"')
-    expect(fonts.mono[0]).toBe('"Fira Code"')
+describe('verifyConfig colorSchema', () => {
+  it.each([
+    ['light', 'dark'],
+    ['dark', 'light'],
+    ['light dark', 'dark'],
+    ['dark light', 'light'],
+  ] as const)('warns when "%s" is used with a %s-only theme', (colorSchema, themeColorSchema) => {
+    const config = resolveConfig({ colorSchema })
+    const warnings: string[] = []
+
+    verifyConfig(config, { colorSchema: themeColorSchema }, warning => warnings.push(warning))
+
+    expect(warnings).toEqual([
+      `Color schema "${colorSchema}" is not supported by the theme`,
+    ])
   })
 
-  it('keeps the configured font stack when fallbacks are disabled', () => {
-    const fonts = resolveFonts({
-      body: 'serif',
-      serif: 'Merriweather',
-      fallbacks: false,
-    })
+  it.each([
+    ['light', 'light'],
+    ['dark', 'dark'],
+    ['light dark', 'both'],
+    ['dark light', 'both'],
+  ] as const)('does not warn when "%s" is supported by a %s theme', (colorSchema, themeColorSchema) => {
+    const config = resolveConfig({ colorSchema })
+    const warnings: string[] = []
 
-    expect(fonts.body).toBe('serif')
-    expect(fonts.serif).toEqual(['Merriweather'])
+    verifyConfig(config, { colorSchema: themeColorSchema }, warning => warnings.push(warning))
+
+    expect(warnings).toEqual([])
   })
 })

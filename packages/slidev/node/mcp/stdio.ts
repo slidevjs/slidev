@@ -18,7 +18,10 @@ export async function startMcpStdioServer(entry: string) {
     entry,
     // Reload from disk on every tool call, as the files may be edited
     // externally between calls
-    getData: () => parser.load({ userRoot, roots: [userRoot] }, entry),
+    getData: () => parser.load({
+      userRoot,
+      roots: [userRoot],
+    }, entry),
   })
   await server.connect(new StdioServerTransport())
 }

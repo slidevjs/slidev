@@ -10,8 +10,7 @@ body,
   overflow: hidden;
   print-color-adjust: exact;
   -webkit-print-color-adjust: exact;
-  --uno: bg-main;
-  font-family: var(--slidev-body-font);
+  --uno: font-body bg-main;
 }
 
 html {
