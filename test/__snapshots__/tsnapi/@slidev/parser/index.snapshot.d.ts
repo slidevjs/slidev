@@ -38,6 +38,7 @@ export declare function prettify(_: SlidevMarkdown): SlidevMarkdown;
 export declare function prettifySlide(_: SourceSlideInfo): SourceSlideInfo;
 export declare function resolveConfig(_: any, _?: SlidevThemeMeta, _?: string, _?: boolean): SlidevConfig;
 export declare function resolveFonts(_?: FontOptions): ResolvedFontOptions;
+export declare function resolveHandoutOptions(_?: HandoutOptions | ResolvedHandoutOptions | undefined): ResolvedHandoutOptions;
 export declare function stringify(_: SlidevMarkdown): string;
 export declare function stringifySlide(_: SourceSlideInfo, _?: number): string;
 export declare function verifyConfig(_: SlidevConfig, _?: SlidevThemeMeta, _?: (_: string) => void): void;

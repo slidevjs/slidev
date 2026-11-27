@@ -19,6 +19,7 @@ export function prettify(_) {}
 export function prettifySlide(_) {}
 export function resolveConfig(_, _, _, _) {}
 export function resolveFonts(_) {}
+export function resolveHandoutOptions(_) {}
 export async function save(_) {}
 export function stringify(_) {}
 export function stringifySlide(_, _) {}

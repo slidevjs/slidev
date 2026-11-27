@@ -74,12 +74,26 @@ export default function setupRoutes() {
     )
   }
 
+  // Enable the browser exporter UI only when configured
   if (__SLIDEV_FEATURE_BROWSER_EXPORTER__) {
     routes.push(
       {
         name: 'export',
         path: '/export/:no?',
         component: () => import('../pages/export.vue'),
+        beforeEnter: passwordGuard,
+      },
+    )
+  }
+
+  // Handout print route is needed for both the browser exporter and
+  // the CLI exporter (print mode).
+  if (__SLIDEV_FEATURE_BROWSER_EXPORTER__ || __SLIDEV_FEATURE_PRINT__) {
+    routes.push(
+      {
+        name: 'handout',
+        path: '/handout',
+        component: () => import('../pages/handout/print.vue'),
         beforeEnter: passwordGuard,
       },
     )

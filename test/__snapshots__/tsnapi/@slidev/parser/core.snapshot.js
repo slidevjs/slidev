@@ -16,6 +16,7 @@ export function prettify(_) {}
 export function prettifySlide(_) {}
 export function resolveConfig(_, _, _, _) {}
 export function resolveFonts(_) {}
+export function resolveHandoutOptions(_) {}
 export function stringify(_) {}
 export function stringifySlide(_, _) {}
 export function verifyConfig(_, _, _) {}
