@@ -268,6 +268,7 @@ export async function exportSlides({
       bottom: '1cm',
       left: '1.5cm',
     },
+    paginateOverflow: false,
   }
   const handoutConfig = handoutOptions || fallbackHandout
   const context = await browser.newContext({
