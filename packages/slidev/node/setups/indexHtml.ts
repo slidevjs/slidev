@@ -35,7 +35,9 @@ function collectPreloadImages(data: Omit<ResolvedSlidevOptions, 'utils'>['data']
 
   const seen = new Set<string>()
   const links: ResolvableLink[] = []
-  const basePrefix = base ? base.replace(RE_TRAILING_SLASH, '') : ''
+  const basePrefix = base
+    ? base.replace(RE_TRAILING_SLASH, '')
+    : ''
 
   for (const slide of data.slides) {
     const images = slide.images || slide.source?.images
@@ -47,7 +49,9 @@ function collectPreloadImages(data: Omit<ResolvedSlidevOptions, 'utils'>['data']
       seen.add(url)
       const href = url.startsWith('http') || url.startsWith('//')
         ? url
-        : `${basePrefix}${url.startsWith('/') ? url : `/${url}`}`
+        : `${basePrefix}${url.startsWith('/')
+          ? url
+          : `/${url}`}`
       links.push({ rel: 'preload', as: 'image', href })
     }
   }
@@ -90,10 +94,18 @@ export default async function setupIndexHtml({ mode, entry, clientRoot, userRoot
   if (data.config.fonts.webfonts.length) {
     const { provider } = data.config.fonts
     if (provider === 'google') {
-      webFontsLink.push({ rel: 'stylesheet', href: generateGoogleFontsUrl(data.config.fonts), type: 'text/css' })
+      webFontsLink.push({
+        rel: 'stylesheet',
+        href: generateGoogleFontsUrl(data.config.fonts),
+        type: 'text/css',
+      })
     }
     else if (provider === 'coollabs') {
-      webFontsLink.push({ rel: 'stylesheet', href: generateCoollabsFontsUrl(data.config.fonts), type: 'text/css' })
+      webFontsLink.push({
+        rel: 'stylesheet',
+        href: generateCoollabsFontsUrl(data.config.fonts),
+        type: 'text/css',
+      })
     }
   }
 
@@ -109,24 +121,47 @@ export default async function setupIndexHtml({ mode, entry, clientRoot, userRoot
         : undefined
 
   const title = getSlideTitle(data)
-  const description = info ? toAttrValue(info) : null
+  const description = info
+    ? toAttrValue(info)
+    : null
   const unhead = createHead({
     init: [
       {
-        htmlAttrs: data.headmatter.lang ? { lang: data.headmatter.lang as string } : undefined,
+        htmlAttrs: data.headmatter.lang
+          ? { lang: data.headmatter.lang as string }
+          : undefined,
         title,
         link: [
-          data.config.favicon ? { rel: 'icon', href: data.config.favicon } : null,
+          data.config.favicon
+            ? { rel: 'icon', href: data.config.favicon }
+            : null,
           ...webFontsLink,
           ...collectPreloadImages(data, base),
         ].filter(x => x),
         meta: [
           { 'http-equiv': 'Content-Type', 'content': 'text/html; charset=UTF-8' },
           { property: 'slidev:version', content: version },
-          { property: 'slidev:entry', content: mode === 'dev' ? slash(entry) : null },
+          {
+            property: 'slidev:entry',
+            content: mode === 'dev'
+              ? slash(entry)
+              : null,
+          },
           { name: 'description', content: description },
-          { name: 'author', content: author ? toAttrValue(author) : null },
-          { name: 'keywords', content: keywords ? toAttrValue(Array.isArray(keywords) ? keywords.join(', ') : keywords) : null },
+          {
+            name: 'author',
+            content: author
+              ? toAttrValue(author)
+              : null,
+          },
+          {
+            name: 'keywords',
+            content: keywords
+              ? toAttrValue(Array.isArray(keywords)
+                  ? keywords.join(', ')
+                  : keywords)
+              : null,
+          },
           { property: 'og:title', content: seoMeta.ogTitle || title },
           { property: 'og:description', content: seoMeta.ogDescription || description },
           { property: 'og:image', content: ogImage },
@@ -148,7 +183,9 @@ export default async function setupIndexHtml({ mode, entry, clientRoot, userRoot
     main = main.replace('__ENTRY__', mainUrl)
   }
   else {
-    const basePrefix = base ? base.slice(0, -1) : ''
+    const basePrefix = base
+      ? base.slice(0, -1)
+      : ''
     main = main.replace('__ENTRY__', encodeURI(basePrefix + mainUrl))
   }
 
