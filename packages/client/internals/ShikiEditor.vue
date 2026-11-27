@@ -1,12 +1,16 @@
 <script setup lang="ts">
-import { shallowRef } from 'vue'
+import { ref, shallowRef } from 'vue'
 import { useIME } from '../composables/useIME'
+import { useTextDirection } from '../composables/useTextDirection'
 
 const props = defineProps<{
   placeholder?: string
 }>()
 const content = defineModel<string>({ required: true })
 const { composingContent, onInput, onCompositionEnd } = useIME(content)
+
+const textareaEl = ref<HTMLTextAreaElement | null>(null)
+useTextDirection(textareaEl)
 
 const highlight = shallowRef<((code: string) => string) | null>(null)
 import('../setup/shiki').then(async (m) => {
@@ -24,7 +28,7 @@ import('../setup/shiki').then(async (m) => {
     <div v-if="highlight" class="relative w-full h-max min-h-full">
       <div class="relative w-full h-max" v-html="`${highlight(composingContent)}&nbsp;`" />
       <textarea
-        v-model="composingContent" :placeholder="props.placeholder"
+        ref="textareaEl" v-model="composingContent" :placeholder="props.placeholder"
         class="absolute inset-0 resize-none text-transparent bg-transparent focus:outline-none caret-black dark:caret-white overflow-y-hidden"
         @input="onInput"
         @compositionend="onCompositionEnd"
