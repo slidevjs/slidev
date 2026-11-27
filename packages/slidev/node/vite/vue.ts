@@ -2,6 +2,7 @@ import type { ResolvedSlidevOptions, SlidevPluginOptions } from '@slidev/types'
 import type { Plugin } from 'vite'
 import Vue from '@vitejs/plugin-vue'
 import VueJsx from '@vitejs/plugin-vue-jsx'
+import { transformVClickMount } from './vClickMount'
 
 const RE_VUE_EXT = /\.vue$/
 const RE_VUE_QUERY_VUE = /\.vue\?vue/
@@ -50,13 +51,23 @@ export async function createVuePlugin(
   } = pluginOptions
 
   const VuePlugin = Vue({
-    include: [RE_VUE_EXT, RE_VUE_QUERY_VUE, RE_VUE_QUERY_V, RE_MD_EXT, RE_MD_QUERY_VUE],
+    include: [
+      RE_VUE_EXT,
+      RE_VUE_QUERY_VUE,
+      RE_VUE_QUERY_V,
+      RE_MD_EXT,
+      RE_MD_QUERY_VUE,
+    ],
     exclude: [],
     ...vueOptions,
     template: {
       ...vueOptions?.template,
       compilerOptions: {
         ...vueOptions?.template?.compilerOptions,
+        nodeTransforms: [
+          transformVClickMount,
+          ...vueOptions?.template?.compilerOptions?.nodeTransforms ?? [],
+        ],
         isCustomElement(tag) {
           return customElements.has(tag) || vueOptions?.template?.compilerOptions?.isCustomElement?.(tag)
         },

@@ -35,14 +35,24 @@ export async function resolveOptions(
 
   // Load theme data first, because it may affect the config
   let themeRaw = entryOptions.theme || initialLoaded.headmatter.theme as string | null | undefined
-  themeRaw = themeRaw === null ? 'none' : (themeRaw || 'default')
+  themeRaw = themeRaw === null
+    ? 'none'
+    : (themeRaw || 'default')
   const [theme, themeRoot] = await resolveTheme(themeRaw, entry)
-  const themeRoots = themeRoot ? [themeRoot] : []
-  const themeMeta = themeRoot ? await getThemeMeta(theme, themeRoot) : undefined
+  const themeRoots = themeRoot
+    ? [themeRoot]
+    : []
+  const themeMeta = themeRoot
+    ? await getThemeMeta(theme, themeRoot)
+    : undefined
 
   const initialConfig = parser.resolveConfig(initialLoaded.headmatter, themeMeta, entryOptions.entry)
   const addonRoots = await resolveAddons(initialConfig.addons)
-  const roots = uniq([...themeRoots, ...addonRoots, rootsInfo.userRoot])
+  const roots = uniq([
+    ...themeRoots,
+    ...addonRoots,
+    rootsInfo.userRoot,
+  ])
   const loaded = await parser.load(
     {
       userRoot: rootsInfo.userRoot,
@@ -167,6 +177,9 @@ function getDefine(options: Omit<ResolvedSlidevOptions, 'utils'>): Record<string
       __SLIDEV_FEATURE_PWA__: matchMode(options.data.config.pwa),
       __SLIDEV_HAS_SERVER__: options.mode !== 'build',
     },
-    (v, k) => [v, JSON.stringify(k)],
+    (v, k) => [
+      v,
+      JSON.stringify(k),
+    ],
   )
 }

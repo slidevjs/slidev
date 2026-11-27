@@ -4,7 +4,9 @@ export const templateTitleRendererMd: VirtualModuleTemplate = {
   id: '/@slidev/title-renderer.md',
   getContent({ data }) {
     const lines = data.slides
-      .map(({ title }, i) => `<template ${i === 0 ? 'v-if' : 'v-else-if'}="no === ${i + 1}">\n\n${title}\n\n</template>`)
+      .map(({ title }, i) => `<template ${i === 0
+        ? 'v-if'
+        : 'v-else-if'}="no === ${i + 1}">\n\n${title}\n\n</template>`)
 
     lines.push(
       `<script setup lang="ts">`,
