@@ -39,6 +39,7 @@ const props = withDefaults(
     autorun?: boolean | 'once'
     showOutputAt?: RawAtValue
     outputHeight?: string
+    outputFontSize?: number | string
     highlightOutput?: boolean
     runnerOptions?: Record<string, unknown>
   }>(),
@@ -87,6 +88,9 @@ const height = computed(() => {
   return props.height
 })
 
+const editorFontSize = ref<number | string | undefined>(props.editorOptions?.fontSize)
+const outputFontSize = computed(() => props.outputFontSize ?? editorFontSize.value)
+
 const loadTypes = ref<() => void>()
 const { $page: thisSlideNo, $renderContext: renderContext } = useSlideContext()
 const { currentSlideNo } = useNav()
@@ -124,6 +128,9 @@ onMounted(async () => {
     ...editorOptions,
     ...props.editorOptions,
   } satisfies monaco.editor.IStandaloneEditorConstructionOptions & monaco.editor.IDiffEditorConstructionOptions
+
+  if (editorOptions.fontSize != null || props.editorOptions?.fontSize != null)
+    editorFontSize.value = commonOptions.fontSize
 
   let editableEditor: monaco.editor.IStandaloneCodeEditor
   if (diff) {
@@ -218,6 +225,7 @@ onMounted(async () => {
       :autorun="props.autorun"
       :show-output-at="props.showOutputAt"
       :height="props.outputHeight"
+      :font-size="outputFontSize"
       :highlight-output="props.highlightOutput"
       :runner-options="props.runnerOptions"
     />
