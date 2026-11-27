@@ -85,7 +85,7 @@ Compared to Reveal.js, Slidev has the following advantages:
 - More concise: Slidev uses an extended Markdown format, while Reveal.js encourages you to write HTML to organize your slides.
 - Vue support: You can use Vue components in Slidev to make your slides interactive.
 - Vite-based: Slidev is built on top of Vite, which provides instant HMR and flexible plugin API.
-- Atomatic CSS: You can [UnoCSS](https://unocss.dev/) out of the box to style your slides.
+- Atomic CSS: You can use [UnoCSS](https://unocss.dev/) out of the box to style your slides.
 
 :::
 
@@ -99,7 +99,7 @@ Compared to Marp, Slidev has the following advantages:
 - More features: Slidev supports many features that Marp doesn't.
 - Vue support: You can use Vue components in Slidev to make your slides interactive.
 - Vite-based: Slidev is built on top of Vite, which provides instant HMR and flexible plugin API.
-- Atomatic CSS: You can [UnoCSS](https://unocss.dev/) out of the box to style your slides.
+- Atomic CSS: You can use [UnoCSS](https://unocss.dev/) out of the box to style your slides.
 
 :::
 
