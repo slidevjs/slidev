@@ -79,7 +79,9 @@ function copyCode() {
 }
 
 // Normalized the ranges, to at least have one range
-const ranges = computed(() => props.stepRanges.map(i => i.length ? i : ['all']))
+const ranges = computed(() => props.stepRanges.map(i => i.length
+  ? i
+  : ['all']))
 
 onUnmounted(() => {
   clicks?.unregister(id)
@@ -101,7 +103,9 @@ onMounted(() => {
     () => clicks.current,
     () => {
       // Calculate the step and rangeStr based on the current click count
-      const clickCount = clickInfo ? clicks.current - clickInfo.start : CLICKS_MAX
+      const clickCount = clickInfo
+        ? clicks.current - clickInfo.start
+        : CLICKS_MAX
       let step = steps.length - 1
       let currentClickSum = 0
       let rangeStr = 'all'
@@ -180,12 +184,13 @@ onMounted(() => {
       :step="stepIndex"
       :animate="!isPrintMode"
       :options="{
+        stagger: 1,
+        ...configs.shiki?.magicMove,
         globalScale: scale * zoom,
         // Use duration 0 to skip animation instead of using the animate prop,
         // because moving from non-animated to animated causes issues with
         // new elements. Unfortunately, this causes a flash.
         duration: isFirstTick ? 0 : $props.duration,
-        stagger: 1,
       }"
     />
     <button

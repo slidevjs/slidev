@@ -69,14 +69,26 @@ Export slides to PDF (or other format). See <LinkInline link="guide/exporting" /
 
 Options:
 
-- `--output` (`string`, default: use `exportFilename` (see https://sli.dev/custom/#frontmatter-configures) or use `[entry]-export`): path to the output.
-- `--format` (`'pdf', 'png', 'pptx', 'md'`, default: `'pdf'`): output format.
+- `--output` (`string`, default: use `exportFilename` (see https://sli.dev/custom/#headmatter) or use `[entry]-export`): path to the output.
+- `--format` (`'pdf', 'png', 'pptx', 'pptx-editable', 'md'`, default: `'pdf'`): output format. `pptx` exports each slide as an image; `pptx-editable` rebuilds them as native PowerPoint shapes with selectable text.
 - `--timeout` (`number`, default: `30000`): timeout for rendering the print page (see https://playwright.dev/docs/api/class-page#page-goto).
 - `--range` (`string`): page ranges to export (example: `'1,4-5,6'`).
 - `--dark` (`boolean`, default: `false`): export as dark theme.
-- `--with-clicks`, `-c` (`boolean`, default: `false`): export pages for every click animation (see https://sli.dev/guide/animations.html#click-animation).
+- `--with-clicks`, `-c` (`boolean`, default: `true` for PPTX formats, `false` otherwise): export pages for every click animation (see https://sli.dev/guide/animations.html#click-animation).
 - `--theme`, `-t` (`string`): override theme.
 - `--omit-background` (`boolean`, default: `false`): remove the default browser background
+
+## `slidev export-notes [...entry]` {#export-notes}
+
+Export presenter notes to PDF. Only slides with notes are included, with their titles and slide numbers, but without slide previews. See [Exporting Presenter Notes](../guide/exporting#presenter-notes) for examples and prerequisites.
+
+- `[entry]` (`string`, default: `slides.md`): path to the slides markdown entry.
+
+Options:
+
+- `--output` (`string`, default: `[exportFilename]-notes.pdf` if `exportFilename` is configured, otherwise `[entry]-export-notes.pdf`): path to the output. The `.pdf` extension is added if omitted.
+- `--timeout` (`number`, default: `30000`): timeout in milliseconds for rendering the print page.
+- `--wait` (`number`, default: `0`): extra delay in milliseconds before exporting.
 
 ## `slidev format [entry]` {#format}
 

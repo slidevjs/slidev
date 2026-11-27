@@ -10,6 +10,7 @@
 ### Articles
 
 - [Tips To Turn R Markdown Into Slidev Presentation](https://yutani.rbind.io/post/2021-06-05-tips-to-turn-r-markdown-into-slidev-presentation/) by Hiroaki Yutani
+- [Slidev tutorial: build a quarterly business review deck, step by step](https://ynteractive.com/content/slidev-quarterly-business-review-deck-tutorial) by Robert Breen
 
 ## 中文
 

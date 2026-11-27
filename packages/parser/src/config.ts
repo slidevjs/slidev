@@ -57,6 +57,7 @@ export function getDefaultConfig(): SlidevConfig {
     duration: '30min',
     timer: 'stopwatch',
     magicMoveDuration: 800,
+    shiki: {},
     preloadImages: true,
     clickAnimation: '',
   }
@@ -85,7 +86,11 @@ export function resolveConfig(headmatter: any, themeMeta: SlidevThemeMeta = {}, 
       ...headmatter.config?.fonts,
       ...headmatter?.fonts,
     }),
-    drawings: resolveDrawings(headmatter.drawings, filepath),
+    drawings: resolveDrawings({
+      ...themeMeta.defaults?.drawings,
+      ...headmatter.config?.drawings,
+      ...headmatter?.drawings,
+    }, filepath),
     htmlAttrs: {
       ...defaultConfig.htmlAttrs,
       ...themeMeta.defaults?.htmlAttrs,
@@ -163,7 +168,12 @@ export function resolveFonts(fonts: FontOptions = {}): ResolvedFontOptions {
   const webfonts = fonts.webfonts
     ? fonts.webfonts
     : fallbacks
-      ? uniq([...sans, ...serif, ...mono, ...custom]).filter(i => !local.includes(i))
+      ? uniq([
+          ...sans,
+          ...serif,
+          ...mono,
+          ...custom,
+        ]).filter(i => !local.includes(i))
       : []
 
   function toQuoted(font: string) {
@@ -235,7 +245,9 @@ function resolveDrawings(options: DrawingsOptions = {}, filepath?: string): Reso
   const persistPath = typeof persist === 'string'
     ? persist
     : persist
-      ? `.slidev/drawings${filepath ? `/${filepath.match(RE_FILENAME_STEM)?.[1]}` : ''}`
+      ? `.slidev/drawings${filepath
+        ? `/${filepath.match(RE_FILENAME_STEM)?.[1]}`
+        : ''}`
       : false
 
   return {

@@ -152,7 +152,13 @@ export function resolveSnippetImport(lineText: string, userRoot: string, slide: 
 }
 
 export default function MarkdownItSnippet(md: MarkdownExit, { userRoot, userWorkspaceRoot, roots, data: { watchFiles, slides } }: ResolvedSlidevOptions) {
-  const allowedRoots = [...new Set([userWorkspaceRoot, userRoot, ...(roots ?? [])].filter(Boolean))]
+  const allowedRoots = [
+    ...new Set([
+      userWorkspaceRoot,
+      userRoot,
+      ...(roots ?? []),
+    ].filter(Boolean)),
+  ]
   md.block.ruler.before('fence', 'snippet_import', (state, startLine, _endLine, silent) => {
     const pos = state.bMarks[startLine] + state.tShift[startLine]
     const max = state.eMarks[startLine]
@@ -166,7 +172,9 @@ export default function MarkdownItSnippet(md: MarkdownExit, { userRoot, userWork
       return true
 
     const slideNo = state.env.id?.match(regexSlideSourceId)
-    const slide = slideNo ? slides[slideNo[1] - 1] : null
+    const slide = slideNo
+      ? slides[slideNo[1] - 1]
+      : null
 
     if (!slide) {
       console.warn(yellow(`[markdown-it-snippet] Snippet syntax is not supported in ${state.env.id || 'unknown source'}. Skipped.`))
@@ -177,14 +185,19 @@ export default function MarkdownItSnippet(md: MarkdownExit, { userRoot, userWork
     if (!snippet)
       return false
 
-    const { content, filepath, src } = snippet
+    const { content, src } = snippet
     let { lang, meta } = snippet
 
     if (meta.includes('{monaco-write}')) {
-      monacoWriterWhitelist.add(filepath)
+      // The writer resolves whatever it receives against `userRoot`, so hand it
+      // a userRoot-relative path. `filepath` is the raw specifier as typed, and
+      // an `@/` alias or a path relative to the slide resolves elsewhere for
+      // reading than it would for writing.
+      const writePath = slash(path.relative(userRoot, src))
+      monacoWriterWhitelist.add(writePath)
       lang = lang.trim()
       meta = meta.replace('{monaco-write}', '').trim() || '{}'
-      const safeFilepath = JSON.stringify(filepath).slice(1, -1)
+      const safeFilepath = JSON.stringify(writePath).slice(1, -1)
       const encoded = lz.compressToBase64(content)
 
       const token = state.push('html_block', '', 0)
@@ -197,11 +210,20 @@ export default function MarkdownItSnippet(md: MarkdownExit, { userRoot, userWork
 
       const token = state.push('fence', 'code', 0)
       token.info = `${lang} ${meta}`.trim()
-      token.content = content.endsWith('\n') ? content : `${content}\n`
+      token.content = content.endsWith('\n')
+        ? content
+        : `${content}\n`
       token.map = [startLine, startLine + 1]
     }
 
     state.line = startLine + 1
     return true
-  }, { alt: ['paragraph', 'reference', 'blockquote', 'list'] })
+  }, {
+    alt: [
+      'paragraph',
+      'reference',
+      'blockquote',
+      'list',
+    ],
+  })
 }

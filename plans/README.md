@@ -30,7 +30,7 @@ high-confidence security + correctness, then larger refactors. You may cherry-pi
 | 008 | Guard against circular `src:` slide imports | P1 | S | LOW | — | DONE (plan file removed) |
 | 009 | `parseRangeString` lower-bound / NaN validation | P2 | S | LOW | — | TODO |
 | 010 | Harden `getSlidePath` against unknown slide | P2 | S | LOW-MED | — | TODO |
-| 011 | 404 on out-of-range slide-patch request | P3 | S | LOW | — | TODO |
+| 011 | 404 on out-of-range slide-patch request | P3 | S | LOW | — | DONE (plan file removed) |
 | 012 | Fix no-op HMR `utils` refresh (missing `await`) | P2 | S | LOW | — | TODO |
 | 013 | Free port + cleanup for build's temp servers | P2 | S-M | MED | — | TODO |
 | 014 | Confine deck-controlled file reads (snippets + `src:`) | P1 | M | MED | — | DONE (plan file removed) |

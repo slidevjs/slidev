@@ -55,17 +55,27 @@ const vMarkModifiers: Record<string, (options: RoughDirectiveOptions, value?: an
 
 const vMarkModifiersDynamic: [RegExp, (match: RegExpMatchArray, options: RoughDirectiveOptions, value?: any) => RoughDirectiveOptions][] = [
   // Support setting delay like `v-mark.delay300="1"`
-  [/^delay-?(\d+)?$/, (match, options, value) => {
-    const ms = (match[1] ? Number.parseInt(match[1]) : value) || 300
-    options.delay = ms
-    return options
-  }],
+  [
+    /^delay-?(\d+)?$/,
+    (match, options, value) => {
+      const ms = (match[1]
+        ? Number.parseInt(match[1])
+        : value) || 300
+      options.delay = ms
+      return options
+    },
+  ],
   // Support setting opacity like `v-mark.op50="1"`
-  [/^(?:op|opacity)-?(\d+)?$/, (match, options, value) => {
-    const opacity = (match[1] ? Number.parseInt(match[1]) : value) || 100
-    options.opacity = opacity / 100
-    return options
-  }],
+  [
+    /^(?:op|opacity)-?(\d+)?$/,
+    (match, options, value) => {
+      const opacity = (match[1]
+        ? Number.parseInt(match[1])
+        : value) || 100
+      options.opacity = opacity / 100
+      return options
+    },
+  ],
 ]
 
 /**

@@ -69,7 +69,15 @@ const ASYNC_MODULES = [
 export function createConfigPlugin(options: ResolvedSlidevOptions): Plugin {
   const resolveClientDep = createResolve({
     // Same as Vite's default resolve conditions
-    conditions: ['import', 'module', 'browser', 'default', options.mode === 'build' ? 'production' : 'development'],
+    conditions: [
+      'import',
+      'module',
+      'browser',
+      'default',
+      options.mode === 'build'
+        ? 'production'
+        : 'development',
+    ],
     url: pathToFileURL(options.clientRoot),
   })
   return {
@@ -177,7 +185,9 @@ export function createConfigPlugin(options: ResolvedSlidevOptions): Plugin {
             },
           },
         },
-        cacheDir: isInstalledGlobally.value ? join(options.cliRoot, 'node_modules/.vite') : undefined,
+        cacheDir: isInstalledGlobally.value
+          ? join(options.cliRoot, 'node_modules/.vite')
+          : undefined,
       }
 
       function isSlidevClient(id: string) {

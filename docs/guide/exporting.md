@@ -14,7 +14,7 @@ However, interactive features in your slides may not be available in the exporte
 
 Slidev provides a UI in the browser for exporting your slides. You can access it by clicking the "Export" button in "More options" menu in the [navigation bar](./ui#navigation-bar), or go to `http://localhost:<port>/export` directly.
 
-In the UI, you can export the slides as PDF, or capture the slides as images and download them as a PPTX or zip file.
+In the UI, you can export the slides as PDF, or capture the slides as images and download them as a PPTX or zip file. Editable PPTX is only available via the [CLI](#editable-pptx).
 
 Note that browsers other than **modern Chromium-based browsers** may not work well with the exporting UI. If you encounter any issues, please try use the CLI instead.
 
@@ -72,6 +72,28 @@ Note that all the slides in the PPTX file will be exported as images, so the tex
 
 In this mode, the `--with-clicks` option is enabled by default. To disable it, pass `--with-clicks false`.
 
+### Editable PPTX
+
+If the recipient needs to edit the deck rather than only present it, export it with native shapes instead of pictures:
+
+```bash
+$ slidev export --format pptx-editable
+```
+
+The slides are measured in the browser and rebuilt as PowerPoint shapes, so text is selectable and editable, boxes can be moved and recolored, and presenter notes are carried over as usual. This does not replace `--format pptx`, which stays the most visually faithful option.
+
+What stays a picture: anything PowerPoint has no equivalent for. That includes SVG (so Mermaid diagrams and icons), `<canvas>`, `<iframe>`, videos, KaTeX formulas, CSS gradients, `filter`, `backdrop-filter`, `mix-blend-mode` and `clip-path`. Only the element concerned becomes a picture, not the whole slide.
+
+If a slide cannot be rebuilt safely, or ends up mostly pictures anyway, it falls back to the same image export used by `--format pptx`, for that slide alone, and the reason is printed.
+
+Worth knowing before you send the file on:
+
+- A `.pptx` names fonts, it does not embed them. The export prints which font families it referenced; recipients need those installed or PowerPoint will substitute.
+- PowerPoint does not measure text exactly as a browser does, so a long paragraph may wrap onto a different number of lines.
+- Decorations a theme draws with `::before` or `::after` in normal flow are left out, and the export lists them. Code block line numbers are one of these: they come from a CSS counter, which has no text and no box that a computed style can report.
+
+Like `--format pptx`, this exports one slide per click step unless you pass `--with-clicks false`. `--per-slide` is not supported with it.
+
 ### PNGs and Markdown
 
 When passing in the `--format png` option, Slidev will export PNG images for each slide instead of a PDF:
@@ -86,13 +108,29 @@ You can also compile a markdown file composed of compiled png using `--format md
 $ slidev export --format md
 ```
 
+## Presenter Notes {#presenter-notes}
+
+To print your presenter notes separately from the slides, use [`slidev export-notes`](../builtin/cli#export-notes). This requires the same [Playwright installation](#cli) as slide exports.
+
+```bash
+$ slidev export-notes
+```
+
+By default, this creates `./slides-export-notes.pdf`. The PDF includes the notes, slide titles, and slide numbers for slides with notes. Slides without notes and slide previews are not included.
+
+To use a different entry file or output filename:
+
+```bash
+$ slidev export-notes talk.md --output speaker-notes.pdf
+```
+
 ## Options
 
 Here are some common options you can use with the `slidev export` command. For a full list of options, see the [CLI documentation](../builtin/cli#export).
 
 ### Export Clicks Steps
 
-By default, Slidev exports one page per slide with clicks animations disabled. If you want to export slides with multiple steps into multiple pages, pass the `--with-clicks` option:
+By default, Slidev exports one page per slide with clicks animations disabled (except for PPTX formats, which export one slide per click step). If you want to export slides with multiple steps into multiple pages, pass the `--with-clicks` option:
 
 ```bash
 $ slidev export --with-clicks

@@ -24,9 +24,13 @@ export function createContextInjectionPlugin(): Plugin {
         ]
 
         // Find all <script> blocks
-        const matchScripts = [...code.matchAll(/<script([^>]*)>/g)]
+        const matchScripts = [
+          ...code.matchAll(/<script([^>]*)>/g),
+        ]
         // Find the <script ... setup> block
-        const setupScriptMatch = [...code.matchAll(/<script([^>]*)setup([^>]*)>/g)].at(0)
+        const setupScriptMatch = [
+          ...code.matchAll(/<script([^>]*)setup([^>]*)>/g),
+        ].at(0)
         if (setupScriptMatch) {
         // Only inject into the <script setup> block
           const setupTag = setupScriptMatch[0]

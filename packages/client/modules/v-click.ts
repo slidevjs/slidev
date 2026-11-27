@@ -165,14 +165,20 @@ export function resolveClick(el: Element | string, dir: DirectiveBinding<any>, v
 
   ctx.register(el, info)
 
-  const isShown = computed(() => flagHide ? !info.isActive.value : info.isActive.value)
+  const isShown = computed(() => flagHide
+    ? !info.isActive.value
+    : info.isActive.value)
   const visibilityState = computed(() => {
     if (isShown.value)
       return 'shown'
-    if (Number.isFinite(info.end))
-      return ctx.current < info.start ? 'before' : 'after'
-    else
+    if (Number.isFinite(info.end)) {
+      return ctx.current < info.start
+        ? 'before'
+        : 'after'
+    }
+    else {
       return flagHide ? 'after' : 'before'
+    }
   })
 
   const resolved = {

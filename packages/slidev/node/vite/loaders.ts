@@ -9,7 +9,7 @@ import YAML from 'yaml'
 import { createDataUtils } from '../options'
 import MarkdownItKatex from '../syntax/katex'
 import markdownItLink from '../syntax/link'
-import { createMakeAbsoluteImportGlob, getBodyJson, updateFrontmatterPatch } from '../utils'
+import { applyNotesAutoRuby, createMakeAbsoluteImportGlob, getBodyJson, updateFrontmatterPatch } from '../utils'
 import { templates } from '../virtual'
 import { templateConfigs } from '../virtual/configs'
 import { templateMonacoRunDeps } from '../virtual/monaco-deps'
@@ -17,8 +17,6 @@ import { templateMonacoTypes } from '../virtual/monaco-types'
 import { templateSlides, VIRTUAL_SLIDE_PREFIX } from '../virtual/slides'
 import { templateTitleRendererMd } from '../virtual/titles'
 import { regexSlideFacadeId, regexSlideReqPath, regexSlideSourceId } from './common'
-
-const RE_WORD_CHARS_ONLY = /^[\w-]+$/
 
 export function createSlidesLoader(
   options: ResolvedSlidevOptions,
@@ -83,13 +81,19 @@ export function createSlidesLoader(
 
         const [, no] = match
         const idx = Number.parseInt(no) - 1
+        const targetSlide = data.slides[idx]
+        if (!targetSlide) {
+          res.statusCode = 404
+          return res.end()
+        }
+
         if (req.method === 'GET') {
-          res.write(JSON.stringify(withRenderedNote(data.slides[idx])))
+          res.write(JSON.stringify(withRenderedNote(targetSlide)))
           return res.end()
         }
         else if (req.method === 'POST') {
           const body: SlidePatch = await getBodyJson(req)
-          const slide = data.slides[idx]
+          const slide = targetSlide
 
           if (body.content && body.content !== slide.source.content)
             hmrSlidesIndexes.add(idx)
@@ -196,6 +200,12 @@ export function createSlidesLoader(
 
       const length = Math.min(data.slides.length, newData.slides.length)
 
+      // Only titles are baked into `/@slidev/title-renderer.md`. Invalidating that
+      // virtual module on every content change dead-ends HMR under Vite 8 when the
+      // module is not self-accepting (#2784). Skip it unless a title (or slide count) changed.
+      const titlesChanged = data.slides.length !== newData.slides.length
+        || range(length).some(i => data.slides[i].title?.trim() !== newData.slides[i].title?.trim())
+
       for (let i = 0; i < length; i++) {
         const a = data.slides[i]
         const b = newData.slides[i]
@@ -232,7 +242,7 @@ export function createSlidesLoader(
       Object.assign(data, newData)
       Object.assign(utils, createDataUtils(options))
 
-      if (hmrSlidesIndexes.size > 0)
+      if (titlesChanged)
         moduleIds.add(templateTitleRendererMd.id)
 
       for (const idx of hmrSlidesIndexes) {
@@ -332,7 +342,9 @@ export function createSlidesLoader(
             // slide so runtime preloading actually receives them.
             images: slide.images ?? slide.source?.images,
             // remove raw content in build, optimize the bundle size
-            ...(mode === 'build' ? { raw: '', content: '', note: '' } : {}),
+            ...(mode === 'build'
+              ? { raw: '', content: '', note: '' }
+              : {}),
           }
           const fontmatter = getFrontmatter(idx)
 
@@ -365,7 +377,9 @@ export function createSlidesLoader(
               '  slide: {',
               `    ...(${JSON.stringify(slideBase)}),`,
               `    frontmatter,`,
-              `    filepath: ${JSON.stringify(mode === 'dev' ? slide.source.filepath : '')},`,
+              `    filepath: ${JSON.stringify(mode === 'dev'
+                ? slide.source.filepath
+                : '')},`,
               `    start: ${JSON.stringify(slide.source.start)},`,
               `    sourceIndex: ${JSON.stringify(slide.source.index)},`,
               `    id: ${idx},`,
@@ -394,32 +408,14 @@ export function createSlidesLoader(
     const notesAutoRuby: Record<string, string | undefined> = (data.headmatter as any).notesAutoRuby || {}
 
     // Apply [click] marker
-    let md = text
+    const md = text
       // replace [click] marker with span
       .replace(/\[click(?::(\d+))?\]/gi, (_, count = 1) => {
         clickCount += Number(count)
         return `<span class="slidev-note-click-mark" data-clicks="${clickCount}"></span>`
       })
 
-    // Apply notesAutoRuby
-    const keys = Object.keys(notesAutoRuby)
-      .sort((b, a) => b.length - a.length)
-      // Add word boundaries to the keys when they are simple alphabets or numbers
-      .map(i => RE_WORD_CHARS_ONLY.test(i) ? `\\b${i}\\b` : i)
-
-    if (keys.length) {
-      const regex = new RegExp(`(${keys.join('|')})`, 'g')
-      md = md.replace(
-        regex,
-        (match) => {
-          if (notesAutoRuby[match])
-            return `<ruby>${match}<rt>${notesAutoRuby[match]}</rt></ruby>`
-          return match
-        },
-      )
-    }
-
-    const html = notesMd.render(md)
+    const html = notesMd.render(applyNotesAutoRuby(md, notesAutoRuby))
     return html
   }
 

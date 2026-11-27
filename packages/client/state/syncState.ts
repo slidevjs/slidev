@@ -118,5 +118,11 @@ export function createSyncState<State extends object>(serverState: State, defaul
     watch(state, onStateChanged, { deep: true })
   }
 
-  return { init, onPatch, onUpdate, patch, state }
+  return {
+    init,
+    onPatch,
+    onUpdate,
+    patch,
+    state,
+  }
 }

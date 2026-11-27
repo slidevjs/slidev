@@ -1,7 +1,7 @@
 {
   "name": "create-slidev",
   "type": "module",
-  "version": "52.19.1",
+  "version": "53.1.0",
   "description": "Create starter template for Slidev",
   "author": "Anthony Fu <anthonyfu117@hotmail.com>",
   "license": "MIT",
@@ -21,7 +21,7 @@
     "template"
   ],
   "engines": {
-    "node": ">=20.12.0"
+    "node": ">=22.12.0"
   },
   "scripts": {
     "build": "node build.mjs",

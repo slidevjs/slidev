@@ -78,7 +78,9 @@ async function init() {
 
   const pkgManager = (RE_PNPM.test(process.env.npm_execpath) || RE_PNPM.test(process.env.npm_config_user_agent))
     ? 'pnpm'
-    : RE_YARN.test(process.env.npm_execpath) ? 'yarn' : 'npm'
+    : RE_YARN.test(process.env.npm_execpath)
+      ? 'yarn'
+      : 'npm'
 
   const related = path.relative(cwd, root)
 
@@ -88,8 +90,12 @@ async function init() {
   if (root !== cwd)
     console.log(blue(`  cd ${bold(related)}`))
 
-  console.log(blue(`  ${pkgManager === 'yarn' ? 'yarn' : `${pkgManager} install`}`))
-  console.log(blue(`  ${pkgManager === 'yarn' ? 'yarn dev' : `${pkgManager} run dev`}`))
+  console.log(blue(`  ${pkgManager === 'yarn'
+    ? 'yarn'
+    : `${pkgManager} install`}`))
+  console.log(blue(`  ${pkgManager === 'yarn'
+    ? 'yarn dev'
+    : `${pkgManager} run dev`}`))
   console.log()
   console.log(`  ${cyan('●')} ${blue('■')} ${yellow('▲')}`)
   console.log()
