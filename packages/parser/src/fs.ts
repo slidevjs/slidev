@@ -8,7 +8,7 @@ import type {
 } from '@slidev/types'
 import { existsSync } from 'node:fs'
 import { readFile, writeFile } from 'node:fs/promises'
-import { slash } from '@antfu/utils'
+import { slash, uniq } from '@antfu/utils'
 import { dirname, isAbsolute, relative, resolve } from 'pathe'
 import YAML from 'yaml'
 import { detectFeatures, parse, parseRangeString, stringify } from './core'
@@ -55,6 +55,30 @@ export interface LoadRootsInfo {
  */
 export type LoadedSlidevData = Omit<SlidevData, 'config' | 'themeMeta'>
 
+/**
+ * Numbers in a `src:` range that point at no slide, such as `0` in `#0,2` or
+ * `1.5` in `#1.5`. `parseRangeString` skips those fragments, so they are read
+ * here as plain numbers to keep reporting them as missing slides.
+ */
+function findMissingSlideIndexes(total: number, range?: string) {
+  const missing: number[] = []
+  if (!range)
+    return missing
+  for (const part of range.split(/[,;]/g)) {
+    const [start, end] = part.split('-', 2)
+    const stop = !part.includes('-')
+      ? +start + 1
+      : end
+        ? +end + 1
+        : total + 1
+    for (let index = +start; index < stop && index <= total; index++) {
+      if (!Number.isInteger(index) || index < 1)
+        missing.push(index)
+    }
+  }
+  return missing
+}
+
 export async function load(
   options: LoadRootsInfo,
   filepath: string,
@@ -98,11 +122,15 @@ export async function load(
     }
 
     const directImporter = importers?.at(-1)
-    for (const index of parseRangeString(md.slides.length, range)) {
+    const indexes = uniq([
+      ...parseRangeString(md.slides.length, range),
+      ...findMissingSlideIndexes(md.slides.length, range),
+    ]).sort((a, b) => a - b)
+    for (const index of indexes) {
       const subSlide = md.slides[index - 1]
       if (!subSlide) {
-        // `parseRangeString` only drops indexes above the total, so a range
-        // such as `#0` or `#-3` still reaches here and has no slide.
+        // Only indexes from `findMissingSlideIndexes`, such as `#0` or `#1.5`,
+        // reach here without a slide.
         md.errors ??= []
         md.errors.push({
           row: 0,
