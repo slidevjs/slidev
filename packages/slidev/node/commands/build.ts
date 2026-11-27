@@ -9,10 +9,9 @@ import sirv from 'sirv'
 import { build as viteBuild } from 'vite'
 import { resolveViteConfigs } from './shared'
 
-export async function build(
+export async function buildPresentation(
   options: ResolvedSlidevOptions,
   viteConfig: InlineConfig = {},
-  args: BuildArgs,
 ) {
   const indexHtmlId = resolve(options.userRoot, 'index.html')
 
@@ -60,6 +59,15 @@ export async function build(
 
   await viteBuild(inlineConfig)
 
+  return config
+}
+
+export async function build(
+  options: ResolvedSlidevOptions,
+  viteConfig: InlineConfig = {},
+  args: BuildArgs,
+) {
+  const config = await buildPresentation(options, viteConfig)
   const outDir = resolve(options.userRoot, config.build.outDir)
 
   // copy or generate ogImage if it's a relative path, skip if not
@@ -155,7 +163,9 @@ export async function build(
     await exportSlides({
       port,
       base: config.base,
-      ...getExportOptions(args, options, join(outDir, `${filename}.pdf`)),
+      ...getExportOptions(options.data.config.export.format === 'html' && !args.format
+        ? { ...args, format: 'pdf' }
+        : args, options, join(outDir, `${filename}.pdf`)),
     })
     server.close()
   }

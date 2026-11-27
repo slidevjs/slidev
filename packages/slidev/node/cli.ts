@@ -397,6 +397,15 @@ cli.command(
     .help(),
   async (args) => {
     const { entry, theme, base, download, out, inspect, 'without-notes': withoutNotes, 'router-mode': routerMode } = args
+    if (args.format === 'html' || [
+      args['allow-remote'],
+      args['max-bytes'],
+      args['image-max-width'],
+      args['image-max-height'],
+      args['image-quality'],
+    ].some(value => value !== undefined)) {
+      throw new Error('[slidev] Standalone HTML options require slidev export --format html')
+    }
     const { build } = await import('./commands/build')
 
     for (const entryFile of entry as unknown as string[]) {
@@ -513,18 +522,51 @@ cli.command(
 
 cli.command(
   'export [entry..]',
-  'Export slides to PDF',
+  'Export slides to PDF or other formats',
   args => exportOptions(commonOptions(args))
     .strict()
     .help(),
   async (args) => {
     const { entry, theme } = args
-    const { exportSlides, getExportOptions } = await import('./commands/export')
-    const candidatePort = await getPort(12445)
+    const { exportHtml, getHtmlOutput, getHtmlExportOptions, validateHtmlExportArgs } = await import('./commands/html')
+    const entries = entry as unknown as string[]
+    const resolved = []
+    const destinations = new Set<string>()
+    for (const entryFile of entries) {
+      const options = await resolveOptions({ entry: entryFile, theme }, 'export')
+      const format = args.format || options.data.config.export.format || 'pdf'
+      validateHtmlExportArgs({ ...args, entry: entryFile }, format)
+      if (format === 'html') {
+        if (entries.length > 1 && args.output)
+          throw new Error('[slidev] --output cannot name one HTML file for multiple entries')
+        getHtmlExportOptions({ ...args, entry: entryFile }, options.data.config.export.html)
+        const output = getHtmlOutput({ ...args, entry: entryFile }, options)
+        if (destinations.has(output))
+          throw new Error(`[slidev] Multiple HTML entries would overwrite ${output}`)
+        destinations.add(output)
+      }
+      resolved.push({ entryFile, options, format })
+    }
 
     let warned = false
-    for (const entryFile of entry as unknown as string) {
-      const options = await resolveOptions({ entry: entryFile, theme }, 'export')
+    for (const { entryFile, options, format } of resolved) {
+      if (format === 'html') {
+        const buildOptions = await resolveOptions({
+          entry: entryFile,
+          theme,
+          base: './',
+          singleFile: true,
+          withoutNotes: args['without-notes'] ?? options.data.config.export['without-notes'],
+          dark: args.dark ?? options.data.config.export.dark,
+        }, 'build')
+        printInfo(buildOptions)
+        const result = await exportHtml(buildOptions, { ...args, entry: entryFile })
+        console.log(`${green('  ✓ ')}${dim('exported to ')}${result}\n`)
+        continue
+      }
+
+      const { exportSlides, getExportOptions } = await import('./commands/export')
+      const candidatePort = await getPort(12445)
 
       if (options.data.config.browserExporter !== false && !warned) {
         warned = true
@@ -670,8 +712,33 @@ function exportOptions<T>(args: Argv<T>) {
         'pptx',
         'pptx-editable',
         'md',
+        'html',
       ],
       describe: 'output format',
+    })
+    .option('without-notes', {
+      type: 'boolean',
+      describe: 'exclude speaker notes from HTML output',
+    })
+    .option('allow-remote', {
+      type: 'boolean',
+      describe: 'retain online resources and embeds in HTML output; requires connectivity',
+    })
+    .option('max-bytes', {
+      type: 'number',
+      describe: 'maximum final HTML file size in bytes',
+    })
+    .option('image-max-width', {
+      type: 'number',
+      describe: 'maximum embedded raster image width for HTML export',
+    })
+    .option('image-max-height', {
+      type: 'number',
+      describe: 'maximum embedded raster image height for HTML export',
+    })
+    .option('image-quality', {
+      type: 'number',
+      describe: 'embedded lossy image quality (1-100) for HTML export',
     })
     .option('timeout', {
       type: 'number',

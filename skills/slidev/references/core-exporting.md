@@ -1,11 +1,11 @@
 ---
 name: exporting
-description: Export presentations to PDF, PPTX, PNG, or Markdown
+description: Export presentations to PDF, PPTX, PNG, Markdown, or standalone HTML
 ---
 
 # Exporting Slides
 
-Export presentations to PDF, PPTX, PNG, or Markdown.
+Export presentations to PDF, PPTX, PNG, Markdown, or standalone HTML.
 
 ## Browser Exporter
 
@@ -16,10 +16,26 @@ Access at `http://localhost:3030/export`:
 
 ## CLI Export
 
-Requires playwright:
+Static CLI exports require Playwright; standalone HTML does not:
 ```bash
 pnpm add -D playwright-chromium
 ```
+
+### Standalone HTML Export
+
+```bash
+slidev export --format html --output presentation.html --without-notes
+slidev export --format html --max-bytes 8000000 --image-max-width 1920 --image-quality 85
+slidev export --format html --allow-remote
+```
+
+Creates one interactive file opened directly in a browser with hash routing and embedded static assets, fonts, and media. Speaker notes are included unless removed. A hard byte cap checks the finished file after lossless deduplication; failure preserves existing output. Images remain unchanged unless dimensions/quality are configured, and sources are never modified.
+
+Headmatter defaults live under `export.html.maxBytes`, `export.html.images` (`maxWidth`, `maxHeight`, `quality`), and `export.html.allowRemote`; individual CLI flags take precedence. JPEG resizing requires explicit quality. Print-only options do not apply.
+
+`allowRemote` defaults to `false`. Enable it to retain HTTP(S) resources and permit known online embeds, including remote iframes. Export warns that connectivity is required. Local assets remain embedded. Use `--no-allow-remote` to override a headmatter opt-in. Size caps cover only the HTML bytes, not retained online resources; image processing affects only embedded images. Missing local files, local embedded documents, `srcdoc`, custom CSP/base tags, and unresolved worker/application chunks remain errors. Browser security restrictions still apply.
+
+Without this opt-in, live embeds and external scripts/documents are rejected. Arbitrary runtime fetches/dynamic paths are not guaranteed offline. Test the default export offline and check asset redistribution rights.
 
 ### PDF Export
 

@@ -68,6 +68,21 @@ describe('resolveOptions', () => {
     })
   })
 
+  it('applies standalone policy before generating build utilities', async () => {
+    mocks.load.mockResolvedValue({ headmatter: {}, slides: [] })
+    const options = await resolveOptions({ entry: '/project/slides.md', singleFile: true, base: './' }, 'build')
+    expect(options.data.config).toMatchObject({
+      routerMode: 'hash',
+      pwa: false,
+      download: false,
+      preloadImages: false,
+      wakeLock: false,
+    })
+    expect(options.utils.define.__SLIDEV_HASH_ROUTE__).toBe('true')
+    expect(options.utils.define.__SLIDEV_HAS_SERVER__).toBe('false')
+    expect(options.utils.define.__SLIDEV_FEATURE_PWA__).toBe('false')
+  })
+
   it('reloads with bootstrap roots while resolving final non-discovery config', async () => {
     const initialData = {
       headmatter: {
