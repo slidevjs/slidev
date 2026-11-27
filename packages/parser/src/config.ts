@@ -26,6 +26,7 @@ export function getDefaultConfig(): SlidevConfig {
     lineNumbers: false,
     colorSchema: 'auto',
     routerMode: 'history',
+    advanceDebounce: 0,
     aspectRatio: 16 / 9,
     canvasWidth: 980,
     exportFilename: '',
