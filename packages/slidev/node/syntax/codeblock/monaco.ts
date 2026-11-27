@@ -1,15 +1,20 @@
 import { defineCodeblockTransformer } from '@slidev/types'
 import lz from 'lz-string'
+import { extractBracedExpression } from '../utils'
 
-// eslint-disable-next-line regexp/no-super-linear-backtracking
-const RE_MONACO = /^([\w'-]+)?\s*\{(monaco[\w-]*)\}\s*(\{[^}]*\})?(.*)$/
+const RE_MONACO = /^([\w'-]+)?\s*\{(monaco[\w-]*)\}/
 const RE_DIFF_SEPARATOR = /^\s*~~~\s*\n/m
 
 export default defineCodeblockTransformer(async ({ info, code, options: { data: { config }, mode } }) => {
   const match = info.match(RE_MONACO)
   if (!match)
     return
-  const [, lang = '', monaco, options] = match
+  const [, lang = '', monaco] = match
+
+  const rest = info.slice(match[0].length)
+  const options = rest.trimStart().startsWith('{')
+    ? extractBracedExpression(rest)
+    : undefined
 
   const monacoEnabled = config.monaco === true || config.monaco === mode
   if (!monacoEnabled) {

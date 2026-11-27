@@ -151,7 +151,7 @@ export function resolveSnippetImport(lineText: string, userRoot: string, slide: 
   return { content, filepath, lang, meta, src }
 }
 
-export default function MarkdownItSnippet(md: MarkdownExit, { userRoot, userWorkspaceRoot, roots, data: { watchFiles, slides } }: ResolvedSlidevOptions) {
+export default function MarkdownItSnippet(md: MarkdownExit, { userRoot, userWorkspaceRoot, roots, data }: ResolvedSlidevOptions) {
   const allowedRoots = [
     ...new Set([
       userWorkspaceRoot,
@@ -172,8 +172,10 @@ export default function MarkdownItSnippet(md: MarkdownExit, { userRoot, userWork
       return true
 
     const slideNo = state.env.id?.match(regexSlideSourceId)
+    // Read `data` on every render: the dev server replaces `data.slides` and
+    // `data.watchFiles` with fresh objects each time it reloads the slides.
     const slide = slideNo
-      ? slides[slideNo[1] - 1]
+      ? data.slides[slideNo[1] - 1]
       : null
 
     if (!slide) {
@@ -205,8 +207,8 @@ export default function MarkdownItSnippet(md: MarkdownExit, { userRoot, userWork
       token.map = [startLine, startLine + 1]
     }
     else {
-      watchFiles[src] ??= new Set()
-      watchFiles[src].add(slide.index)
+      data.watchFiles[src] ??= new Set()
+      data.watchFiles[src].add(slide.index)
 
       const token = state.push('fence', 'code', 0)
       token.info = `${lang} ${meta}`.trim()
