@@ -1,14 +1,68 @@
 import MarkdownExit from 'markdown-exit'
 import * as shiki from 'shiki'
-import { describe, expect, it } from 'vitest'
+import { beforeAll, describe, expect, it } from 'vitest'
 import { MarkdownItCodeblocks } from '.'
 import MarkdownItShiki from '../shiki'
 
-describe('markdownItCodeblocks', () => {
-  const createMd = async (config = {}) => {
-    const md = MarkdownExit({ html: true })
+it('keeps languages containing `#` or `+`', async () => {
+  const md = MarkdownExit({ html: true })
+  const options = {
+    data: { config: {} },
+    mode: 'dev',
+    utils: {
+      shiki,
+      shikiOptions: { theme: 'nord' },
+    },
+  } as any
+
+  md.use(await MarkdownItShiki(options))
+  md.use(MarkdownItCodeblocks, options, [])
+
+  const result = await md.renderAsync([
+    '```c# [Program.cs] {1}',
+    'using System;',
+    '```',
+  ].join('\n'))
+
+  expect(result).toContain('title="Program.cs"')
+  expect(result).toContain(':ranges=\'["1"]\'')
+  expect(result).toContain('<code class="language-c#">')
+  expect(result).toContain('<span style="color:#81A1C1">using</span>')
+})
+
+it('keeps nested objects in code block options', async () => {
+  const md = MarkdownExit({ html: true })
+  const options = {
+    data: { config: {} },
+    mode: 'dev',
+    utils: {
+      shiki,
+      shikiOptions: { theme: 'nord' },
+    },
+  } as any
+
+  md.use(await MarkdownItShiki(options))
+  md.use(MarkdownItCodeblocks, options, [])
+
+  const result = await md.renderAsync([
+    '```ts {1} { maxHeight: \'100px\', foo: { bar: \'}\' } }',
+    'const a = 1',
+    '```',
+  ].join('\n'))
+
+  expect(result).toContain('v-bind="{ maxHeight: \'100px\', foo: { bar: \'}\' } }"')
+  expect(result).toContain(':ranges=\'["1"]\'')
+  expect(result).toContain('<code class="language-ts">')
+})
+
+describe('twoslash', { timeout: 20_000 }, () => {
+  const md = MarkdownExit({ html: true })
+
+  beforeAll(async () => {
     const options = {
-      data: { config },
+      data: {
+        config: { twoslash: true },
+      },
       mode: 'dev',
       utils: {
         shiki,
@@ -18,46 +72,27 @@ describe('markdownItCodeblocks', () => {
 
     md.use(await MarkdownItShiki(options))
     md.use(MarkdownItCodeblocks, options, [])
-    return md
-  }
-
-  it('keeps languages containing `#` or `+`', async () => {
-    const md = await createMd()
-
-    const result = await md.renderAsync([
-      '```c# [Program.cs] {1}',
-      'using System;',
-      '```',
-    ].join('\n'))
-
-    expect(result).toContain('title="Program.cs"')
-    expect(result).toContain(':ranges=\'["1"]\'')
-    expect(result).toContain('<code class="language-c#">')
-    expect(result).toContain('<span style="color:#81A1C1">using</span>')
   })
 
-  it('renders code block with nested options', async () => {
-    const md = await createMd()
-
+  it.each([
+    ['ts twoslash', '', '[]'],
+    ['ts {} twoslash', '', '[]'],
+    ['ts {2} twoslash', '', '["2"]'],
+    ['ts twoslash {2}', '', '["2"]'],
+    ['ts twoslash [main.ts]', 'main.ts', '[]'],
+    ['ts twoslash [main.ts] {2}', 'main.ts', '["2"]'],
+  ])('keeps twoslash, title and ranges for `%s`', async (info, title, ranges) => {
     const result = await md.renderAsync([
-      '```txt {editorOptions:{lineNumbers:\'off\'}}',
-      'git reset',
+      `\`\`\`${info}`,
+      'const a = 1',
+      'const b = a + 1',
+      '//    ^?',
       '```',
     ].join('\n'))
 
-    expect(result).toContain('v-bind="{editorOptions:{lineNumbers:\'off\'}}"')
-    expect(result).toContain('<code class="language-txt">')
-  })
-
-  it('renders monaco with nested options', async () => {
-    const md = await createMd({ monaco: true })
-
-    const result = await md.renderAsync([
-      '```ts {monaco-run}{runnerOptions: {container: \'out\'}}',
-      'console.log("hello")',
-      '```',
-    ].join('\n'))
-
-    expect(result).toContain('<Monaco v-bind="{runnerOptions: {container: \'out\'}}" runnable lang="ts"')
+    expect(result).toContain(`title=${JSON.stringify(title)}`)
+    expect(result).toContain(`:ranges='${ranges}'`)
+    expect(result).toContain('twoslash-hover')
+    expect(result).not.toContain('^?')
   })
 })

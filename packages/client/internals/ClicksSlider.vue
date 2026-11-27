@@ -27,7 +27,9 @@ const current = computed({
   get() {
     if (props.resettable && !props.active)
       return -1
-    return props.clicksContext.current > total.value ? -1 : props.clicksContext.current
+    return props.clicksContext.current > total.value
+      ? -1
+      : props.clicksContext.current
   },
   set(value: number) {
     if (props.resettable && value < 0) {
@@ -65,7 +67,9 @@ function setCurrentFromPointer(event: PointerEvent, snap: boolean) {
   // Keep press-at-right-edge inside the last cell.
   const position = clamp(0, ratio, snap ? 0.999999 : 1) * length.value
   const currentOffset = clamp(0, current.value - start.value, length.value - 1)
-  let next = snap ? start.value + Math.floor(position) : current.value
+  let next = snap
+    ? start.value + Math.floor(position)
+    : current.value
   if (!snap && position >= currentOffset + 1.5)
     next = start.value + Math.floor(position - 0.5)
   else if (!snap && position < currentOffset - 0.5)

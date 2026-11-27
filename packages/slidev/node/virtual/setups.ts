@@ -19,6 +19,17 @@ function createSetupTemplate(name: string): VirtualModuleTemplate {
 }
 
 // setups
-const setupModules = ['shiki', 'code-runners', 'monaco', 'mermaid', 'mermaid-renderer', 'main', 'root', 'routes', 'shortcuts', 'context-menu']
+const setupModules = [
+  'shiki',
+  'code-runners',
+  'monaco',
+  'mermaid',
+  'mermaid-renderer',
+  'main',
+  'root',
+  'routes',
+  'shortcuts',
+  'context-menu',
+]
 
 export const templateSetups = setupModules.map(createSetupTemplate)
