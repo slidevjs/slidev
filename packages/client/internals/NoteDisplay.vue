@@ -46,8 +46,11 @@ function processNote() {
     let n = marker
     let p = marker.parentElement
     while (p && n !== noteDisplay.value) {
-      if (!parentsMap.has(p))
-        parentsMap.set(p, [[null, lastClicks]])
+      if (!parentsMap.has(p)) {
+        parentsMap.set(p, [
+          [null, lastClicks],
+        ])
+      }
       parentsMap.get(p)!.push([n, clicks])
       n = p
       p = p.parentElement
@@ -148,20 +151,20 @@ watchEffect(() => {
   <div
     v-if="noteHtml"
     ref="noteDisplay"
-    class="prose overflow-auto outline-none slidev-note"
+    class="prose dark:prose-invert overflow-auto outline-none slidev-note"
     :class="[props.class, withClicks ? 'slidev-note-with-clicks' : '']"
     v-html="noteHtml"
   />
   <div
     v-else-if="note"
-    class="prose overflow-auto outline-none slidev-note"
+    class="prose dark:prose-invert overflow-auto outline-none slidev-note"
     :class="props.class"
   >
     <p v-text="note" />
   </div>
   <div
     v-else
-    class="prose overflow-auto outline-none opacity-50 italic select-none slidev-note"
+    class="prose dark:prose-invert overflow-auto outline-none opacity-50 italic select-none slidev-note"
     :class="props.class"
   >
     <p v-text="props.placeholder || 'No notes.'" />
@@ -171,5 +174,10 @@ watchEffect(() => {
 <style>
 .slidev-note :first-child {
   margin-top: 0;
+}
+
+.slidev-note {
+  overflow-wrap: anywhere;
+  word-break: break-word;
 }
 </style>

@@ -1,6 +1,6 @@
 # Configure Highlighter
 
-Slidev uses [Shiki](https://github.com/shikijs/shiki) as the code highlighter. It's a TextMate Grammar powered syntax highlighter as accurate as VS Code. It generates colored tokens so no additinal CSS is required. Shiki also comes with [a bunch of built-in themes](https://shiki.style/themes). In Slidev, we also provided the [TwoSlash](#twoslash-integration) support.
+Slidev uses [Shiki](https://github.com/shikijs/shiki) as the code highlighter. It's a TextMate Grammar powered syntax highlighter as accurate as VS Code. It generates colored tokens so no additional CSS is required. Shiki also comes with [a bunch of built-in themes](https://shiki.style/themes). In Slidev, we also provided the [TwoSlash](/features/twoslash) support.
 
 ## Configure Shiki
 
@@ -25,8 +25,6 @@ export default defineShikiSetup(() => {
 ```
 
 If you want to add custom theme or language (TextMate grammar/themes in JSON), you can import them in the setup file:
-
-<!-- eslint-disable import/first-->
 
 ```ts twoslash [setup/shiki.ts]
 import { defineShikiSetup } from '@slidev/types'

@@ -42,9 +42,7 @@ Props not related to position are the same as [the `Arrow` component](#arrow).
 
 ## `AutoFitText`
 
-> Experimental
-
-Box inside which the font size will automatically adapt to fit the content. Similar to PowerPoint or Keynote TextBox.
+Box inside which the font size will automatically adapt to fit the content, powered by [fitty](https://github.com/rikschennink/fitty). Similar to PowerPoint or Keynote TextBox.
 
 ### Usage
 
@@ -54,9 +52,10 @@ Box inside which the font size will automatically adapt to fit the content. Simi
 
 Props:
 
-- `max` (`string | number`, default `100`): Maximum font size
-- `min` (`string | number`, default `30`): Minimum font size
-- `modelValue` (`string`, default `''`): text content
+- `max` (`number`, default `100`): Maximum font size in pixels
+- `min` (`number`, default `30`): Minimum font size in pixels
+- `modelValue` (`string`, default `''`): Text content (alternatively, use the default slot)
+- `multiLine` (`boolean`, default `true`): Allow the text to wrap when the minimum font size is reached
 
 ## `LightOrDark`
 
@@ -227,7 +226,7 @@ hideInToc: true
 ---
 ```
 
-Titles are displayed using the [`<Titles>` component](#titles)
+Titles are displayed using the [`<TitleRenderer>` component](#titlerenderer)
 
 ### Usage
 
@@ -253,7 +252,7 @@ Apply scaling or transforming to elements.
 ### Usage
 
 ```md
-<Transform :scale="0.5">
+<Transform :scale="0.5" origin="top center">
   <YourElements />
 </Transform>
 ```
@@ -271,14 +270,34 @@ Embed a tweet.
 
 ```md
 <Tweet id="20" />
+<Tweet url="https://x.com/antfu7/status/1389604687502995457" />
 ```
 
 Props:
 
-- `id` (`number | string`, required): id of the tweet
+- `id` (`number | string`): id of the tweet
+- `url` (`string`): full `x.com` or `twitter.com` post URL
 - `scale` (`number | string`, default `1`): transform scale value
 - `conversation` (`string`, default `'none'`): [tweet embed parameter](https://developer.twitter.com/en/docs/twitter-for-websites/embedded-tweets/guides/embedded-tweet-parameter-reference)
 - `cards` (`'hidden' | 'visible'`, default `'visible'`): [tweet embed parameter](https://developer.twitter.com/en/docs/twitter-for-websites/embedded-tweets/guides/embedded-tweet-parameter-reference)
+
+Provide either `id` or `url`. When both are present, `id` takes precedence.
+
+## `BlueSky`
+
+Embed a Bluesky post.
+
+### Usage
+
+```md
+<BlueSky uri="https://bsky.app/profile/sli.dev/post/3la7gcgfwpe2n" />
+<BlueSky uri="at://did:plc:432mbsu2xucyvxl6sluohidu/app.bsky.feed.post/3la7gcgfwpe2n" />
+```
+
+Props:
+
+- `uri` (`string`, required): AT-URI of the Bluesky post, or a `https://bsky.app/profile/.../post/...` URL
+- `scale` (`number | string`, default `1`): transform scale value
 
 ## `VAfter`, `VClick` and `VClicks`
 

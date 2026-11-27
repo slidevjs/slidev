@@ -34,3 +34,26 @@ console.log('Original text')
 console.log('Modified text')
 ```
 ````
+
+## Editor Height
+
+By default, the Monaco editor has a fixed height based on the initial content. If you start with an empty or small code block and want the editor to automatically grow as you type more code, you can set `{height:'auto'}`.
+
+````md
+```ts {monaco} {height:'auto'}
+// The editor will automatically grow as you type more code
+console.log('Hello, World!')
+```
+````
+
+You can also set a specific height using CSS units like `{height:'300px'}` or `{height:'100%'}`.
+
+## Line Numbers
+
+Like other code blocks, the Monaco editor respects the global `lineNumbers` headmatter. You can also toggle line numbers for a single editor with `{lines:true}` while keeping it editable.
+
+````md
+```ts {monaco} {lines:true}
+console.log('HelloWorld')
+```
+````

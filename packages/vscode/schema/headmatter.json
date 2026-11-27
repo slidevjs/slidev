@@ -84,6 +84,11 @@
           "markdownDescription": "Custom zoom level for the slide",
           "default": 1
         },
+        "clickAnimation": {
+          "type": "string",
+          "description": "Default click animation for the slides",
+          "markdownDescription": "Default click animation for the slides"
+        },
         "dragPos": {
           "type": "object",
           "additionalProperties": {
@@ -112,8 +117,8 @@
               "type": "null"
             }
           ],
-          "description": "Page transition, powered by Vue's `<TransitionGroup/>`\n\nBuilt-in transitions:\n- fade\n- fade-out\n- slide-left\n- slide-right\n- slide-up\n- slide-down\n\nSee https://sli.dev/guide/animations.html#pages-transitions\n\nSee https://vuejs.org/guide/built-ins/transition.html",
-          "markdownDescription": "Page transition, powered by Vue's `<TransitionGroup/>`\n\nBuilt-in transitions:\n- fade\n- fade-out\n- slide-left\n- slide-right\n- slide-up\n- slide-down\n\nSee https://sli.dev/guide/animations.html#pages-transitions\n\nSee https://vuejs.org/guide/built-ins/transition.html"
+          "description": "Page transition, powered by Vue's `<TransitionGroup/>`\n\nBuilt-in transitions:\n- fade\n- fade-out\n- slide-left\n- slide-right\n- slide-up\n- slide-down\n- view-transition\n\nSee https://sli.dev/guide/animations.html#pages-transitions\n\nSee https://vuejs.org/guide/built-ins/transition.html",
+          "markdownDescription": "Page transition, powered by Vue's `<TransitionGroup/>`\n\nBuilt-in transitions:\n- fade\n- fade-out\n- slide-left\n- slide-right\n- slide-up\n- slide-down\n- view-transition\n\nSee https://sli.dev/guide/animations.html#pages-transitions\n\nSee https://vuejs.org/guide/built-ins/transition.html"
         },
         "title": {
           "type": "string",
@@ -174,6 +179,24 @@
           "markdownDescription": "Show a copy button in code blocks",
           "default": true
         },
+        "magicMoveCopy": {
+          "anyOf": [
+            {
+              "type": "boolean"
+            },
+            {
+              "type": "string",
+              "const": "final"
+            },
+            {
+              "type": "string",
+              "const": "always"
+            }
+          ],
+          "description": "Show copy button in magic move code blocks\n\n`'final'` for only show copy button on the final step `'always'` or `true` for show copy button on all steps",
+          "markdownDescription": "Show copy button in magic move code blocks\n\n`'final'` for only show copy button on the final step\n`'always'` or `true` for show copy button on all steps",
+          "default": true
+        },
         "author": {
           "type": "string",
           "description": "The author of the slides",
@@ -225,21 +248,30 @@
             "dark",
             "light",
             "all",
-            "auto"
+            "auto",
+            "light dark",
+            "dark light"
           ],
-          "description": "Force slides color schema",
-          "markdownDescription": "Force slides color schema",
+          "description": "Color scheme for slides. Use `auto` to follow the system preference, `light` or `dark` to force a scheme, or `light dark` / `dark light` to choose a default while allowing users to switch.",
+          "markdownDescription": "Color scheme for slides. Use `auto` to follow the system preference,\n`light` or `dark` to force a scheme, or `light dark` / `dark light`\nto choose a default while allowing users to switch.",
           "default": "auto"
         },
         "routerMode": {
           "type": "string",
           "enum": [
             "hash",
-            "history"
+            "history",
+            "memory"
           ],
-          "description": "Router mode for vue-router",
-          "markdownDescription": "Router mode for vue-router",
+          "description": "Router mode for vue-router\n\n- `history`: the slide number is reflected in the URL path\n- `hash`: hash-based routing, for static hosts or subdirectory deploys\n- `memory`: routing is kept in memory, so the URL never reflects the slide number and cannot be used to navigate — useful for kiosk or externally driven \"follower\" decks (deep-links, `/presenter`, `/overview` and export-by-URL are unavailable)",
+          "markdownDescription": "Router mode for vue-router\n\n- `history`: the slide number is reflected in the URL path\n- `hash`: hash-based routing, for static hosts or subdirectory deploys\n- `memory`: routing is kept in memory, so the URL never reflects the slide number and cannot be used to navigate — useful for kiosk or externally driven \"follower\" decks (deep-links, `/presenter`, `/overview` and export-by-URL are unavailable)",
           "default": "history"
+        },
+        "advanceDebounce": {
+          "type": "number",
+          "description": "Ignore repeated forward navigation within this many milliseconds. The first advance is immediate. Set to 0 to disable.",
+          "markdownDescription": "Ignore repeated forward navigation within this many milliseconds.\nThe first advance is immediate. Set to 0 to disable.",
+          "default": 0
         },
         "aspectRatio": {
           "type": [
@@ -372,16 +404,27 @@
           "markdownDescription": "Attributes to apply to the HTML element",
           "default": {}
         },
+        "comark": {
+          "type": "boolean",
+          "description": "Suppport Comark syntax\n\nhttps://comark.dev/syntax/markdown",
+          "markdownDescription": "Suppport Comark syntax\n\nhttps://comark.dev/syntax/markdown",
+          "default": false
+        },
         "mdc": {
           "type": "boolean",
-          "description": "Suppport MDC syntax\n\nSee https://github.com/antfu/markdown-it-mdc\n\nSee https://content.nuxtjs.org/guide/writing/mdc",
-          "markdownDescription": "Suppport MDC syntax\n\nSee https://github.com/antfu/markdown-it-mdc\n\nSee https://content.nuxtjs.org/guide/writing/mdc",
+          "deprecated": "MDC is now Comark. Use the `comark` option instead",
           "default": false
         },
         "editor": {
           "type": "boolean",
           "description": "Enable built-in editor",
           "markdownDescription": "Enable built-in editor",
+          "default": true
+        },
+        "mcp": {
+          "type": "boolean",
+          "description": "Enable the MCP (Model Context Protocol) server endpoint on the dev server, allowing AI agents to inspect and edit the slides",
+          "markdownDescription": "Enable the MCP (Model Context Protocol) server endpoint on the dev server,\nallowing AI agents to inspect and edit the slides",
           "default": true
         },
         "contextMenu": {
@@ -421,6 +464,24 @@
           ],
           "description": "Enable wake lock",
           "markdownDescription": "Enable wake lock"
+        },
+        "pwa": {
+          "anyOf": [
+            {
+              "type": "boolean"
+            },
+            {
+              "type": "string",
+              "const": "dev"
+            },
+            {
+              "type": "string",
+              "const": "build"
+            }
+          ],
+          "description": "Enable PWA support: a service worker precaches all deck assets on first load so a served deck works fully offline afterward. Heavy; opt-in.",
+          "markdownDescription": "Enable PWA support: a service worker precaches all deck assets on first\nload so a served deck works fully offline afterward. Heavy; opt-in.",
+          "default": false
         },
         "exportFilename": {
           "type": [
@@ -487,11 +548,75 @@
           "markdownDescription": "Additional local modules to load as dependencies of monaco runnable",
           "default": []
         },
+        "monacoRunUseStrict": {
+          "type": "boolean",
+          "description": "Whether to run monaco runnable code in strict mode",
+          "markdownDescription": "Whether to run monaco runnable code in strict mode",
+          "default": true
+        },
         "seoMeta": {
           "$ref": "#/definitions/SeoMeta",
           "description": "Seo meta tags settings",
           "markdownDescription": "Seo meta tags settings",
           "default": {}
+        },
+        "notesAutoRuby": {
+          "type": "object",
+          "additionalProperties": {
+            "type": "string"
+          },
+          "description": "Auto replace words with `<ruby>` tags in notes",
+          "markdownDescription": "Auto replace words with `<ruby>` tags in notes",
+          "default": {}
+        },
+        "duration": {
+          "type": [
+            "string",
+            "number"
+          ],
+          "description": "The expected duration of the slide",
+          "markdownDescription": "The expected duration of the slide",
+          "default": "30min"
+        },
+        "timer": {
+          "type": "string",
+          "enum": [
+            "stopwatch",
+            "countdown"
+          ],
+          "description": "Timer mode",
+          "markdownDescription": "Timer mode",
+          "default": "stopwatch"
+        },
+        "magicMoveDuration": {
+          "type": "number",
+          "description": "Duration for shiki magic move transitions in milliseconds",
+          "markdownDescription": "Duration for shiki magic move transitions in milliseconds",
+          "default": 800
+        },
+        "shiki": {
+          "$ref": "#/definitions/ShikiOptions",
+          "description": "Configure Shiki",
+          "markdownDescription": "Configure Shiki",
+          "default": {}
+        },
+        "preloadImages": {
+          "anyOf": [
+            {
+              "type": "boolean"
+            },
+            {
+              "type": "object",
+              "properties": {
+                "ahead": {
+                  "type": "number"
+                }
+              }
+            }
+          ],
+          "description": "Preload images extracted from slides for faster navigation.\n\n- `true` - enable with default look-ahead of 3 slides\n- `false` - disable image preloading\n- `{ ahead: number }` - enable with custom look-ahead window",
+          "markdownDescription": "Preload images extracted from slides for faster navigation.\n\n- `true` - enable with default look-ahead of 3 slides\n- `false` - disable image preloading\n- `{ ahead: number }` - enable with custom look-ahead window",
+          "default": true
         },
         "defaults": {
           "$ref": "#/definitions/Frontmatter",
@@ -529,13 +654,13 @@
     "BuiltinSlideTransition": {
       "type": "string",
       "enum": [
+        "fade",
+        "fade-out",
         "slide-up",
         "slide-down",
         "slide-left",
         "slide-right",
-        "fade",
-        "zoom",
-        "none"
+        "view-transition"
       ]
     },
     "TransitionGroupProps": {
@@ -826,6 +951,81 @@
       "description": "The following type should map to unhead MataFlat type",
       "markdownDescription": "The following type should map to unhead MataFlat type"
     },
+    "ShikiOptions": {
+      "type": "object",
+      "properties": {
+        "magicMove": {
+          "$ref": "#/definitions/ShikiMagicMoveOptions",
+          "description": "Options passed to Shiki Magic Move for customizing code transition animations\n\nSee https://shiki.style/packages/magic-move#options for the full list of options",
+          "markdownDescription": "Options passed to Shiki Magic Move for customizing code transition animations\n\nSee https://shiki.style/packages/magic-move#options for the full list of options",
+          "default": {}
+        }
+      }
+    },
+    "ShikiMagicMoveOptions": {
+      "type": "object",
+      "properties": {
+        "delayMove": {
+          "type": "number",
+          "description": "Ratio of the duration to delay the move animation",
+          "markdownDescription": "Ratio of the duration to delay the move animation",
+          "default": 0.3
+        },
+        "delayLeave": {
+          "type": "number",
+          "description": "Ratio of the duration to delay the leave animation",
+          "markdownDescription": "Ratio of the duration to delay the leave animation",
+          "default": 0
+        },
+        "delayEnter": {
+          "type": "number",
+          "description": "Ratio of the duration to delay the enter animation",
+          "markdownDescription": "Ratio of the duration to delay the enter animation",
+          "default": 0.7
+        },
+        "delayContainer": {
+          "type": "number",
+          "description": "Ratio of the duration to delay the container animation",
+          "markdownDescription": "Ratio of the duration to delay the container animation",
+          "default": 0.4
+        },
+        "easing": {
+          "type": "string",
+          "description": "Easing function, in the CSS `transition-timing-function` format",
+          "markdownDescription": "Easing function, in the CSS `transition-timing-function` format",
+          "default": "ease"
+        },
+        "animateContainer": {
+          "type": "boolean",
+          "description": "Apply animation to the container",
+          "markdownDescription": "Apply animation to the container",
+          "default": false
+        },
+        "containerStyle": {
+          "type": "boolean",
+          "description": "Apply styles (color and background) to the container",
+          "markdownDescription": "Apply styles (color and background) to the container",
+          "default": true
+        },
+        "stagger": {
+          "type": "number",
+          "description": "Stagger the animation of the tokens, in milliseconds",
+          "markdownDescription": "Stagger the animation of the tokens, in milliseconds",
+          "default": 1
+        },
+        "splitTokens": {
+          "type": "boolean",
+          "description": "Split the tokens at the edge of diff chunks",
+          "markdownDescription": "Split the tokens at the edge of diff chunks",
+          "default": false
+        },
+        "enhanceMatching": {
+          "type": "boolean",
+          "description": "Enhance the matching algorithm to match tokens that has same content",
+          "markdownDescription": "Enhance the matching algorithm to match tokens that has same content"
+        }
+      }
+    },
     "Frontmatter": {
       "type": "object",
       "properties": {
@@ -844,8 +1044,8 @@
               "type": "null"
             }
           ],
-          "description": "Page transition, powered by Vue's `<TransitionGroup/>`\n\nBuilt-in transitions:\n- fade\n- fade-out\n- slide-left\n- slide-right\n- slide-up\n- slide-down\n\nSee https://sli.dev/guide/animations.html#pages-transitions\n\nSee https://vuejs.org/guide/built-ins/transition.html",
-          "markdownDescription": "Page transition, powered by Vue's `<TransitionGroup/>`\n\nBuilt-in transitions:\n- fade\n- fade-out\n- slide-left\n- slide-right\n- slide-up\n- slide-down\n\nSee https://sli.dev/guide/animations.html#pages-transitions\n\nSee https://vuejs.org/guide/built-ins/transition.html"
+          "description": "Page transition, powered by Vue's `<TransitionGroup/>`\n\nBuilt-in transitions:\n- fade\n- fade-out\n- slide-left\n- slide-right\n- slide-up\n- slide-down\n- view-transition\n\nSee https://sli.dev/guide/animations.html#pages-transitions\n\nSee https://vuejs.org/guide/built-ins/transition.html",
+          "markdownDescription": "Page transition, powered by Vue's `<TransitionGroup/>`\n\nBuilt-in transitions:\n- fade\n- fade-out\n- slide-left\n- slide-right\n- slide-up\n- slide-down\n- view-transition\n\nSee https://sli.dev/guide/animations.html#pages-transitions\n\nSee https://vuejs.org/guide/built-ins/transition.html"
         },
         "layout": {
           "anyOf": [
@@ -930,6 +1130,11 @@
           "description": "Custom zoom level for the slide",
           "markdownDescription": "Custom zoom level for the slide",
           "default": 1
+        },
+        "clickAnimation": {
+          "type": "string",
+          "description": "Default click animation for the slide",
+          "markdownDescription": "Default click animation for the slide"
         },
         "dragPos": {
           "type": "object",

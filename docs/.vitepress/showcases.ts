@@ -311,6 +311,30 @@ export const showcases: ShowCaseInfo[] = [
     datetime: '2025-06-05',
   },
   {
+    title: 'Reverse Engineering Denuvo in Hogwarts Legacy',
+    author: {
+      name: 'Maurice Heumann',
+      link: 'https://momo5502.com',
+    },
+    at: 'Navaja Negra 2025',
+    slidesLink: 'https://momo5502.com/slides/denuvo',
+    sourceLink: 'https://github.com/momo5502/denuvo-slides',
+    cover: 'https://raw.githubusercontent.com/momo5502/denuvo-slides/refs/heads/master/images/preview.png',
+    datetime: '2025-10-03',
+  },
+  {
+    title: 'Reliability: Manual → Autopilot',
+    author: {
+      name: 'Severin Neumann',
+      link: 'https://github.com/svrnm/',
+    },
+    at: 'Karlsruhe Cloud Native – Summer Edition 2026',
+    slidesLink: 'https://ai-sre-talk.vercel.app/',
+    sourcesLink: 'https://github.com/bronto-community/ai-sre-talk',
+    cover: 'https://raw.githubusercontent.com/bronto-community/ai-sre-talk/refs/heads/main/preview.png',
+    datetime: '2026-07-28',
+  },
+  {
     title: '代码管理及集成 (基本Git)',
     author: {
       name: 'heng1025',

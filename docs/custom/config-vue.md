@@ -6,9 +6,8 @@ Slidev uses [Vue 3](https://v3.vuejs.org/) to render the application on the clie
 
 Create `./setup/main.ts` with the following content:
 
-<!-- eslint-disable import/first -->
-
 ```ts twoslash [setup/main.ts]
+/* eslint-disable import/first */
 import type { Plugin } from 'vue'
 
 declare const YourPlugin: Plugin

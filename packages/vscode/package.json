@@ -4,7 +4,7 @@
   "displayName": "Slidev",
   "type": "module",
   "preview": true,
-  "version": "52.1.0",
+  "version": "53.1.0",
   "private": true,
   "description": "Slidev support for VS Code",
   "license": "MIT",
@@ -18,16 +18,16 @@
   "main": "./dist/index.cjs",
   "icon": "dist/res/logo.png",
   "engines": {
-    "vscode": "^1.89.0"
+    "vscode": "^1.99.0"
   },
   "activationEvents": [
-    "onStartupFinished"
+    "workspaceContains:**/*.md"
   ],
   "contributes": {
     "languages": [
       {
         "id": "markdown",
-        "configuration": "./language/language-configuration.json"
+        "configuration": "./syntaxes/language-configuration.json"
       },
       {
         "id": "slidev"
@@ -145,7 +145,7 @@
       {
         "command": "slidev.add-entry",
         "category": "Slidev",
-        "title": "Choose Markdown files to add as slides entries",
+        "title": "Add Slidev markdown files as projects",
         "icon": "$(add)"
       },
       {
@@ -191,40 +191,52 @@
         "enablement": "slidev:hasActiveProject"
       },
       {
-        "command": "slidev.stop-dev",
-        "category": "Slidev",
-        "title": "Stop the dev server",
-        "icon": "$(stop-circle)"
-      },
-      {
         "command": "slidev.open-in-browser",
         "category": "Slidev",
         "title": "Open slides in browser",
         "icon": "$(globe)"
       },
       {
+        "command": "slidev.show-slide-preview",
+        "category": "Slidev",
+        "title": "Switch to slide preview",
+        "icon": "$(preview)",
+        "enablement": "slidev:preview:overview"
+      },
+      {
+        "command": "slidev.show-overview-preview",
+        "category": "Slidev",
+        "title": "Switch to overview preview",
+        "icon": "$(multiple-windows)",
+        "enablement": "!slidev:preview:overview"
+      },
+      {
         "command": "slidev.preview-prev-click",
         "category": "Slidev",
         "title": "Navigate to prev click in preview window",
-        "icon": "$(arrow-left)"
+        "icon": "$(arrow-left)",
+        "enablement": "slidev:preview:has-prev-click"
       },
       {
         "command": "slidev.preview-next-click",
         "category": "Slidev",
         "title": "Navigate to next click in preview window",
-        "icon": "$(arrow-right)"
+        "icon": "$(arrow-right)",
+        "enablement": "slidev:preview:has-next-click"
       },
       {
         "command": "slidev.preview-prev-slide",
         "category": "Slidev",
         "title": "Navigate to prev slide in preview window",
-        "icon": "$(arrow-up)"
+        "icon": "$(arrow-up)",
+        "enablement": "slidev:preview:has-prev-slide"
       },
       {
         "command": "slidev.preview-next-slide",
         "category": "Slidev",
         "title": "Navigate to next slide in preview window",
-        "icon": "$(arrow-down)"
+        "icon": "$(arrow-down)",
+        "enablement": "slidev:preview:has-next-slide"
       },
       {
         "command": "slidev.enable-preview-sync",
@@ -277,22 +289,22 @@
         },
         {
           "command": "slidev.preview-prev-slide",
-          "when": "view =~ /slidev-preview/ && slidev:preview:ready && !slidev:preview:compat",
+          "when": "view =~ /slidev-preview/ && slidev:preview:ready && !slidev:preview:compat && !slidev:preview:overview",
           "group": "navigation@1"
         },
         {
           "command": "slidev.preview-next-slide",
-          "when": "view =~ /slidev-preview/ && slidev:preview:ready && !slidev:preview:compat",
+          "when": "view =~ /slidev-preview/ && slidev:preview:ready && !slidev:preview:compat && !slidev:preview:overview",
           "group": "navigation@2"
         },
         {
           "command": "slidev.preview-prev-click",
-          "when": "view =~ /slidev-preview/ && slidev:preview:ready && !slidev:preview:compat",
+          "when": "view =~ /slidev-preview/ && slidev:preview:ready && !slidev:preview:compat && !slidev:preview:overview",
           "group": "navigation@3"
         },
         {
           "command": "slidev.preview-next-click",
-          "when": "view =~ /slidev-preview/ && slidev:preview:ready && !slidev:preview:compat",
+          "when": "view =~ /slidev-preview/ && slidev:preview:ready && !slidev:preview:compat && !slidev:preview:overview",
           "group": "navigation@4"
         },
         {
@@ -303,7 +315,17 @@
         {
           "command": "slidev.open-in-browser",
           "when": "view =~ /slidev-preview/ && slidev:preview:ready",
-          "group": "navigation@5"
+          "group": "navigation@7"
+        },
+        {
+          "command": "slidev.show-slide-preview",
+          "when": "view =~ /slidev-preview/ && slidev:preview:ready && !slidev:preview:compat && slidev:preview:overview",
+          "group": "navigation@8"
+        },
+        {
+          "command": "slidev.show-overview-preview",
+          "when": "view =~ /slidev-preview/ && slidev:preview:ready && !slidev:preview:compat && !slidev:preview:overview",
+          "group": "navigation@8"
         },
         {
           "command": "slidev.refresh-preview",
@@ -313,12 +335,12 @@
         {
           "command": "slidev.enable-preview-sync",
           "when": "view =~ /slidev-preview/ && !slidev:preview:sync",
-          "group": "navigation@7"
+          "group": "navigation@5"
         },
         {
           "command": "slidev.disable-preview-sync",
           "when": "view =~ /slidev-preview/ && slidev:preview:sync",
-          "group": "navigation@7"
+          "group": "navigation@5"
         }
       ],
       "view/item/context": [
@@ -331,11 +353,6 @@
           "command": "slidev.remove-entry",
           "when": "view == slidev-projects-tree && viewItem =~ /<project>/",
           "group": "inline@2"
-        },
-        {
-          "command": "slidev.stop-dev",
-          "when": "view == slidev-projects-tree && viewItem =~ /<up>/",
-          "group": "inline"
         }
       ]
     },
@@ -361,6 +378,12 @@
           "type": "boolean",
           "scope": "window",
           "description": "Display annotations for slides markdown files",
+          "default": true
+        },
+        "slidev.annotations-line-numbers": {
+          "type": "boolean",
+          "scope": "window",
+          "description": "Display line numbers in code blocks",
           "default": true
         },
         "slidev.preview-sync": {
@@ -410,14 +433,14 @@
           "name": "Projects",
           "visibility": "collapsed",
           "initialSize": 1,
-          "when": "slidev:enabled"
+          "when": "slidev:enabled && (!slidev:preview:overview || !slidev:preview:ready)"
         },
         {
           "id": "slidev-slides-tree",
           "name": "Slides",
           "visibility": "visible",
           "initialSize": 3,
-          "when": "slidev:enabled"
+          "when": "slidev:enabled && (!slidev:preview:overview || !slidev:preview:ready)"
         },
         {
           "type": "webview",
@@ -449,8 +472,7 @@
         "icon": "$(debug-stackframe-active)",
         "inputSchema": {
           "type": "object",
-          "properties": {
-          }
+          "properties": {}
         }
       },
       {
@@ -481,7 +503,9 @@
       },
       {
         "name": "slidev_getAllSlideTitles",
-        "tags": ["slidev"],
+        "tags": [
+          "slidev"
+        ],
         "toolReferenceName": "getAllSlideTitles",
         "displayName": "Get All Slide Titles",
         "modelDescription": "Get the list of all slide titles in the specified Slidev project.",
@@ -501,7 +525,9 @@
       },
       {
         "name": "slidev_findSlideNoByTitle",
-        "tags": ["slidev"],
+        "tags": [
+          "slidev"
+        ],
         "toolReferenceName": "findSlideNoByTitle",
         "displayName": "Find Slide Number by Title",
         "modelDescription": "Find the slide number in the specified Slidev project by its title.",
@@ -525,7 +551,9 @@
       },
       {
         "name": "slidev_listEntries",
-        "tags": ["slidev"],
+        "tags": [
+          "slidev"
+        ],
         "toolReferenceName": "listEntries",
         "displayName": "List All Loaded Slidev Entries",
         "modelDescription": "Get all loaded Slidev project entry file paths.",
@@ -539,7 +567,9 @@
       },
       {
         "name": "slidev_getPreviewPort",
-        "tags": ["slidev"],
+        "tags": [
+          "slidev"
+        ],
         "toolReferenceName": "getPreviewPort",
         "displayName": "Get Project Preview Port",
         "modelDescription": "Get the preview port number of the specified Slidev project.",
@@ -559,7 +589,9 @@
       },
       {
         "name": "slidev_chooseEntry",
-        "tags": ["slidev"],
+        "tags": [
+          "slidev"
+        ],
         "toolReferenceName": "chooseEntry",
         "displayName": "Choose Active Slidev Entry",
         "modelDescription": "Switch the active Slidev project entry to the specified entry file path.",
@@ -575,7 +607,9 @@
               "default": ""
             }
           },
-          "required": ["entrySlidePath"]
+          "required": [
+            "entrySlidePath"
+          ]
         }
       }
     ]
@@ -584,7 +618,7 @@
     "publish": "tsx scripts/publish.ts",
     "pack": "vsce package --no-dependencies",
     "prepare": "tsx scripts/schema.ts",
-    "build": "tsdown --env.NODE_ENV production --treeshake",
+    "build": "tsdown --env.NODE_ENV production --treeshake --minify",
     "dev": "nr prepare && tsdown --watch ./src --watch ./language-server --env.NODE_ENV development",
     "vscode:prepublish": "nr build"
   },
@@ -593,17 +627,20 @@
     "@slidev/parser": "workspace:*",
     "@slidev/types": "workspace:*",
     "@types/node": "catalog:types",
-    "@types/vscode": "catalog:types",
+    "@types/vscode": "^1.99.0",
     "@volar/language-server": "catalog:vscode",
     "@volar/vscode": "catalog:vscode",
     "get-port-please": "catalog:prod",
     "mlly": "catalog:prod",
     "ovsx": "catalog:dev",
-    "prettier": "catalog:frontend",
+    "pathe": "catalog:prod",
+    "picomatch": "catalog:vscode",
+    "prettier": "catalog:vscode",
     "reactive-vscode": "catalog:vscode",
     "tm-grammars": "catalog:frontend",
     "ts-json-schema-generator": "catalog:vscode",
     "volar-service-prettier": "catalog:vscode",
-    "volar-service-yaml": "catalog:vscode"
+    "vscode-uri": "catalog:vscode",
+    "yaml-language-server": "catalog:vscode"
   }
 }

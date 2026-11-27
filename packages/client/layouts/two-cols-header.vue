@@ -13,6 +13,12 @@ This shows on the left
 This shows on the right
 ::bottom::
 This shows at the bottom, aligned to the end (bottom) of the grid
+
+<style>
+.two-cols-header {
+  column-gap: 20px; /* Adjust the gap size as needed */
+}
+</style>
 ```
 -->
 
@@ -48,7 +54,7 @@ const props = defineProps({
 .two-cols-header {
   display: grid;
   grid-template-columns: repeat(2, 1fr);
-  grid-template-rows: repeat(2, 1fr);
+  grid-template-rows: auto 1fr auto;
 }
 
 .col-header {

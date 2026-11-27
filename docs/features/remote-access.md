@@ -52,7 +52,7 @@ You can open a [Cloudflare Quick Tunnels](https://developers.cloudflare.com/clou
 ::: code-group
 
 ```bash [pnpm]
-pnpm dev -- --remote --tunnel
+pnpm dev --remote --tunnel
 # i.e. slidev --remote --tunnel
 ```
 

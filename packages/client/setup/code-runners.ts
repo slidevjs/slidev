@@ -1,10 +1,11 @@
 import type { CodeRunner, CodeRunnerOutput, CodeRunnerOutputs, CodeRunnerOutputText } from '@slidev/types'
+import type { CodeToHastOptions } from 'shiki'
 import type ts from 'typescript'
-
-import deps from '#slidev/monaco-run-deps'
-import setups from '#slidev/setups/code-runners'
 import { createSingletonPromise } from '@antfu/utils'
 import { ref } from 'vue'
+import deps from '#slidev/monaco-run-deps'
+import setups from '#slidev/setups/code-runners'
+import { configs } from '../env'
 
 export default createSingletonPromise(async () => {
   const runners: Record<string, CodeRunner> = {
@@ -14,8 +15,16 @@ export default createSingletonPromise(async () => {
     ts: runTypeScript,
   }
 
-  const { getHighlighter } = await import('#slidev/shiki')
-  const highlight = await getHighlighter()
+  const { defaultHighlightOptions, getEagerHighlighter } = await (await import('./shiki')).default()
+
+  const highlighter = await getEagerHighlighter()
+  const highlight = (code: string, lang: string, options?: Partial<CodeToHastOptions>) => {
+    return highlighter.codeToHtml(code, {
+      ...defaultHighlightOptions,
+      lang,
+      ...options,
+    })
+  }
 
   const run = async (code: string, lang: string, options: Record<string, unknown>): Promise<CodeRunnerOutputs> => {
     try {
@@ -56,21 +65,26 @@ export default createSingletonPromise(async () => {
 function runJavaScript(code: string): CodeRunnerOutputs {
   const result = ref<CodeRunnerOutput[]>([])
 
-  const onError = (error: any) => result.value.push({ error: String(error) })
+  const onError = (error: any) => result.value.push({
+    error: String(error),
+  })
   const logger = (...objs: any[]) => result.value.push(objs.map(printObject))
   const vmConsole = Object.assign({}, console)
   vmConsole.info = vmConsole.log = vmConsole.debug = vmConsole.warn = vmConsole.error = logger
   vmConsole.clear = () => result.value.length = 0
   try {
-    const safeJS = `return async (console, __slidev_import, __slidev_on_error) => {
+    const wrappedCode = `return async (console, __slidev_import, __slidev_on_error) => {
+    ${configs.monacoRunUseStrict
+      ? `"use strict";`
+      : ''}
       try {
-        ${sanitizeJS(code)}
+        ${fixupCode(code)}
       } catch (e) {
         __slidev_on_error(e)
       }
     }`
     // eslint-disable-next-line no-new-func
-    ;(new Function(safeJS)())(vmConsole, (specifier: string) => {
+    ;(new Function(wrappedCode)())(vmConsole, (specifier: string) => {
       const mod = deps[specifier]
       if (!mod)
         throw new Error(`Module not found: ${specifier}.\nAvailable modules: ${Object.keys(deps).join(', ')}. Please refer to https://sli.dev/custom/config-code-runners#additional-runner-dependencies`)
@@ -109,7 +123,9 @@ function runJavaScript(code: string): CodeRunnerOutputs {
       textRep = `Set (${arg.size}) {${setIter.map(objectToText).join(', ')}}`
     }
     else if (arg instanceof Map) {
-      const mapIter = [...arg.entries()]
+      const mapIter = [
+        ...arg.entries(),
+      ]
       textRep
         = `Map (${arg.size}) {${mapIter
           .map(([k, v]) => `${objectToText(k)} => ${objectToText(v)}`)
@@ -125,13 +141,19 @@ function runJavaScript(code: string): CodeRunnerOutputs {
     else if (typeof arg === 'object') {
       const name = arg.constructor?.name ?? ''
       // No one needs to know an obj is an obj
-      const nameWithoutObject = name && name === 'Object' ? '' : name
-      const prefix = nameWithoutObject ? `${nameWithoutObject}: ` : ''
+      const nameWithoutObject = name && name === 'Object'
+        ? ''
+        : name
+      const prefix = nameWithoutObject
+        ? `${nameWithoutObject}: `
+        : ''
 
       // JSON.stringify omits any keys with a value of undefined. To get around this, we replace undefined with the text __undefined__ and then do a global replace using regex back to keyword undefined
       textRep
         = prefix
-          + JSON.stringify(arg, (_, value) => (value === undefined ? '__undefined__' : value), 2).replace(
+          + JSON.stringify(arg, (_, value) => (value === undefined
+            ? '__undefined__'
+            : value), 2).replace(
             /"__undefined__"/g,
             'undefined',
           )
@@ -144,7 +166,7 @@ function runJavaScript(code: string): CodeRunnerOutputs {
     return textRep
   }
 
-  function sanitizeJS(code: string) {
+  function fixupCode(code: string) {
     // The reflect-metadata runtime is available, so allow that to go through
     code = code.replace(`import "reflect-metadata"`, '').replace(`require("reflect-metadata")`, '')
     // Transpiled typescript sometimes contains an empty export, remove it.
@@ -171,7 +193,7 @@ export async function runTypeScript(code: string) {
     },
   }).outputText
 
-  const importRegex = /import\s*\((.+)\)/g
+  const importRegex = /\bimport\s*\((.+)\)/g
   code = code.replace(importRegex, (_full, specifier) => `__slidev_import(${specifier})`)
 
   return runJavaScript(code)

@@ -8,9 +8,9 @@ Usage:
 -->
 <script setup lang="ts">
 import type { TocItem } from '@slidev/types'
-import TitleRenderer from '#slidev/title-renderer'
 import { toArray } from '@antfu/utils'
 import { computed } from 'vue'
+import TitleRenderer from '#slidev/title-renderer'
 import { useNav } from '../composables/useNav'
 
 const props = withDefaults(
