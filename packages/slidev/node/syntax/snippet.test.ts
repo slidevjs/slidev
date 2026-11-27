@@ -104,3 +104,29 @@ it('whitelists a {monaco-write} snippet under the path the writer resolves', asy
   expect(path.resolve(fixturesRoot, [...monacoWriterWhitelist][0]))
     .toBe(path.join(fixturesRoot, 'snippets/snippet.ts'))
 })
+
+it('registers the snippet in the current watchFiles after the data is reloaded', async () => {
+  const data = {
+    watchFiles: {} as Record<string, Set<number>>,
+    slides: options.data.slides,
+  }
+  const md = MarkdownExit()
+  md.use(MarkdownItSnippet, { ...options, data })
+
+  // The dev server swaps in fresh objects when it reloads the slides.
+  data.watchFiles = {}
+  data.slides = [
+    {
+      index: 0,
+      source: {
+        filepath: path.join(fixturesRoot, 'test.md'),
+      },
+    },
+  ]
+
+  await md.renderAsync('<<< @/snippets/snippet.ts', { id: 'slides.md__slidev_1.md' })
+
+  expect(data.watchFiles).toEqual({
+    [path.join(fixturesRoot, 'snippets/snippet.ts')]: new Set([0]),
+  })
+})
