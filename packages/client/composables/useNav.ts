@@ -339,6 +339,16 @@ const useNavState = createSharedComposable((): SlidevContextNavState => {
   const currentSlideRoute = computed(() => slides.value[currentSlideNo.value - 1])
   const printRange = ref(parseRangeString(slides.value.length, currentRoute?.query?.range as string | undefined))
 
+  watch(currentSlideRoute, () => {
+    window.dispatchEvent(new CustomEvent('slidev-slide-changed', {
+      detail: {
+        slideNumber: currentSlideNo.value,
+        slide: toRaw(currentSlideRoute.value?.meta.slide),
+        frontmatter: toRaw(currentSlideRoute.value?.meta.slide.frontmatter),
+      },
+    }))
+  })
+
   const queryClicksRaw = useRouteQuery<string>('clicks', '0')
 
   const clicksContext = computed(() => getPrimaryClicks(currentSlideRoute.value))
