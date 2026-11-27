@@ -1,11 +1,17 @@
 import { defineCodeblockTransformer } from '@slidev/types'
-import { escapeVueInCode, normalizeRangeStr } from '../utils'
+import { escapeVueInCode, extractBracedExpression, normalizeRangeStr } from '../utils'
 
-// eslint-disable-next-line regexp/no-super-linear-backtracking
-const RE_BLOCK_INFO = /^([\w'#+-]+)?([ \w\t'-]*)(?:\[([^\]]*)\])?[ \t]*(?:\{([\w,|\-*]+)\})?[ \t]*(\{[^}]*\})?(.*)$/
+const RE_BLOCK_INFO = /^([\w'#+-]+)?([ \w\t'-]*)(?:\[([^\]]*)\])?[ \t]*(?:\{([\w,|\-*]+)\})?[ \t]*/
 
 export default defineCodeblockTransformer(async ({ info, renderHighlighted }) => {
-  const [, lang = '', meta = '', title = '', rangeStr = '', options, rest = ''] = info.match(RE_BLOCK_INFO) ?? []
+  const match = info.match(RE_BLOCK_INFO)!
+  const [, lang = '', meta = '', title = '', rangeStr = ''] = match
+  let rest = info.slice(match[0].length)
+  const options = rest.startsWith('{')
+    ? extractBracedExpression(rest)
+    : undefined
+  if (options)
+    rest = rest.slice(options.length)
   const ranges = normalizeRangeStr(rangeStr)
   const optionsProp = options
     ? `v-bind="${options}"`
