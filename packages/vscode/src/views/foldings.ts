@@ -21,7 +21,9 @@ export const useFoldings = defineService(() => {
         // Not using global slides data because it updates too late
         const md = await parse(document.getText(), document.uri.fsPath)
         return md?.slides.map(source => ({
-          start: Math.max(0, source.frontmatterStyle === 'frontmatter' ? source.start : source.start - 1),
+          start: Math.max(0, source.frontmatterStyle === 'frontmatter'
+            ? source.start
+            : source.start - 1),
           end: source.end - 1,
           kind: FoldingRangeKind.Region,
         }))

@@ -18,7 +18,9 @@ export function MarkdownItCodeblocks(md: MarkdownExit, options: ResolvedSlidevOp
       info: token.info.trim(),
       code: token.content,
       fence: token.markup.length,
-      slide: slideNo ? options.data.slides[slideNo[1] - 1] : null,
+      slide: slideNo
+        ? options.data.slides[slideNo[1] - 1]
+        : null,
       options,
       renderHighlighted(override) {
         if (override.info != null)

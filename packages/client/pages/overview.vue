@@ -101,7 +101,11 @@ function checkActiveBlocks() {
       active = { idx, visibleHeight }
   }
 
-  activeBlocks.value = fullyVisible.length ? fullyVisible : active ? [active.idx] : []
+  activeBlocks.value = fullyVisible.length
+    ? fullyVisible
+    : active
+      ? [active.idx]
+      : []
 }
 
 function openSlideInNewTab(path: string) {
@@ -151,7 +155,9 @@ function scrollSlideNoIntoCenter(no: number) {
   if (start == null)
     return
   const top = start
-    + (end == null ? 0 : (end - start) * progress)
+    + (end == null
+      ? 0
+      : (end - start) * progress)
     - scroller.value.clientHeight * 0.5
   if (Math.abs(scroller.value.scrollTop - top) < 1)
     return
@@ -160,8 +166,12 @@ function scrollSlideNoIntoCenter(no: number) {
 
 function getInitialSlideNo() {
   const value = currentRoute.query.slideNo
-  const no = Number(Array.isArray(value) ? value[0] : value)
-  return Number.isFinite(no) && no > 0 ? no : undefined
+  const no = Number(Array.isArray(value)
+    ? value[0]
+    : value)
+  return Number.isFinite(no) && no > 0
+    ? no
+    : undefined
 }
 
 function updateSlideNoQuery(no: number) {
@@ -275,7 +285,9 @@ function openOverviewSlideSource(e: MouseEvent, route: SlideRoute) {
 
 onMounted(() => {
   window.addEventListener('message', onOverviewMessage)
-  const initialSlideNo = isEmbeddedPreviewMode.value ? getInitialSlideNo() : undefined
+  const initialSlideNo = isEmbeddedPreviewMode.value
+    ? getInitialSlideNo()
+    : undefined
   if (initialSlideNo != null) {
     ignoreOverviewScrollUntil = Date.now() + 300
     scrollSlideNoIntoCenter(initialSlideNo)

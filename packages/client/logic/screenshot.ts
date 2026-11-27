@@ -58,4 +58,6 @@ export async function startScreenshotSession(width: number, height: number) {
 export type ScreenshotSession = Awaited<ReturnType<typeof startScreenshotSession>>
 
 const chromeVersion = window.navigator.userAgent.match(/Chrome\/(\d+)/)?.[1]
-export const isScreenshotSupported = chromeVersion ? Number(chromeVersion) >= 94 : false
+export const isScreenshotSupported = chromeVersion
+  ? Number(chromeVersion) >= 94
+  : false

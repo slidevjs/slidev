@@ -16,6 +16,10 @@ npx skills add slidevjs/slidev --agent codex --skill slidev
 
 In Codex, you can invoke the installed skill explicitly with `$slidev`.
 
+## Requirements
+
+Slidev itself needs [Node.js](https://nodejs.org) >= 22.12.0 and a package manager (pnpm recommended). The skill tells the agent to check for both before creating a project.
+
 ## What's Included
 
 The Slidev skill provides knowledge about:

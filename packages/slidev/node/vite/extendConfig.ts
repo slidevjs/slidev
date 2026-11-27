@@ -69,7 +69,15 @@ const ASYNC_MODULES = [
 export function createConfigPlugin(options: ResolvedSlidevOptions): Plugin {
   const resolveClientDep = createResolve({
     // Same as Vite's default resolve conditions
-    conditions: ['import', 'module', 'browser', 'default', options.mode === 'build' ? 'production' : 'development'],
+    conditions: [
+      'import',
+      'module',
+      'browser',
+      'default',
+      options.mode === 'build'
+        ? 'production'
+        : 'development',
+    ],
     url: pathToFileURL(options.clientRoot),
   })
   return {
@@ -177,7 +185,9 @@ export function createConfigPlugin(options: ResolvedSlidevOptions): Plugin {
             },
           },
         },
-        cacheDir: isInstalledGlobally.value ? join(options.cliRoot, 'node_modules/.vite') : undefined,
+        cacheDir: isInstalledGlobally.value
+          ? join(options.cliRoot, 'node_modules/.vite')
+          : undefined,
       }
 
       function isSlidevClient(id: string) {
@@ -197,6 +207,16 @@ export function createConfigPlugin(options: ResolvedSlidevOptions): Plugin {
       return () => {
         server.middlewares.use(async (req, res, next) => {
           if (req.url === '/index.html') {
+            let html: string
+            try {
+              // Inject `/@vite/client` and run other plugins' `transformIndexHtml` hooks.
+              // Vite 8 relies on `/@vite/client` to install `define` globals in the browser.
+              html = await server.transformIndexHtml(req.url, options.utils.indexHtml, req.originalUrl)
+            }
+            catch (e) {
+              return next(e)
+            }
+
             const headers = server.config.server.headers ?? {}
 
             for (const header in headers) {
@@ -205,7 +225,7 @@ export function createConfigPlugin(options: ResolvedSlidevOptions): Plugin {
 
             res.setHeader('Content-Type', 'text/html')
             res.statusCode = 200
-            res.end(options.utils.indexHtml)
+            res.end(html)
             return
           }
           next()

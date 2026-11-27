@@ -4,7 +4,9 @@ import configs from '#slidev/configs'
 
 export { configs }
 
-export const mode = import.meta.env.DEV ? 'dev' : 'build'
+export const mode = import.meta.env.DEV
+  ? 'dev'
+  : 'build'
 
 export const slideAspect = computed(() => configs.aspectRatio)
 export const slideWidth = computed(() => configs.canvasWidth)
