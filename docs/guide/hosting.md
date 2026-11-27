@@ -148,6 +148,70 @@ jobs:
 3. Commit and push the changes to your repository. The GitHub Actions workflow will automatically deploy your slides to GitHub Pages every time you push to the `main` branch.
 4. You can access your slides at `https://<username>.github.io/<repository-name>/`.
 
+### Codeberg pages {#codeberg-pages}
+
+To deploy your slides on [Codeberg Pages](https://codeberg.page/) via Forgejo Actions, follow these steps:
+
+1. In your repository, go to `+ Enable more` > `Units`. Under `Overview`, select `Actions`, and then `Save Settings`.
+
+2. Open `package.json`
+
+3. In  `"scripts"`, change the name of the target to `_site` by adding ` --out _site`
+
+::: details package.json
+```json
+  "scripts": {
+  "build": "slidev build --out _site",
+}
+```
+:::
+
+4. You can also set the package manager to pnpn and node version
+
+::: details package.json
+```json
+  "packageManager": "pnpm@12.0.0",
+  "devEngines": {
+    "runtime": { "name": "node", "version": "^24.0.0", "onFail": "download" }
+  }
+```
+:::
+
+5. Create `.forgejo/workflows/deploy.yaml`, copy the following yaml code. Then, in `deploy.yaml`, change `<repository-name>` with the actual name of your repository.
+
+::: details .forgejo/workflows/deploy.yaml
+
+```yaml
+name: Deploy
+on:
+  push:
+    branches: [main]
+jobs:
+  publish:
+    runs-on: codeberg-tiny
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v7
+        
+      - name: Setup nodejs and pnpm 
+        uses: pnpm/setup@v3
+
+      - name: Build
+        run: pnpm build --base /<repository-name>/
+
+      - name: Deploy
+        uses: actions/git-pages@v2
+        with:
+          site: https://${{ forge.repository_owner }}.codeberg.page/<repository-name>/
+          token: ${{ forge.token }}
+          source: _site/
+```
+:::
+
+6. Commit and push the changes to your repository. The Forgejo Actions workflow will automatically deploy your slides to Codeberg Pages every time you push to the `main` branch.
+7. You can access your slides at `https://<username>.codeberg.page/<repository-name>/`.
+
+
 ### Netlify
 
 Create `netlify.toml` in your project root with the following content:
