@@ -42,7 +42,7 @@ defineProps<{
         class="ml-2 text-current! opacity-20 hover:opacity-100 hover:text-[#cb3837]"
         target="_blank"
       >
-        <carbon:video />
+        <div class="i-carbon:video" />
       </a>
       <a
         v-if="info.slidesLink"
@@ -50,7 +50,7 @@ defineProps<{
         class="ml-2 text-current! opacity-20 hover:opacity-100 hover:text-[#cb3837]"
         target="_blank"
       >
-        <carbon:presentation-file />
+        <div class="i-carbon:presentation-file" />
       </a>
       <a
         v-if="info.sourceLink"
@@ -58,7 +58,7 @@ defineProps<{
         class="ml-2 text-current! opacity-20 hover:opacity-100"
         target="_blank"
       >
-        <carbon:logo-github />
+        <div class="i-carbon:logo-github" />
       </a>
     </div>
   </div>

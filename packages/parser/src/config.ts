@@ -1,6 +1,9 @@
-import { toArray, uniq } from '@antfu/utils'
 import type { DrawingsOptions, FontOptions, ResolvedDrawingsOptions, ResolvedExportOptions, ResolvedFontOptions, SlidevConfig, SlidevThemeMeta } from '@slidev/types'
+import { toArray, uniq } from '@antfu/utils'
 import { parseAspectRatio } from './utils'
+
+const RE_QUOTED_STRING = /^(['"]).*\1$/
+const RE_FILENAME_STEM = /([^\\/]+?)(?:\.\w+)?$/
 
 export function getDefaultConfig(): SlidevConfig {
   return {
@@ -14,6 +17,7 @@ export function getDefaultConfig(): SlidevConfig {
     monacoTypesAdditionalPackages: [],
     monacoTypesIgnorePackages: [],
     monacoRunAdditionalDeps: [],
+    monacoRunUseStrict: true,
     download: false,
     export: {} as ResolvedExportOptions,
     info: false,
@@ -22,6 +26,7 @@ export function getDefaultConfig(): SlidevConfig {
     lineNumbers: false,
     colorSchema: 'auto',
     routerMode: 'history',
+    advanceDebounce: 0,
     aspectRatio: 16 / 9,
     canvasWidth: 980,
     exportFilename: '',
@@ -32,20 +37,36 @@ export function getDefaultConfig(): SlidevConfig {
     drawings: {} as ResolvedDrawingsOptions,
     plantUmlServer: 'https://www.plantuml.com/plantuml',
     codeCopy: true,
+    magicMoveCopy: true,
+    author: '',
     record: 'dev',
     css: 'unocss',
     presenter: true,
+    browserExporter: 'dev',
     htmlAttrs: {},
-    transition: undefined,
+    transition: null,
     editor: true,
-    contextMenu: undefined,
+    mcp: true,
+    contextMenu: null,
     wakeLock: true,
+    pwa: false,
+    remote: false,
+    mdc: false,
+    comark: false,
+    seoMeta: {},
+    notesAutoRuby: {},
+    duration: '30min',
+    timer: 'stopwatch',
+    magicMoveDuration: 800,
+    shiki: {},
+    preloadImages: true,
+    clickAnimation: '',
   }
 }
 
 export function resolveConfig(headmatter: any, themeMeta: SlidevThemeMeta = {}, filepath?: string, verify = false) {
   const themeHightlighter = ['prism', 'shiki', 'shikiji'].includes(themeMeta.highlighter || '')
-    ? themeMeta.highlighter as 'prism' | 'shiki'
+    ? themeMeta.highlighter as 'shiki'
     : undefined
   const themeColorSchema = ['light', 'dark'].includes(themeMeta.colorSchema || '')
     ? themeMeta.colorSchema as 'light' | 'dark'
@@ -61,15 +82,27 @@ export function resolveConfig(headmatter: any, themeMeta: SlidevThemeMeta = {}, 
     ...headmatter.config,
     ...headmatter,
     fonts: resolveFonts({
+      ...defaultConfig.fonts,
       ...themeMeta.defaults?.fonts,
       ...headmatter.config?.fonts,
       ...headmatter?.fonts,
     }),
-    drawings: resolveDrawings(headmatter.drawings, filepath),
+    drawings: resolveDrawings({
+      ...themeMeta.defaults?.drawings,
+      ...headmatter.config?.drawings,
+      ...headmatter?.drawings,
+    }, filepath),
     htmlAttrs: {
+      ...defaultConfig.htmlAttrs,
       ...themeMeta.defaults?.htmlAttrs,
       ...headmatter.config?.htmlAttrs,
       ...headmatter?.htmlAttrs,
+    },
+    themeConfig: {
+      ...defaultConfig.themeConfig,
+      ...themeMeta.defaults?.themeConfig,
+      ...headmatter.config?.themeConfig,
+      ...headmatter?.themeConfig,
     },
   }
 
@@ -79,8 +112,19 @@ export function resolveConfig(headmatter: any, themeMeta: SlidevThemeMeta = {}, 
     config.highlighter = 'shiki'
   }
 
-  if (config.colorSchema !== 'dark' && config.colorSchema !== 'light')
+  // @ts-expect-error compat
+  if (config.highlighter === 'prism')
+    throw new Error(`[slidev] "prism" support has been dropped. Please use "highlighter: shiki" instead`)
+
+  if (![
+    'dark',
+    'light',
+    'auto',
+    'light dark',
+    'dark light',
+  ].includes(config.colorSchema)) {
     config.colorSchema = 'auto'
+  }
   if (themeColorSchema && config.colorSchema === 'auto')
     config.colorSchema = themeColorSchema
 
@@ -97,20 +141,20 @@ export function verifyConfig(
   themeMeta: SlidevThemeMeta = {},
   warn = (v: string) => console.warn(`[slidev] ${v}`),
 ) {
-  const themeHightlighter = ['prism', 'shiki'].includes(themeMeta.highlighter || '')
-    ? themeMeta.highlighter as 'prism' | 'shiki'
+  const themeHightlighter = themeMeta.highlighter === 'shiki'
+    ? themeMeta.highlighter as 'shiki'
     : undefined
   const themeColorSchema = ['light', 'dark'].includes(themeMeta.colorSchema || '')
     ? themeMeta.colorSchema as 'light' | 'dark'
     : undefined
 
   if (themeColorSchema && config.colorSchema !== themeColorSchema)
-    warn(`Color schema "${config.colorSchema}" does not supported by the theme`)
+    warn(`Color schema "${config.colorSchema}" is not supported by the theme`)
 
   if (themeHightlighter && config.highlighter !== themeHightlighter)
     warn(`Syntax highlighter "${config.highlighter}" does not supported by the theme`)
 
-  if (!['unocss', undefined].includes(config.css)) {
+  if (config.css !== 'unocss') {
     warn(`Unsupported Atomic CSS engine "${config.css}", fallback to UnoCSS`)
     config.css = 'unocss'
   }
@@ -121,24 +165,28 @@ export function resolveFonts(fonts: FontOptions = {}): ResolvedFontOptions {
     fallbacks = true,
     italic = false,
     provider = 'google',
+    body = 'sans',
   } = fonts
-  let sans = toArray(fonts.sans).flatMap(i => i.split(/,\s*/g)).map(i => i.trim())
-  let serif = toArray(fonts.serif).flatMap(i => i.split(/,\s*/g)).map(i => i.trim())
-  let mono = toArray(fonts.mono).flatMap(i => i.split(/,\s*/g)).map(i => i.trim())
-  const weights = toArray(fonts.weights || '200,400,600').flatMap(i => i.toString().split(/,\s*/g)).map(i => i.trim())
-  const custom = toArray(fonts.custom).flatMap(i => i.split(/,\s*/g)).map(i => i.trim())
+  let sans = toArray(fonts.sans).flatMap(i => i.split(',')).map(i => i.trim())
+  let serif = toArray(fonts.serif).flatMap(i => i.split(',')).map(i => i.trim())
+  let mono = toArray(fonts.mono).flatMap(i => i.split(',')).map(i => i.trim())
+  const weights = toArray(fonts.weights || '200,400,600').flatMap(i => i.toString().split(',')).map(i => i.trim())
+  const custom = toArray(fonts.custom).flatMap(i => i.split(',')).map(i => i.trim())
 
-  const local = toArray(fonts.local).flatMap(i => i.split(/,\s*/g)).map(i => i.trim())
+  const local = toArray(fonts.local).flatMap(i => i.split(',')).map(i => i.trim())
   const webfonts = fonts.webfonts
     ? fonts.webfonts
     : fallbacks
-      ? uniq([...sans, ...serif, ...mono, ...custom])
+      ? uniq([
+          ...sans,
+          ...serif,
+          ...mono,
+          ...custom,
+        ]).filter(i => !local.includes(i))
       : []
 
-  webfonts.filter(i => local.includes(i))
-
   function toQuoted(font: string) {
-    if (/^(['"]).*\1$/.test(font))
+    if (RE_QUOTED_STRING.test(font))
       return font
     return `"${font}"`
   }
@@ -187,6 +235,7 @@ export function resolveFonts(fonts: FontOptions = {}): ResolvedFontOptions {
     sans,
     serif,
     mono,
+    body,
     webfonts,
     provider,
     local,
@@ -206,7 +255,9 @@ function resolveDrawings(options: DrawingsOptions = {}, filepath?: string): Reso
   const persistPath = typeof persist === 'string'
     ? persist
     : persist
-      ? `.slidev/drawings${filepath ? `/${filepath.match(/([^\\/]+?)(\.\w+)?$/)?.[1]}` : ''}`
+      ? `.slidev/drawings${filepath
+        ? `/${filepath.match(RE_FILENAME_STEM)?.[1]}`
+        : ''}`
       : false
 
   return {

@@ -1,14 +1,16 @@
-<script setup>
+<script setup lang="ts">
 import { computed } from 'vue'
 import { useRouter } from 'vue-router'
 import { useNav } from '../composables/useNav'
+
+const RE_DIGITS = /\d+/
 
 const { currentRoute } = useRouter()
 const { total } = useNav()
 
 const guessedSlide = computed(() => {
   const path = currentRoute.value.path
-  const match = path.match(/\d+/)
+  const match = path.match(RE_DIGITS)
   if (match) {
     const slideNo = +match[0]
     if (slideNo > 0 && slideNo <= total.value)
@@ -19,22 +21,22 @@ const guessedSlide = computed(() => {
 </script>
 
 <template>
-  <div class="grid justify-center pt-15%">
+  <div class="grid justify-center text-center pt-15% gap-5">
     <div>
-      <h1 class="text-9xl font-bold">
+      <h1 class="text-9xl font-light">
         404
       </h1>
       <p class="text-2xl">
-        Page not found<code class="op-70">:{{ currentRoute.path }}</code>
+        Page <code class="op-60">{{ currentRoute.path }}</code> not found
       </p>
-      <div class="mt-3 flex flex-col gap-2">
-        <RouterLink v-if="guessedSlide !== 1" to="/" class="page-link">
-          Go Home
-        </RouterLink>
-        <RouterLink v-if="guessedSlide" :to="`/${guessedSlide}`" class="page-link">
-          Go to Slide {{ guessedSlide }}
-        </RouterLink>
-      </div>
+    </div>
+    <div class="mt-3 flex flex-col gap-2 max-w-xs mx-auto w-full">
+      <RouterLink v-if="guessedSlide !== 1" to="/" class="page-link">
+        Go Home
+      </RouterLink>
+      <RouterLink v-if="guessedSlide" :to="`/${guessedSlide}`" class="page-link">
+        Go to Slide {{ guessedSlide }}
+      </RouterLink>
     </div>
   </div>
 </template>

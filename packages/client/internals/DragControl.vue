@@ -1,9 +1,9 @@
 <script setup lang="ts">
-import { clamp } from '@antfu/utils'
 import type { Pausable } from '@vueuse/core'
+import type { DragElementState } from '../composables/useDragElements'
+import { clamp } from '@antfu/utils'
 import { useIntervalFn } from '@vueuse/core'
 import { computed, inject, ref, watchEffect } from 'vue'
-import type { DragElementState } from '../composables/useDragElements'
 import { useSlideBounds } from '../composables/useSlideBounds'
 import { injectionSlideScale } from '../constants'
 import { slideHeight, slideWidth } from '../env'
@@ -138,7 +138,10 @@ function getCornerProps(isLeft: boolean, isTop: boolean) {
           return { w, h }
         }
         else {
-          return { w: Math.max(w1, minSize), h: Math.max(h1, minSize) }
+          return {
+            w: Math.max(w1, minSize),
+            h: Math.max(h1, minSize),
+          }
         }
       }
 
@@ -209,11 +212,23 @@ function getCornerProps(isLeft: boolean, isTop: boolean) {
       width: `${ctrlSize}px`,
       height: `${ctrlSize}px`,
       margin: `-${ctrlSize / 2}px`,
-      left: isLeft !== arrowRevX.value ? '0' : undefined,
-      right: isLeft !== arrowRevX.value ? undefined : '0',
-      top: isTop !== arrowRevY.value ? '0' : undefined,
-      bottom: isTop !== arrowRevY.value ? undefined : '0',
-      cursor: isArrow ? 'move' : +isLeft + +isTop === 1 ? 'nesw-resize' : 'nwse-resize',
+      left: isLeft !== arrowRevX.value
+        ? '0'
+        : undefined,
+      right: isLeft !== arrowRevX.value
+        ? undefined
+        : '0',
+      top: isTop !== arrowRevY.value
+        ? '0'
+        : undefined,
+      bottom: isTop !== arrowRevY.value
+        ? undefined
+        : '0',
+      cursor: isArrow
+        ? 'move'
+        : +isLeft + +isTop === 1
+            ? 'nesw-resize'
+            : 'nwse-resize',
       borderRadius: isArrow ? '50%' : undefined,
     },
     class: ctrlClasses,
@@ -269,9 +284,19 @@ function getBorderProps(dir: 'l' | 'r' | 't' | 'b') {
       width: `${ctrlSize}px`,
       height: `${ctrlSize}px`,
       margin: `-${ctrlSize / 2}px`,
-      left: dir === 'l' ? '0' : dir === 'r' ? `100%` : `50%`,
-      top: dir === 't' ? '0' : dir === 'b' ? `100%` : `50%`,
-      cursor: 'lr'.includes(dir) ? 'ew-resize' : 'ns-resize',
+      left: dir === 'l'
+        ? '0'
+        : dir === 'r'
+          ? `100%`
+          : `50%`,
+      top: dir === 't'
+        ? '0'
+        : dir === 'b'
+          ? `100%`
+          : `50%`,
+      cursor: 'lr'.includes(dir)
+        ? 'ew-resize'
+        : 'ns-resize',
       borderRadius: '50%',
     },
     class: ctrlClasses,
@@ -375,7 +400,7 @@ watchEffect(() => {
     @pointermove="onPointermove"
     @pointerup="onPointerup"
   >
-    <div class="absolute inset-0 z-100 dark:b-gray-400" :class="isArrow ? '' : 'b b-dark'">
+    <div class="absolute inset-0 z-nav dark:b-gray-400" :class="isArrow ? '' : 'b b-dark'">
       <template v-if="!autoHeight">
         <div v-bind="getCornerProps(true, true)" />
         <div v-bind="getCornerProps(false, false)" />

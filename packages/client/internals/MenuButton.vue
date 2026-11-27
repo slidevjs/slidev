@@ -25,13 +25,13 @@ onClickOutside(el, () => {
 <template>
   <div ref="el" class="flex relative">
     <button :class="{ disabled }" @click="value = !value">
-      <slot name="button" :class="{ disabled }" />
+      <slot name="button" :value :class="{ disabled }" />
     </button>
     <KeepAlive>
       <div
         v-if="value"
-        class="rounded-md bg-main text-main shadow absolute bottom-10 left-0 z-20"
-        dark:border="~ main"
+        class="bg-main text-main shadow-xl absolute bottom-10 left-0 z-menu py2"
+        border="~ main rounded-md"
       >
         <slot name="menu" />
       </div>

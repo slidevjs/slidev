@@ -1,10 +1,10 @@
-import { builtinModules } from 'node:module'
-import { join, resolve } from 'node:path'
-
-import fg from 'fast-glob'
-import { uniq } from '@antfu/utils'
-import { toAtFS } from '../resolver'
 import type { VirtualModuleTemplate } from './types'
+import { builtinModules } from 'node:module'
+
+import { uniq } from '@antfu/utils'
+import fg from 'fast-glob'
+import { join, resolve } from 'pathe'
+import { toAtFS } from '../resolver'
 
 export const templateMonacoTypes: VirtualModuleTemplate = {
   id: '/@slidev/monaco-types',
@@ -34,7 +34,9 @@ export const templateMonacoTypes: VirtualModuleTemplate = {
 
       // strip module filepath e.g. lodash/identity => lodash
       const [a = '', b = ''] = moduleSpecifier.split('/')
-      const moduleName = a.startsWith('@') ? `${a}/${b}` : a
+      const moduleName = a.startsWith('@')
+        ? `${a}/${b}`
+        : a
 
       return moduleName
     }

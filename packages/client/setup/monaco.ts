@@ -1,28 +1,27 @@
-import { createSingletonPromise } from '@antfu/utils'
 import type { MonacoSetupReturn } from '@slidev/types'
-import * as monaco from 'monaco-editor'
-import { watchEffect } from 'vue'
+import { createSingletonPromise } from '@antfu/utils'
+import { shikiToMonaco } from '@shikijs/monaco'
 import { setupTypeAcquisition } from '@typescript/ata'
+import * as monaco from 'monaco-editor'
+import EditorWorker from 'monaco-editor/editor/editor.worker?worker'
+// @ts-expect-error missing types
+import { StandaloneServices } from 'monaco-editor/editor/standalone/browser/standaloneServices'
+
+import CssWorker from 'monaco-editor/language/css/css.worker?worker'
+import HtmlWorker from 'monaco-editor/language/html/html.worker?worker'
+import JsonWorker from 'monaco-editor/language/json/json.worker?worker'
+import TsWorker from 'monaco-editor/language/typescript/ts.worker?worker'
+// @ts-expect-error missing types
+import { ContextViewService } from 'monaco-editor/platform/contextview/browser/contextViewService'
+// @ts-expect-error missing types
+import { SyncDescriptor } from 'monaco-editor/platform/instantiation/common/descriptors'
 import ts from 'typescript'
+import { watchEffect } from 'vue'
 
-import EditorWorker from 'monaco-editor/esm/vs/editor/editor.worker?worker'
-import CssWorker from 'monaco-editor/esm/vs/language/css/css.worker?worker'
-import HtmlWorker from 'monaco-editor/esm/vs/language/html/html.worker?worker'
-import JsonWorker from 'monaco-editor/esm/vs/language/json/json.worker?worker'
-import TsWorker from 'monaco-editor/esm/vs/language/typescript/ts.worker?worker'
-
-// @ts-expect-error missing types
-import { ContextViewService } from 'monaco-editor/esm/vs/platform/contextview/browser/contextViewService'
-
-// @ts-expect-error missing types
-import { SyncDescriptor } from 'monaco-editor/esm/vs/platform/instantiation/common/descriptors'
-
-// @ts-expect-error missing types
-import { StandaloneServices } from 'monaco-editor/esm/vs/editor/standalone/browser/standaloneServices'
-
-import { isDark } from '../logic/dark'
 import configs from '#slidev/configs'
 import setups from '#slidev/setups/monaco'
+import { isDark } from '../logic/dark'
+import { lockShortcuts } from '../state'
 
 window.MonacoEnvironment = {
   getWorker(_, label) {
@@ -51,49 +50,50 @@ class ContextViewService2 extends ContextViewService {
   }
 }
 
+// Initialize services first, otherwise we can't override them.
+StandaloneServices.initialize({
+  contextViewService: new SyncDescriptor(ContextViewService2, [], true),
+})
+
 const setup = createSingletonPromise(async () => {
-  // Initialize services first, otherwise we can't override them.
-  StandaloneServices.initialize({
-    contextViewService: new SyncDescriptor(ContextViewService2, [], true),
-  })
-
-  const defaults = monaco.languages.typescript.typescriptDefaults
-
+  const defaults = monaco.typescript.typescriptDefaults
   defaults.setCompilerOptions({
     ...defaults.getCompilerOptions(),
     strict: true,
-    moduleResolution: monaco.languages.typescript.ModuleResolutionKind.NodeJs,
-    module: monaco.languages.typescript.ModuleKind.ESNext,
+    moduleResolution: monaco.typescript.ModuleResolutionKind.NodeJs,
+    module: monaco.typescript.ModuleKind.ESNext,
   })
 
   const ata = configs.monacoTypesSource === 'cdn'
     ? setupTypeAcquisition({
-      projectName: 'TypeScript Playground',
-      typescript: ts as any, // Version mismatch. No problem found so far.
-      logger: console,
-      delegate: {
-        receivedFile: (code: string, path: string) => {
-          defaults.addExtraLib(code, `file://${path}`)
-          const uri = monaco.Uri.file(path)
-          if (monaco.editor.getModel(uri) === null)
-            monaco.editor.createModel(code, 'javascript', uri)
-        },
-        progress: (downloaded: number, total: number) => {
+        projectName: 'TypeScript Playground',
+        typescript: ts as any, // Version mismatch. No problem found so far.
+        logger: console,
+        delegate: {
+          receivedFile: (code: string, path: string) => {
+            defaults.addExtraLib(code, `file://${path}`)
+            const uri = monaco.Uri.file(path)
+            if (monaco.editor.getModel(uri) === null)
+              monaco.editor.createModel(code, 'javascript', uri)
+          },
+          progress: (downloaded: number, total: number) => {
           // eslint-disable-next-line no-console
-          console.debug(`[Typescript ATA] ${downloaded} / ${total}`)
+            console.debug(`[Typescript ATA] ${downloaded} / ${total}`)
+          },
         },
-      },
-    })
+      })
     : () => { }
+
+  const { getEagerHighlighter, languageNames, themeOption } = await (await import('./shiki')).default()
 
   monaco.languages.register({ id: 'vue' })
   monaco.languages.register({ id: 'html' })
   monaco.languages.register({ id: 'css' })
   monaco.languages.register({ id: 'typescript' })
   monaco.languages.register({ id: 'javascript' })
-
-  const { shiki, themes, shikiToMonaco } = await import('#slidev/shiki')
-  const highlighter = await shiki
+  for (const lang of languageNames) {
+    monaco.languages.register({ id: lang })
+  }
 
   const editorOptions: MonacoSetupReturn['editorOptions'] & object = {}
   for (const setup of setups) {
@@ -101,16 +101,29 @@ const setup = createSingletonPromise(async () => {
     Object.assign(editorOptions, result?.editorOptions)
   }
 
+  // Disable shortcuts when focusing Monaco editor.
+  monaco.editor.onDidCreateEditor((editor) => {
+    let release: (() => void) | null = null
+    editor.onDidFocusEditorWidget(() => {
+      release = lockShortcuts()
+    })
+    editor.onDidBlurEditorWidget(() => {
+      release?.()
+      release = null
+    })
+  })
+
   // Use Shiki to highlight Monaco
+  const highlighter = await getEagerHighlighter()
   shikiToMonaco(highlighter, monaco)
-  if (typeof themes === 'string') {
-    monaco.editor.setTheme(themes)
+  if (typeof themeOption === 'string') {
+    monaco.editor.setTheme(themeOption)
   }
   else {
     watchEffect(() => {
       monaco.editor.setTheme(isDark.value
-        ? themes.dark || 'vitesse-dark'
-        : themes.light || 'vitesse-light')
+        ? themeOption.dark || 'vitesse-dark'
+        : themeOption.light || 'vitesse-light')
     })
   }
 
@@ -124,7 +137,7 @@ const setup = createSingletonPromise(async () => {
 async function _addFile(raw: () => Promise<{ default: string }>, path: string) {
   const uri = monaco.Uri.file(path)
   const code = (await raw()).default
-  monaco.languages.typescript.typescriptDefaults.addExtraLib(code, `file:///${path}`)
+  monaco.typescript.typescriptDefaults.addExtraLib(code, `file:///${path}`)
   monaco.editor.createModel(code, 'javascript', uri)
 }
 

@@ -1,0 +1,395 @@
+import type { ThemeInfo } from './themes'
+
+export type AddonInfo = Omit<ThemeInfo, 'previews'>
+
+export const official: AddonInfo[] = [
+  {
+    id: '',
+    link: '#',
+    name: 'Work in Progress',
+    description: '',
+    tags: [],
+    author: {
+      name: '',
+    },
+  },
+]
+
+// Please add your addon to the end of the list.
+export const community: AddonInfo[] = [
+  {
+    id: 'slidev-addon-python-runner',
+    name: 'Python Runner',
+    description: 'Run actual Python code in your slides',
+    tags: ['Code runner'],
+    author: {
+      name: '_Kerman',
+      link: 'https://github.com/KermanX',
+    },
+    repo: 'https://github.com/KermanX/slidev-addon-python-runner',
+  },
+  {
+    id: 'slidev-addon-tldraw',
+    name: 'tldraw',
+    description: 'Embed tldraw diagrams directly in Slidev, with in-slide editing support',
+    tags: ['Integration', 'Diagram'],
+    author: {
+      name: 'Albert Brand',
+      link: 'https://github.com/AlbertBrand',
+    },
+    repo: 'https://github.com/AlbertBrand/slidev-addon-tldraw',
+  },
+  {
+    id: 'slidev-addon-react',
+    name: 'React Components',
+    description: 'Use React components with JSX/TSX in your Slidev presentations.',
+    tags: ['React', 'Component', 'Integration'],
+    repo: 'https://github.com/Ygilany/slidev-addon-react',
+    author: {
+      name: 'YGilany',
+      link: 'https://github.com/YGilany',
+    },
+  },
+  {
+    id: 'slidev-addon-typst',
+    name: 'Typst',
+    description: 'Typst addon for Slidev',
+    tags: ['Integration', 'Diagram'],
+    author: {
+      name: 'Shigma',
+      link: 'https://github.com/shigma',
+    },
+    repo: 'https://github.com/shigma/slidev-addon-typst',
+  },
+  {
+    id: 'slidev-addon-fancy-arrow',
+    name: 'Fancy Arrow',
+    description: 'Hand drawn arrows with various styling and positioning options',
+    tags: ['Component'],
+    author: {
+      name: 'whitphx',
+      link: 'https://github.com/whitphx',
+    },
+    repo: 'https://github.com/whitphx/slidev-addon-fancy-arrow',
+  },
+  {
+    id: 'slidev-addon-sync',
+    name: 'Remote Sync',
+    description: 'Sync component for Slidev static build that uses a SSE or WS server',
+    tags: ['Remote control', 'Navigation'],
+    author: {
+      name: 'Tony Cabaye',
+      link: 'https://github.com/tonai',
+    },
+    repo: 'https://github.com/Smile-SA/slidev-addon-sync',
+  },
+  {
+    id: 'slidev-addon-tikzjax',
+    name: 'tikzjax',
+    description: 'Compile TikZ/Chemfig/... to SVG and display them in Slidev',
+    tags: ['Integration', 'Diagram'],
+    author: {
+      name: 'Ethan Goh',
+      link: 'https://github.com/7086cmd',
+    },
+    repo: 'https://github.com/7086cmd/slidev-addon-tikzjax',
+  },
+  {
+    id: 'slidev-component-pager',
+    name: 'Pager',
+    description: 'Show current page and total page number',
+    tags: ['Component', 'Navigation'],
+    author: {
+      name: 'Tony Cabaye',
+      link: 'https://github.com/tonai',
+    },
+    repo: 'https://github.com/Smile-SA/slidev-component-pager',
+  },
+  {
+    id: 'slidev-component-poll',
+    name: 'Poll and Quiz',
+    description: 'Poll and Quiz components for Slidev',
+    tags: ['Component'],
+    author: {
+      name: 'Tony Cabaye',
+      link: 'https://github.com/tonai',
+    },
+    repo: 'https://github.com/Smile-SA/slidev-component-poll',
+  },
+  {
+    id: 'slidev-component-progress',
+    name: 'Progress',
+    description: 'Show interactive progress bar for Slidev',
+    tags: ['Tool', 'Navigation'],
+    author: {
+      name: 'Tony Cabaye',
+      link: 'https://github.com/tonai',
+    },
+    repo: 'https://github.com/Smile-SA/slidev-component-progress',
+  },
+  {
+    id: 'slidev-component-scroll',
+    name: 'Mouse Scroll',
+    description: 'Use mouse wheel for navigating',
+    tags: ['Navigation'],
+    author: {
+      name: 'Tony Cabaye',
+      link: 'https://github.com/tonai',
+    },
+    repo: 'https://github.com/Smile-SA/slidev-component-scroll',
+  },
+  {
+    id: 'slidev-component-spotlight',
+    name: 'Spotlight',
+    description: 'Activate a spotlight to highlight a specific region by holding a key',
+    tags: ['Tool'],
+    author: {
+      name: 'Tony Cabaye',
+      link: 'https://github.com/tonai',
+    },
+    repo: 'https://github.com/Smile-SA/slidev-component-spotlight',
+  },
+  {
+    id: 'slidev-component-zoom',
+    name: 'Zooming',
+    description: 'Allow zooming inside the slides',
+    tags: ['Tool'],
+    author: {
+      name: 'Tony Cabaye',
+      link: 'https://github.com/tonai',
+    },
+    repo: 'https://github.com/Smile-SA/slidev-component-zoom',
+  },
+  {
+    id: 'slidev-addon-rabbit',
+    name: 'Rabbit',
+    description: 'Presentation time management for Slidev inspired by Rabbit',
+    tags: ['Tool', 'Navigation'],
+    author: {
+      name: 'kaakaa',
+      link: 'https://github.com/kaakaa',
+    },
+    repo: 'https://github.com/kaakaa/slidev-addon-rabbit',
+  },
+  {
+    id: 'slidev-addon-stem',
+    name: 'STEM',
+    description: 'Slidev addon for scientific presentation',
+    tags: ['Component', 'Layout'],
+    author: {
+      name: 'yutaka-shoji',
+      link: 'https://github.com/yutaka-shoji',
+    },
+    repo: 'https://github.com/yutaka-shoji/slidev-addon-stem',
+  },
+  {
+    id: 'slidev-addon-naive',
+    name: 'Naive UI',
+    description: 'Brings Naive UI components into Slidev',
+    tags: ['Component'],
+    author: {
+      name: 'Samuel Huang',
+      link: 'https://sghuang.com',
+    },
+    repo: 'https://github.com/sghuang19/slidev-addon-naive',
+  },
+  {
+    id: 'slidev-addon-hls-player',
+    name: 'HLS player',
+    description: 'Add a basic hls.js powered video player on your slides to show HTTP Live Streaming videos',
+    tags: ['hls', 'video'],
+    author: {
+      name: 'Albert Brand',
+      link: 'https://github.com/AlbertBrand',
+    },
+    repo: 'https://github.com/AlbertBrand/slidev-addon-hls-player',
+  },
+  {
+    id: 'slidev-addon-window-mockup',
+    name: 'Window Mockup',
+    description: 'Styled window frames',
+    tags: ['Component'],
+    author: {
+      name: 'whitphx',
+      link: 'https://github.com/whitphx',
+    },
+    repo: 'https://github.com/whitphx/slidev-addon-window-mockup',
+  },
+  {
+    id: 'slidev-addon-diagram-js',
+    name: 'BPMN, DMN & more',
+    description: 'Display diagrams like BPMN, DMN, Wardley Maps and Event Storming in your slidev',
+    tags: ['Component'],
+    author: {
+      name: 'emaarco',
+      link: 'https://github.com/emaarco',
+    },
+    repo: 'https://github.com/emaarco/slidev-addon-diagram-js',
+  },
+  {
+    id: 'slidev-addon-p5',
+    name: 'Runner for p5js',
+    description: 'Display, edit and run p5js sketches in your slidev',
+    tags: ['Component', 'Code runner'],
+    author: {
+      name: 'mjvo',
+      link: 'https://github.com/mjvo',
+    },
+    repo: 'https://github.com/mjvo/slidev-addon-p5',
+  },
+  {
+    id: 'slidev-pane',
+    name: 'slidev-pane',
+    description: 'PowerPoint-style pane presenter for Slidev with slide thumbnails, quick navigation, and a zoomable main canvas.',
+    tags: ['Navigation'],
+    author: {
+      name: 'xunz',
+      link: 'https://github.com/xunz3',
+    },
+    repo: 'https://github.com/xunz3/slidev-pane',
+  },
+  {
+    id: 'slidev-agent',
+    name: 'slidev-agent',
+    description: 'Slidev addon and wrapper CLI for LangChain-powered slide authoring.',
+    tags: ['Component', 'Integration'],
+    author: {
+      name: 'Christian Bromann',
+      link: 'https://github.com/christian-bromann',
+    },
+    repo: 'https://github.com/christian-bromann/slidev-agent',
+  },
+  {
+    id: 'slidev-addon-animated-text',
+    name: 'Animated text',
+    description: 'Stroke by stroke animated text with any font using tegaki.',
+    tags: ['Component'],
+    author: {
+      name: 'Andreas Taranetz',
+      link: 'https://andreas.taranetz.com/',
+    },
+    repo: 'https://github.com/andreas-taranetz/slidev-addon-animated-text',
+  },
+  {
+    id: 'slidev-addon-livecode',
+    name: 'Live embedded VS Code IDE',
+    description: 'Live VS Code IDE sessions in your Slidev presentations, powered by coderaft',
+    tags: [
+      'Component',
+      'Integration',
+      'Tool',
+      'IDE',
+    ],
+    author: {
+      name: 'Mickaël Alves',
+      link: 'https://mickaelalves.dev/',
+    },
+    repo: 'https://github.com/mickaelalvs/slidev-addon-livecode',
+  },
+  {
+    id: 'slidev-addon-second-screen',
+    name: 'Second Screen',
+    description: 'Open presentation on a second screen from presenter view with automatic fullscreen and visual status indicator.',
+    tags: ['Navigation', 'Presenter'],
+    author: {
+      name: 'Denis Sowa',
+      link: 'https://github.com/L-C-P',
+    },
+    repo: 'https://github.com/L-C-P/slidev-addon-second-screen',
+  },
+  {
+    id: 'slidev-addon-sandpack',
+    name: 'Sandpack',
+    description: 'Build stepped, multi-file Sandpack live-code demos from readable Markdown.',
+    tags: ['Code runner', 'React', 'Integration'],
+    author: {
+      name: 'Nir Tamir',
+      link: 'https://github.com/nirtamir2',
+    },
+    repo: 'https://github.com/nirtamir2/slidev-addon-sandpack',
+  },
+  {
+    id: 'slidev-addon-studio',
+    name: 'Studio',
+    description: 'Edit slides on the canvas, with every change written back to your Markdown.',
+    tags: ['Editor', 'Tool'],
+    author: {
+      name: 'Daniel Christensen',
+      link: 'https://github.com/BobTheShoplifter',
+    },
+    repo: 'https://github.com/BobTheShoplifter/slidev-addon-studio',
+  },
+  {
+    id: 'slidev-addon-gsap',
+    name: 'GSAP',
+    description: 'Use click-driven GSAP timelines for a much more natural and powerful way to specify your animations.',
+    tags: ['Animation', 'Integration'],
+    author: {
+      name: 'Max Kurze',
+      link: 'https://github.com/maxkurze1',
+    },
+    repo: 'https://github.com/maxkurze1/slidev-addon-gsap',
+  },
+  {
+    id: 'slidev-addon-audience-filter',
+    name: 'Audience Filter',
+    description: 'Show or hide slides per audience via showFor/hideFor frontmatter, with an audience switch in the presenter view.',
+    tags: ['Tool', 'Presenter'],
+    author: {
+      name: 'Denis Sowa',
+      link: 'https://github.com/L-C-P',
+    },
+    repo: 'https://github.com/L-C-P/slidev-addon-audience-filter',
+  },
+  {
+    id: 'slidev-addon-autofit',
+    name: 'Autofit',
+    description: 'Automatically scales slide content down until it fits, like the "shrink text on overflow" option in PowerPoint.',
+    tags: ['Layout'],
+    author: {
+      name: 'Denis Sowa',
+      link: 'https://github.com/L-C-P',
+    },
+    repo: 'https://github.com/L-C-P/slidev-addon-autofit',
+  },
+  {
+    id: 'slidev-addon-obs',
+    name: 'OBS',
+    description: 'Switch OBS Studio scenes per slide via obs-websocket (v4 and v5).',
+    tags: ['Integration', 'Tool'],
+    author: {
+      name: 'Denis Sowa',
+      link: 'https://github.com/L-C-P',
+    },
+    repo: 'https://github.com/L-C-P/slidev-addon-obs',
+  },
+  {
+    id: 'slidev-addon-archify-explorer',
+    name: 'Archify Explorer',
+    description: 'Open interactive Archify diagrams from static previews in Slidev.',
+    tags: ['Diagram', 'Integration'],
+    author: {
+      name: 'Sergio Valverde',
+      link: 'https://github.com/svg153',
+    },
+    repo: 'https://github.com/svg153/slidev-archify-explorer',
+  },
+  {
+    id: 'slidev-addon-logi-spotlight',
+    name: 'Logi Spotlight',
+    description: 'Start the presentation from a Logitech Spotlight clicker and get its timer vibrations, like in Google Slides.',
+    tags: ['Integration'],
+    author: {
+      name: 'Erik Zaadi',
+      link: 'https://github.com/erikzaadi',
+    },
+    repo: 'https://github.com/erikzaadi/slidev-addon-logi-spotlight',
+  },
+  // Add yours here!
+  {
+    id: '',
+    link: 'https://github.com/slidevjs/slidev/edit/main/docs/.vitepress/addons.ts',
+    name: 'Yours?',
+    description: 'Click here to submit your addon :)',
+  },
+]

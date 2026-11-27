@@ -1,17 +1,19 @@
-import path from 'node:path'
+import type { ExportArgs, ResolvedSlidevOptions, SlideInfo, SlidevConfig, TocItem } from '@slidev/types'
 import { Buffer } from 'node:buffer'
+import fs from 'node:fs/promises'
 import process from 'node:process'
-import fs from 'fs-extra'
-import { blue, cyan, dim, green, yellow } from 'kolorist'
-import { Presets, SingleBar } from 'cli-progress'
-import { clearUndefined } from '@antfu/utils'
-import { parseRangeString } from '@slidev/parser/core'
-import type { ExportArgs, ResolvedSlidevOptions, SlideInfo, TocItem } from '@slidev/types'
+import { clearUndefined, ensureSuffix, slash } from '@antfu/utils'
 import { outlinePdfFactory } from '@lillallol/outline-pdf'
+import { parseRangeString } from '@slidev/parser/core'
+import { blue, cyan, dim, green, yellow } from 'ansis'
+import { Presets, SingleBar } from 'cli-progress'
+import { resolve } from 'mlly'
+import path, { dirname, relative } from 'pathe'
 import * as pdfLib from 'pdf-lib'
 import { PDFDocument } from 'pdf-lib'
-import { resolve } from 'mlly'
 import { getRoots } from '../resolver'
+
+const RE_CLICKS_PARAM = /clicks=([1-9]\d*)/
 
 export interface ExportOptions {
   total: number
@@ -19,10 +21,11 @@ export interface ExportOptions {
   slides: SlideInfo[]
   port?: number
   base?: string
-  format?: 'pdf' | 'png' | 'pptx' | 'md'
+  format?: 'pdf' | 'png' | 'pptx' | 'pptx-editable' | 'md'
   output?: string
   timeout?: number
   wait?: number
+  waitUntil: 'networkidle' | 'load' | 'domcontentloaded' | undefined
   dark?: boolean
   routerMode?: 'hash' | 'history'
   width?: number
@@ -36,11 +39,19 @@ export interface ExportOptions {
    */
   perSlide?: boolean
   scale?: number
+  omitBackground?: boolean
+}
+
+export function resolveExportDarkMode(dark: boolean | undefined, colorSchema: SlidevConfig['colorSchema']) {
+  if (colorSchema === 'light dark' || colorSchema === 'dark light')
+    return dark ?? colorSchema === 'dark light'
+  return dark || colorSchema === 'dark'
 }
 
 interface ExportPngResult {
   slideIndex: number
   buffer: Buffer
+  filename: string
 }
 
 function addToTree(tree: TocItem[], info: SlideInfo, slideIndexes: Record<number, number>, level = 1) {
@@ -63,11 +74,15 @@ function addToTree(tree: TocItem[], info: SlideInfo, slideIndexes: Record<number
 
 function makeOutline(tree: TocItem[]): string {
   return tree.map(({ title, path, level, children }) => {
-    const rootOutline = title ? `${path}|${'-'.repeat(level - 1)}|${title}` : null
+    const rootOutline = title
+      ? `${path}|${'-'.repeat(level - 1)}|${title}`
+      : null
 
     const childrenOutline = makeOutline(children)
 
-    return childrenOutline.length > 0 ? `${rootOutline}\n${childrenOutline}` : rootOutline
+    return childrenOutline.length > 0
+      ? `${rootOutline}\n${childrenOutline}`
+      : rootOutline
   }).filter(outline => !!outline).join('\n')
 }
 
@@ -81,7 +96,12 @@ export interface ExportNotesOptions {
 
 function createSlidevProgress(indeterminate = false) {
   function getSpinner(n = 0) {
-    return [cyan('●'), green('◆'), blue('■'), yellow('▲')][n % 4]
+    return [
+      cyan('●'),
+      green('◆'),
+      blue('■'),
+      yellow('▲'),
+    ][n % 4]
   }
   let current = 0
   let spinner = 0
@@ -90,7 +110,9 @@ function createSlidevProgress(indeterminate = false) {
   const progress = new SingleBar({
     clearOnComplete: true,
     hideCursor: true,
-    format: `  {spin} ${yellow('rendering')}${indeterminate ? dim(yellow('...')) : ' {bar} {value}/{total}'}`,
+    format: `  {spin} ${yellow('rendering')}${indeterminate
+      ? dim(yellow('...'))
+      : ' {bar} {value}/{total}'}`,
     linewrap: false,
     barsize: 30,
   }, Presets.shades_grey)
@@ -98,15 +120,21 @@ function createSlidevProgress(indeterminate = false) {
   return {
     bar: progress,
     start(total: number) {
-      progress.start(total, 0, { spin: getSpinner(spinner) })
+      progress.start(total, 0, {
+        spin: getSpinner(spinner),
+      })
       timer = setInterval(() => {
         spinner += 1
-        progress.update(current, { spin: getSpinner(spinner) })
+        progress.update(current, {
+          spin: getSpinner(spinner),
+        })
       }, 200)
     },
     update(v: number) {
       current = v
-      progress.update(v, { spin: getSpinner(spinner) })
+      progress.update(v, {
+        spin: getSpinner(spinner),
+      })
     },
     stop() {
       clearInterval(timer)
@@ -134,27 +162,30 @@ export async function exportNotes({
   if (!output.endsWith('.pdf'))
     output = `${output}.pdf`
 
-  await page.goto(`http://localhost:${port}${base}presenter/print`, { waitUntil: 'networkidle', timeout })
-  await page.waitForLoadState('networkidle')
-  await page.emulateMedia({ media: 'screen' })
+  try {
+    await page.goto(`http://localhost:${port}${base}presenter/print`, { waitUntil: 'networkidle', timeout })
+    await page.waitForLoadState('networkidle')
+    await page.emulateMedia({ media: 'screen' })
 
-  if (wait)
-    await page.waitForTimeout(wait)
+    if (wait)
+      await page.waitForTimeout(wait)
 
-  await page.pdf({
-    path: output,
-    margin: {
-      left: 0,
-      top: 0,
-      right: 0,
-      bottom: 0,
-    },
-    printBackground: true,
-    preferCSSPageSize: true,
-  })
-
-  progress.stop()
-  browser.close()
+    await page.pdf({
+      path: output,
+      margin: {
+        left: 0,
+        top: 0,
+        right: 0,
+        bottom: 0,
+      },
+      printBackground: true,
+      preferCSSPageSize: true,
+    })
+  }
+  finally {
+    progress.stop()
+    await browser.close()
+  }
 
   return output
 }
@@ -178,8 +209,16 @@ export async function exportSlides({
   withToc = false,
   perSlide = false,
   scale = 1,
+  waitUntil,
+  omitBackground = false,
 }: ExportOptions) {
   const pages: number[] = parseRangeString(total, range)
+
+  // Writers disagree about who creates the parent directory of `--output`, so
+  // the ones calling `fs.writeFile` directly failed with ENOENT on a path like
+  // `dist/slides.pptx`. Create it here, before the browser starts. `png` gets
+  // only the parent: its `--output` is a directory that `genPagePng` creates.
+  await fs.mkdir(dirname(path.resolve(output)), { recursive: true })
 
   const { chromium } = await importPlaywright()
   const browser = await chromium.launch({
@@ -189,12 +228,46 @@ export async function exportSlides({
     viewport: {
       width,
       // Calculate height for every slides to be in the viewport to trigger the rendering of iframes (twitter, youtube...)
-      height: perSlide ? height : height * pages.length,
+      height: perSlide
+        ? height
+        : height * pages.length,
     },
     deviceScaleFactor: scale,
   })
   const page = await context.newPage()
   const progress = createSlidevProgress(!perSlide)
+  progress.start(pages.length)
+
+  try {
+    if (format === 'pdf') {
+      await genPagePdf()
+    }
+    else if (format === 'png') {
+      await genPagePng(output)
+    }
+    else if (format === 'md') {
+      await genPageMd()
+    }
+    else if (format === 'pptx') {
+      const buffers = await genPagePng(false)
+      await genPagePptx(buffers)
+    }
+    else if (format === 'pptx-editable') {
+      await genPagePptxEditable()
+    }
+    else {
+      throw new Error(`[slidev] Unsupported exporting format "${format}"`)
+    }
+  }
+  finally {
+    progress.stop()
+    await browser.close()
+  }
+
+  const relativeOutput = slash(relative('.', output))
+  return relativeOutput.startsWith('.')
+    ? relativeOutput
+    : `./${relativeOutput}`
 
   async function go(no: number | string, clicks?: string) {
     const query = new URLSearchParams()
@@ -211,11 +284,15 @@ export async function exportSlides({
       ? `http://localhost:${port}${base}?${query}#${no}`
       : `http://localhost:${port}${base}${no}?${query}`
     await page.goto(url, {
-      waitUntil: 'networkidle',
+      waitUntil,
       timeout,
     })
-    await page.waitForLoadState('networkidle')
-    await page.emulateMedia({ colorScheme: dark ? 'dark' : 'light', media: 'screen' })
+    if (waitUntil)
+      await page.waitForLoadState(waitUntil)
+    await page.emulateMedia({
+      colorScheme: dark ? 'dark' : 'light',
+      media: 'screen',
+    })
     const slide = no === 'print'
       ? page.locator('body')
       : page.locator(`[data-slidev-no="${no}"]`)
@@ -236,18 +313,17 @@ export async function exportSlides({
         const element = elements.nth(index)
         const attribute = await element.getAttribute('data-waitfor')
         if (attribute) {
-          await element.locator(attribute).waitFor({ state: 'visible' })
-            .catch((e) => {
-              console.error(e)
-              process.exitCode = 1
-            })
+          await element.locator(attribute).waitFor({ state: 'visible' }).catch((e) => {
+            console.error(e)
+            process.exitCode = 1
+          })
         }
       }
     }
     // Wait for frames to load
     {
       const frames = page.frames()
-      await Promise.all(frames.map(frame => frame.waitForLoadState()))
+      await Promise.all(frames.map(frame => frame.waitForLoadState(undefined, { timeout })))
     }
     // Wait for Mermaid graphs to be rendered
     {
@@ -296,7 +372,7 @@ export async function exportSlides({
   }
 
   function getClicksFromUrl(url: string) {
-    return url.match(/clicks=([1-9]\d*)/)?.[1]
+    return url.match(RE_CLICKS_PARAM)?.[1]
   }
 
   async function genPageWithClicks(
@@ -386,33 +462,47 @@ export async function exportSlides({
     await fs.writeFile(output, pdfData)
   }
 
-  async function genPagePngOnePiece(writeToDisk: boolean) {
+  async function genPagePngOnePiece(writeToDisk: string | false) {
     const result: ExportPngResult[] = []
     await go('print')
-    await fs.emptyDir(output)
     const slideContainers = page.locator('.print-slide-container')
     const count = await slideContainers.count()
+
     for (let i = 0; i < count; i++) {
-      progress.update(i + 1)
       const id = (await slideContainers.nth(i).getAttribute('id')) || ''
       const slideNo = +id.split('-')[0]
-      const buffer = await slideContainers.nth(i).screenshot()
-      result.push({ slideIndex: slideNo - 1, buffer })
+
+      // Only process slides that are in the specified range
+      if (!pages.includes(slideNo))
+        continue
+
+      progress.update(result.length + 1)
+
+      const buffer = await slideContainers.nth(i).screenshot({
+        omitBackground,
+      })
+      const filename = `${withClicks ? id : slideNo}.png`
+      result.push({ slideIndex: slideNo - 1, buffer, filename })
       if (writeToDisk)
-        await fs.writeFile(path.join(output, `${withClicks ? id : slideNo}.png`), buffer)
+        await fs.writeFile(path.join(writeToDisk, filename), buffer)
     }
     return result
   }
 
-  async function genPagePngPerSlide(writeToDisk: boolean) {
+  async function genPagePngPerSlide(writeToDisk: string | false) {
     const result: ExportPngResult[] = []
     const genScreenshot = async (no: number, clicks?: string) => {
       await go(no, clicks)
-      const buffer = await page.screenshot()
-      result.push({ slideIndex: no - 1, buffer })
+      const buffer = await page.screenshot({
+        omitBackground,
+      })
+      const filename = `${no.toString().padStart(2, '0')}${clicks
+        ? `-${clicks}`
+        : ''}.png`
+      result.push({ slideIndex: no - 1, buffer, filename })
       if (writeToDisk) {
         await fs.writeFile(
-          path.join(output, `${no.toString().padStart(2, '0')}${clicks ? `-${clicks}` : ''}.png`),
+          path.join(writeToDisk, filename),
           buffer,
         )
       }
@@ -430,25 +520,31 @@ export async function exportSlides({
       : genPagePdfOnePiece()
   }
 
-  function genPagePng(writeToDisk = true) {
+  async function genPagePng(writeToDisk: string | false, cleanOutput = true) {
+    if (writeToDisk) {
+      if (cleanOutput)
+        await fs.rm(writeToDisk, { force: true, recursive: true })
+      await fs.mkdir(writeToDisk, { recursive: true })
+    }
     return perSlide
       ? genPagePngPerSlide(writeToDisk)
       : genPagePngOnePiece(writeToDisk)
   }
 
   async function genPageMd() {
-    const files = await fs.readdir(output)
-    const mds: string[] = files.map((file, i, files) => {
-      const slideIndex = getSlideIndex(file)
-      const mdImg = `![${slides[slideIndex]?.title}](./${path.join(output, file)})\n\n`
-      if ((i + 1 === files.length || getSlideIndex(files[i + 1]) !== slideIndex) && slides[slideIndex]?.note)
-        return `${mdImg}${slides[slideIndex]?.note}\n\n`
-      return mdImg
-    })
-
-    if (!output.endsWith('.md'))
-      output = `${output}.md`
-    await fs.writeFile(output, mds.join(''))
+    const pngs = await genPagePng(dirname(output), false)
+    const content = slides
+      .filter(({ index }) => pages.includes(index + 1))
+      .map(({ title, index, note }) =>
+        pngs.filter(({ slideIndex }) => slideIndex === index)
+          .map(({ filename }) => `![${title || (index + 1)}](./${filename})\n\n`)
+          .join('')
+          + (note
+            ? `${note.trim()}\n\n`
+            : ''),
+      )
+      .join('---\n\n')
+    await fs.writeFile(ensureSuffix('.md', output), content)
   }
 
   // Ported from https://github.com/marp-team/marp-cli/blob/main/src/converter.ts
@@ -491,9 +587,31 @@ export async function exportSlides({
     await fs.writeFile(output, buffer)
   }
 
-  function getSlideIndex(file: string): number {
-    const slideId = file.substring(0, file.indexOf('.')).split('-')[0]
-    return Number(slideId) - 1
+  // Native shapes and editable text, rather than one picture per slide. The
+  // walker, normalizer and builder live in ./pptx, so this is a delegation.
+  async function genPagePptxEditable() {
+    if (perSlide) {
+      // Per-slide mode never renders the print page the measurement depends
+      // on. Failing beats writing a deck missing every slide but the first.
+      throw new Error('[slidev] `--per-slide` is not supported with `--format pptx-editable`')
+    }
+
+    const { exportPptxEditable, reportEditableExport } = await import('./pptx')
+    const result = await exportPptxEditable({
+      page,
+      slides,
+      width,
+      height,
+      pages,
+      go,
+    }, output)
+    // So the "exported to ..." line names the file that was actually written.
+    output = result.output
+
+    // The progress bar repaints on a timer with the cursor hidden, so anything
+    // written while it runs is interleaved with it or overwritten.
+    progress.stop()
+    reportEditableExport(result)
   }
 
   // Adds metadata (title, author, keywords) to PDF document, mutating it
@@ -527,41 +645,19 @@ export async function exportSlides({
 
     return await outlinePdf({ outline, pdf })
   }
-
-  progress.start(pages.length)
-
-  if (format === 'pdf') {
-    await genPagePdf()
-  }
-  else if (format === 'png') {
-    await genPagePng()
-  }
-  else if (format === 'md') {
-    await genPagePng()
-    await genPageMd()
-  }
-  else if (format === 'pptx') {
-    const buffers = await genPagePng(false)
-    await genPagePptx(buffers)
-  }
-  else {
-    throw new Error(`Unsupported exporting format "${format}"`)
-  }
-
-  progress.stop()
-  browser.close()
-  return output
 }
 
-export function getExportOptions(args: ExportArgs, options: ResolvedSlidevOptions, outDir?: string, outFilename?: string): Omit<ExportOptions, 'port' | 'base'> {
+export function getExportOptions(args: ExportArgs, options: ResolvedSlidevOptions, outFilename?: string): Omit<ExportOptions, 'port' | 'base'> {
   const config = {
     ...options.data.config.export,
     ...args,
     ...clearUndefined({
+      waitUntil: args['wait-until'],
       withClicks: args['with-clicks'],
       executablePath: args['executable-path'],
       withToc: args['with-toc'],
       perSlide: args['per-slide'],
+      omitBackground: args['omit-background'],
     }),
   }
   const {
@@ -570,6 +666,7 @@ export function getExportOptions(args: ExportArgs, options: ResolvedSlidevOption
     format,
     timeout,
     wait,
+    waitUntil,
     range,
     dark,
     withClicks,
@@ -577,27 +674,35 @@ export function getExportOptions(args: ExportArgs, options: ResolvedSlidevOption
     withToc,
     perSlide,
     scale,
+    omitBackground,
   } = config
-  outFilename = output || options.data.config.exportFilename || outFilename || `${path.basename(entry, '.md')}-export`
-  if (outDir)
-    outFilename = path.join(outDir, outFilename)
+  outFilename = output || outFilename || options.data.config.exportFilename || `${path.basename(entry, '.md')}-export`
   return {
     output: outFilename,
     slides: options.data.slides,
     total: options.data.slides.length,
     range,
-    format: (format || 'pdf') as 'pdf' | 'png' | 'pptx' | 'md',
+    format: (format || 'pdf') as 'pdf' | 'png' | 'pptx' | 'pptx-editable' | 'md',
     timeout: timeout ?? 30000,
     wait: wait ?? 0,
-    dark: dark || options.data.config.colorSchema === 'dark',
-    routerMode: options.data.config.routerMode,
+    waitUntil: waitUntil === 'none'
+      ? undefined
+      : (waitUntil ?? 'networkidle') as 'networkidle' | 'load' | 'domcontentloaded',
+    dark: resolveExportDarkMode(dark, options.data.config.colorSchema),
+    // Export navigates by URL; memory routing ignores the URL, so fall back to history.
+    routerMode: options.data.config.routerMode === 'memory'
+      ? 'history'
+      : options.data.config.routerMode,
     width: options.data.config.canvasWidth,
     height: Math.round(options.data.config.canvasWidth / options.data.config.aspectRatio),
-    withClicks: withClicks ?? format === 'pptx',
+    // Both pptx formats default to one slide per click step. Testing the
+    // exact string here silently collapsed click steps for the editable one.
+    withClicks: withClicks ?? !!format?.startsWith('pptx'),
     executablePath,
     withToc: withToc || false,
     perSlide: perSlide || false,
     scale: scale || 2,
+    omitBackground: omitBackground ?? false,
   }
 }
 

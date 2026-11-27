@@ -1,16 +1,16 @@
 <template>
   <div class="h-full w-full flex items-center justify-center gap-5 lt-md:flex-col">
     <RouterLink to="/" class="page-link">
-      <carbon:presentation-file /> Slides
+      <div class="i-carbon:presentation-file" /> Slides
     </RouterLink>
     <RouterLink to="/presenter" class="page-link">
-      <carbon:user-speaker /> Presenter
+      <div class="i-carbon:user-speaker" /> Presenter
     </RouterLink>
     <RouterLink to="/notes" class="page-link">
-      <carbon:catalog /> Notes
+      <div class="i-carbon:catalog" /> Notes
     </RouterLink>
     <RouterLink to="/overview" class="page-link">
-      <carbon:list-boxes /> Overview
+      <div class="i-carbon:list-boxes" /> Overview
     </RouterLink>
   </div>
 </template>

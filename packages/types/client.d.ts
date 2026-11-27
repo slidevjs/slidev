@@ -19,8 +19,8 @@ declare module '#slidev/global-layers' {
 }
 
 declare module '#slidev/slides' {
-  import type { ShallowRef } from 'vue'
   import type { SlideRoute } from '@slidev/types'
+  import type { ShallowRef } from 'vue'
 
   const slides: ShallowRef<SlideRoute[]>
   export { slides }
@@ -40,15 +40,11 @@ declare module '#slidev/custom-nav-controls' {
   export default component
 }
 
-declare module '#slidev/shiki' {
-  import type { ShikiHighlighterCore } from 'shiki/core'
-  import type { BundledLanguage, BundledTheme } from 'shiki'
+declare module '#slidev/setups/shiki' {
+  import type { ShikiSetup } from '@slidev/types'
 
-  export { shikiToMonaco } from '@shikijs/monaco'
-
-  export const langs: BundledLanguage[]
-  export const themes: BundledTheme | Record<string, BundledTheme>
-  export const shiki: Promise<ShikiHighlighterCore>
+  const setups: ShikiSetup[]
+  export default setups
 }
 
 declare module '#slidev/setups/monaco' {
@@ -69,6 +65,13 @@ declare module '#slidev/setups/mermaid' {
   import type { MermaidSetup } from '@slidev/types'
 
   const setups: MermaidSetup[]
+  export default setups
+}
+
+declare module '#slidev/setups/mermaid-renderer' {
+  import type { MermaidRendererSetup } from '@slidev/types'
+
+  const setups: MermaidRendererSetup[]
   export default setups
 }
 
@@ -107,7 +110,7 @@ declare module '#slidev/setups/context-menu' {
   export default setups
 }
 
-declare module '#slidev/styles' {
+declare module '#slidev/conditional-styles' {
   // side-effects only
 }
 

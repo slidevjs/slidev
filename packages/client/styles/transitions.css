@@ -12,22 +12,22 @@
 
 .slide-left-enter-from,
 .slide-right-leave-to {
-  transform: translateX(100%);
+  translate: 100% 0;
 }
 
 .slide-left-leave-to,
 .slide-right-enter-from {
-  transform: translateX(-100%);
+  translate: -100% 0;
 }
 
 .slide-up-enter-from,
 .slide-down-leave-to {
-  transform: translateY(100%);
+  translate: 0 100%;
 }
 
 .slide-up-leave-to,
 .slide-down-enter-from {
-  transform: translateY(-100%);
+  translate: 0 -100%;
 }
 
 /* Fading */

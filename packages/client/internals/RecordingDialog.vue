@@ -1,9 +1,9 @@
 <script setup lang="ts">
 import { useVModel } from '@vueuse/core'
 import { nextTick } from 'vue'
-import { getFilename, mimeType, recordCamera, recorder, recordingName } from '../logic/recording'
+import { bitRate, frameRate, getFilename, mimeType, recordCamera, recorder, recordingName, resolution } from '../logic/recording'
+import DevicesSelectors from './DevicesSelectors.vue'
 import Modal from './Modal.vue'
-import DevicesList from './DevicesList.vue'
 
 const props = defineProps({
   modelValue: {
@@ -18,6 +18,14 @@ const value = useVModel(props, 'modelValue', emit)
 
 const { startRecording } = recorder
 
+const frameRateOptions = [15, 24, 30, 60]
+const resolutionOptions = [
+  { value: '1280x720', label: '720p (1280x720)' },
+  { value: '1920x1080', label: '1080p (1920x1080)' },
+  { value: '2560x1440', label: '1440p (2560x1440)' },
+  { value: '3840x2160', label: '2160p (3840x2160)' },
+]
+
 function close() {
   value.value = false
 }
@@ -27,6 +35,7 @@ async function start() {
   await nextTick()
   startRecording({
     mimeType: mimeType.value,
+    bitsPerSecond: bitRate.value * 1024,
   })
 }
 </script>
@@ -34,7 +43,7 @@ async function start() {
 <template>
   <Modal v-model="value" class="px-6 py-4 recording-dialog flex flex-col gap-2">
     <div class="flex gap-2 text-xl">
-      <carbon:video class="my-auto" />Recording
+      <div class="i-carbon:video my-auto" />Recording
     </div>
     <div class="grid grid-cols-2 gap-4">
       <div class="flex flex-col gap-2 py-2">
@@ -51,6 +60,48 @@ async function start() {
             <div>This will be used in the output filename that might <br>help you better organize your recording chips.</div>
           </div>
         </div>
+
+        <div class="form-text">
+          <label for="framerate">Frame Rate</label>
+          <select
+            v-model="frameRate"
+            class="bg-transparent text-current border border-main rounded px-2 py-1"
+            name="framerate"
+          >
+            <option v-for="rate in frameRateOptions" :key="rate" :value="rate">
+              {{ rate }} fps
+            </option>
+          </select>
+        </div>
+
+        <div class="form-text">
+          <label for="resolution">Resolution</label>
+          <select
+            v-model="resolution"
+            class="bg-transparent text-current border border-main rounded px-2 py-1"
+            name="resolution"
+          >
+            <option v-for="res in resolutionOptions" :key="res.value" :value="res.value">
+              {{ res.label }}
+            </option>
+          </select>
+        </div>
+
+        <div class="form-text">
+          <label for="bitrate">Bitrate</label>
+          <div class="relative">
+            <input
+              v-model.number="bitRate"
+              type="number"
+              min="1000"
+              step="1000"
+              class="bg-transparent text-current border border-main rounded px-2 py-1 w-full pr-12"
+              name="bitrate"
+            >
+            <span class="absolute right-3 top-1/2 transform -translate-y-1/2 text-sm opacity-50">kbps</span>
+          </div>
+        </div>
+
         <div class="form-check">
           <input
             v-model="recordCamera"
@@ -72,14 +123,14 @@ async function start() {
           </div>
         </div>
       </div>
-      <DevicesList />
+      <DevicesSelectors />
     </div>
     <div class="flex my-1">
-      <button class="cancel" @click="close">
+      <button class="slidev-form-button" @click="close">
         Cancel
       </button>
       <div class="flex-auto" />
-      <button @click="start">
+      <button class="slidev-form-button primary" @click="start">
         Start
       </button>
     </div>
@@ -110,16 +161,6 @@ async function start() {
 
   input[type='text'] {
     @apply border border-main rounded px-2 py-1;
-  }
-
-  button {
-    @apply bg-orange-400 text-white px-4 py-1 rounded border-b-2 border-orange-600;
-    @apply hover:(bg-orange-500 border-orange-700);
-  }
-
-  button.cancel {
-    @apply bg-gray-400 bg-opacity-50 text-white px-4 py-1 rounded border-b-2 border-main;
-    @apply hover:(bg-opacity-75 border-opacity-75);
   }
 }
 </style>

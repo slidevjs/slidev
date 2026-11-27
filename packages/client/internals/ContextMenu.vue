@@ -1,10 +1,10 @@
 <script setup lang="ts">
 import { onClickOutside, useElementBounding, useEventListener, useWindowFocus } from '@vueuse/core'
 import { computed, ref, watch } from 'vue'
-import { closeContextMenu, currentContextMenu } from '../logic/contextMenu'
 import { useDynamicSlideInfo } from '../composables/useSlideInfo'
-import { windowSize } from '../state'
 import { configs } from '../env'
+import { closeContextMenu, currentContextMenu } from '../logic/contextMenu'
+import { windowSize } from '../state'
 
 const container = ref<HTMLElement>()
 
@@ -61,35 +61,39 @@ const top = computed(() => {
     v-if="currentContextMenu"
     ref="container"
     :style="`left:${left}px;top:${top}px`"
-    class="fixed z-100 w-60 flex flex-wrap justify-items-start p-1 animate-fade-in animate-duration-100 backdrop-blur bg-main bg-opacity-75! border border-main rounded-md shadow overflow-hidden select-none"
+    class="slidev-glass-effect fixed z-context-menu w-60 flex flex-wrap justify-items-start p-1 animate-fade-in animate-duration-100 rounded-md shadow overflow-hidden select-none"
     @contextmenu.prevent=""
     @click="closeContextMenu"
   >
     <template v-for="item, index of currentContextMenu.items.value" :key="index">
       <div v-if="item === 'separator'" :key="index" class="w-full my1 border-t border-main" />
-      <div
-        v-else-if="item.small"
-        class="p-2 w-[40px] h-[40px] inline-block text-center cursor-pointer rounded"
-        :class="item.disabled ? `op40` : `hover:bg-active`"
-        :title="(item.label as string)"
-        @click="item.action"
-      >
-        <component :is="item.icon" />
-      </div>
-      <div
-        v-else
-        class="w-full grid grid-cols-[35px_1fr] p-2 pl-0 cursor-pointer rounded"
-        :class="item.disabled ? `op40` : `hover:bg-active`"
-        @click="item.action"
-      >
-        <div class="mx-auto">
-          <component :is="item.icon" />
+      <template v-else-if="item.show ?? true">
+        <div
+          v-if="item.small"
+          class="p-2 w-[40px] h-[40px] inline-block text-center cursor-pointer rounded flex"
+          :class="item.disabled ? `op40` : `hover:bg-active`"
+          :title="(item.label as string)"
+          @click="item.action"
+        >
+          <div v-if="typeof item.icon === 'string'" :class="item.icon" class="text-1.2em ma" />
+          <component :is="item.icon" v-else />
         </div>
-        <div v-if="typeof item.label === 'string'">
-          {{ item.label }}
+        <div
+          v-else
+          class="w-full grid grid-cols-[35px_1fr] p-2 pl-0 cursor-pointer rounded"
+          :class="item.disabled ? `op40` : `hover:bg-active`"
+          @click="item.action"
+        >
+          <div class="mx-auto flex">
+            <div v-if="typeof item.icon === 'string'" :class="item.icon" class="text-1.2em ma" />
+            <component :is="item.icon" v-else />
+          </div>
+          <div v-if="typeof item.label === 'string'">
+            {{ item.label }}
+          </div>
+          <component :is="item.label" v-else />
         </div>
-        <component :is="item.label" v-else />
-      </div>
+      </template>
     </template>
     <template v-if="!isExplicitEnabled">
       <div class="w-full my1 border-t border-main" />

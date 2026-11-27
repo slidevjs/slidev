@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { Fragment, onMounted, onUnmounted } from 'vue'
-import { makeId } from '../logic/utils'
 import { useSlideContext } from '../context'
+import { makeId } from '../logic/utils'
 
 const props = defineProps({
   size: {

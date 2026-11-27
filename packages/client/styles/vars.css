@@ -12,9 +12,17 @@
   --slidev-transition-duration: 0.5s;
   --slidev-slide-container-background: black;
   --slidev-controls-foreground: white;
+
+  --slidev-code-tab-divider: #e5e5e5;
+  --slidev-code-tab-text-color: #67676c;
+  --slidev-code-tab-font-size: 12px;
+  --slidev-code-tab-active-text-color: #3c3c43;
 }
 
 html.dark {
   --slidev-code-background: #1b1b1b;
   --slidev-code-foreground: #eee;
+  --slidev-code-tab-divider: #222222;
+  --slidev-code-tab-text-color: #98989f;
+  --slidev-code-tab-active-text-color: #dfdfd6;
 }

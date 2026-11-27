@@ -1,6 +1,50 @@
-import YAML from 'yaml'
-import { ensurePrefix } from '@antfu/utils'
 import type { FrontmatterStyle, SlidevDetectedFeatures, SlidevMarkdown, SlidevPreparserExtension, SourceSlideInfo } from '@slidev/types'
+import { ensurePrefix } from '@antfu/utils'
+import YAML from 'yaml'
+
+const RE_FRONTMATTER = /^---.*\r?\n([\s\S]*?)---/
+const RE_YAML_CODEBLOCK = /^\s*```ya?ml([\s\S]*?)```/
+const RE_DOLLAR_INLINE = /\$.*?\$/
+const RE_DOLLAR_BLOCK = /\$\$/
+const RE_MONACO_BLOCK = /\{monaco.*\}/
+const RE_TWEET_TAG = /<Tweet\b/
+const RE_BLUESKY_TAG = /<BlueSky\b/
+const RE_MERMAID_CODEBLOCK = /^```mermaid/m
+const RE_HEADING = /^(#+) (.*)$/m
+const RE_CODE_BLOCK = /^```[\s\S]+?^```/gm
+const RE_LEADING_BACKTICKS = /^\s*`+/
+const RE_CRLF = /\r?\n/g
+const RE_BOM = /^\uFEFF/
+
+export interface SlidevParserOptions {
+  noParseYAML?: boolean
+  preserveCR?: boolean
+}
+
+function advanceHtmlCommentState(line: string, inHtmlComment: boolean) {
+  let cursor = 0
+
+  while (cursor < line.length) {
+    if (inHtmlComment) {
+      const end = line.indexOf('-->', cursor)
+      if (end < 0)
+        return true
+      inHtmlComment = false
+      cursor = end + 3
+    }
+    else {
+      const start = line.indexOf('<!--', cursor)
+      if (start < 0)
+        return false
+      const end = line.indexOf('-->', start + 4)
+      if (end < 0)
+        return true
+      cursor = end + 3
+    }
+  }
+
+  return inHtmlComment
+}
 
 export function stringify(data: SlidevMarkdown) {
   return `${data.slides.map(stringifySlide).join('\n').trim()}\n`
@@ -14,7 +58,9 @@ export function stringifySlide(data: SourceSlideInfo, idx = 0) {
 
 export function prettifySlide(data: SourceSlideInfo) {
   const trimed = data.content.trim()
-  data.content = trimed ? `\n${data.content.trim()}\n` : ''
+  data.content = trimed
+    ? `\n${data.content.trim()}\n`
+    : ''
   data.raw = data.frontmatterDoc?.contents
     ? data.frontmatterStyle === 'yaml'
       ? `\`\`\`yaml\n${data.frontmatterDoc.toString().trim()}\n\`\`\`\n${data.content}`
@@ -30,12 +76,12 @@ export function prettify(data: SlidevMarkdown) {
   return data
 }
 
-function matter(code: string) {
+function matter(code: string, options: SlidevParserOptions) {
   let type: FrontmatterStyle | undefined
   let raw: string | undefined
 
   let content = code
-    .replace(/^---.*\r?\n([\s\S]*?)---/, (_, f) => {
+    .replace(RE_FRONTMATTER, (_, f) => {
       type = 'frontmatter'
       raw = f
       return ''
@@ -43,38 +89,164 @@ function matter(code: string) {
 
   if (type !== 'frontmatter') {
     content = content
-      .replace(/^\s*```ya?ml([\s\S]*?)```/, (_, f) => {
+      .replace(RE_YAML_CODEBLOCK, (_, f) => {
         type = 'yaml'
         raw = f
         return ''
       })
   }
 
-  const doc = YAML.parseDocument(raw || '')
+  const doc = raw && !options.noParseYAML
+    ? YAML.parseDocument(raw)
+    : undefined
 
   return {
     type,
     raw,
     doc,
-    data: doc.toJSON(),
+    data: doc?.toJSON(),
     content,
   }
 }
 
+const IMAGE_EXTENSIONS = /\.(?:png|jpe?g|gif|svg|webp|avif|ico|bmp|tiff?)$/i
+const RE_MD_IMAGE_TITLE = /\s+(?:"[^"]*"|'[^']*')\s*$/
+
+/**
+ * Strip the optional CommonMark title and the angle-bracket form from a
+ * markdown image destination, so `![a](/x.png "Title")` yields `/x.png`.
+ */
+function normalizeMarkdownImageTarget(target: string) {
+  const url = target.trim().replace(RE_MD_IMAGE_TITLE, '').trim()
+  return url.startsWith('<') && url.endsWith('>')
+    ? url.slice(1, -1).trim()
+    : url
+}
+
+/**
+ * Extract image URLs from slide content and frontmatter.
+ * Strips code blocks first to avoid false positives.
+ */
+export function extractImagesUsage(content: string, frontmatter: Record<string, any>): string[] {
+  const images = new Set<string>()
+
+  // Collect from frontmatter keys
+  for (const key of ['image', 'backgroundImage', 'background']) {
+    const val = frontmatter[key]
+    if (typeof val === 'string' && val && !val.startsWith('data:')) {
+      // For `background`, only include if it looks like an image URL
+      if (key === 'background') {
+        if (IMAGE_EXTENSIONS.test(val) || val.startsWith('/') || val.startsWith('http'))
+          images.add(val)
+      }
+      else {
+        images.add(val)
+      }
+    }
+  }
+
+  // Strip code blocks to avoid false positives
+  const stripped = content.replace(RE_CODE_BLOCK, '')
+
+  // Markdown images: ![alt](url), ![alt](url "title"), ![alt](<url>)
+  for (const [, target] of stripped.matchAll(/!\[[^\]]*\]\(([^)]+)\)/g)) {
+    const url = normalizeMarkdownImageTarget(target)
+    if (url && !url.startsWith('data:'))
+      images.add(url)
+  }
+
+  // Vue component props: src="url", image="url"
+  for (const [, url] of stripped.matchAll(/\b(?:src|image)=["']([^"']+)["']/g)) {
+    if (url && !url.startsWith('data:') && !url.includes('{{') && IMAGE_EXTENSIONS.test(url))
+      images.add(url.trim())
+  }
+
+  // Vue bound props: :src="'/path/to/img.png'"
+  for (const [, url] of stripped.matchAll(/:(?:src|image)=["']'([^']+)'["']/g)) {
+    if (url && !url.startsWith('data:') && IMAGE_EXTENSIONS.test(url))
+      images.add(url.trim())
+  }
+
+  // CSS url() with image extension filter
+  for (const [, url] of stripped.matchAll(/url\(["']?([^"')]+)["']?\)/g)) {
+    if (url && !url.startsWith('data:') && IMAGE_EXTENSIONS.test(url))
+      images.add(url.trim())
+  }
+
+  return Array.from(images)
+}
+
 export function detectFeatures(code: string): SlidevDetectedFeatures {
   return {
-    katex: !!code.match(/\$.*?\$/) || !!code.match(/\$\$/),
-    monaco: code.match(/\{monaco.*\}/) ? scanMonacoReferencedMods(code) : false,
-    tweet: !!code.match(/<Tweet\b/),
-    mermaid: !!code.match(/^```mermaid/m),
+    katex: !!code.match(RE_DOLLAR_INLINE) || !!code.match(RE_DOLLAR_BLOCK),
+    monaco: RE_MONACO_BLOCK.test(code)
+      ? scanMonacoReferencedMods(code)
+      : false,
+    tweet: !!code.match(RE_TWEET_TAG),
+    bluesky: !!code.match(RE_BLUESKY_TAG),
+    mermaid: !!code.match(RE_MERMAID_CODEBLOCK),
   }
 }
 
-export function parseSlide(raw: string): Omit<SourceSlideInfo, 'filepath' | 'index' | 'start' | 'contentStart' | 'end'> {
-  const matterResult = matter(raw)
+/**
+ * Detect slide content that was parsed as frontmatter because the blank line
+ * after `---` is missing, e.g. `---\n<!-- note -->\n\n---`.
+ */
+function isMisplacedFrontmatter(type: FrontmatterStyle | undefined, raw: string | undefined, data: unknown) {
+  if (type !== 'frontmatter' || !raw?.trim())
+    return false
+  if (raw.trimStart().startsWith('<!--'))
+    return true
+  return data != null && (typeof data !== 'object' || Array.isArray(data))
+}
+
+/**
+ * Keys produced by an HTML comment written inside frontmatter,
+ * e.g. `layout: center\n<!-- note -->` gives `{ "<!-- note -->": null }`.
+ */
+function getHtmlCommentKeys(data: unknown) {
+  if (data == null || typeof data !== 'object' || Array.isArray(data))
+    return []
+  return Object.keys(data).filter(key => key.trimStart().startsWith('<!--'))
+}
+
+function resolveFrontmatter(type: FrontmatterStyle | undefined, raw: string | undefined, data: any): Record<string, any> {
+  if (isMisplacedFrontmatter(type, raw, data))
+    return {}
+  const commentKeys = getHtmlCommentKeys(data)
+  if (!commentKeys.length)
+    return data || {}
+  const frontmatter = { ...data }
+  for (const key of commentKeys)
+    delete frontmatter[key]
+  return frontmatter
+}
+
+const MISPLACED_FRONTMATTER_MESSAGE = 'Missing blank line after "---": the content below it was parsed as frontmatter and ignored. Add a blank line after "---" if it is slide content.'
+const HTML_COMMENT_IN_FRONTMATTER_MESSAGE = 'HTML comments are not supported in frontmatter and were ignored. Use "#" for YAML comments.'
+
+function checkMisplacedFrontmatter(slide: SourceSlideInfo, md: SlidevMarkdown) {
+  const data = slide.frontmatterDoc?.toJSON()
+  let message: string | undefined
+  if (isMisplacedFrontmatter(slide.frontmatterStyle, slide.frontmatterRaw, data))
+    message = MISPLACED_FRONTMATTER_MESSAGE
+  else if (slide.frontmatterStyle === 'frontmatter' && getHtmlCommentKeys(data).length)
+    message = HTML_COMMENT_IN_FRONTMATTER_MESSAGE
+  if (!message)
+    return
+  md.errors ??= []
+  md.errors.push({
+    row: slide.start,
+    message,
+  })
+}
+
+export function parseSlide(raw: string, options: SlidevParserOptions = {}): Omit<SourceSlideInfo, 'filepath' | 'index' | 'start' | 'contentStart' | 'end'> {
+  const matterResult = matter(raw, options)
   let note: string | undefined
-  const frontmatter = matterResult.data || {}
+  const frontmatter = resolveFrontmatter(matterResult.type, matterResult.raw, matterResult.data)
   let content = matterResult.content.trim()
+  const revision = hash(raw.trim())
 
   const comments = Array.from(content.matchAll(/<!--([\s\S]*?)-->/g))
   if (comments.length) {
@@ -91,23 +263,29 @@ export function parseSlide(raw: string): Omit<SourceSlideInfo, 'filepath' | 'ind
     title = frontmatter.title || frontmatter.name
   }
   else {
-    const match = content.match(/^(#+) (.*)$/m)
+    // `#` lines inside a fenced block are code comments, not the slide title
+    const match = content.replace(RE_CODE_BLOCK, '').match(RE_HEADING)
     title = match?.[2]?.trim()
     level = match?.[1]?.length
   }
   if (frontmatter.level)
     level = frontmatter.level || 1
 
+  const images = extractImagesUsage(content, frontmatter)
+
   return {
     raw,
     title,
     level,
+    revision,
     content,
+    contentRaw: content,
     frontmatter,
     frontmatterStyle: matterResult.type,
     frontmatterDoc: matterResult.doc,
     frontmatterRaw: matterResult.raw,
     note,
+    images,
   }
 }
 
@@ -115,19 +293,23 @@ export async function parse(
   markdown: string,
   filepath: string,
   extensions?: SlidevPreparserExtension[],
+  options: SlidevParserOptions = {},
 ): Promise<SlidevMarkdown> {
-  const lines = markdown.split(/\r?\n/g)
+  // a leading UTF-8 BOM would hide the headmatter, as the first line no longer starts with `---`
+  markdown = markdown.replace(RE_BOM, '')
+  const lines = markdown.split(options.preserveCR ? '\n' : RE_CRLF)
   const slides: SourceSlideInfo[] = []
 
   let start = 0
   let contentStart = 0
+  let inHtmlComment = false
 
   async function slice(end: number) {
     if (start === end)
       return
     const raw = lines.slice(start, end).join('\n')
     const slide: SourceSlideInfo = {
-      ...parseSlide(raw),
+      ...parseSlide(raw, options),
       filepath,
       index: slides.length,
       start,
@@ -140,6 +322,18 @@ export async function parse(
           const newContent = await e.transformSlide(slide.content, slide.frontmatter)
           if (newContent !== undefined)
             slide.content = newContent
+          if (typeof slide.frontmatter.title === 'string') {
+            slide.title = slide.frontmatter.title
+          }
+          if (typeof slide.frontmatter.level === 'number') {
+            slide.level = slide.frontmatter.level
+          }
+        }
+
+        if (e.transformNote) {
+          const newNote = await e.transformNote(slide.note, slide.frontmatter)
+          if (newNote !== undefined)
+            slide.note = newNote
         }
       }
     }
@@ -156,7 +350,13 @@ export async function parse(
   }
 
   for (let i = 0; i < lines.length; i++) {
-    const line = lines[i].trimEnd()
+    const rawLine = lines[i]
+    const line = rawLine.trimEnd()
+    if (inHtmlComment) {
+      inHtmlComment = advanceHtmlCommentState(rawLine, true)
+      continue
+    }
+
     if (line.startsWith('---')) {
       await slice(i)
 
@@ -173,7 +373,7 @@ export async function parse(
     }
     // skip code block
     else if (line.trimStart().startsWith('```')) {
-      const codeBlockLevel = line.match(/^\s*`+/)![0]
+      const codeBlockLevel = line.match(RE_LEADING_BACKTICKS)![0]
       let j = i + 1
       for (; j < lines.length; j++) {
         if (lines[j].startsWith(codeBlockLevel))
@@ -183,16 +383,104 @@ export async function parse(
       if (j !== lines.length)
         i = j
     }
+    else {
+      inHtmlComment = advanceHtmlCommentState(rawLine, false)
+    }
   }
 
   if (start <= lines.length - 1)
     await slice(lines.length)
 
-  return {
+  const md: SlidevMarkdown = {
     filepath,
     raw: markdown,
     slides,
   }
+  for (const slide of slides)
+    checkMisplacedFrontmatter(slide, md)
+  return md
+}
+
+export function parseSync(
+  markdown: string,
+  filepath: string,
+  options: SlidevParserOptions = {},
+): SlidevMarkdown {
+  markdown = markdown.replace(RE_BOM, '')
+  const lines = markdown.split(options.preserveCR ? '\n' : RE_CRLF)
+  const slides: SourceSlideInfo[] = []
+
+  let start = 0
+  let contentStart = 0
+  let inHtmlComment = false
+
+  function slice(end: number) {
+    if (start === end)
+      return
+    const raw = lines.slice(start, end).join('\n')
+    const slide: SourceSlideInfo = {
+      ...parseSlide(raw, options),
+      filepath,
+      index: slides.length,
+      start,
+      contentStart,
+      end,
+    }
+    slides.push(slide)
+    start = end + 1
+    contentStart = end + 1
+  }
+
+  for (let i = 0; i < lines.length; i++) {
+    const rawLine = lines[i]
+    const line = rawLine.trimEnd()
+    if (inHtmlComment) {
+      inHtmlComment = advanceHtmlCommentState(rawLine, true)
+      continue
+    }
+
+    if (line.startsWith('---')) {
+      slice(i)
+
+      const next = lines[i + 1]
+      // found frontmatter, skip next dash
+      if (line[3] !== '-' && next?.trim()) {
+        start = i
+        for (i += 1; i < lines.length; i++) {
+          if (lines[i].trimEnd() === '---')
+            break
+        }
+        contentStart = i + 1
+      }
+    }
+    // skip code block
+    else if (line.trimStart().startsWith('```')) {
+      const codeBlockLevel = line.match(RE_LEADING_BACKTICKS)![0]
+      let j = i + 1
+      for (; j < lines.length; j++) {
+        if (lines[j].startsWith(codeBlockLevel))
+          break
+      }
+      // Update i only when code block ends
+      if (j !== lines.length)
+        i = j
+    }
+    else {
+      inHtmlComment = advanceHtmlCommentState(rawLine, false)
+    }
+  }
+
+  if (start <= lines.length - 1)
+    slice(lines.length)
+
+  const md: SlidevMarkdown = {
+    filepath,
+    raw: markdown,
+    slides,
+  }
+  for (const slide of slides)
+    checkMisplacedFrontmatter(slide, md)
+  return md
 }
 
 function scanMonacoReferencedMods(md: string) {
@@ -222,5 +510,14 @@ function scanMonacoReferencedMods(md: string) {
   }
 }
 
-export * from './utils'
+function hash(str: string) {
+  let hash = 0
+  for (let i = 0; i < str.length; i++) {
+    hash = ((hash << 5) - hash) + str.charCodeAt(i)
+    hash |= 0
+  }
+  return hash.toString(36).slice(0, 12)
+}
+
 export * from './config'
+export * from './utils'

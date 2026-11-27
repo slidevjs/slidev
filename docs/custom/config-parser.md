@@ -1,4 +1,8 @@
-# Configure and Extend the Parser
+# Configure Pre-Parser
+
+::: info
+Custom pre-parsers are not supposed to be used too often. Usually you can use [Transformers](./config-transformers) for custom syntaxes.
+:::
 
 Slidev parses your presentation file (e.g. `slides.md`) in three steps:
 
@@ -15,14 +19,14 @@ Configuring the markdown parser used in step 2 can be done by [configuring Vite 
 > Available since v0.37.0.
 
 ::: warning
-Important: when modifying the preparser configuration, you need to stop and start slidev again (restart might not be sufficient).
+Important: when modifying the preparser configuration, you need to stop and start Slidev again (restart might not be sufficient).
 :::
 
-The preparser (step 1 above) is highly extensible and allows you to implement custom syntaxes for your md files. Extending the preparser is considered **an advanced feature** and is susceptible to breaking [editor integrations](/guide/editors) due to implicit changes in the syntax.
+The preparser (step 1 above) is highly extensible and allows you to implement custom syntaxes for your md files. Extending the preparser is considered **an advanced feature** and is susceptible to breaking [editor integrations](../features/side-editor) due to implicit changes in the syntax.
 
 To customize it, create a `./setup/preparser.ts` file with the following content:
 
-```ts
+```ts twoslash [./setup/preparser.ts]
 import { definePreparserSetup } from '@slidev/types'
 
 export default definePreparserSetup(({ filepath, headmatter, mode }) => {
@@ -47,6 +51,7 @@ This example systematically replaces any `@@@` line with a line with `hello`. It
 - An extension can contain:
   - a `transformRawLines(lines)` function that runs just after parsing the headmatter of the md file and receives a list of all lines (from the md file). The function can mutate the list arbitrarily.
   - a `transformSlide(content, frontmatter)` function that is called for each slide, just after splitting the file, and receives the slide content as a string and the frontmatter of the slide as an object. The function can mutate the frontmatter and must return the content string (possibly modified, possibly `undefined` if no modifications have been done).
+  - a `transformNote(note, frontmatter)` function that is called for each slide, just after splitting the file, and receives the slide note as a string or undefined and the frontmatter of the slide as an object. The function can mutate the frontmatter and must return the note string (possibly modified, possibly `undefined` if no modifications have been done).
   - a `name`
 
 ## Example Preparser Extensions
@@ -71,7 +76,7 @@ see you next time
 
 To allow these `@src:` and `@cover:` syntaxes, create a `./setup/preparser.ts` file with the following content:
 
-```ts
+```ts twoslash [./setup/preparser.ts]
 import { definePreparserSetup } from '@slidev/types'
 
 export default definePreparserSetup(() => {
@@ -81,7 +86,7 @@ export default definePreparserSetup(() => {
         let i = 0
         while (i < lines.length) {
           const l = lines[i]
-          if (l.match(/^@cover:/i)) {
+          if (/^@cover:/i.test(l)) {
             lines.splice(
               i,
               1,
@@ -93,7 +98,7 @@ export default definePreparserSetup(() => {
             )
             continue
           }
-          if (l.match(/^@src:/i)) {
+          if (/^@src:/i.test(l)) {
             lines.splice(
               i,
               1,
@@ -152,13 +157,13 @@ Here we used an underscore in `_scale` to avoid possible conflicts with existing
 
 To handle this `_scale: ...` syntax in the frontmatter, create a `./setup/preparser.ts` file with the following content:
 
-```ts
+```ts twoslash [./setup/preparser.ts]
 import { definePreparserSetup } from '@slidev/types'
 
 export default definePreparserSetup(() => {
   return [
     {
-      transformSlide(content, frontmatter) {
+      async transformSlide(content, frontmatter) {
         if ('_scale' in frontmatter) {
           return [
             `<Transform :scale=${frontmatter._scale}>`,
@@ -175,3 +180,53 @@ export default definePreparserSetup(() => {
 ```
 
 And that's it.
+
+### Use case 3: using custom frontmatter to transform note
+
+Imagine a case where you want to replace the slides default notes with custom notes.
+For instance, you might want to write your `slides.md` as follows:
+
+<!-- eslint-skip -->
+
+```md
+---
+layout: quote
+_note: notes/note.md
+---
+
+# Welcome
+
+> great!
+
+<!--
+Default slide notes
+-->
+```
+
+Here we used an underscore in `_note` to avoid possible conflicts with existing frontmatter properties.
+
+To handle this `_note: ...` syntax in the frontmatter, create a `./setup/preparser.ts` file with the following content:
+
+```ts twoslash [./setup/preparser.ts]
+import fs, { promises as fsp } from 'node:fs'
+import { definePreparserSetup } from '@slidev/types'
+
+export default definePreparserSetup(() => {
+  return [
+    {
+      async transformNote(note, frontmatter) {
+        if ('_note' in frontmatter && fs.existsSync(frontmatter._note)) {
+          try {
+            const newNote = await fsp.readFile(frontmatter._note, 'utf8')
+            return newNote
+          }
+          catch (err) {
+          }
+        }
+
+        return note
+      },
+    },
+  ]
+})
+```

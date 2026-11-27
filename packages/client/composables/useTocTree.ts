@@ -4,7 +4,7 @@ import { computed } from 'vue'
 import { getSlidePath } from '../logic/slides'
 
 function addToTree(tree: TocItem[], route: SlideRoute, level = 1) {
-  const titleLevel = route.meta?.slide?.level
+  const titleLevel = route.meta.slide.level ?? level
   if (titleLevel && titleLevel > level && tree.length > 0) {
     addToTree(tree[tree.length - 1].children, route, level + 1)
   }
@@ -13,6 +13,7 @@ function addToTree(tree: TocItem[], route: SlideRoute, level = 1) {
       no: route.no,
       children: [],
       level,
+      titleLevel,
       path: getSlidePath(route.meta.slide?.frontmatter?.routeAlias ?? route.no, false),
       hideInToc: Boolean(route.meta?.slide?.frontmatter?.hideInToc),
       title: route.meta?.slide?.title,

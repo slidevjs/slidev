@@ -36,7 +36,7 @@ async function pack() {
     console.log('[pack] pack', path)
     cd(resolve(WORKSPACE_ROOT, path))
     const { stdout } = await $`pnpm pack`
-    await fs.move(stdout.trim(), `${PKG_ROOT}/${name}.tgz`)
+    await fs.move(stdout.split('\n').filter(Boolean).at(-1).trim(), `${PKG_ROOT}/${name}.tgz`)
   }
 }
 

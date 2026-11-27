@@ -1,7 +1,7 @@
-import { slash } from '@antfu/utils'
-import type { MaybeRefOrGetter } from '@vue/runtime-core'
-import { computed, toValue } from '@vue/runtime-core'
+import type { MaybeRefOrGetter } from 'reactive-vscode'
 import type { TextDocument } from 'vscode'
+import { slash } from '@antfu/utils'
+import { computed, toValue } from 'reactive-vscode'
 import { activeProject, projects } from '../projects'
 
 export function getProjectFromDoc(doc: TextDocument | undefined) {

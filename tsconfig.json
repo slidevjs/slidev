@@ -1,17 +1,18 @@
 {
   "compilerOptions": {
-    "target": "es2022",
+    "target": "ESNext",
     "jsx": "preserve",
     "lib": ["DOM", "ESNext"],
-    "baseUrl": ".",
     "module": "ESNext",
-    "moduleResolution": "node",
+    "moduleResolution": "bundler",
     "paths": {
+      "vitepress/dist/client/theme-default/components/VPMenuLink.vue": ["./docs/.vitepress/shims/VPMenuLink.ts"],
       "@slidev/client": ["./packages/client/index.ts"],
       "@slidev/client/*": ["./packages/client/*"],
       "@slidev/types": ["./packages/types/src/index.ts"],
       "@slidev/parser/fs": ["./packages/parser/src/fs.ts"],
       "@slidev/parser/core": ["./packages/parser/src/core.ts"],
+      "@slidev/parser/utils": ["./packages/parser/src/utils.ts"],
       "@slidev/parser": ["./packages/parser/src/index.ts"]
     },
     "resolveJsonModule": true,
@@ -19,23 +20,27 @@
       "vite",
       "vite/client",
       "node",
-      "vite-plugin-vue-server-ref/module"
+      "vite-plugin-vue-server-ref/client"
     ],
+    "allowImportingTsExtensions": true,
     "strict": true,
     "strictNullChecks": true,
     "noUnusedLocals": true,
     "noEmit": true,
     "esModuleInterop": true,
     "forceConsistentCasingInFileNames": true,
+    "ignoreDeprecations": "6.0",
     "skipLibCheck": true
   },
   "include": [
     "./*.ts",
+    "./docs/**/*.ts",
+    "./docs/**/*.vue",
     "./packages/**/*.ts",
     "./packages/**/*.vue",
     "./demo/**/*.ts",
     "./demo/**/*.vue",
     "./test/**/*.ts"
   ],
-  "exclude": ["**/dist/**", "node_modules"]
+  "exclude": ["**/dist/**", "**/node_modules/**"]
 }

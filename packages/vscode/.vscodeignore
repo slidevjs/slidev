@@ -1,5 +1,12 @@
 .vscode/**
 .vscode-test/**
+node_modules/**
+language-server/**
+scripts/**
 src/**
-tsup.config.ts
-*.map
+tsdown.config.ts
+**/*.map
+syntaxes/codeblock-patch.ts
+syntaxes/slidev.example.md
+syntaxes/tsconfig.json
+syntaxes/.vscode

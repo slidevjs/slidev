@@ -2,7 +2,7 @@
 
 Slidev employs some directory structure conventions to minimize the configuration surface and to make the functionality extensions flexible and intuitive.
 
-The basic structure is as follows:
+The conventional directory structure is:
 
 ```bash
 your-slidev/
@@ -10,6 +10,7 @@ your-slidev/
   ├── layouts/          # custom layouts
   ├── public/           # static assets
   ├── setup/            # custom setup / hooks
+  ├── snippets/         # code snippets
   ├── styles/           # custom style
   ├── index.html        # injections to index.html
   ├── slides.md         # the main slides entry
@@ -20,82 +21,33 @@ All of them are optional.
 
 ## Components
 
-Conventions: `./components/*.{vue,js,ts,jsx,tsx,md}`
+Pattern: `./components/*.{vue,js,ts,jsx,tsx,md}`
 
-Components inside this directory can be directly used in the slides Markdown with the same component name as the file name.
-
-For example:
-
-```bash
-your-slidev/
-  ├── ...
-  └── components/
-      ├── MyComponent.vue
-      └── HelloWorld.ts
-```
-
-```md
-<!-- slides.md -->
-
-# My Slide
-
-<MyComponent :count="4"/>
-
-<!-- both namings work -->
-
-<hello-world foo="bar">
-  Slot
-</hello-world>
-```
-
-This feature is powered by [`unplugin-vue-components`](https://github.com/antfu/unplugin-vue-components), learn more there.
-
-Slidev also provides some [built-in components](/builtin/components) for you to use.
+<LinkCard link="guide/component" />
 
 ## Layouts
 
-Conventions: `./layouts/*.{vue,js,ts,jsx,tsx}`
+Pattern: `./layouts/*.{vue,js,ts,jsx,tsx}`
 
-```
-your-slidev/
-  ├── ...
-  └── layouts/
-      ├── cover.vue
-      └── my-cool-theme.vue
-```
-
-You can use any filename for your layout. You then reference your layout in your YAML header using the filename.
-
-```yaml
----
-layout: my-cool-theme
----
-```
-
-If the layout you provide has the same name as a built-in layout or a theme layout, your custom layout will take precedence over the built-in/theme layout. The priority order is `local > theme > built-in`.
-
-In the layout component, use `<slot/>` for the slide content. For example:
-
-```html
-<!-- default.vue -->
-<template>
-  <div class="slidev-layout default">
-    <slot />
-  </div>
-</template>
-```
+<LinkCard link="guide/layout" />
 
 ## Public
 
-Conventions: `./public/*`
+Pattern: `./public/*`
 
-Assets in this directory will be served at root path `/` during dev, and copied to the root of the dist directory as-is. Read more about [Vite's `public` directory](https://vitejs.dev/guide/assets.html#the-public-directory).
+Assets in this directory will be served at root path `/` during dev, and copied to the root of the dist directory as-is. Read more about [Assets Handling](../guide/faq#assets-handling).
 
 ## Style
 
-Conventions: `./style.css` | `./styles/index.{css,js,ts}`
+Pattern: `./style.css` | `./styles/index.{css,js,ts}`
 
 Files following this convention will be injected to the App root. If you need to import multiple CSS entries, you can create the following structure and manage the import order yourself.
+
+:::warning
+Global CSS here also applies to the presenter UI. Prefer scoping styles to individual slides, or wrap your selectors under `.slidev-layout` to avoid leaking styles into presenter mode.
+
+**Example:** Use `.slidev-layout .grid { ... }` instead of just `.grid { ... }`.
+:::
 
 ```bash
 your-slidev/
@@ -115,11 +67,11 @@ import './code.css'
 import './layouts.css'
 ```
 
-Styles will be processed by [UnoCSS](https://unocss.dev/) and [PostCSS](https://postcss.org/), so you can use CSS nesting and [at-directives](https://unocss.dev/transformers/directives#apply) out-of-box. For example:
+Styles will be processed by [UnoCSS](https://unocss.dev/) and [PostCSS](https://postcss.org/), so you can use CSS nesting and [at-directives](https://unocss.dev/transformers/directives#apply) and Nested CSS out-of-box. For example:
 
 <!-- eslint-skip -->
 
-```less
+```css
 .slidev-layout {
   --uno: px-14 py-10 text-[1.1rem];
 
@@ -137,18 +89,29 @@ Styles will be processed by [UnoCSS](https://unocss.dev/) and [PostCSS](https://
 }
 ```
 
-[Learn more about the syntax](https://unocss.dev/transformers/directives#apply).
+Learn more about the syntax [here](https://unocss.dev/transformers/directives#apply).
+
+### Targeting the Active Slide
+
+To style whichever slide is currently visible without hardcoding page numbers (`.slidev-page-7`), Slidev applies the `.slidev-page-active` class to the current slide wrapper inside `#slideshow`:
+
+```css
+.slidev-page-active .my-element {
+  color: red;
+}
+```
+
+This includes Play mode, the main Presenter view, and single-slide print/export views rendered through the slideshow (such as `/2?print=true` or `--per-slide`). It is not applied to overview thumbnails, Presenter Next previews, or standalone `/print` and `/export` frames.
 
 ## `index.html`
 
-Conventions: `index.html`
+Pattern: `index.html`
 
 The `index.html` provides the ability to inject meta tags and/or scripts to the main `index.html`
 
 For example, for the following custom `index.html`:
 
-```html
-<!-- ./index.html -->
+```html [index.html]
 <head>
   <link rel="preconnect" href="https://fonts.gstatic.com">
   <link href="https://fonts.googleapis.com/css2?family=Fira+Code:wght@400;600&family=Nunito+Sans:wght@200;400;600&display=swap" rel="stylesheet">
@@ -183,6 +146,6 @@ The final hosted `index.html` will be:
 
 ## Global Layers
 
-Conventions: `global-top.vue` | `global-bottom.vue`
+Pattern: `global-top.vue` | `global-bottom.vue` | `custom-nav-controls.vue` | `slide-top.vue` | `slide-bottom.vue`
 
-Learn more: [Global Layers](/custom/global-layers)
+<LinkCard link="features/global-layers" />

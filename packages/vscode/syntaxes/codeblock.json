@@ -1,0 +1,58 @@
+{
+  "$schema": "https://raw.githubusercontent.com/martinring/tmlanguage/master/tmlanguage.json",
+  "fileTypes": [],
+  "injectionSelector": "L:fenced_code.block.language.attributes.markdown -meta.code_block_attrs.slidev",
+  "patterns": [
+    {
+      "match": "twoslash",
+      "name": "keyword.twoslash.slidev"
+    },
+    {
+      "match": "\\s*(\\{)([^}]*)(\\})\\s*(.*)$",
+      "name": "meta.code_block_attrs.slidev",
+      "captures": {
+        "1": {
+          "name": "punctuation.definition.range_or_monaco.slidev"
+        },
+        "2": {
+          "name": "meta.range_or_monaco.slidev",
+          "patterns": [
+            {
+              "include": "source.slidev#monaco-type"
+            },
+            {
+              "include": "source.slidev#range-with-steps"
+            }
+          ]
+        },
+        "3": {
+          "name": "punctuation.definition.range_or_monaco.slidev"
+        },
+        "4": {
+          "patterns": [
+            {
+              "match": "twoslash",
+              "name": "keyword.twoslash.slidev"
+            },
+            {
+              "begin": "(?=\\{)",
+              "end": "(?<=\\})(\\s*twoslash)?$",
+              "endCaptures": {
+                "1": {
+                  "name": "keyword.twoslash.slidev"
+                }
+              },
+              "contentName": "meta.embedded.block.code_block_options.ts",
+              "patterns": [
+                {
+                  "include": "source.ts#object-literal"
+                }
+              ]
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "scopeName": "inject-to-markdown.codeblock.slidev"
+}

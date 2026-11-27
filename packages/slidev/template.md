@@ -6,8 +6,6 @@ theme: seriph
 background: https://cover.sli.dev
 # apply any unocss classes to the current slide
 class: 'text-center'
-# https://sli.dev/custom/highlighters.html
-highlighter: shiki
 # some information about the slides, markdown enabled
 info: |
   ## Slidev Starter Template
@@ -16,7 +14,7 @@ info: |
   Learn more at [Sli.dev](https://sli.dev)
 transition: slide-left
 title: Welcome to Slidev
-mdc: true
+comark: true
 ---
 
 # Welcome to Slidev
@@ -24,14 +22,14 @@ mdc: true
 Presentation slides for developers
 
 <div class="pt-12">
-  <span @click="$slidev.nav.next" class="px-2 py-1 rounded cursor-pointer" hover="bg-white bg-opacity-10">
-    Press Space for next page <carbon:arrow-right class="inline"/>
+  <span @click="$slidev.nav.next" class="px-2 py-1 rounded cursor-pointer" flex="~ justify-center items-center gap-2" hover="bg-white bg-opacity-10">
+    Press Space for next page <div class="i-carbon:arrow-right inline-block"/>
   </span>
 </div>
 
 <div class="abs-br m-6 flex gap-2">
   <button @click="$slidev.nav.openInEditor()" title="Open in Editor" class="text-xl slidev-icon-btn opacity-50 !border-none !hover:text-white">
-    <carbon:edit />
+    <div class="i-carbon:edit" />
   </button>
   <a href="https://github.com/slidevjs/slidev" target="_blank" alt="GitHub" title="Open in GitHub"
     class="text-xl slidev-icon-btn opacity-50 !border-none !hover:text-white">
@@ -115,7 +113,7 @@ Hover on the bottom-left corner to see the navigation's control panel, [learn mo
 | <kbd>up</kbd> | previous slide |
 | <kbd>down</kbd> | next slide |
 
-<!-- https://sli.dev/guide/animations.html#click-animations -->
+<!-- https://sli.dev/guide/animations.html#click-animation -->
 <img
   v-click
   class="absolute -bottom-9 -left-7 w-80 opacity-50"
@@ -237,8 +235,8 @@ theme: seriph
 
 </div>
 
-Read more about [How to use a theme](https://sli.dev/themes/use.html) and
-check out the [Awesome Themes Gallery](https://sli.dev/themes/gallery.html).
+Read more about [How to use a theme](https://sli.dev/guide/theme-addon#use-theme) and
+check out the [Awesome Themes Gallery](https://sli.dev/resources/theme-gallery).
 
 ---
 preload: false

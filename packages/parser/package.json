@@ -1,8 +1,8 @@
 {
   "name": "@slidev/parser",
-  "version": "0.49.10",
+  "version": "53.1.0",
   "description": "Markdown parser for Slidev",
-  "author": "antfu <anthonyfu117@hotmail.com>",
+  "author": "Anthony Fu <anthonyfu117@hotmail.com>",
   "license": "MIT",
   "funding": "https://github.com/sponsors/antfu",
   "homepage": "https://sli.dev",
@@ -12,40 +12,34 @@
   },
   "bugs": "https://github.com/slidevjs/slidev/issues",
   "exports": {
-    ".": {
-      "types": "./dist/index.d.ts",
-      "import": "./dist/index.mjs",
-      "require": "./dist/index.js"
-    },
-    "./core": {
-      "types": "./dist/core.d.ts",
-      "import": "./dist/core.mjs",
-      "require": "./dist/core.js"
-    },
-    "./fs": {
-      "types": "./fs.d.ts",
-      "import": "./dist/fs.mjs",
-      "require": "./dist/fs.js"
-    }
+    ".": "./dist/index.mjs",
+    "./core": "./dist/core.mjs",
+    "./fs": "./dist/fs.mjs",
+    "./utils": "./dist/utils.mjs",
+    "./package.json": "./package.json"
   },
-  "main": "dist/index.js",
-  "module": "dist/index.mjs",
-  "types": "dist/index.d.ts",
+  "main": "./dist/index.mjs",
+  "module": "./dist/index.mjs",
+  "types": "./dist/index.d.mts",
   "files": [
     "*.d.ts",
     "dist"
   ],
   "engines": {
-    "node": ">=18.0.0"
+    "node": ">=22.12.0"
   },
   "scripts": {
-    "build": "rimraf dist && tsup src/index.ts src/core.ts src/fs.ts",
+    "build": "tsdown",
     "dev": "nr build --watch",
     "prepublishOnly": "npm run build"
   },
   "dependencies": {
-    "@antfu/utils": "^0.7.8",
+    "@antfu/utils": "catalog:frontend",
     "@slidev/types": "workspace:*",
-    "yaml": "^2.4.2"
+    "pathe": "catalog:prod",
+    "yaml": "catalog:prod"
+  },
+  "devDependencies": {
+    "tsdown-stale-guard": "catalog:dev"
   }
 }

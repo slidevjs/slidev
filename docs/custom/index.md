@@ -2,28 +2,33 @@
 
 Slidev is fully customizable, from styling to tooling configurations. It allows you to configure the tools underneath ([Vite](/custom/config-vite), [UnoCSS](/custom/config-unocss), [Monaco](/custom/config-monaco), etc.)
 
-## Frontmatter Configures
+## Slides Deck Configs {#headmatter}
 
-You can configure Slidev in the frontmatter of your first slide, the following shows the default value for each option.
+You can configure the whole slides project in the frontmatter of your **first** slide (i.e. headmatter). The following shows the default value for each option:
 
 ```yaml
 ---
-# theme id or package name
-# Learn more: https://sli.dev/themes/use.html
+# theme id, package name, or local path
+# Learn more: https://sli.dev/guide/theme-addon.html#use-theme
 theme: default
-# title of your slide, will auto infer from the first header if not specified
+# addons, can be a list of package names or local paths
+# Learn more: https://sli.dev/guide/theme-addon.html#use-addon
+addons: []
+# title of your slide, will inferred from the first header if not specified
 title: Slidev
-# titleTemplate for the webpage, `%s` will be replaced by the page's title
+# titleTemplate for the webpage, `%s` will be replaced by the slides deck's title
 titleTemplate: '%s - Slidev'
-# information for your slides, can be a markdown string.
+# information for your slides, can be a Markdown string
 info: false
 # author field for exported PDF or PPTX
 author: Your Name Here
-# keywords field for exported PDF, comma-delimited.
+# keywords field for exported PDF, comma-delimited
 keywords: keyword1,keyword2
 
 # enable presenter mode, can be boolean, 'dev' or 'build'
 presenter: true
+# enable browser exporter, can be boolean, 'dev' or 'build'
+browserExporter: dev
 # enabled pdf downloading in SPA build, can also be a custom url
 download: false
 # filename of the export file
@@ -37,8 +42,6 @@ export:
   dark: false
   withClicks: false
   withToc: false
-# syntax highlighter, can be 'prism', 'shiki'
-highlighter: shiki
 # enable twoslash, can be boolean, 'dev' or 'build'
 twoslash: true
 # show line numbers in code blocks
@@ -49,7 +52,7 @@ monaco: true
 monacoTypesSource: local
 # explicitly specify extra local packages to import the types for
 monacoTypesAdditionalPackages: []
-# explicitly specify extra local modules as dependency of monaco runnable
+# explicitly specify extra local modules as dependencies of monaco runnable
 monacoRunAdditionalDeps: []
 # download remote assets in local using vite-plugin-remote-assets, can be boolean, 'dev' or 'build'
 remoteAssets: false
@@ -61,15 +64,31 @@ record: dev
 contextMenu: true
 # enable wake lock, can be boolean, 'dev' or 'build'
 wakeLock: true
-
-# force color schema for the slides, can be 'auto', 'light', or 'dark'
-colorSchema: auto
-# router mode for vue-router, can be "history" or "hash"
+# enable PWA support to precache assets for offline use, can be boolean, 'dev' or 'build'
+# Learn more: https://sli.dev/features/pwa.html
+pwa: false
+# take snapshot for each slide in the overview
+overviewSnapshots: false
+# router mode for vue-router, can be "history", "hash", or "memory"
 routerMode: history
+# ignore duplicate forward navigation within this many milliseconds (0 disables it)
+advanceDebounce: 0
+
+# color scheme for the slides:
+# - 'auto' follows the system preference and allows switching
+# - 'light' or 'dark' forces that scheme and disables switching
+# - 'light dark' or 'dark light' sets the default and allows switching
+colorSchema: auto
 # aspect ratio for the slides
 aspectRatio: 16/9
 # real width of the canvas, unit in px
 canvasWidth: 980
+# defines the default transition between slides
+# Learn more: https://sli.dev/guide/animations.html#slide-transitions
+transition: undefined # or BuiltinSlideTransition | string | TransitionGroupProps | null
+# defines the default animation presets for click animations
+# Learn more: https://sli.dev/guide/animations.html#click-animation-presets
+clickAnimation: undefined # or comma-delimited string
 # used for theme customization, will inject root styles as `--slidev-theme-x` for attribute `x`
 themeConfig:
   primary: '#5d8392'
@@ -77,9 +96,10 @@ themeConfig:
 # favicon, can be a local file path or URL
 favicon: 'https://cdn.jsdelivr.net/gh/slidevjs/slidev/assets/favicon.png'
 # URL of PlantUML server used to render diagrams
-plantUmlServer: 'https://www.plantuml.com/plantuml'
-# fonts will be auto imported from Google fonts
-# Learn more: https://sli.dev/custom/fonts
+# Learn more: https://sli.dev/features/plantuml.html
+plantUmlServer: https://www.plantuml.com/plantuml
+# fonts will be auto-imported from Google fonts
+# Learn more: https://sli.dev/custom/config-fonts.html
 fonts:
   sans: Roboto
   serif: Roboto Slab
@@ -102,29 +122,78 @@ drawings:
 htmlAttrs:
   dir: ltr
   lang: en
+
+# SEO meta tags
+seoMeta:
+  ogTitle: Slidev Starter Template
+  ogDescription: Presentation slides for developers
+  ogImage: https://cover.sli.dev
+  ogUrl: https://example.com
+  twitterCard: summary_large_image
+  twitterTitle: Slidev Starter Template
+  twitterDescription: Presentation slides for developers
+  twitterImage: https://cover.sli.dev
+  twitterSite: username
+  twitterUrl: https://example.com
 ---
 ```
 
-Check out the [type definitions](https://github.com/slidevjs/slidev/blob/main/packages/types/src/config.ts) for more options.
+Check out the [type definitions](https://github.com/slidevjs/slidev/blob/main/packages/types/src/config.ts) for more details.
 
-## Per slide configuration
+For `colorSchema`, `auto` follows the system preference and allows switching, while `light` and `dark` force that scheme. Use `light dark` or `dark light` to allow switching while choosing the initial default: the first scheme is the default when there is no saved manual preference. Manual selections are saved in browser local storage and shared by presentations on the same origin.
 
-In addition, every slide accepts the following configuration in the Frontmatter block:
+## Per-slide Configs {#frontmatter}
 
-- `clicks` (`number`): Custom clicks count (learn more [here](/guide/animations.html#custom-total-clicks-count)).
-- `clicksStart` (`number`): Custom start clicks count.
-- `disabled` (`boolean`): Completely disable and hide the slide.
-- `hide` (`boolean`): The same as `disabled`.
-- `hideInToc` (`boolean`): Hide the slide for the `<Toc>` components (learn more [here](/builtin/components.html#toc)).
-- `layout` (`string`): Defines the layout component applied to the slide (learn more [here](/guide/syntax.html#front-matter-layouts) and [here](/builtin/layouts.html)).
-- `level` (`number`): Override the title level for the `<TitleRenderer>` and `<Toc>` components (only if `title` has also been declared, learn more [here](/builtin/components.html#titlerenderer)).
-- `preload` (`boolean`, default `true`): Preload the next slide (learn more [here](/guide/animations.html#motion)).
-- `routeAlias` (`string`): Create a route alias that can be used in the URL or with the `<Link>` component (learn more [here](/builtin/components.html#link)).
-- `src` (`string`): Includes a markdown file (learn more [here](/guide/syntax.html#multiple-entries)).
-- `title` (`string`): Override the title for the `<TitleRenderer>` and `<Toc>` components (learn more [here](/builtin/components.html#titlerenderer)).
-- `transition` (`string | TransitionProps`): Defines the transition between the slide and the next one (learn more [here](/guide/animations.html#slide-transitions)).
-- `zoom` (`number`): Custom zoom scale. Useful for slides with a lot of content.
-- `dragPos` (`Record<string,string>`): Used as positions of draggable elements (learn more [here](/guide/draggable.html).
+Also every slide accepts the following configuration in its frontmatter block. The following shows the default value for each option:
+
+```yaml
+---
+# custom clicks count
+# Learn more: https://sli.dev/guide/animations#total
+clicks: 0
+# custom start clicks count
+clicksStart: 0
+# background image URL, local asset path, or color/gradient
+background: undefined # or string (e.g. 'https://cover.sli.dev' or '/image.png')
+# completely disable and hide the slide
+disabled: false
+# the same as `disabled`
+hide: false
+# hide the slide for the <Toc> components
+hideInToc: false
+# defines the layout component applied to the slide
+layout: <"cover" if the slide is the first slide, otherwise "default">
+# custom class(es) added to the slide root element
+class: undefined # or string | string[] | Record<string, unknown>
+# override the title level for the <TitleRenderer> and <Toc> components
+# only if `title` has also been declared
+level: 1
+# mount this slide before entering
+preload: true
+# create a route alias that can be used in the URL or with the <Link> component
+routeAlias: undefined # or string
+# includes a markdown file
+# Learn more: https://sli.dev/guide/syntax.html#importing-slides
+src: undefined # or string
+# override the title for the <TitleRenderer> and <Toc> components
+# only if `title` has also been declared
+title: undefined # or string
+# defines the transition between the slide and the next one
+# Learn more: https://sli.dev/guide/animations.html#slide-transitions
+transition: undefined # or BuiltinSlideTransition | string | TransitionGroupProps | null
+# defines the default animation presets for click animations in this slide
+# Learn more: https://sli.dev/guide/animations.html#click-animation-presets
+clickAnimation: undefined # or comma-delimited string
+# custom zoom scale
+# useful for slides with a lot of content
+zoom: 1
+# used as positions of draggable elements
+# Learn more: https://sli.dev/features/draggable.html
+dragPos: {} # type: Record<string, string>
+---
+```
+
+Check out the [type definition](https://github.com/slidevjs/slidev/blob/main/packages/types/src/frontmatter.ts#L260) for more details.
 
 ## Directory Structure
 
@@ -134,10 +203,13 @@ Refer to the [Directory Structure](/custom/directory-structure) section.
 
 ## Config Tools
 
-- [Highlighters](/custom/highlighters)
-- [Configure Vue](/custom/config-vue)
-- [Configure Vite](/custom/config-vite)
-- [Configure UnoCSS](/custom/config-unocss)
-- [Configure Monaco](/custom/config-monaco)
-- [Configure KaTeX](/custom/config-katex)
-- [Configure Mermaid](/custom/config-mermaid)
+<script setup>
+import VPLink from 'vitepress/dist/client/theme-default/components/VPLink.vue'
+import customizations from '../.vitepress/customizations'
+</script>
+
+<li v-for="c of customizations.slice(2)" :key="c.text">
+  <VPLink :href="c.link">
+    {{ c.text }}
+  </VPLink>
+</li>

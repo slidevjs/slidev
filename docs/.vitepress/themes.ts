@@ -1,22 +1,15 @@
-export type Tag =
-  | 'official'
-  | 'dark'
-  | 'light'
-  | 'colorful'
-  | 'minimalism'
-
 export interface ThemeInfo {
   id: string
   name: string
   description: string
   previews: string[]
   repo?: string
-  author: {
+  author?: {
     name: string
     link?: string
   }
   link?: string
-  tags?: Tag[]
+  tags?: string[]
 }
 
 export const official: ThemeInfo[] = [
@@ -126,6 +119,7 @@ export const official: ThemeInfo[] = [
   },
 ]
 
+// Please add your theme to the end of the list.
 export const community: ThemeInfo[] = [
   {
     id: 'slidev-theme-geist',
@@ -182,11 +176,11 @@ export const community: ThemeInfo[] = [
     },
     repo: 'https://github.com/zthxxx/slides/tree/master/packages/slidev-theme-eloc',
     previews: [
-      'https://cdn.jsdelivr.net/gh/zthxxx/slides@master/packages/slidev-theme-eloc/screenshot/01.png',
-      'https://cdn.jsdelivr.net/gh/zthxxx/slides@master/packages/slidev-theme-eloc/screenshot/02.png',
-      'https://cdn.jsdelivr.net/gh/zthxxx/slides@master/packages/slidev-theme-eloc/screenshot/03.png',
-      'https://cdn.jsdelivr.net/gh/zthxxx/slides@master/packages/slidev-theme-eloc/screenshot/04.png',
-      'https://cdn.jsdelivr.net/gh/zthxxx/slides@master/packages/slidev-theme-eloc/screenshot/05.png',
+      'https://media.githubusercontent.com/media/zthxxx/slides/refs/heads/master/packages/slidev-theme-eloc/screenshot/01.png',
+      'https://media.githubusercontent.com/media/zthxxx/slides/refs/heads/master/packages/slidev-theme-eloc/screenshot/02.png',
+      'https://media.githubusercontent.com/media/zthxxx/slides/refs/heads/master/packages/slidev-theme-eloc/screenshot/03.png',
+      'https://media.githubusercontent.com/media/zthxxx/slides/refs/heads/master/packages/slidev-theme-eloc/screenshot/04.png',
+      'https://media.githubusercontent.com/media/zthxxx/slides/refs/heads/master/packages/slidev-theme-eloc/screenshot/05.png',
     ],
     tags: [
       'dark',
@@ -218,7 +212,7 @@ export const community: ThemeInfo[] = [
     name: 'Unicorn',
     description: 'Based on Dawntraoz website design',
     author: {
-      name: 'Alba Silvente (dawntraoz)',
+      name: 'Alba Silvente',
       link: 'https://github.com/dawntraoz',
     },
     repo: 'https://github.com/dawntraoz/slidev-theme-unicorn',
@@ -259,10 +253,10 @@ export const community: ThemeInfo[] = [
     name: 'Penguin',
     description: 'A Penguin theme for Slidev',
     author: {
-      name: 'Alvaro Saburido (alvarosaburido)',
-      link: 'https://github.com/alvarosaburido',
+      name: 'Alvaro Saburido',
+      link: 'https://github.com/alvarosabu',
     },
-    repo: 'https://github.com/alvarosaburido/slidev-theme-penguin',
+    repo: 'https://github.com/alvarosabu/slidev-theme-penguin',
     previews: [
       'https://cdn.jsdelivr.net/gh/alvarosaburido/slidev-theme-penguin@master/screenshots/dark/01.png',
       'https://cdn.jsdelivr.net/gh/alvarosaburido/slidev-theme-penguin@master/screenshots/light/02.png',
@@ -390,7 +384,7 @@ export const community: ThemeInfo[] = [
     name: 'Dracula',
     description: 'One the best dark theme meets slidev',
     author: {
-      name: 'JD Solanki (jd-solanki)',
+      name: 'JD Solanki',
       link: 'https://github.com/jd-solanki',
     },
     repo: 'https://github.com/jd-solanki/slidev-theme-dracula',
@@ -463,15 +457,319 @@ export const community: ThemeInfo[] = [
       'light',
     ],
   },
+  {
+    id: 'slidev-theme-mint',
+    name: 'mint',
+    description: 'Slidev Theme Mint',
+    author: {
+      name: 'Alfatta Rezqa',
+      link: 'https://github.com/alfatta',
+    },
+    repo: 'https://github.com/alfatta/slidev-theme-mint',
+    previews: [
+      'https://cdn.jsdelivr.net/gh/alfatta/slidev-theme-mint/screenshot/1.png',
+      'https://cdn.jsdelivr.net/gh/alfatta/slidev-theme-mint/screenshot/2.png',
+      'https://cdn.jsdelivr.net/gh/alfatta/slidev-theme-mint/screenshot/3.png',
+      'https://cdn.jsdelivr.net/gh/alfatta/slidev-theme-mint/screenshot/4.png',
+      'https://cdn.jsdelivr.net/gh/alfatta/slidev-theme-mint/screenshot/5.png',
+      'https://cdn.jsdelivr.net/gh/alfatta/slidev-theme-mint/screenshot/6.png',
+      'https://cdn.jsdelivr.net/gh/alfatta/slidev-theme-mint/screenshot/7.png',
+      'https://cdn.jsdelivr.net/gh/alfatta/slidev-theme-mint/screenshot/8.png',
+      'https://cdn.jsdelivr.net/gh/alfatta/slidev-theme-mint/screenshot/9.png',
+    ],
+    tags: [
+      'light',
+      'mint',
+      'green',
+      'cool',
+    ],
+  },
+  {
+    id: 'slidev-theme-neversink',
+    name: 'neversink',
+    description: 'Slidev Theme Neversink',
+    author: {
+      name: 'Todd M. Gureckis',
+      link: 'https://github.com/gureckis',
+    },
+    repo: 'https://github.com/gureckis/slidev-theme-neversink',
+    previews: [
+      'https://gureckis.github.io/slidev-theme-neversink/screenshots/2.png',
+      'https://gureckis.github.io/slidev-theme-neversink/screenshots/6.png',
+      'https://gureckis.github.io/slidev-theme-neversink/screenshots/8.png',
+      'https://gureckis.github.io/slidev-theme-neversink/screenshots/15.png',
+      'https://gureckis.github.io/slidev-theme-neversink/screenshots/18.png',
+      'https://gureckis.github.io/slidev-theme-neversink/screenshots/22.png',
+      'https://gureckis.github.io/slidev-theme-neversink/screenshots/26.png',
+      'https://gureckis.github.io/slidev-theme-neversink/screenshots/34.png',
+      'https://gureckis.github.io/slidev-theme-neversink/screenshots/36.png',
+      'https://gureckis.github.io/slidev-theme-neversink/screenshots/38.png',
+      'https://gureckis.github.io/slidev-theme-neversink/screenshots/35.png',
+    ],
+    tags: [
+      'light',
+      'academic',
+      'education',
+    ],
+  },
+  {
+    id: 'slidev-theme-ktym4a',
+    name: 'ktym4a',
+    description: 'Based on ktym4a website design',
+    author: {
+      name: 'ktym4a',
+      link: 'https://github.com/ktym4a',
+    },
+    repo: 'https://github.com/ktym4a/slidev-theme-ktym4a',
+    previews: [
+      'https://cdn.jsdelivr.net/gh/ktym4a/slidev-theme-ktym4a@main/example-export/rotation/0.png',
+      'https://cdn.jsdelivr.net/gh/ktym4a/slidev-theme-ktym4a@main/example-export/rotation/1.png',
+      'https://cdn.jsdelivr.net/gh/ktym4a/slidev-theme-ktym4a@main/example-export/rotation/6.png',
+      'https://cdn.jsdelivr.net/gh/ktym4a/slidev-theme-ktym4a@main/example-export/rotation/7.png',
+      'https://cdn.jsdelivr.net/gh/ktym4a/slidev-theme-ktym4a@main/example-export/rotation/8.png',
+      'https://cdn.jsdelivr.net/gh/ktym4a/slidev-theme-ktym4a@main/example-export/single/0.png',
+      'https://cdn.jsdelivr.net/gh/ktym4a/slidev-theme-ktym4a@main/example-export/single/1.png',
+      'https://cdn.jsdelivr.net/gh/ktym4a/slidev-theme-ktym4a@main/example-export/single/3.png',
+      'https://cdn.jsdelivr.net/gh/ktym4a/slidev-theme-ktym4a@main/example-export/single/4.png',
+    ],
+    tags: [
+      'dark',
+      'catppuccin',
+    ],
+  },
+  {
+    id: 'slidev-theme-nord',
+    name: 'Nord',
+    description: 'Based on the Nord theme',
+    author: {
+      name: 'David Ollerhead',
+      link: 'https://github.com/oller',
+    },
+    repo: 'https://github.com/oller/slidev-theme-nord',
+    previews: [
+      'https://raw.githubusercontent.com/oller/slidev-theme-nord/HEAD/example-export/1.png',
+      'https://raw.githubusercontent.com/oller/slidev-theme-nord/HEAD/example-export/2.png',
+      'https://raw.githubusercontent.com/oller/slidev-theme-nord/HEAD/example-export/3.png',
+      'https://raw.githubusercontent.com/oller/slidev-theme-nord/HEAD/example-export/4.png',
+      'https://raw.githubusercontent.com/oller/slidev-theme-nord/HEAD/example-export/5.png',
+      'https://raw.githubusercontent.com/oller/slidev-theme-nord/HEAD/example-export/6.png',
+      'https://raw.githubusercontent.com/oller/slidev-theme-nord/HEAD/example-export/7.png',
+      'https://raw.githubusercontent.com/oller/slidev-theme-nord/HEAD/example-export/8.png',
+      'https://raw.githubusercontent.com/oller/slidev-theme-nord/HEAD/example-export/9.png',
+      'https://raw.githubusercontent.com/oller/slidev-theme-nord/HEAD/example-export/10.png',
+      'https://raw.githubusercontent.com/oller/slidev-theme-nord/HEAD/example-export/11.png',
+      'https://raw.githubusercontent.com/oller/slidev-theme-nord/HEAD/example-export/12.png',
+    ],
+    tags: [
+      'dark',
+      'light',
+      'nord',
+    ],
+  },
+  {
+    id: 'slidev-theme-scholarly',
+    name: 'Scholarly',
+    description: 'Based on the Nord theme',
+    author: {
+      name: 'Jiaxin Peng',
+      link: 'https://github.com/jxpeng98',
+    },
+    repo: 'https://github.com/jxpeng98/slidev-theme-scholarly',
+    previews: [
+      'https://raw.githubusercontent.com/jxpeng98/slidev-theme-scholarly/HEAD/images/themes/classic-blue/1.png',
+      'https://raw.githubusercontent.com/jxpeng98/slidev-theme-scholarly/HEAD/images/themes/oxford/1.png',
+      'https://raw.githubusercontent.com/jxpeng98/slidev-theme-scholarly/HEAD/images/themes/cambridge/1.png',
+      'https://raw.githubusercontent.com/jxpeng98/slidev-theme-scholarly/HEAD/images/themes/princeton/1.png',
+      'https://raw.githubusercontent.com/jxpeng98/slidev-theme-scholarly/HEAD/images/themes/classic-blue/2.png',
+      'https://raw.githubusercontent.com/jxpeng98/slidev-theme-scholarly/HEAD/images/themes/classic-blue/3.png',
+      'https://raw.githubusercontent.com/jxpeng98/slidev-theme-scholarly/HEAD/images/themes/classic-blue/4.png',
+    ],
+    tags: [
+      'dark',
+      'light',
+      'academic',
+      'oxford',
+      'cambridge',
+      'princeton',
+    ],
+  },
+  {
+    id: 'slidev-theme-field-manual',
+    name: 'Field Manual',
+    description: 'A 24-layout theme modeled on the style of vintage military field manuals',
+    author: {
+      name: 'PJ Doland',
+      link: 'https://github.com/pjdoland',
+    },
+    repo: 'https://github.com/pjdoland/slidev-theme-field-manual',
+    previews: [
+      'https://raw.githubusercontent.com/pjdoland/slidev-theme-field-manual/main/screenshots/1.jpg',
+      'https://raw.githubusercontent.com/pjdoland/slidev-theme-field-manual/main/screenshots/2.jpg',
+      'https://raw.githubusercontent.com/pjdoland/slidev-theme-field-manual/main/screenshots/3.jpg',
+      'https://raw.githubusercontent.com/pjdoland/slidev-theme-field-manual/main/screenshots/4.jpg',
+      'https://raw.githubusercontent.com/pjdoland/slidev-theme-field-manual/main/screenshots/5.jpg',
+      'https://raw.githubusercontent.com/pjdoland/slidev-theme-field-manual/main/screenshots/6.jpg',
+      'https://raw.githubusercontent.com/pjdoland/slidev-theme-field-manual/main/screenshots/7.jpg',
+      'https://raw.githubusercontent.com/pjdoland/slidev-theme-field-manual/main/screenshots/8.jpg',
+      'https://raw.githubusercontent.com/pjdoland/slidev-theme-field-manual/main/screenshots/9.jpg',
+      'https://raw.githubusercontent.com/pjdoland/slidev-theme-field-manual/main/screenshots/10.jpg',
+      'https://raw.githubusercontent.com/pjdoland/slidev-theme-field-manual/main/screenshots/11.jpg',
+      'https://raw.githubusercontent.com/pjdoland/slidev-theme-field-manual/main/screenshots/12.jpg',
+      'https://raw.githubusercontent.com/pjdoland/slidev-theme-field-manual/main/screenshots/13.jpg',
+      'https://raw.githubusercontent.com/pjdoland/slidev-theme-field-manual/main/screenshots/14.jpg',
+      'https://raw.githubusercontent.com/pjdoland/slidev-theme-field-manual/main/screenshots/15.jpg',
+      'https://raw.githubusercontent.com/pjdoland/slidev-theme-field-manual/main/screenshots/16.jpg',
+      'https://raw.githubusercontent.com/pjdoland/slidev-theme-field-manual/main/screenshots/17.jpg',
+      'https://raw.githubusercontent.com/pjdoland/slidev-theme-field-manual/main/screenshots/18.jpg',
+      'https://raw.githubusercontent.com/pjdoland/slidev-theme-field-manual/main/screenshots/19.jpg',
+      'https://raw.githubusercontent.com/pjdoland/slidev-theme-field-manual/main/screenshots/20.jpg',
+      'https://raw.githubusercontent.com/pjdoland/slidev-theme-field-manual/main/screenshots/21.jpg',
+      'https://raw.githubusercontent.com/pjdoland/slidev-theme-field-manual/main/screenshots/22.jpg',
+      'https://raw.githubusercontent.com/pjdoland/slidev-theme-field-manual/main/screenshots/23.jpg',
+      'https://raw.githubusercontent.com/pjdoland/slidev-theme-field-manual/main/screenshots/24.jpg',
+      'https://raw.githubusercontent.com/pjdoland/slidev-theme-field-manual/main/screenshots/25.jpg',
+      'https://raw.githubusercontent.com/pjdoland/slidev-theme-field-manual/main/screenshots/26.jpg',
+      'https://raw.githubusercontent.com/pjdoland/slidev-theme-field-manual/main/screenshots/27.jpg',
+      'https://raw.githubusercontent.com/pjdoland/slidev-theme-field-manual/main/screenshots/28.jpg',
+      'https://raw.githubusercontent.com/pjdoland/slidev-theme-field-manual/main/screenshots/29.jpg',
+      'https://raw.githubusercontent.com/pjdoland/slidev-theme-field-manual/main/screenshots/30.jpg',
+      'https://raw.githubusercontent.com/pjdoland/slidev-theme-field-manual/main/screenshots/31.jpg',
+      'https://raw.githubusercontent.com/pjdoland/slidev-theme-field-manual/main/screenshots/32.jpg',
+      'https://raw.githubusercontent.com/pjdoland/slidev-theme-field-manual/main/screenshots/33.jpg',
+    ],
+    tags: [
+      'light',
+      'dark',
+      'vintage',
+      'military',
+    ],
+  },
+  {
+    id: 'slidev-theme-touying',
+    name: 'Touying',
+    description: 'A theme based on the design of the Typst Touying',
+    author: {
+      name: '_Kerman',
+      link: 'https://github.com/kermanx',
+    },
+    repo: 'https://github.com/kermanx/slidev-theme-touying',
+    previews: [
+      'https://github.com/user-attachments/assets/a075a45c-7ee7-4ede-b3e7-90f29edf3845',
+      'https://github.com/user-attachments/assets/5ddea6cb-e604-41f9-a857-9f43b439c91b',
+      'https://github.com/user-attachments/assets/2b649cbc-537d-4306-adcd-3877bbeeb87a',
+      'https://github.com/user-attachments/assets/e2258aef-1c80-4db0-af2f-eb430b83f2e7',
+      'https://github.com/user-attachments/assets/f3010e84-7b9c-42b7-bffc-bdf48fdfbd2e',
+    ],
+    tags: [
+      'light',
+    ],
+  },
+  {
+    id: 'slidev-theme-tahta',
+    name: 'Tahta',
+    description: 'A design system for Slidev — design tokens, components, and 13 themeable style variants with themed chart palettes and role-color cards. WCAG-AA contrast, ECharts, and frontmatter-driven layouts (no CSS).',
+    author: {
+      name: 'Cagdas Salur',
+      link: 'https://github.com/zcag',
+    },
+    repo: 'https://github.com/zcag/tahta',
+    link: 'https://tahta.cagdas.io',
+    previews: [
+      'https://cdn.jsdelivr.net/gh/zcag/tahta@1dd8357/docs/screenshots/01.png',
+      'https://cdn.jsdelivr.net/gh/zcag/tahta@1dd8357/docs/screenshots/02.png',
+      'https://cdn.jsdelivr.net/gh/zcag/tahta@1dd8357/docs/screenshots/03.png',
+      'https://cdn.jsdelivr.net/gh/zcag/tahta@1dd8357/docs/screenshots/04.png',
+      'https://cdn.jsdelivr.net/gh/zcag/tahta@1dd8357/docs/screenshots/05.png',
+      'https://cdn.jsdelivr.net/gh/zcag/tahta@1dd8357/docs/screenshots/06.png',
+    ],
+    tags: [
+      'dark',
+      'light',
+    ],
+  },
+  {
+    id: 'slidev-theme-tokyo-night-storm',
+    name: 'Tokyo Night Storm',
+    description: 'A dark-only theme using the Tokyo Night Storm palette',
+    author: {
+      name: 'David Ollerhead',
+      link: 'https://github.com/oller',
+    },
+    repo: 'https://github.com/oller/slidev-theme-tokyo-night-storm',
+    previews: [
+      'https://raw.githubusercontent.com/oller/slidev-theme-tokyo-night-storm/HEAD/example-export/1.png',
+      'https://raw.githubusercontent.com/oller/slidev-theme-tokyo-night-storm/HEAD/example-export/2.png',
+      'https://raw.githubusercontent.com/oller/slidev-theme-tokyo-night-storm/HEAD/example-export/3.png',
+      'https://raw.githubusercontent.com/oller/slidev-theme-tokyo-night-storm/HEAD/example-export/4.png',
+      'https://raw.githubusercontent.com/oller/slidev-theme-tokyo-night-storm/HEAD/example-export/5.png',
+      'https://raw.githubusercontent.com/oller/slidev-theme-tokyo-night-storm/HEAD/example-export/6.png',
+      'https://raw.githubusercontent.com/oller/slidev-theme-tokyo-night-storm/HEAD/example-export/7.png',
+      'https://raw.githubusercontent.com/oller/slidev-theme-tokyo-night-storm/HEAD/example-export/8.png',
+      'https://raw.githubusercontent.com/oller/slidev-theme-tokyo-night-storm/HEAD/example-export/9.png',
+      'https://raw.githubusercontent.com/oller/slidev-theme-tokyo-night-storm/HEAD/example-export/10.png',
+      'https://raw.githubusercontent.com/oller/slidev-theme-tokyo-night-storm/HEAD/example-export/11.png',
+    ],
+    tags: [
+      'dark',
+      'tokyo-night',
+      'tokyo-night-storm',
+      'tokyo',
+      'night',
+      'storm',
+    ],
+  },
+  {
+    id: 'slidev-theme-pixel',
+    name: 'Pixel',
+    description: 'A minimalist, typographic theme: black and white, monospace accents, terminal-style cards, and a random pixel grid on section slides, unique on every load.',
+    author: {
+      name: 'Noe Romano',
+      link: 'https://github.com/romanoe',
+    },
+    repo: 'https://github.com/romanoe/slidev-theme-pixel',
+    previews: [
+      'https://cdn.jsdelivr.net/gh/romanoe/slidev-theme-pixel@d175c07/screenshots/cover.png',
+      'https://cdn.jsdelivr.net/gh/romanoe/slidev-theme-pixel@d175c07/screenshots/section.png',
+      'https://cdn.jsdelivr.net/gh/romanoe/slidev-theme-pixel@d175c07/screenshots/two-cols.png',
+      'https://cdn.jsdelivr.net/gh/romanoe/slidev-theme-pixel@d175c07/screenshots/image-full.png',
+      'https://cdn.jsdelivr.net/gh/romanoe/slidev-theme-pixel@d175c07/screenshots/photowall.png',
+      'https://cdn.jsdelivr.net/gh/romanoe/slidev-theme-pixel@d175c07/screenshots/grid.png',
+    ],
+    tags: [
+      'dark',
+      'light',
+      'minimalism',
+    ],
+  },
+  {
+    id: 'slidev-theme-tufte',
+    name: 'Tufte',
+    description: 'After Edward Tufte: warm paper, one serif with old-style figures, a margin column for notes and sources, three-rule tables, sparklines and directly labelled bars, no chartjunk.',
+    author: {
+      name: 'Christoph Martel',
+      link: 'https://github.com/abits',
+    },
+    repo: 'https://github.com/abits/slidev-theme-tufte',
+    previews: [
+      'https://cdn.jsdelivr.net/gh/abits/slidev-theme-tufte@73a1245/screenshots/1.png',
+      'https://cdn.jsdelivr.net/gh/abits/slidev-theme-tufte@73a1245/screenshots/3.png',
+      'https://cdn.jsdelivr.net/gh/abits/slidev-theme-tufte@73a1245/screenshots/4.png',
+      'https://cdn.jsdelivr.net/gh/abits/slidev-theme-tufte@73a1245/screenshots/5.png',
+      'https://cdn.jsdelivr.net/gh/abits/slidev-theme-tufte@73a1245/screenshots/6.png',
+      'https://cdn.jsdelivr.net/gh/abits/slidev-theme-tufte@73a1245/screenshots/10.png',
+    ],
+    tags: [
+      'light',
+      'minimalism',
+      'academic',
+    ],
+  },
   // Add yours here!
   {
     id: '',
-    link: 'https://github.com/slidevjs/docs/edit/main/.vitepress/themes.ts',
+    link: 'https://github.com/slidevjs/slidev/edit/main/docs/.vitepress/themes.ts',
     name: 'Yours?',
-    description: 'Submit your theme to be list here!',
-    author: {
-      name: '',
-    },
+    description: 'Click here to submit your theme :)',
     previews: [
       '/theme-placeholder.png',
     ],

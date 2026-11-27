@@ -1,6 +1,6 @@
 <script setup lang="ts">
-import { ref } from 'vue'
 import { useDraggable, useLocalStorage } from '@vueuse/core'
+import { ref } from 'vue'
 
 const props = defineProps<{
   storageKey?: string

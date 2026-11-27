@@ -1,38 +1,35 @@
-import { join } from 'node:path'
-import { fileURLToPath, pathToFileURL } from 'node:url'
-import type { InlineConfig, Plugin } from 'vite'
-import { mergeConfig } from 'vite'
-import { slash, uniq } from '@antfu/utils'
 import type { ResolvedSlidevOptions } from '@slidev/types'
+import type { Plugin, UserConfig } from 'vite'
+import { fileURLToPath, pathToFileURL } from 'node:url'
+import { slash, uniq } from '@antfu/utils'
 import { createResolve } from 'mlly'
-import { getIndexHtml } from '../commands/shared'
+import { join } from 'pathe'
+import { mergeConfig } from 'vite'
 import { isInstalledGlobally, resolveImportPath, toAtFS } from '../resolver'
 
+const RE_SLIDEV_CLIENT = /^@slidev\/client$/
+const RE_SLIDEV_CLIENT_SUBPATH = /^@slidev\/client\/(.*)/
+const RE_SLIDEV_VIRTUAL = /^#slidev\/(.*)/
+const RE_MONACO_EDITOR = /\/monaco-editor(?:-core)?\//
+
 const INCLUDE_GLOBAL = [
+  '@fix-webm-duration/fix',
   '@typescript/ata',
   'file-saver',
   'lz-string',
-  'prettier',
   'recordrtc',
   'typescript',
   'yaml',
+  'pptxgenjs',
+  'ansis',
 ]
 
-const INCLUDE_LOCAL = [
-  ...INCLUDE_GLOBAL,
-
-  'codemirror',
-  'codemirror/mode/javascript/javascript',
-  'codemirror/mode/css/css',
-  'codemirror/mode/markdown/markdown',
-  'codemirror/mode/xml/xml',
-  'codemirror/mode/htmlmixed/htmlmixed',
-  'codemirror/addon/display/placeholder',
-].map(i => `@slidev/cli > @slidev/client > ${i}`)
+const INCLUDE_LOCAL = INCLUDE_GLOBAL.map(i => `@slidev/cli > @slidev/client > ${i}`)
 
 // @keep-sorted
 const EXCLUDE_GLOBAL = [
   '@antfu/utils',
+  '@shikijs/magic-move/vue',
   '@shikijs/monaco',
   '@shikijs/vitepress-twoslash/client',
   '@slidev/client',
@@ -54,7 +51,6 @@ const EXCLUDE_GLOBAL = [
   'fuse.js',
   'mermaid',
   'monaco-editor',
-  'shiki-magic-move/vue',
   'shiki',
   'shiki/core',
   'vue-demi',
@@ -73,26 +69,34 @@ const ASYNC_MODULES = [
 export function createConfigPlugin(options: ResolvedSlidevOptions): Plugin {
   const resolveClientDep = createResolve({
     // Same as Vite's default resolve conditions
-    conditions: ['import', 'module', 'browser', 'default', options.mode === 'build' ? 'production' : 'development'],
+    conditions: [
+      'import',
+      'module',
+      'browser',
+      'default',
+      options.mode === 'build'
+        ? 'production'
+        : 'development',
+    ],
     url: pathToFileURL(options.clientRoot),
   })
   return {
     name: 'slidev:config',
     async config(config) {
-      const injection: InlineConfig = {
-        define: getDefine(options),
+      const injection: UserConfig = {
+        define: options.utils.define,
         resolve: {
           alias: [
             {
-              find: /^@slidev\/client$/,
+              find: RE_SLIDEV_CLIENT,
               replacement: `${toAtFS(options.clientRoot)}/index.ts`,
             },
             {
-              find: /^@slidev\/client\/(.*)/,
+              find: RE_SLIDEV_CLIENT_SUBPATH,
               replacement: `${toAtFS(options.clientRoot)}/$1`,
             },
             {
-              find: /^#slidev\/(.*)/,
+              find: RE_SLIDEV_VIRTUAL,
               replacement: '/@slidev/$1',
             },
             {
@@ -101,9 +105,9 @@ export function createConfigPlugin(options: ResolvedSlidevOptions): Plugin {
             },
             ...(isInstalledGlobally.value
               ? await Promise.all(INCLUDE_GLOBAL.map(async dep => ({
-                find: dep,
-                replacement: fileURLToPath(await resolveClientDep(dep)),
-              })))
+                  find: dep,
+                  replacement: fileURLToPath(await resolveClientDep(dep)),
+                })))
               : []
             ),
           ],
@@ -119,15 +123,13 @@ export function createConfigPlugin(options: ResolvedSlidevOptions): Plugin {
               exclude: EXCLUDE_LOCAL,
               include: INCLUDE_LOCAL,
             },
-        css: options.data.config.css === 'unocss'
-          ? {
-              postcss: {
-                plugins: [
-                  await import('postcss-nested').then(r => (r.default || r)()) as any,
-                ],
-              },
-            }
-          : {},
+        css: {
+          postcss: {
+            plugins: [
+              await import('postcss-nested').then(r => (r.default || r)()) as any,
+            ],
+          },
+        },
         server: {
           fs: {
             strict: true,
@@ -158,7 +160,7 @@ export function createConfigPlugin(options: ResolvedSlidevOptions): Plugin {
                   return 'assets/slidev/[name]-[hash].js'
 
                 // Monaco Editor
-                if (chunkInfo.moduleIds.filter(i => i.match(/\/monaco-editor(-core)?\//)).length > chunkInfo.moduleIds.length * 0.6)
+                if (chunkInfo.moduleIds.filter(i => i.match(RE_MONACO_EDITOR)).length > chunkInfo.moduleIds.length * 0.6)
                   return 'assets/monaco/[name]-[hash].js'
 
                 return DEFAULT
@@ -183,6 +185,9 @@ export function createConfigPlugin(options: ResolvedSlidevOptions): Plugin {
             },
           },
         },
+        cacheDir: isInstalledGlobally.value
+          ? join(options.cliRoot, 'node_modules/.vite')
+          : undefined,
       }
 
       function isSlidevClient(id: string) {
@@ -195,42 +200,37 @@ export function createConfigPlugin(options: ResolvedSlidevOptions): Plugin {
       //     return nodeModuelsMatch[nodeModuelsMatch.length - 1][1]
       // }
 
-      if (isInstalledGlobally.value) {
-        injection.cacheDir = join(options.cliRoot, 'node_modules/.vite')
-        injection.root = options.cliRoot
-      }
-
       return mergeConfig(injection, config)
     },
     configureServer(server) {
       // serve our index.html after vite history fallback
       return () => {
         server.middlewares.use(async (req, res, next) => {
-          if (req.url!.endsWith('.html')) {
+          if (req.url === '/index.html') {
+            let html: string
+            try {
+              // Inject `/@vite/client` and run other plugins' `transformIndexHtml` hooks.
+              // Vite 8 relies on `/@vite/client` to install `define` globals in the browser.
+              html = await server.transformIndexHtml(req.url, options.utils.indexHtml, req.originalUrl)
+            }
+            catch (e) {
+              return next(e)
+            }
+
+            const headers = server.config.server.headers ?? {}
+
+            for (const header in headers) {
+              res.setHeader(header, headers[header]!)
+            }
+
             res.setHeader('Content-Type', 'text/html')
             res.statusCode = 200
-            res.end(await getIndexHtml(options))
+            res.end(html)
             return
           }
           next()
         })
       }
     },
-  }
-}
-
-export function getDefine(options: ResolvedSlidevOptions): Record<string, string> {
-  return {
-    __DEV__: options.mode === 'dev' ? 'true' : 'false',
-    __SLIDEV_CLIENT_ROOT__: JSON.stringify(toAtFS(options.clientRoot)),
-    __SLIDEV_HASH_ROUTE__: JSON.stringify(options.data.config.routerMode === 'hash'),
-    __SLIDEV_FEATURE_DRAWINGS__: JSON.stringify(options.data.config.drawings.enabled === true || options.data.config.drawings.enabled === options.mode),
-    __SLIDEV_FEATURE_EDITOR__: JSON.stringify(options.mode === 'dev' && options.data.config.editor !== false),
-    __SLIDEV_FEATURE_DRAWINGS_PERSIST__: JSON.stringify(!!options.data.config.drawings.persist === true),
-    __SLIDEV_FEATURE_RECORD__: JSON.stringify(options.data.config.record === true || options.data.config.record === options.mode),
-    __SLIDEV_FEATURE_PRESENTER__: JSON.stringify(options.data.config.presenter === true || options.data.config.presenter === options.mode),
-    __SLIDEV_FEATURE_PRINT__: JSON.stringify(options.mode === 'export' || (options.mode === 'build' && [true, 'true', 'auto'].includes(options.data.config.download))),
-    __SLIDEV_FEATURE_WAKE_LOCK__: JSON.stringify(options.data.config.wakeLock === true || options.data.config.wakeLock === options.mode),
-    __SLIDEV_HAS_SERVER__: options.mode !== 'build' ? 'true' : 'false',
   }
 }

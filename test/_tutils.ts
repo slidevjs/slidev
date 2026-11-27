@@ -1,20 +1,28 @@
+import type { MarkdownTransformContext } from '@slidev/types'
 import path from 'node:path'
 import MagicString from 'magic-string-stack'
-import type { MarkdownTransformContext } from '@slidev/types'
+import * as shiki from 'shiki'
 
 export function createTransformContext(code: string): MarkdownTransformContext {
   const s = new MagicString(code)
   return {
     s,
-    id: '1.md',
+    slide: { } as any,
     options: {
       userRoot: path.join(__dirname, './fixtures/'),
       data: {
         slides: [
           {} as any,
         ],
-        watchFiles: [],
+        watchFiles: {},
         config: {} as any,
+        features: {},
+      },
+      utils: {
+        shiki,
+        shikiOptions: {
+          theme: 'nord',
+        },
       },
     } as any,
   }

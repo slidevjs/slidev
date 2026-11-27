@@ -3,10 +3,12 @@ context('Smoke test', () => {
     while (1) {
       let oldUrl, newUrl
       cy.get('body')
-        .url().then(url => (oldUrl = url))
+        .url()
+        .then(url => (oldUrl = url))
         .type(`{RightArrow}`)
         .wait(1000)
-        .url().then(url => (newUrl = url))
+        .url()
+        .then(url => (newUrl = url))
       if (oldUrl === newUrl)
         break
     }

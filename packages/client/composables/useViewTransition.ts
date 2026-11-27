@@ -1,7 +1,7 @@
 import { ref } from 'vue'
 import { useRouter } from 'vue-router'
-import { getSlide } from '../logic/slides'
 import { configs } from '../env'
+import { getSlide } from '../logic/slides'
 
 export function useViewTransition() {
   const router = useRouter()
@@ -17,8 +17,14 @@ export function useViewTransition() {
     const toMeta = getSlide(to.params.no as string)?.meta
     const fromNo = fromMeta?.slide?.no
     const toNo = toMeta?.slide?.no
-    const transitionType = fromNo != null && toNo != null
-      && ((fromNo < toNo ? fromMeta?.transition : toMeta?.transition) ?? configs.transition)
+    // Navigating within the same slide (only `clicks` changed): keep the current mode.
+    // Resetting it swaps the wrapper in SlidesShow and remounts every slide.
+    if (fromNo != null && fromNo === toNo)
+      return
+    const transitionType = fromNo != null && toNo != null && fromNo !== toNo
+      && ((fromNo < toNo
+        ? fromMeta?.transition
+        : toMeta?.transition) ?? configs.transition)
     if (transitionType !== 'view-transition') {
       isViewTransition.value = false
       return
@@ -41,7 +47,6 @@ export function useViewTransition() {
 
     // Wait for `TransitionGroup` to become normal `div`
     setTimeout(() => {
-      // @ts-expect-error missing types
       document.startViewTransition(() => {
         changeRoute()
         return promise

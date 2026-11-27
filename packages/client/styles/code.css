@@ -44,6 +44,64 @@ html:not(.dark) .shiki span {
   overflow: auto;
 }
 
+.slidev-code-block-title,
+.slidev-code-group-tabs {
+  background: var(--slidev-code-background);
+  color: var(--slidev-code-tab-text-color);
+  padding-left: var(--slidev-code-padding);
+  padding-right: var(--slidev-code-padding);
+  font-size: var(--slidev-code-tab-font-size);
+  border-radius: var(--slidev-code-radius) var(--slidev-code-radius) 0 0;
+  box-shadow: inset 0 -1px var(--slidev-code-tab-divider);
+  display: flex;
+  gap: 8px;
+  align-items: center;
+}
+
+.slidev-code-block-title {
+  padding: var(--slidev-code-padding);
+}
+
+.slidev-code-tab {
+  font-size: var(--slidev-code-tab-font-size);
+  white-space: nowrap;
+  cursor: pointer;
+  transition: color 0.25s;
+  padding: var(--slidev-code-padding);
+  border-bottom: 2px solid transparent;
+  color: var(--slidev-code-tab-text-color);
+  position: relative;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.slidev-code-tab:hover {
+  color: var(--slidev-code-tab-active-text-color) !important;
+}
+
+.slidev-code-group-blocks .slidev-code-wrapper {
+  margin: 0 !important;
+}
+
+.slidev-code-group-blocks .slidev-code {
+  border-radius: 0 0 var(--slidev-code-radius) var(--slidev-code-radius) !important;
+}
+
+.slidev-code-group-blocks .slidev-code-wrapper.active {
+  display: block;
+}
+
+.slidev-code-group-blocks .slidev-code-wrapper {
+  display: none;
+}
+
+.slidev-code-block-title + .slidev-code,
+.slidev-code-group-tabs + .slidev-code {
+  border-top-left-radius: 0 !important;
+  border-top-right-radius: 0 !important;
+}
+
 .slidev-code .slidev-code-highlighted {
 }
 .slidev-code .slidev-code-dishonored {
@@ -65,11 +123,17 @@ html:not(.dark) .shiki span {
 }
 
 /* Inline Code */
+.slidev-note :not(pre) > code,
 .slidev-layout :not(pre) > code {
   font-size: 0.9em;
   background: var(--slidev-code-background);
   border-radius: var(--slidev-code-radius);
   --uno: font-light py-0.5 px-1.5;
+}
+
+.slidev-note :not(pre) > code:after,
+.slidev-note :not(pre) > code:before {
+  content: '';
 }
 
 .slidev-layout :not(pre) > code:before {
@@ -81,9 +145,4 @@ html:not(.dark) .shiki span {
 .katex :after,
 .katex :before {
   border-color: currentColor;
-}
-
-/* CodeMirror */
-.CodeMirror pre.CodeMirror-placeholder {
-  opacity: 0.4;
 }

@@ -1,8 +1,8 @@
 <script setup lang="ts">
-import type { PropType } from 'vue'
-import { nextTick, ref, toRef, watch, watchEffect } from 'vue'
-import { ignorableWatch, onClickOutside, useVModel } from '@vueuse/core'
 import type { ClicksContext } from '@slidev/types'
+import type { PropType } from 'vue'
+import { ignorableWatch, onClickOutside, useVModel } from '@vueuse/core'
+import { nextTick, ref, toRef, watch, watchEffect } from 'vue'
 import { useDynamicSlideInfo } from '../composables/useSlideInfo'
 import NoteDisplay from './NoteDisplay.vue'
 
@@ -94,6 +94,14 @@ function calculateEditorHeight() {
     inputEl.value.style.height = `${inputEl.value.scrollHeight}px`
 }
 
+function onKeyDown(e: KeyboardEvent) {
+  // Override save shortcut on editing mode
+  if (editing.value && e.metaKey && e.key === 's') {
+    e.preventDefault()
+    update({ note: note.value }, props.no)
+  }
+}
+
 watch(
   [note, editing],
   () => {
@@ -123,11 +131,11 @@ watch(
     v-else
     ref="inputEl"
     v-model="note"
-    class="prose resize-none overflow-auto outline-none bg-transparent block border-primary border-2"
-    style="line-height: 1.75;"
+    class="prose dark:prose-invert resize-none overflow-auto outline-none bg-transparent block border-primary border-2 slidev-note placeholder:op25"
     :style="[props.style, inputHeight != null ? { height: `${inputHeight}px` } : {}]"
-    :class="props.class"
+    :class="[props.class, note ? '' : 'italic']"
     :placeholder="placeholder"
     @keydown.esc="editing = false"
+    @keydown="onKeyDown"
   />
 </template>

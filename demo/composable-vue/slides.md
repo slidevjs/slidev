@@ -466,8 +466,8 @@ title.value = 'Hello World'
 ### Binding an Existing Ref
 
 ```ts {monaco}
-import { computed, ref } from 'vue'
 import { useTitle } from '@vueuse/core'
+import { computed, ref } from 'vue'
 
 const name = ref('Hello')
 const title = computed(() => {
@@ -495,8 +495,8 @@ Take a look at `useTitle`'s implementation
 <v-clicks>
 
 ```ts {monaco}
-import { ref, watch } from 'vue'
 import type { MaybeRef } from '@vueuse/core'
+import { ref, watch } from 'vue'
 
 export function useTitle(
   newTitle: MaybeRef<string | null | undefined>,
@@ -1069,8 +1069,8 @@ layout: center
 Composition API support for Vue 2.<br><carbon-logo-github class="inline-block"/> [vuejs/composition-api](https://github.com/vuejs/composition-api)
 
 ```ts
-import Vue from 'vue'
 import VueCompositionAPI from '@vue/composition-api'
+import Vue from 'vue'
 
 Vue.use(VueCompositionAPI)
 ```

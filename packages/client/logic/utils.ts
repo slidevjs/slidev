@@ -1,27 +1,4 @@
 import { parseRangeString } from '@slidev/parser/core'
-import { useTimestamp } from '@vueuse/core'
-import { computed, ref } from 'vue'
-
-export function useTimer() {
-  const tsStart = ref(Date.now())
-  const now = useTimestamp({
-    interval: 1000,
-  })
-  const timer = computed(() => {
-    const passed = (now.value - tsStart.value) / 1000
-    const sec = Math.floor(passed % 60).toString().padStart(2, '0')
-    const min = Math.floor(passed / 60).toString().padStart(2, '0')
-    return `${min}:${sec}`
-  })
-  function resetTimer() {
-    tsStart.value = now.value
-  }
-
-  return {
-    timer,
-    resetTimer,
-  }
-}
 
 export function makeId(length = 5) {
   const result = []
@@ -52,4 +29,13 @@ export function updateCodeHighlightRange(
       token.classList.toggle('dishonored', !isHighlighted)
     }
   }
+}
+
+/**
+ * Google Slides' "Present" keys: Cmd+Enter (macOS) and Ctrl+F5 (Windows/Linux).
+ * Checks the modifier flag on the event itself, because clickers (e.g. Logitech Spotlight)
+ * send it without a separate modifier keydown, which `useMagicKeys` combos miss.
+ */
+export function isPresentShortcut(e: Pick<KeyboardEvent, 'key' | 'metaKey' | 'ctrlKey'>) {
+  return (e.key === 'Enter' && e.metaKey) || (e.key === 'F5' && e.ctrlKey)
 }

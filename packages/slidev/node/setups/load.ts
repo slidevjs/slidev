@@ -1,31 +1,23 @@
-import { resolve } from 'node:path'
-import { fileURLToPath } from 'node:url'
-import fs from 'fs-extra'
-import { deepMergeWithArray } from '@antfu/utils'
-import jiti from 'jiti'
+import type { Awaitable } from '@antfu/utils'
+import { existsSync } from 'node:fs'
+import { resolve } from 'pathe'
+import { loadModule } from '../utils'
 
-export async function loadSetups<T, R extends object>(
-  clientRoot: string,
+export async function loadSetups<F extends (...args: any) => any>(
   roots: string[],
-  name: string,
-  arg: T,
-  initial: R,
-  merge: boolean | ((a: R, o: R) => R) = true,
-): Promise<R> {
-  let returns = initial
-  for (const root of [clientRoot, ...roots].reverse()) {
-    const path = resolve(root, 'setup', name)
-    if (fs.existsSync(path)) {
-      const { default: setup } = jiti(fileURLToPath(import.meta.url))(path)
-      const result = await setup(arg)
-      if (result !== null) {
-        returns = typeof merge === 'function'
-          ? merge(returns, result)
-          : merge
-            ? deepMergeWithArray(returns, result)
-            : result
-      }
+  filename: string,
+  args: Parameters<F>,
+  extraLoader?: (root: string) => ReturnType<F>[],
+) {
+  return await Promise.all(roots.flatMap((root) => {
+    const tasks: Awaitable<ReturnType<F>>[] = []
+    const path = resolve(root, 'setup', filename)
+    if (existsSync(path)) {
+      tasks.push(loadModule<{ default: F }>(path).then(mod => mod.default(...args)))
     }
-  }
-  return returns
+    if (extraLoader) {
+      tasks.push(...extraLoader(root))
+    }
+    return tasks
+  }))
 }

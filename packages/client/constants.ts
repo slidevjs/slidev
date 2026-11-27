@@ -1,5 +1,5 @@
-import type { ComputedRef, InjectionKey, Ref, UnwrapNestedRefs } from 'vue'
 import type { ClicksContext, RenderContext, SlideRoute } from '@slidev/types'
+import type { ComputedRef, InjectionKey, Ref, UnwrapNestedRefs } from 'vue'
 import type { SlidevContext } from './modules/context'
 
 // Here we use string literal instead of symbols to make HMR more stable
@@ -16,12 +16,12 @@ export const injectionSlideZoom = '$$slidev-slide-zoom' as unknown as InjectionK
 
 export const CLASS_VCLICK_TARGET = 'slidev-vclick-target'
 export const CLASS_VCLICK_HIDDEN = 'slidev-vclick-hidden'
-export const CLASS_VCLICK_FADE = 'slidev-vclick-fade'
 export const CLASS_VCLICK_GONE = 'slidev-vclick-gone'
 export const CLASS_VCLICK_HIDDEN_EXP = 'slidev-vclick-hidden-explicitly'
 export const CLASS_VCLICK_CURRENT = 'slidev-vclick-current'
 export const CLASS_VCLICK_PRIOR = 'slidev-vclick-prior'
 export const CLASS_VCLICK_DISPLAY_NONE = 'slidev-vclick-display-none'
+export const CLASS_VCLICK_ANIMATION_PREFIX = 'slidev-vclick-anim-'
 
 export const CLICKS_MAX = 999999
 
@@ -45,6 +45,8 @@ export const FRONTMATTER_FIELDS = [
   'transition',
   'zoom',
   'dragPos',
+  'lang',
+  'clickAnimation',
 ]
 
 export const HEADMATTER_FIELDS = [
@@ -55,6 +57,7 @@ export const HEADMATTER_FIELDS = [
   'author',
   'keywords',
   'presenter',
+  'browserExporter',
   'download',
   'exportFilename',
   'export',
@@ -64,6 +67,7 @@ export const HEADMATTER_FIELDS = [
   'monacoTypesSource',
   'monacoTypesAdditionalPackages',
   'monacoRunAdditionalDeps',
+  'monacoRunUseStrict',
   'remoteAssets',
   'selectable',
   'record',
@@ -79,6 +83,13 @@ export const HEADMATTER_FIELDS = [
   'drawings',
   'htmlAttrs',
   'mdc',
+  'comark',
   'contextMenu',
   'wakeLock',
+  'pwa',
+  'seoMeta',
+  'notesAutoRuby',
+  'magicMoveDuration',
+  'shiki',
+  'preloadImages',
 ]

@@ -1,16 +1,18 @@
 <script setup lang="ts">
 import { useHead } from '@unhead/vue'
-import { computed, ref, watch } from 'vue'
 import { useLocalStorage } from '@vueuse/core'
-import { slidesTitle } from '../env'
-import { sharedState } from '../state/shared'
-import { fullscreen } from '../state'
-
-import NoteDisplay from '../internals/NoteDisplay.vue'
-import IconButton from '../internals/IconButton.vue'
-import ClicksSlider from '../internals/ClicksSlider.vue'
-import { useNav } from '../composables/useNav'
+import { computed, ref, watch } from 'vue'
 import { createClicksContextBase } from '../composables/useClicks'
+import { useNav } from '../composables/useNav'
+import { slidesTitle } from '../env'
+import ClicksSlider from '../internals/ClicksSlider.vue'
+import CurrentProgressBar from '../internals/CurrentProgressBar.vue'
+import IconButton from '../internals/IconButton.vue'
+import Modal from '../internals/Modal.vue'
+import NoteDisplay from '../internals/NoteDisplay.vue'
+import TimerBar from '../internals/TimerBar.vue'
+import { fullscreen } from '../state'
+import { sharedState } from '../state/shared'
 
 useHead({ title: `Notes - ${slidesTitle}` })
 
@@ -19,7 +21,8 @@ const { isFullscreen, toggle: toggleFullscreen } = fullscreen
 
 const scroller = ref<HTMLDivElement>()
 const fontSize = useLocalStorage('slidev-notes-font-size', 18)
-const pageNo = computed(() => sharedState.lastUpdate?.type === 'viewer' ? sharedState.viewerPage : sharedState.page)
+const pageNo = computed(() => sharedState.page)
+const showHelp = ref(false)
 const currentRoute = computed(() => slides.value.find(i => i.no === pageNo.value))
 
 watch(pageNo, () => {
@@ -36,21 +39,33 @@ function decreaseFontSize() {
 }
 
 const clicksContext = computed(() => {
-  const clicks = sharedState.lastUpdate?.type === 'viewer' ? sharedState.viewerClicks : sharedState.clicks
-  const total = sharedState.lastUpdate?.type === 'viewer' ? sharedState.viewerClicksTotal : sharedState.clicksTotal
+  const clicks = sharedState.clicks
+  const total = sharedState.clicksTotal
   return createClicksContextBase(ref(clicks), undefined, total)
 })
 </script>
 
 <template>
-  <div
-    class="fixed top-0 left-0 h-3px bg-primary transition-all duration-500"
-    :style="{ width: `${(pageNo - 1) / (total - 1) * 100 + 1}%` }"
-  />
-  <div class="h-full pt-2 flex flex-col">
+  <Modal v-model="showHelp" class="px-6 py-4 flex flex-col gap-2">
+    <div class="flex gap-2 text-xl">
+      <div class="i-carbon:information my-auto" /> Help
+    </div>
+    <div class="prose dark:prose-invert">
+      <p>This is the hands-free live notes viewer.</p>
+      <p>It's designed to be used in a separate view or device. The progress is controlled by and auto synced with the main presenter or slide.</p>
+    </div>
+    <div class="flex my-1">
+      <button class="slidev-form-button" @click="showHelp = false">
+        Close
+      </button>
+    </div>
+  </Modal>
+  <div class="h-full flex flex-col">
+    <CurrentProgressBar :clicks-context="clicksContext" :current="pageNo" />
+    <TimerBar />
     <div
       ref="scroller"
-      class="px-5 flex-auto h-full overflow-auto"
+      class="px-5 py-3 flex-auto h-full overflow-auto"
       :style="{ fontSize: `${fontSize}px` }"
     >
       <NoteDisplay
@@ -67,18 +82,25 @@ const clicksContext = computed(() => {
     <div class="flex-none border-t border-main">
       <div class="flex gap-1 items-center px-6 py-3">
         <IconButton :title="isFullscreen ? 'Close fullscreen' : 'Enter fullscreen'" @click="toggleFullscreen">
-          <carbon:minimize v-if="isFullscreen" />
-          <carbon:maximize v-else />
+          <div v-if="isFullscreen" class="i-carbon:minimize" />
+          <div v-else class="i-carbon:maximize" />
         </IconButton>
         <IconButton title="Increase font size" @click="increaseFontSize">
-          <carbon:zoom-in />
+          <div class="i-carbon:zoom-in" />
         </IconButton>
         <IconButton title="Decrease font size" @click="decreaseFontSize">
-          <carbon:zoom-out />
+          <div class="i-carbon:zoom-out" />
+        </IconButton>
+        <IconButton title="Edit notes" to="/notes-edit" target="_blank">
+          <div class="i-carbon:edit" />
+        </IconButton>
+        <IconButton title="Help" class="rounded-full" @click="showHelp = true">
+          <div class="i-carbon:help" />
         </IconButton>
         <div class="flex-auto" />
-        <div class="p2 text-center">
-          {{ pageNo }} / {{ total }}
+        <div class="px2 my-auto">
+          <span class="text-lg">{{ pageNo }}</span>
+          <span class="opacity-50 text-sm"> / {{ total }}</span>
         </div>
       </div>
     </div>

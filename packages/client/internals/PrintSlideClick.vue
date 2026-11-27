@@ -1,12 +1,12 @@
 <script setup lang="ts">
-import { computed, reactive, shallowRef } from 'vue'
+import type { SlidevContextNav } from '../composables/useNav'
 import { provideLocal } from '@vueuse/core'
-import { injectionSlidevContext } from '../constants'
+import { computed, reactive, shallowRef, useTemplateRef } from 'vue'
+import { GlobalBottom, GlobalTop } from '#slidev/global-layers'
+import { injectionSlideElement, injectionSlidevContext } from '../constants'
 import { configs, slideHeight, slideWidth } from '../env'
 import { getSlideClass } from '../utils'
-import type { SlidevContextNav } from '../composables/useNav'
 import SlideWrapper from './SlideWrapper.vue'
-import { GlobalBottom, GlobalTop } from '#slidev/global-layers'
 
 const { nav } = defineProps<{
   nav: SlidevContextNav
@@ -32,14 +32,15 @@ provideLocal(injectionSlidevContext, reactive({
   configs,
   themeConfigs: computed(() => configs.themeConfig),
 }))
+
+provideLocal(injectionSlideElement, useTemplateRef('slide-element'))
 </script>
 
 <template>
-  <div :id="id" class="print-slide-container" :style="style">
+  <div :id="id" ref="slide-element" class="print-slide-container" :style="style">
     <GlobalBottom />
 
     <SlideWrapper
-      :is="route.component!"
       :clicks-context="nav.clicksContext.value"
       :class="getSlideClass(route)"
       :route="route"
@@ -57,3 +58,14 @@ provideLocal(injectionSlidevContext, reactive({
     <GlobalTop />
   </div>
 </template>
+
+<style scoped lang="postcss">
+.print-slide-container {
+  @apply relative overflow-hidden break-after-page translate-0 bg-main;
+}
+
+.print-slide-container > .slidev-page {
+  /* Keep the unscaled slide box from being split across PDF pages. */
+  contain: size;
+}
+</style>

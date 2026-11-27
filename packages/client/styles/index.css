@@ -8,7 +8,9 @@ body,
   height: 100vh;
   height: calc(var(--vh, 1vh) * 100);
   overflow: hidden;
-  @apply font-sans;
+  print-color-adjust: exact;
+  -webkit-print-color-adjust: exact;
+  --uno: font-body bg-main;
 }
 
 html {
@@ -17,12 +19,12 @@ html {
 
 .slidev-icon-btn {
   aspect-ratio: 1;
-  display: inline-block;
   user-select: none;
   outline: none;
   cursor: pointer;
-  @apply opacity-75 transition duration-200 ease-in-out align-middle rounded p-1;
+  @apply inline-flex items-center justify-center opacity-75 transition duration-200 ease-in-out align-middle rounded p-1 relative;
   @apply hover:(opacity-100 bg-gray-400 bg-opacity-10);
+  @apply focus-visible:(opacity-100 outline outline-2 outline-offset-2 outline-black dark:outline-white);
   @apply md:p-2;
 }
 
@@ -39,22 +41,8 @@ html {
   pointer-events: none;
 }
 
-.slidev-vclick-target {
-  @apply transition-opacity duration-100;
-}
-
-.slidev-vclick-hidden {
-  opacity: 0 !important;
-  pointer-events: none !important;
-  user-select: none !important;
-}
-
-.slidev-vclick-display-none {
-  display: none !important;
-}
-
-.slidev-vclick-fade {
-  opacity: 0.5;
+.slidev-layout a.slidev-icon-btn {
+  @apply border-none hover:border-none hover:text-white;
 }
 
 .slidev-icon {
@@ -74,15 +62,18 @@ html {
 /* Note Clicks */
 
 .slidev-note-with-clicks .slidev-note-fade {
-  color: #888888ab;
+  color: #888888cc;
+}
+
+.dark .slidev-note-with-clicks .slidev-note-fade {
+  color: #a1a1a1cc;
 }
 
 .slidev-note-click-mark {
   user-select: none;
   font-size: 0.7em;
   display: inline-flex;
-  --uno: text-violet bg-violet/10 px1 font-mono rounded items-center border
-    border-transparent;
+  --uno: text-violet bg-violet/10 px1 font-mono rounded items-center border border-transparent;
 }
 .slidev-note-click-mark.slidev-note-click-mark-active {
   --uno: border border-violet;
@@ -116,16 +107,49 @@ html {
   transform: translateY(0.1em);
 }
 
+.slidev-form-button {
+  --uno: text-white px-4 py-1 rounded border-b-2;
+  --uno: 'bg-gray-500 border-gray-700';
+  --uno: 'hover:(bg-gray-400 border-gray6)';
+}
+.slidev-form-button.primary {
+  --uno: bg-teal-600 border-teal-800;
+  --uno: 'hover:(bg-teal-500 border-teal-700)';
+}
+
 /* Transform the position back for Rough Notation (v-mark) */
 .rough-annotation {
   transform: scale(calc(1 / var(--slidev-slide-scale)));
 }
 
-#twoslash-container {
-  position: fixed;
+/*
+ * Counter the slide scale so iframes lay out and rasterize at their real
+ * on-screen resolution. Without this, canvas-based content (e.g. Excalidraw)
+ * is rendered at the slide's design size and bitmap-upscaled, which makes it
+ * blurry when the slide is scaled up. Scales below 1 are not countered, so
+ * scaled-down views like the overview keep the original layout.
+ */
+.slidev-layout-iframe {
+  --slidev-iframe-raster: max(var(--slidev-slide-scale, 1), 1);
+  width: calc(100% * var(--slidev-iframe-raster));
+  height: calc(100% * var(--slidev-iframe-raster));
+  transform: scale(calc(var(--slidev-iframe-scale, 1) / var(--slidev-iframe-raster)));
+  transform-origin: top left;
 }
 
-#twoslash-container .v-popper__wrapper {
-  transform: scale(calc(1 * var(--slidev-slide-scale)));
-  transform-origin: 30px top;
+#twoslash-container {
+  position: fixed;
+
+  .v-popper__wrapper:not(.no-slide-scale > *) {
+    zoom: var(--slidev-slide-scale);
+  }
+
+  .v-popper__popper:not(.no-slide-scale > *) {
+    translate: calc(10px * (1 - var(--slidev-slide-scale))) 0;
+    width: max-content;
+  }
+}
+
+.slidev-note ul {
+  margin: 0;
 }

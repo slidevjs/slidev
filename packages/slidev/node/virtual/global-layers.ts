@@ -1,39 +1,34 @@
-import { existsSync } from 'node:fs'
-import { join } from 'node:path'
-import { toAtFS } from '../resolver'
 import type { VirtualModuleTemplate } from './types'
+import { join } from 'pathe'
+
+const id = `/@slidev/global-layers`
 
 export const templateGlobalLayers: VirtualModuleTemplate = {
-  id: `/@slidev/global-layers`,
+  id,
   getContent({ roots }) {
-    const imports: string[] = []
+    const { makeAbsoluteImportGlob } = this
+    const imports = [`import { h } from 'vue'`]
+    let importIndex = 0
 
-    let n = 0
-    function getComponent(names: string[]) {
-      const components = roots
-        .flatMap(root => names.map(name => join(root, name)))
-        .filter(i => existsSync(i))
-
-      imports.push(components.map((path, i) => `import __n${n}_${i} from '${toAtFS(path)}'`).join('\n'))
-      const render = components.map((_, i) => `h(__n${n}_${i})`).join(',')
-
-      n++
-
-      return `{ render: () => [${render}] }`
+    function* getComponent(name: string, names: string[]) {
+      yield `const ${name}Components = [\n`
+      for (const root of roots) {
+        const globs = names.map(name => join(root, `${name}.{ts,js,vue}`))
+        const importName = `__slidev_global_layer_${importIndex++}`
+        imports.push(`import ${importName} from ${JSON.stringify(makeAbsoluteImportGlob(globs, { import: 'default' }))}`)
+        yield `  Object.values(${importName})[0],\n`
+      }
+      yield `].filter(Boolean)\n`
+      yield `export const ${name} = { render: () => ${name}Components.map(comp => h(comp)) }\n\n`
     }
 
-    const globalTop = getComponent(['global.vue', 'global-top.vue', 'GlobalTop.vue'])
-    const globalBottom = getComponent(['global-bottom.vue', 'GlobalBottom.vue'])
-    const slideTop = getComponent(['slide-top.vue', 'SlideTop.vue'])
-    const slideBottom = getComponent(['slide-bottom.vue', 'SlideBottom.vue'])
+    const body = [
+      ...getComponent('GlobalTop', ['global', 'global-top', 'GlobalTop']),
+      ...getComponent('GlobalBottom', ['global-bottom', 'GlobalBottom']),
+      ...getComponent('SlideTop', ['slide-top', 'SlideTop']),
+      ...getComponent('SlideBottom', ['slide-bottom', 'SlideBottom']),
+    ].join('')
 
-    return [
-      imports.join('\n'),
-      `import { h } from 'vue'`,
-      `export const GlobalTop = ${globalTop}`,
-      `export const GlobalBottom = ${globalBottom}`,
-      `export const SlideTop = ${slideTop}`,
-      `export const SlideBottom = ${slideBottom}`,
-    ].join('\n')
+    return `${imports.join('\n')}\n\n${body}`
   },
 }

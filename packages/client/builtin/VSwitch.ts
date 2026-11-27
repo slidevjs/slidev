@@ -1,11 +1,11 @@
 import type { PropType, Ref, Slot, TransitionGroupProps, VNode } from 'vue'
-import { TransitionGroup, defineComponent, h, onMounted, onUnmounted, ref, watchEffect } from 'vue'
 import { recomputeAllPoppers } from 'floating-vue'
-import { useSlideContext } from '../context'
-import { makeId } from '../logic/utils'
-import { resolveTransition } from '../logic/transition'
-import { skipTransition } from '../logic/hmr'
+import { defineComponent, h, onMounted, onUnmounted, ref, TransitionGroup, watchEffect } from 'vue'
 import { CLASS_VCLICK_CURRENT, CLASS_VCLICK_DISPLAY_NONE, CLASS_VCLICK_PRIOR, CLASS_VCLICK_TARGET, CLICKS_MAX } from '../constants'
+import { useSlideContext } from '../context'
+import { resolveTransition } from '../logic/transition'
+import { makeId } from '../logic/utils'
+import { hmrSkipTransition } from '../state'
 
 export default defineComponent({
   props: {
@@ -41,13 +41,18 @@ export default defineComponent({
     for (const [range, slot] of slotEntries) {
       const elRef = ref<HTMLElement>()
       if (Number.isFinite(+range)) {
-        contents.push([+range, lastStart ?? +range + 1, slot, elRef])
+        contents.push([
+          +range,
+          lastStart ?? +range + 1,
+          slot,
+          elRef,
+        ])
         lastStart = +range
       }
       else {
         const [start, end] = range.split('-').map(Number)
         if (!Number.isFinite(start) || !Number.isFinite(end))
-          throw new Error(`Invalid range for v-switch: ${range}`)
+          throw new TypeError(`Invalid range for v-switch: ${range}`)
         contents.push([start, end, slot, elRef])
         lastStart = start
       }
@@ -77,7 +82,7 @@ export default defineComponent({
 
     function onAfterLeave() {
       // Refer to SlidesShow.vue
-      skipTransition.value = true
+      hmrSkipTransition.value = true
       recomputeAllPoppers()
     }
     const transitionProps = transition && {
@@ -107,7 +112,9 @@ export default defineComponent({
         }, slot?.()))
       }
       return transitionProps
-        ? h(TransitionGroup, skipTransition.value ? {} : transitionProps, () => children)
+        ? h(TransitionGroup, hmrSkipTransition.value
+            ? {}
+            : transitionProps, () => children)
         : h(tag, children)
     }
   },

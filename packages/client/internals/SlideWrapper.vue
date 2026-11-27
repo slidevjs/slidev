@@ -1,13 +1,12 @@
 <script setup lang="ts">
-import { computed, defineAsyncComponent, defineComponent, h, onMounted, ref, toRef } from 'vue'
+import type { ClicksContext, RenderContext, SlideRoute } from '@slidev/types'
 import type { CSSProperties, PropType } from 'vue'
 import { provideLocal } from '@vueuse/core'
-import type { ClicksContext, RenderContext, SlideRoute } from '@slidev/types'
-import { injectionClicksContext, injectionCurrentPage, injectionRenderContext, injectionRoute, injectionSlideZoom } from '../constants'
-import { getSlideClass } from '../utils'
-import { configs } from '../env'
-import SlideLoading from './SlideLoading.vue'
+import { computed, ref, toRef } from 'vue'
 import { SlideBottom, SlideTop } from '#slidev/global-layers'
+import { injectionClicksContext, injectionCurrentPage, injectionFrontmatter, injectionRenderContext, injectionRoute, injectionSlideZoom } from '../constants'
+import { configs } from '../env'
+import { getSlideClass } from '../utils'
 
 const props = defineProps({
   clicksContext: {
@@ -27,38 +26,17 @@ const props = defineProps({
 const zoom = computed(() => props.route.meta?.slide?.frontmatter.zoom ?? 1)
 
 provideLocal(injectionRoute, props.route)
+provideLocal(injectionFrontmatter, props.route.meta.slide.frontmatter)
 provideLocal(injectionCurrentPage, ref(props.route.no))
 provideLocal(injectionRenderContext, ref(props.renderContext))
 provideLocal(injectionClicksContext, toRef(props, 'clicksContext'))
 provideLocal(injectionSlideZoom, zoom)
 
-const zoomStyle = computed(() => {
-  return zoom.value === 1
-    ? undefined
-    : {
-        width: `${100 / zoom.value}%`,
-        height: `${100 / zoom.value}%`,
-        transformOrigin: 'top left',
-        transform: `scale(${zoom.value})`,
-      }
-})
 const style = computed<CSSProperties>(() => ({
-  ...zoomStyle.value,
   'user-select': configs.selectable ? undefined : 'none',
-}))
-
-const SlideComponent = computed(() => props.route && defineAsyncComponent({
-  loader: async () => {
-    const component = await props.route.component()
-    return defineComponent({
-      setup(_, { attrs }) {
-        onMounted(() => props.clicksContext?.onMounted?.())
-        return () => h(component.default, attrs)
-      },
-    })
-  },
-  delay: 300,
-  loadingComponent: SlideLoading,
+  '--slidev-slide-zoom-scale': zoom.value === 1
+    ? undefined
+    : zoom.value,
 }))
 </script>
 
@@ -67,9 +45,10 @@ const SlideComponent = computed(() => props.route && defineAsyncComponent({
     :data-slidev-no="props.route.no"
     :class="getSlideClass(route, ['slide', 'presenter'].includes(props.renderContext) ? '' : 'disable-view-transition')"
     :style="style"
+    :lang="props.route.meta.slide.frontmatter.lang"
   >
     <SlideBottom />
-    <SlideComponent />
+    <component :is="props.route.component" />
     <SlideTop />
   </div>
 </template>
@@ -82,5 +61,14 @@ const SlideComponent = computed(() => props.route && defineAsyncComponent({
 .slidev-page {
   position: absolute;
   inset: 0;
+
+  /* Zoom handling */
+  --slidev-slide-zoom-scale: 1;
+  width: calc(100% / var(--slidev-slide-zoom-scale));
+  height: calc(100% / var(--slidev-slide-zoom-scale));
+  transform-origin: top left;
+  scale: var(--slidev-slide-zoom-scale);
+  /* slide scale = container scale * zoom scale */
+  --slidev-slide-scale: calc(var(--slidev-slide-container-scale) * var(--slidev-slide-zoom-scale));
 }
 </style>

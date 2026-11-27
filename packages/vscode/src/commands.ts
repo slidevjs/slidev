@@ -1,40 +1,53 @@
-import { relative } from 'node:path'
-import { onScopeDispose } from '@vue/runtime-core'
-import type { Disposable } from 'vscode'
-import { Position, Range, Selection, TextEditorRevealType, Uri, commands, window, workspace } from 'vscode'
-import { save as saveSlidevMarkdown } from '@slidev/parser/fs'
 import { slash } from '@antfu/utils'
+import { relative } from 'pathe'
+import { useCommand } from 'reactive-vscode'
+import { ConfigurationTarget, window, workspace } from 'vscode'
 import { useDevServer } from './composables/useDevServer'
-import { useEditingSlideSource } from './composables/useEditingSlideSource'
-import { useFocusedSlideNo } from './composables/useFocusedSlideNo'
-import { configuredPort, forceEnabled, include, previewSync } from './configs'
-import type { SlidevProject } from './projects'
-import { activeEntry, activeProject, activeSlidevData, addProject, projects, rescanProjects } from './projects'
+import { useFocusedSlide } from './composables/useFocusedSlide'
+import { config } from './configs'
+import { activeEntry, activeProject, addProject, projects, rescanProjects } from './projects'
 import { findPossibleEntries } from './utils/findPossibleEntries'
+import { getSlidesTitle } from './utils/getSlidesTitle'
 import { usePreviewWebview } from './views/previewWebview'
-import type { SlidesTreeElement } from './views/slidesTree'
+
+const RE_DIGITS = /^\d+$/
 
 export function useCommands() {
-  const disposables: Disposable[] = []
-  onScopeDispose(() => disposables.forEach(d => d.dispose()))
-  function registerCommand(command: string, callback: (...args: any[]) => any) {
-    disposables.push(commands.registerCommand(command, callback))
-  }
+  useCommand('slidev.enable-extension', () => config.update('force-enabled', true, ConfigurationTarget.Workspace))
+  useCommand('slidev.disable-extension', () => config.update('force-enabled', false, ConfigurationTarget.Workspace))
 
-  registerCommand('slidev.enable-extension', () => forceEnabled.value = true)
-  registerCommand('slidev.disable-extension', () => forceEnabled.value = false)
+  useCommand('slidev.rescan-projects', rescanProjects)
 
-  registerCommand('slidev.rescan-projects', rescanProjects)
-
-  registerCommand('slidev.choose-entry', async () => {
-    const entry = await window.showQuickPick([...projects.keys()], {
-      title: 'Choose active slides entry.',
-    })
-    if (entry)
-      activeEntry.value = entry
+  useCommand('slidev.choose-entry', async () => {
+    while (true) {
+      const addNewEntry = '$(add) Add new slides entry...'
+      const entry = await window.showQuickPick(
+        [
+          ...projects.keys(),
+          addNewEntry,
+        ],
+        {
+          title: 'Choose active slides entry.',
+        },
+      )
+      if (entry === addNewEntry) {
+        if (!await addEntry()) {
+          break
+        }
+      }
+      else if (entry) {
+        activeEntry.value = entry
+        break
+      }
+      else {
+        break
+      }
+    }
   })
 
-  registerCommand('slidev.add-entry', async () => {
+  useCommand('slidev.add-entry', addEntry)
+
+  async function addEntry() {
     const files = await findPossibleEntries()
     const selected = await window.showQuickPick(files, {
       title: 'Choose Markdown files to add as slides entries.',
@@ -46,123 +59,92 @@ export function useCommands() {
       if (workspace.workspaceFolders) {
         const workspaceRoot = workspace.workspaceFolders[0].uri.fsPath
         const relatives = selected.map(s => slash(relative(workspaceRoot, s)))
-        include.value = [...include.value, ...relatives]
+        // write back to settings.json
+        await config.update('include', [
+          ...config.include,
+          ...relatives,
+        ])
       }
     }
-  })
+    return !!selected
+  }
 
-  registerCommand('slidev.remove-entry', async (project: SlidevProject) => {
-    const entry = project.entry
+  useCommand('slidev.remove-entry', async (node: any) => {
+    const entry = slash(node.treeItem.resourceUri.fsPath)
     if (activeEntry.value === entry)
       activeEntry.value = null
     projects.delete(entry)
   })
 
-  registerCommand('slidev.set-as-active', async (project: SlidevProject) => {
-    activeEntry.value = project.entry
+  useCommand('slidev.set-as-active', async (node: any) => {
+    const entry = slash(node.treeItem.resourceUri.fsPath)
+    activeEntry.value = entry
   })
 
-  registerCommand('slidev.stop-dev', async (project: SlidevProject) => {
-    const { stop } = useDevServer(project)
-    stop()
+  useCommand('slidev.goto', (filepath: string, index: number) => {
+    const { gotoSlide } = useFocusedSlide()
+    gotoSlide(filepath, index)
   })
-
-  async function gotoSlide(filepath: string, index: number, getNo?: () => number | null) {
-    const { markdown: currrentMarkdown, index: currentIndex } = useEditingSlideSource()
-    const sameFile = currrentMarkdown.value?.filepath === filepath
-    if (sameFile && currentIndex.value === index)
+  useCommand('slidev.next', () => {
+    const { focusedMarkdown, focusedSourceSlide, gotoSlide } = useFocusedSlide()
+    if (!focusedMarkdown.value || focusedSourceSlide.value == null)
       return
-
-    const slide = activeSlidevData.value?.markdownFiles[filepath]?.slides[index]
-    if (!slide)
+    gotoSlide(focusedMarkdown.value.filepath, focusedSourceSlide.value.index + 1)
+  })
+  useCommand('slidev.prev', () => {
+    const { focusedMarkdown, focusedSourceSlide, gotoSlide } = useFocusedSlide()
+    if (!focusedMarkdown.value || focusedSourceSlide.value == null)
       return
-
-    const uri = Uri.file(filepath).with({
-      // Add a fragment to the URI will cause a flush. So we need to remove it if it's the same file.
-      fragment: sameFile ? undefined : `L${slide.contentStart + 1}`,
-    })
-    const editor = await window.showTextDocument(await workspace.openTextDocument(uri))
-
-    const cursorPos = new Position(slide.contentStart, 0)
-    editor.selection = new Selection(cursorPos, cursorPos)
-
-    const startPos = new Position(slide.start, 0)
-    const endPos = new Position(slide.end, 0)
-    const slideRange = new Range(startPos, endPos)
-    editor.revealRange(slideRange, TextEditorRevealType.AtTop)
-
-    const no = getNo?.()
-    if (no) {
-      const focusedSlideNo = useFocusedSlideNo()
-      focusedSlideNo.value = no
-    }
-  }
-
-  registerCommand('slidev.goto', gotoSlide)
-  registerCommand('slidev.next', () => {
-    const { markdown, index } = useEditingSlideSource()
-    const focusedSlideNo = useFocusedSlideNo()
-    gotoSlide(markdown.value!.filepath, index.value + 1, () => focusedSlideNo.value + 1)
-  })
-  registerCommand('slidev.prev', () => {
-    const { markdown, index } = useEditingSlideSource()
-    const focusedSlideNo = useFocusedSlideNo()
-    gotoSlide(markdown.value!.filepath, index.value - 1, () => focusedSlideNo.value - 1)
+    gotoSlide(focusedMarkdown.value.filepath, focusedSourceSlide.value.index - 1)
   })
 
-  registerCommand('slidev.refresh-preview', () => {
+  useCommand('slidev.refresh-preview', async () => {
     const { refresh } = usePreviewWebview()
-    refresh()
+    await refresh()
   })
 
-  registerCommand('slidev.config-port', async () => {
+  useCommand('slidev.config-port', async () => {
+    if (!activeProject.value) {
+      window.showErrorMessage('No active project to configure port.')
+      return
+    }
     const port = await window.showInputBox({
-      prompt: 'Slidev Preview Port',
-      value: configuredPort.value.toString(),
+      prompt: `Slidev Preview Port for ${getSlidesTitle(activeProject.value.data)}`,
+      value: config.port.toString(),
       validateInput: (v) => {
-        if (!v.match(/^\d+$/))
+        if (!RE_DIGITS.test(v))
           return 'Port should be a number'
         if (+v < 1024 || +v > 65535)
           return 'Port should be between 1024 and 65535'
         return null
       },
     })
-    if (!port)
-      return
-    configuredPort.value = +port
+    if (port && activeProject.value) {
+      activeProject.value.port.value = +port
+    }
   })
 
-  registerCommand('slidev.start-dev', async () => {
+  useCommand('slidev.start-dev', async () => {
     const project = activeProject.value
     if (!project) {
       window.showErrorMessage('Cannot start dev server: No active slides project.')
       return
     }
 
-    const { start, showTerminal } = useDevServer(project)
-    await start()
-    await showTerminal()
-
-    const { retry } = usePreviewWebview()
-    setTimeout(retry, 3000)
-    setTimeout(retry, 5000)
-    setTimeout(retry, 7000)
-    setTimeout(retry, 9000)
+    const { start, terminal } = useDevServer(project)
+    start()
+    terminal.value?.show()
   })
 
-  registerCommand('slidev.open-in-browser', () => usePreviewWebview().openExternal())
+  useCommand('slidev.open-in-browser', () => usePreviewWebview().openExternal())
 
-  registerCommand('slidev.preview-prev-click', () => usePreviewWebview().prevClick())
-  registerCommand('slidev.preview-next-click', () => usePreviewWebview().nextClick())
-  registerCommand('slidev.preview-prev-slide', () => usePreviewWebview().prevSlide())
-  registerCommand('slidev.preview-next-slide', () => usePreviewWebview().nextSlide())
+  useCommand('slidev.preview-prev-click', () => usePreviewWebview().prevClick())
+  useCommand('slidev.preview-next-click', () => usePreviewWebview().nextClick())
+  useCommand('slidev.preview-prev-slide', () => usePreviewWebview().prevSlide())
+  useCommand('slidev.preview-next-slide', () => usePreviewWebview().nextSlide())
+  useCommand('slidev.show-slide-preview', () => usePreviewWebview().setPreviewMode('slide'))
+  useCommand('slidev.show-overview-preview', () => usePreviewWebview().setPreviewMode('overview'))
 
-  registerCommand('slidev.enable-preview-sync', () => (previewSync.value = true))
-  registerCommand('slidev.disable-preview-sync', () => (previewSync.value = false))
-
-  registerCommand('slidev.remove-slide', async ({ slide }: SlidesTreeElement) => {
-    const md = activeSlidevData.value!.markdownFiles[slide.filepath]
-    md.slides.splice(md.slides.indexOf(slide), 1)
-    await saveSlidevMarkdown(md)
-  })
+  useCommand('slidev.enable-preview-sync', () => (config.update('preview-sync', true, ConfigurationTarget.Global)))
+  useCommand('slidev.disable-preview-sync', () => (config.update('preview-sync', false, ConfigurationTarget.Global)))
 }

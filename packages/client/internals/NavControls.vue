@@ -1,17 +1,18 @@
 <script setup lang="ts">
 import { computed, ref, shallowRef } from 'vue'
-import { isColorSchemaConfigured, isDark, toggleDark } from '../logic/dark'
-import { downloadPDF } from '../utils'
-import { activeElement, breakpoints, fullscreen, presenterLayout, showEditor, showInfoDialog, showPresenterCursor, toggleOverview, togglePresenterLayout } from '../state'
-import { configs } from '../env'
-import { useNav } from '../composables/useNav'
-import { useDrawings } from '../composables/useDrawings'
-import Settings from './Settings.vue'
-import MenuButton from './MenuButton.vue'
-import VerticalDivider from './VerticalDivider.vue'
-import IconButton from './IconButton.vue'
-
 import CustomNavControls from '#slidev/custom-nav-controls'
+import { useDrawings } from '../composables/useDrawings'
+import { useNav } from '../composables/useNav'
+import { configs } from '../env'
+import { isColorSchemaConfigured, isDark, toggleDark } from '../logic/dark'
+import { activeElement, breakpoints, cursorStyle, fullscreen, hasViewerCssFilter, presenterLayout, showEditor, showInfoDialog, showPresenterCursor, toggleOverview, togglePresenterCursor, togglePresenterLayout } from '../state'
+import { downloadPDF } from '../utils'
+import IconButton from './IconButton.vue'
+import MenuButton from './MenuButton.vue'
+import Settings from './Settings.vue'
+import SyncControls from './SyncControls.vue'
+
+import VerticalDivider from './VerticalDivider.vue'
 
 const props = defineProps({
   persist: {
@@ -48,7 +49,7 @@ function onMouseLeave() {
 
 const barStyle = computed(() => props.persist
   ? 'text-$slidev-controls-foreground bg-transparent'
-  : 'rounded-md bg-main shadow dark:border dark:border-main')
+  : 'rounded-md bg-main shadow-xl border border-main')
 
 const RecordingControls = shallowRef<any>()
 if (__SLIDEV_FEATURE_RECORD__)
@@ -58,30 +59,30 @@ if (__SLIDEV_FEATURE_RECORD__)
 <template>
   <nav ref="root" class="flex flex-col">
     <div
-      class="flex flex-wrap-reverse text-xl gap-0.5 p-1 lg:gap-1 lg:p-2"
+      class="flex flex-wrap-reverse text-xl gap-0.5 p-1 lg:p-2"
       :class="barStyle"
       @mouseleave="onMouseLeave"
     >
       <IconButton v-if="!isEmbedded" :title="isFullscreen ? 'Close fullscreen' : 'Enter fullscreen'" @click="toggleFullscreen">
-        <carbon:minimize v-if="isFullscreen" />
-        <carbon:maximize v-else />
+        <div v-if="isFullscreen" class="i-carbon:minimize" />
+        <div v-else class="i-carbon:maximize" />
       </IconButton>
-      <IconButton :class="{ disabled: !hasPrev }" title="Go to previous slide" @click="prev">
-        <carbon:arrow-left />
+      <IconButton :disabled="!hasPrev" title="Go to previous slide" @click="prev">
+        <div class="i-carbon:arrow-left" />
       </IconButton>
-      <IconButton :class="{ disabled: !hasNext }" title="Go to next slide" @click="next">
-        <carbon:arrow-right />
+      <IconButton :disabled="!hasNext" title="Go to next slide" @click="next">
+        <div class="i-carbon:arrow-right" />
       </IconButton>
       <IconButton v-if="!isEmbedded" title="Show slide overview" @click="toggleOverview()">
-        <carbon:apps />
+        <div class="i-carbon:apps" />
       </IconButton>
       <IconButton
         v-if="!isColorSchemaConfigured"
         :title="isDark ? 'Switch to light mode theme' : 'Switch to dark mode theme'"
         @click="toggleDark()"
       >
-        <carbon-moon v-if="isDark" />
-        <carbon-sun v-else />
+        <div v-if="isDark" class="i-carbon-moon" />
+        <div v-else class="i-carbon-sun" />
       </IconButton>
 
       <VerticalDivider />
@@ -94,51 +95,63 @@ if (__SLIDEV_FEATURE_RECORD__)
 
         <IconButton
           v-if="isPresenter"
-          :title="showPresenterCursor ? 'Hide presenter cursor' : 'Show presenter cursor'"
-          @click="showPresenterCursor = !showPresenterCursor"
+          :title="cursorStyle === 'laser'
+            ? (showPresenterCursor ? 'Disable laser pointer' : 'Enable laser pointer')
+            : (showPresenterCursor ? 'Hide presenter cursor' : 'Show presenter cursor')"
+          :active="showPresenterCursor"
+          @click="togglePresenterCursor()"
         >
-          <ph-cursor-fill v-if="showPresenterCursor" />
-          <ph-cursor-duotone v-else />
+          <template v-if="cursorStyle === 'laser'">
+            <div v-if="showPresenterCursor" class="i-carbon-magic-wand-filled color-red-600 dark:color-red-400" />
+            <div v-else class="i-carbon-magic-wand" />
+          </template>
+          <template v-else>
+            <div v-if="showPresenterCursor" class="i-ph-cursor-fill" />
+            <div v-else class="i-ph-cursor-duotone" />
+          </template>
         </IconButton>
-      </template>
-
-      <template v-if="__SLIDEV_FEATURE_DRAWINGS__ && (!configs.drawings.presenterOnly || isPresenter) && !isEmbedded">
-        <IconButton class="relative" :title="drawingEnabled ? 'Hide drawing toolbar' : 'Show drawing toolbar'" @click="drawingEnabled = !drawingEnabled">
-          <carbon:pen />
+        <IconButton
+          v-if="__SLIDEV_FEATURE_DRAWINGS__ && (!configs.drawings.presenterOnly || isPresenter)"
+          class="relative"
+          :title="drawingEnabled ? 'Hide drawing toolbar' : 'Show drawing toolbar'"
+          :active="drawingEnabled"
+          @click="drawingEnabled = !drawingEnabled"
+        >
+          <div class="i-carbon:pen" />
           <div
             v-if="drawingEnabled"
             class="absolute left-1 right-1 bottom-0 h-0.7 rounded-full"
             :style="{ background: brush.color }"
           />
         </IconButton>
-        <VerticalDivider />
-      </template>
 
-      <template v-if="!isEmbedded">
+        <VerticalDivider />
+
         <IconButton v-if="isPresenter" title="Play Mode" @click="exitPresenter">
-          <carbon:presentation-file />
+          <div class="i-carbon:presentation-file" />
         </IconButton>
         <IconButton v-if="__SLIDEV_FEATURE_PRESENTER__ && isPresenterAvailable" title="Presenter Mode" @click="enterPresenter">
-          <carbon:user-speaker />
+          <div class="i-carbon:user-speaker" />
         </IconButton>
-
         <IconButton
           v-if="__DEV__ && __SLIDEV_FEATURE_EDITOR__"
           :title="showEditor ? 'Hide editor' : 'Show editor'"
           class="lt-md:hidden"
           @click="showEditor = !showEditor"
         >
-          <carbon:text-annotation-toggle />
-        </IconButton>
-
-        <IconButton v-if="isPresenter" title="Toggle Presenter Layout" class="aspect-ratio-initial" @click="togglePresenterLayout">
-          <carbon:template />
-          {{ presenterLayout }}
+          <div class="i-carbon:text-annotation-toggle" />
         </IconButton>
       </template>
+
       <template v-if="!__DEV__">
         <IconButton v-if="configs.download" title="Download as PDF" @click="downloadPDF">
-          <carbon:download />
+          <div class="i-carbon:download" />
+        </IconButton>
+      </template>
+
+      <template v-if="__SLIDEV_FEATURE_BROWSER_EXPORTER__ && !isEmbedded && !isPresenter">
+        <IconButton title="Browser Exporter" to="/export">
+          <div class="i-carbon:document-pdf" />
         </IconButton>
       </template>
 
@@ -147,14 +160,24 @@ if (__SLIDEV_FEATURE_RECORD__)
         title="Show info"
         @click="showInfoDialog = !showInfoDialog"
       >
-        <carbon:information />
+        <div class="i-carbon:information" />
       </IconButton>
 
-      <template v-if="!isPresenter && !isEmbedded">
+      <template v-if="!isEmbedded">
+        <VerticalDivider />
+
+        <IconButton v-if="isPresenter" title="Toggle Presenter Layout" class="aspect-ratio-initial flex items-center" @click="togglePresenterLayout">
+          <div class="i-carbon:template" />
+          {{ presenterLayout }}
+        </IconButton>
+
+        <SyncControls v-if="__SLIDEV_FEATURE_PRESENTER__" />
+
         <MenuButton>
-          <template #button>
-            <IconButton title="Adjust settings">
-              <carbon:settings-adjust />
+          <template #button="{ value }">
+            <IconButton title="More Options" :active="value">
+              <div class="i-carbon:settings-adjust" />
+              <div v-if="hasViewerCssFilter" w-2 h-2 bg-primary rounded-full absolute top-0.5 right-0.5 />
             </IconButton>
           </template>
           <template #menu>
@@ -165,11 +188,9 @@ if (__SLIDEV_FEATURE_RECORD__)
 
       <VerticalDivider v-if="!isEmbedded" />
 
-      <div class="h-40px flex" p="l-1 t-0.5 r-2" text="sm leading-2">
-        <div class="my-auto">
-          {{ currentSlideNo }}
-          <span class="opacity-50">/ {{ total }}</span>
-        </div>
+      <div class="px2 my-auto">
+        <span class="text-lg">{{ currentSlideNo }}</span>
+        <span class="opacity-50 text-sm"> / {{ total }}</span>
       </div>
 
       <CustomNavControls />

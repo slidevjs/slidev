@@ -1,14 +1,13 @@
 import type { Awaitable } from '@antfu/utils'
-import type MarkdownIt from 'markdown-it'
-import type { PluginContext } from 'rollup'
 import type { ResolvedSlidevOptions } from '@slidev/types'
+import type { Rolldown } from 'vite'
+import type { MakeAbsoluteImportGlob } from '../utils'
+
+export interface VirtualModuleContext extends Pick<Rolldown.PluginContext, 'resolve'> {
+  makeAbsoluteImportGlob: MakeAbsoluteImportGlob
+}
 
 export interface VirtualModuleTemplate {
   id: string
-  getContent: (options: ResolvedSlidevOptions, ctx: VirtualModuleTempalteContext, pluginCtx: PluginContext) => Awaitable<string>
-}
-
-export interface VirtualModuleTempalteContext {
-  md: MarkdownIt
-  getLayouts: () => Promise<Record<string, string>>
+  getContent: (this: VirtualModuleContext, options: ResolvedSlidevOptions) => Awaitable<string>
 }

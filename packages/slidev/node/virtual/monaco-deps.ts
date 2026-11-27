@@ -1,18 +1,22 @@
-import { resolve } from 'node:path'
-import { uniq } from '@antfu/utils'
 import type { VirtualModuleTemplate } from './types'
+import { uniq } from '@antfu/utils'
+import { resolve } from 'pathe'
 
 export const templateMonacoRunDeps: VirtualModuleTemplate = {
   id: '/@slidev/monaco-run-deps',
-  getContent: async ({ userRoot, data }, _ctx, pluginCtx) => {
+  async getContent({ userRoot, data }) {
     if (!data.features.monaco)
       return ''
-    const deps = uniq(data.features.monaco.deps.concat(data.config.monacoTypesAdditionalPackages))
+    const deps = uniq([
+      ...data.features.monaco.deps,
+      ...(data.config.monacoTypesAdditionalPackages || []),
+      ...(data.config.monacoRunAdditionalDeps || []),
+    ])
     const importerPath = resolve(userRoot, './snippets/__importer__.ts')
     let result = ''
     for (let i = 0; i < deps.length; i++) {
       const specifier = deps[i]
-      const resolved = await pluginCtx.resolve(specifier, importerPath)
+      const resolved = await this.resolve(specifier, importerPath)
       if (!resolved)
         continue
       result += `import * as vendored${i} from ${JSON.stringify(resolved.id)}\n`

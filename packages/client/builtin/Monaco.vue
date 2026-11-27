@@ -12,49 +12,56 @@ Learn more: https://sli.dev/guide/syntax.html#monaco-editor
 -->
 
 <script setup lang="ts">
-import { debounce } from '@antfu/utils'
-import lz from 'lz-string'
-import type * as monaco from 'monaco-editor'
-import { computed, defineAsyncComponent, nextTick, onMounted, ref } from 'vue'
 import type { RawAtValue } from '@slidev/types'
+import type * as monaco from 'monaco-editor'
+import { debounce } from '@antfu/utils'
 import { whenever } from '@vueuse/core'
-import { makeId } from '../logic/utils'
-import { useSlideContext } from '../context'
+import lz from 'lz-string'
+import { computed, defineAsyncComponent, nextTick, onMounted, ref } from 'vue'
 import { useNav } from '../composables/useNav'
+import { useSlideContext } from '../context'
+import { configs } from '../env'
+import { makeId } from '../logic/utils'
 
-const props = withDefaults(defineProps<{
-  codeLz: string
-  diffLz?: string
-  lang?: string
-  readonly?: boolean
-  lineNumbers?: 'on' | 'off' | 'relative' | 'interval'
-  height?: number | string // Posible values: 'initial', 'auto', '100%', '200px', etc.
-  editorOptions?: monaco.editor.IEditorOptions
-  ata?: boolean
-  runnable?: boolean
-  writable?: string
-  autorun?: boolean | 'once'
-  showOutputAt?: RawAtValue
-  outputHeight?: string
-  highlightOutput?: boolean
-  runnerOptions?: Record<string, unknown>
-}>(), {
-  codeLz: '',
-  lang: 'typescript',
-  readonly: false,
-  lineNumbers: 'off',
-  height: 'initial',
-  ata: true,
-  runnable: false,
-  autorun: true,
-  highlightOutput: true,
-})
+const props = withDefaults(
+  defineProps<{
+    codeLz?: string
+    diffLz?: string
+    lang?: string
+    readonly?: boolean
+    lines?: boolean
+    lineNumbers?: 'on' | 'off' | 'relative' | 'interval'
+    height?: number | string // Posible values: 'initial', 'auto', '100%', '200px', etc.
+    editorOptions?: monaco.editor.IEditorOptions
+    ata?: boolean
+    runnable?: boolean
+    writable?: string
+    autorun?: boolean | 'once'
+    showOutputAt?: RawAtValue
+    outputHeight?: string
+    outputFontSize?: number | string
+    highlightOutput?: boolean
+    runnerOptions?: Record<string, unknown>
+  }>(),
+  {
+    codeLz: '',
+    lang: 'typescript',
+    readonly: false,
+    lines: configs.lineNumbers,
+    height: 'initial',
+    ata: true,
+    runnable: false,
+    autorun: true,
+    highlightOutput: true,
+  },
+)
 
 const CodeRunner = defineAsyncComponent(() => import('../internals/CodeRunner.vue').then(r => r.default))
 
 const code = ref(lz.decompressFromBase64(props.codeLz).trimEnd())
 const diff = props.diffLz && ref(lz.decompressFromBase64(props.diffLz).trimEnd())
 const isWritable = computed(() => props.writable && !props.readonly && __DEV__)
+const lineNumbers = props.lineNumbers ?? (props.lines ? 'on' : 'off')
 
 const langMap: Record<string, string> = {
   ts: 'typescript',
@@ -69,7 +76,6 @@ const extMap: Record<string, string> = {
 }
 const ext = extMap[props.lang] ?? props.lang
 
-const outer = ref<HTMLDivElement>()
 const container = ref<HTMLDivElement>()
 
 const contentHeight = ref(0)
@@ -81,6 +87,9 @@ const height = computed(() => {
     return `${initialHeight.value}px`
   return props.height
 })
+
+const editorFontSize = ref<number | string | undefined>(props.editorOptions?.fontSize)
+const outputFontSize = computed(() => props.outputFontSize ?? editorFontSize.value)
 
 const loadTypes = ref<() => void>()
 const { $page: thisSlideNo, $renderContext: renderContext } = useSlideContext()
@@ -104,7 +113,7 @@ onMounted(async () => {
   const commonOptions = {
     automaticLayout: true,
     readOnly: props.readonly,
-    lineNumbers: props.lineNumbers,
+    lineNumbers,
     minimap: { enabled: false },
     overviewRulerBorder: false,
     overviewRulerLanes: 0,
@@ -115,9 +124,13 @@ onMounted(async () => {
     fontSize: 11.5,
     fontFamily: 'var(--slidev-code-font-family)',
     scrollBeyondLastLine: false,
+    useInlineViewWhenSpaceIsLimited: false,
     ...editorOptions,
     ...props.editorOptions,
   } satisfies monaco.editor.IStandaloneEditorConstructionOptions & monaco.editor.IDiffEditorConstructionOptions
+
+  if (editorOptions.fontSize != null || props.editorOptions?.fontSize != null)
+    editorFontSize.value = commonOptions.fontSize
 
   let editableEditor: monaco.editor.IStandaloneCodeEditor
   if (diff) {
@@ -196,12 +209,13 @@ onMounted(async () => {
   })
 
   nextTick(() => monaco.editor.remeasureFonts())
+  setTimeout(() => monaco.editor.remeasureFonts(), 1000)
 })
 </script>
 
 <template>
   <div class="relative slidev-monaco-container">
-    <div ref="outer" class="relative slidev-monaco-container-inner" :style="{ height }">
+    <div class="relative slidev-monaco-container-inner" :style="{ height }">
       <div ref="container" class="absolute inset-0.5" />
     </div>
     <CodeRunner
@@ -211,6 +225,7 @@ onMounted(async () => {
       :autorun="props.autorun"
       :show-output-at="props.showOutputAt"
       :height="props.outputHeight"
+      :font-size="outputFontSize"
       :highlight-output="props.highlightOutput"
       :runner-options="props.runnerOptions"
     />

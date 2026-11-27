@@ -3,15 +3,16 @@ import type { Component } from 'vue'
 type ContextMenuOption = {
   action: () => void
   disabled?: boolean
+  show?: boolean
 } & (
   | {
     small?: false
-    icon?: Component
+    icon?: Component | string
     label: string | Component
   }
   | {
     small: true
-    icon: Component
+    icon: Component | string
     label: string
   }
   )

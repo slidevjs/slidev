@@ -1,16 +1,13 @@
-import { save as slidevSave } from '@slidev/parser/fs'
-import type { SourceSlideInfo } from '@slidev/types'
-import { computed, markRaw, onScopeDispose, watch, watchEffect } from '@vue/runtime-core'
-import type { TreeItem } from 'vscode'
-import { DataTransferItem, EventEmitter, ThemeIcon, TreeItemCollapsibleState, commands, window } from 'vscode'
-import { useViewVisibility } from '../composables/useViewVisibility'
-import { previewSync } from '../configs'
-import { activeSlidevData } from '../projects'
-import { getSlideNo } from '../utils/getSlideNo'
+import type { SlidevMarkdown, SourceSlideInfo } from '@slidev/types'
+import type { TreeViewNode } from 'reactive-vscode'
+import { isDeepEqual } from '@antfu/utils'
+import { stringify } from '@slidev/parser/core'
+import { computed, defineService, shallowRef, useTreeView, watch, watchEffect } from 'reactive-vscode'
+import { DataTransferItem, ThemeIcon, TreeItemCollapsibleState, Uri, window, workspace } from 'vscode'
+import { useFocusedSlide } from '../composables/useFocusedSlide'
+import { activeData } from '../projects'
 import { getSlidesTitle } from '../utils/getSlidesTitle'
-import { createSingletonComposable } from '../utils/singletonComposable'
 import { toRelativePath } from '../utils/toRelativePath'
-import { usePreviewWebview } from './previewWebview'
 
 export const slideMineType = 'application/slidev.slide'
 
@@ -27,7 +24,8 @@ const layoutIconMap = {
   'image-left': 'layout-sidebar-left',
   'image-right': 'layout-sidebar-right',
   'image': 'file-media', // TODO: a better icon
-  'intro': 'go-to-file',
+  'intro': 'debug-step-into',
+  'outro': 'debug-step-out',
   'none': 'layout-statusbar',
   'quote': 'quote',
   'section': 'symbol-module', // TODO: a better icon
@@ -36,147 +34,161 @@ const layoutIconMap = {
   'two-cols': 'split-horizontal',
 } as Record<string, string>
 
-export interface SlidesTreeElement {
-  parent: SlidesTreeElement | null
-  children?: SlidesTreeElement[]
-  slide: SourceSlideInfo
+export interface SlidesTreeNode extends TreeViewNode {
+  markdownPath: string
+  slideIndex: number
+  readonly children?: this[]
 }
 
-function getImportChain(element: SlidesTreeElement): SourceSlideInfo[] {
-  const chain: SourceSlideInfo[] = []
-  let parent = element.parent
-  while (parent) {
-    chain.unshift(parent.slide)
-    parent = parent.parent
-  }
-  return chain
-}
+export const useSlidesTree = defineService(() => {
+  const { focusedSourceSlide, gotoSlide } = useFocusedSlide()
 
-function getGotoCommandArgs(element: SlidesTreeElement) {
-  const slide = element.slide
-  return [
-    slide.filepath,
-    slide.index,
-    () => getSlideNo(activeSlidevData.value, slide, getImportChain(element)),
-  ]
-}
+  const treeData = computed(() => {
+    const data = activeData.value
+    if (!data)
+      return null
 
-function getTreeItem(element: SlidesTreeElement): TreeItem {
-  const slide = element.slide
-  const isFirstSlide = activeSlidevData.value?.entry.slides.findIndex(s => s === slide) === 0
-  const layoutName = slide.frontmatter.layout || (isFirstSlide ? 'cover' : 'default')
-  const icon = slide.imports ? 'link-external' : layoutIconMap[layoutName] ?? 'window'
-  return {
-    label: slide.title,
-    description: slide.imports ? toRelativePath(slide.imports[0].filepath) : !slide.title ? '(Untitled)' : undefined,
-    iconPath: new ThemeIcon(icon),
-    command: {
-      command: 'slidev.goto',
-      title: 'Goto',
-      arguments: getGotoCommandArgs(element),
-    },
-    collapsibleState: slide.imports ? TreeItemCollapsibleState.Expanded : TreeItemCollapsibleState.None,
-  }
-}
+    const sourceToNode = new Map<string, SlidesTreeNode>()
+    const createNode = (slide: SourceSlideInfo) => {
+      const isFirstSlide = data.entry.slides.findIndex(s => s === slide) === 0
+      const layoutName = slide.frontmatter.layout || (isFirstSlide ? 'cover' : 'default')
+      const slideNo = slide.imports
+        ? 0
+        : data.slides.findIndex(s => s.source === slide) + 1
+      const label = slide.imports
+        ? ''
+        : `${slideNo}. ${slide.title || '(Untitled)'}`
+      const description = slide.imports
+        ? toRelativePath(slide.imports[0].filepath)
+        : undefined
+      const icon = slide.imports
+        ? 'link-external'
+        : layoutIconMap[layoutName] ?? 'window'
+      const collapsibleState = slide.imports ? TreeItemCollapsibleState.Expanded : TreeItemCollapsibleState.None
 
-export const useSlidesTree = createSingletonComposable(() => {
-  const onChange = new EventEmitter<void>()
-
-  const slidesTreeData = computed(() => {
-    function createElement(parent: SlidesTreeElement | null, slide: SourceSlideInfo) {
-      const element: SlidesTreeElement = markRaw({ parent, slide })
-      element.children = slide.imports?.map(s => createElement(element, s))
-      return element
-    }
-    return activeSlidevData.value?.entry.slides.map(s => createElement(null, s))
-  })
-
-  const treeView = window.createTreeView('slidev-slides-tree', {
-    treeDataProvider: {
-      onDidChangeTreeData: onChange.event,
-      getTreeItem,
-      getChildren(element) {
-        return element
-          ? element.children
-          : slidesTreeData.value
-      },
-      getParent(element) {
-        return element.parent
-      },
-    },
-    canSelectMany: true,
-    dragAndDropController: {
-      dragMimeTypes: [slideMineType],
-      dropMimeTypes: [slideMineType],
-      handleDrag(elements, dataTransfer) {
-        const data = activeSlidevData.value
-        if (!data) {
-          window.showErrorMessage(`Cannot drag and drop slides: No active slides project.`)
-          return
-        }
-        const sourcesInEntry = elements.map(element => element.slide).filter(s => s.filepath === data.entry.filepath)
-        dataTransfer.set(slideMineType, new DataTransferItem(sourcesInEntry))
-      },
-      handleDrop(target, dataTransfer) {
-        const slides: SourceSlideInfo[] = dataTransfer.get(slideMineType)?.value
-        if (!slides || !target)
-          return
-        if (slides.length === 0) {
-          window.showErrorMessage(`Cannot drag and drop slides: None of the selected slides are in the entry Markdown.`)
-          return
-        }
-        const data = activeSlidevData.value!
-        const targetIndex = target.slide.index
-        const oldSlides = data.entry.slides.map(s => slides.includes(s) ? null : s)
-        data.entry.slides = [
-          ...oldSlides.slice(0, targetIndex + 1),
-          ...slides,
-          ...oldSlides.slice(targetIndex + 1),
-        ].filter(Boolean) as SourceSlideInfo[]
-        slidevSave(data.entry)
-      },
-    },
-    showCollapseAll: true,
-  })
-  onScopeDispose(() => treeView.dispose())
-
-  watch(activeSlidevData, () => onChange.fire())
-
-  const visible = useViewVisibility(treeView)
-  const { previewNavState } = usePreviewWebview()
-  watch(
-    () => [visible.value, previewNavState.no, activeSlidevData.value, slidesTreeData.value] as const,
-    ([visible, no, data, tree]) => {
-      if (!visible)
-        return
-      const slide = data?.slides[no - 1]
-      if (!slide || !previewSync.value)
-        return
-      const path = (slide.importChain ?? []).concat(slide.source)
-      const source = path.shift()
-      let element = tree?.find(e => e.slide === source)
-      while (true) {
-        const source = path.shift()
-        if (!source) {
-          if (element) {
-            treeView.reveal(element, { select: true })
-            commands.executeCommand('slidev.goto', ...getGotoCommandArgs(element))
-          }
-          return
-        }
-        element = element?.children?.find(e => e.slide === source)
-        if (!element)
-          return
+      const node: SlidesTreeNode = {
+        markdownPath: slide.filepath,
+        slideIndex: slide.index,
+        children: slide.imports?.map(createNode),
+        treeItem: {
+          label,
+          description,
+          iconPath: new ThemeIcon(icon),
+          collapsibleState,
+          command: {
+            command: 'slidev.goto',
+            title: 'Goto',
+            arguments: [slide.filepath, slide.index],
+          },
+        },
       }
+      sourceToNode.set(`${slide.filepath}:${slide.index}`, node)
+      return node
+    }
+    return {
+      items: data.entry.slides.map(createNode),
+      sourceToNode,
+    }
+  })
+
+  const treeItems = shallowRef<SlidesTreeNode[]>([])
+  const sourceToNode = shallowRef(new Map<string, SlidesTreeNode>())
+  watch(treeData, (treeData) => {
+    const newItems = treeData?.items || []
+    if (!isDeepEqual(treeItems.value, newItems)) {
+      treeItems.value = newItems
+      sourceToNode.value = treeData?.sourceToNode || new Map()
+    }
+  }, { immediate: true })
+
+  const treeView = useTreeView(
+    'slidev-slides-tree',
+    treeItems,
+    {
+      canSelectMany: true,
+      dragAndDropController: {
+        dragMimeTypes: [slideMineType],
+        dropMimeTypes: [slideMineType],
+        handleDrag(source, dataTransfer) {
+          const data = activeData.value
+          if (!data) {
+            window.showErrorMessage(`Cannot drag and drop slides: No active slides project.`)
+            return
+          }
+          const sources = source.map(node => data.markdownFiles[node.markdownPath]?.slides[node.slideIndex]).filter(Boolean)
+          dataTransfer.set(slideMineType, new DataTransferItem(sources))
+        },
+        async handleDrop(target, dataTransfer) {
+          const slides: SourceSlideInfo[] = dataTransfer.get(slideMineType)?.value
+          const data = activeData.value
+          if (!slides?.length || !target || !data)
+            return
+          if (slides.length === 0) {
+            window.showErrorMessage(`Cannot drag and drop slides: None of the selected slides are in the entry Markdown.`)
+            return
+          }
+          const targetIndex = target.slideIndex
+          const targetMarkdown = data.markdownFiles[target.markdownPath]
+          const oldSlides = targetMarkdown.slides.map(s => slides.includes(s)
+            ? null
+            : s)
+          const before = oldSlides.slice(0, targetIndex + 1).filter(Boolean) as SourceSlideInfo[]
+          const after = oldSlides.slice(targetIndex + 1).filter(Boolean) as SourceSlideInfo[]
+          const newTargetMarkdown = {
+            ...targetMarkdown,
+            slides: [
+              ...before,
+              ...slides,
+              ...after,
+            ],
+          }
+
+          const changedMarkdown = new Set<SlidevMarkdown>([newTargetMarkdown])
+          for (const markdown of Object.values(data.markdownFiles)) {
+            if (markdown === targetMarkdown)
+              continue // already handled
+            const newSlides = markdown.slides.filter(s => !slides.includes(s))
+            if (newSlides.length !== markdown.slides.length) {
+              changedMarkdown.add({
+                ...markdown,
+                slides: newSlides,
+              })
+            }
+          }
+
+          for (const markdown of changedMarkdown) {
+            const newContent = stringify(markdown)
+            await workspace.fs.writeFile(
+              Uri.file(markdown.filepath),
+              (new TextEncoder()).encode(newContent),
+            )
+          }
+
+          setTimeout(async () => {
+            await gotoSlide(target.markdownPath, before.length)
+          }, 100)
+        },
+      },
+      showCollapseAll: true,
+      title: () => activeData.value
+        ? `Slides: ${getSlidesTitle(activeData.value)}`
+        : 'Slides',
     },
   )
 
+  const focusedNode = computed(() => {
+    if (!focusedSourceSlide.value)
+      return null
+    const { filepath, index } = focusedSourceSlide.value
+    return sourceToNode.value.get(`${filepath}:${index}`)
+  })
   watchEffect(() => {
-    if (activeSlidevData.value)
-      treeView.title = `Slides (${getSlidesTitle(activeSlidevData.value)})`
-    else
-      treeView.title = 'Slides'
+    if (treeView.visible.value && focusedNode.value) {
+      treeView.reveal(focusedNode.value, { select: true })
+    }
   })
 
-  return treeView
+  return {
+    treeView,
+  }
 })

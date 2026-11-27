@@ -1,7 +1,7 @@
 <script setup lang="ts">
-import { computed } from 'vue'
-import { useStyleTag } from '@vueuse/core'
 import { useHead } from '@unhead/vue'
+import { useStyleTag } from '@vueuse/core'
+import { computed } from 'vue'
 import { useNav } from '../../composables/useNav'
 import { configs } from '../../env'
 import NoteDisplay from '../../internals/NoteDisplay.vue'

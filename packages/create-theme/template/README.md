@@ -6,7 +6,7 @@ A (...) theme for [Slidev](https://github.com/slidevjs/slidev).
 
 <!--
   Learn more about how to write a theme:
-  https://sli.dev/themes/write-a-theme.html
+  https://sli.dev/guide/write-theme.html
 --->
 
 <!--
@@ -27,7 +27,7 @@ Add the following frontmatter to your `slides.md`. Start Slidev then it will pro
 theme: <b>{{name}}</b>
 ---</code></pre>
 
-Learn more about [how to use a theme](https://sli.dev/themes/use).
+Learn more about [how to use a theme](https://sli.dev/guide/theme-addon#use-theme).
 
 ## Layouts
 

@@ -10,8 +10,8 @@ const { isDark, toggleDark } = useDarkMode()
     @click="toggleDark()"
   >
     <div class="flex">
-      <carbon:moon v-if="isDark" />
-      <carbon:sun v-else />
+      <div v-if="isDark" class="i-carbon:moon" />
+      <div v-else class="i-carbon:sun" />
       <span class="mr-1 ml-2">{{ isDark ? 'Dark' : 'Light' }}</span>
     </div>
   </button>

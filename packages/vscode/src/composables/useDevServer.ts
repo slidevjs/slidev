@@ -1,58 +1,75 @@
-import { basename } from 'node:path'
-import type { Ref } from '@vue/runtime-core'
-import { toRef } from '@vue/runtime-core'
-import { getPort as getPortPlease } from 'get-port-please'
+import type { EffectScope, ShallowRef } from 'reactive-vscode'
 import type { Terminal } from 'vscode'
 import type { SlidevProject } from '../projects'
-import { useTerminal } from '../views/terminal'
+import { basename } from 'pathe'
+import { effectScope, onScopeDispose, shallowRef, useAbsoluteUri, useDisposable } from 'reactive-vscode'
+import { env, window } from 'vscode'
+import { config } from '../configs'
+import { getSlidesTitle } from '../utils/getSlidesTitle'
 import { useServerDetector } from './useServerDetector'
 
-export type Server = {
-  port: Ref<number | null>
-  terminal: Ref<Terminal | null>
-  start: () => Promise<void>
-  showTerminal: () => Promise<void>
-  stop: () => void
-} & ReturnType<typeof useServerDetector>
-
-const serverMap = new Map<SlidevProject, Server>()
-
-export function useDevServer(project: SlidevProject) {
-  const existing = serverMap.get(project)
-  if (existing)
-    return existing
-
-  const { terminal, isTerminalActive, showTerminal, sendText, closeTerminal } = useTerminal(project)
-  const port = toRef(project, 'port')
-
-  async function start() {
-    if (isTerminalActive())
-      return
-    port.value ??= await getPort()
-    sendText(`npm exec slidev -- --port ${port.value} ${JSON.stringify(basename(project.entry))}`)
-  }
-
-  function stop() {
-    closeTerminal()
-    port.value = null
-  }
-
-  const result: Server = {
-    port,
-    terminal,
-    start,
-    showTerminal,
-    stop,
-    ...useServerDetector(port, project.entry),
-  }
-  serverMap.set(project, result)
-  return result
+export interface SlidevServer {
+  scope: EffectScope
+  terminal: ShallowRef<Terminal | null>
+  start: () => void
 }
 
-async function getPort() {
-  const usedPorts = [...serverMap.values()].map(server => server.port.value ?? 0)
-  const minPort = Math.max(3029, ...usedPorts) + 1
-  return await getPortPlease({
-    portRange: [minPort, 4000],
-  })
+export function useDevServer(project: SlidevProject) {
+  const { allocPort, redetect } = useServerDetector()
+
+  const { port, server } = project
+  if (server.value)
+    return server.value
+
+  const scope = effectScope(true)
+  return server.value = scope.run(() => {
+    const terminal = shallowRef<Terminal | null>(null)
+
+    async function start() {
+      if (terminal.value && terminal.value.exitStatus == null)
+        return
+
+      terminal.value = useDisposable(window.createTerminal({
+        name: getSlidesTitle(project.data),
+        cwd: project.userRoot,
+        iconPath: {
+          light: useAbsoluteUri('dist/res/logo-mono.svg').value,
+          dark: useAbsoluteUri('dist/res/logo-mono-dark.svg').value,
+        },
+        isTransient: true,
+      }))
+
+      const p = port.value ??= await allocPort()
+      const args = [
+        JSON.stringify(basename(project.entry)),
+        `--port ${p}`,
+        env.remoteName != null
+          ? '--remote'
+          : '',
+      ].filter(Boolean).join(' ')
+      // eslint-disable-next-line no-template-curly-in-string
+      terminal.value.sendText(config['dev-command'].replaceAll('${args}', args).replaceAll('${port}', `${p}`))
+
+      let intervalCount = 0
+      const maxIntervals = 100
+      const interval = setInterval(async () => {
+        intervalCount++
+        const ready = await redetect(p)
+        if (ready || intervalCount >= maxIntervals) {
+          clearInterval(interval)
+        }
+      }, 500)
+    }
+
+    onScopeDispose(() => {
+      close()
+      server.value = null
+    })
+
+    return {
+      scope,
+      terminal,
+      start,
+    }
+  })!
 }

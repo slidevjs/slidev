@@ -1,21 +1,25 @@
 #!/usr/bin/env node
 /* eslint-disable no-console */
 
+import fs from 'node:fs'
+import { createRequire } from 'node:module'
 // @ts-check
 import process from 'node:process'
-import fs from 'node:fs'
-import path from 'node:path'
-import { createRequire } from 'node:module'
 import { fileURLToPath } from 'node:url'
+import { blue, bold, cyan, dim, green, yellow } from 'ansis'
 import minimist from 'minimist'
+import path from 'pathe'
 import prompts from 'prompts'
-import { blue, bold, cyan, dim, green, yellow } from 'kolorist'
 
 const argv = minimist(process.argv.slice(2))
 const cwd = process.cwd()
 const require = createRequire(import.meta.url)
 const __dirname = fileURLToPath(new URL('.', import.meta.url))
 const { version } = require('./package.json')
+
+const RE_PNPM = /pnpm/
+const RE_YARN = /yarn/
+const RE_SLIDEV_THEME_PREFIX = /^slidev-theme-/
 
 const renameFiles = {
   _gitignore: '.gitignore',
@@ -72,9 +76,11 @@ async function init() {
 
   prepareTemplate(root, path.join(__dirname, 'template'), packageName)
 
-  const pkgManager = (/pnpm/.test(process.env.npm_execpath) || /pnpm/.test(process.env.npm_config_user_agent))
+  const pkgManager = (RE_PNPM.test(process.env.npm_execpath) || RE_PNPM.test(process.env.npm_config_user_agent))
     ? 'pnpm'
-    : /yarn/.test(process.env.npm_execpath) ? 'yarn' : 'npm'
+    : RE_YARN.test(process.env.npm_execpath)
+      ? 'yarn'
+      : 'npm'
 
   const related = path.relative(cwd, root)
 
@@ -84,8 +90,12 @@ async function init() {
   if (root !== cwd)
     console.log(blue(`  cd ${bold(related)}`))
 
-  console.log(blue(`  ${pkgManager === 'yarn' ? 'yarn' : `${pkgManager} install`}`))
-  console.log(blue(`  ${pkgManager === 'yarn' ? 'yarn dev' : `${pkgManager} run dev`}`))
+  console.log(blue(`  ${pkgManager === 'yarn'
+    ? 'yarn'
+    : `${pkgManager} install`}`))
+  console.log(blue(`  ${pkgManager === 'yarn'
+    ? 'yarn dev'
+    : `${pkgManager} run dev`}`))
   console.log()
   console.log(`  ${cyan('●')} ${blue('■')} ${yellow('▲')}`)
   console.log()
@@ -142,7 +152,7 @@ function getValidPackageName(projectName) {
 }
 
 function getThemeName(pkgName) {
-  return pkgName.replace(/^slidev-theme-/, '')
+  return pkgName.replace(RE_SLIDEV_THEME_PREFIX, '')
 }
 
 function copyDir(srcDir, destDir) {

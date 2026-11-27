@@ -1,5 +1,5 @@
 ---
-# You can also start simply with 'default'
+# try also 'default' to start simple
 theme: seriph
 # random image from a curated Unsplash collection by Anthony
 # like them? see https://unsplash.com/collections/94734566/slidev
@@ -11,36 +11,33 @@ info: |
   Presentation slides for developers.
 
   Learn more at [Sli.dev](https://sli.dev)
-# apply unocss classes to the current slide
+# apply UnoCSS classes to the current slide
 class: text-center
-# https://sli.dev/custom/highlighters.html
-highlighter: shiki
-# https://sli.dev/guide/drawing
+# https://sli.dev/features/drawing
 drawings:
   persist: false
-# slide transition: https://sli.dev/guide/animations#slide-transitions
+# slide transition: https://sli.dev/guide/animations.html#slide-transitions
 transition: slide-left
-# enable MDC Syntax: https://sli.dev/guide/syntax#mdc-syntax
-mdc: true
+# enable Comark Syntax: https://comark.dev/syntax/markdown
+comark: true
+# duration of the presentation
+duration: 35min
 ---
 
 # Welcome to Slidev
 
 Presentation slides for developers
 
-<div class="pt-12">
-  <span @click="$slidev.nav.next" class="px-2 py-1 rounded cursor-pointer" hover="bg-white bg-opacity-10">
-    Press Space for next page <carbon:arrow-right class="inline"/>
-  </span>
+<div @click="$slidev.nav.next" class="mt-12 py-1" hover:bg="white op-10">
+  Press Space for next page <carbon:arrow-right />
 </div>
 
-<div class="abs-br m-6 flex gap-2">
-  <button @click="$slidev.nav.openInEditor()" title="Open in Editor" class="text-xl slidev-icon-btn opacity-50 !border-none !hover:text-white">
+<div class="abs-br m-6 text-xl">
+  <button @click="$slidev.nav.openInEditor()" title="Open in Editor" class="slidev-icon-btn">
     <carbon:edit />
   </button>
-  <a href="https://github.com/slidevjs/slidev" target="_blank" alt="GitHub" title="Open in GitHub"
-    class="text-xl slidev-icon-btn opacity-50 !border-none !hover:text-white">
-    <carbon-logo-github />
+  <a href="https://github.com/slidevjs/slidev" target="_blank" class="slidev-icon-btn">
+    <carbon:logo-github />
   </a>
 </div>
 
@@ -70,7 +67,7 @@ Read more about [Why Slidev?](https://sli.dev/guide/why)
 
 <!--
 You can have `style` tag in markdown to override the style for the current page.
-Learn more: https://sli.dev/guide/syntax#embedded-styles
+Learn more: https://sli.dev/features/slide-scope-style
 -->
 
 <style>
@@ -96,18 +93,18 @@ level: 2
 
 # Navigation
 
-Hover on the bottom-left corner to see the navigation's controls panel, [learn more](https://sli.dev/guide/navigation.html)
+Hover on the bottom-left corner to see the navigation's controls panel, [learn more](https://sli.dev/guide/ui#navigation-bar)
 
 ## Keyboard Shortcuts
 
-|     |     |
-| --- | --- |
-| <kbd>right</kbd> / <kbd>space</kbd>| next animation or slide |
+|                                                     |                             |
+| --------------------------------------------------- | --------------------------- |
+| <kbd>right</kbd> / <kbd>space</kbd>                 | next animation or slide     |
 | <kbd>left</kbd>  / <kbd>shift</kbd><kbd>space</kbd> | previous animation or slide |
-| <kbd>up</kbd> | previous slide |
-| <kbd>down</kbd> | next slide |
+| <kbd>up</kbd>                                       | previous slide              |
+| <kbd>down</kbd>                                     | next slide                  |
 
-<!-- https://sli.dev/guide/animations.html#click-animations -->
+<!-- https://sli.dev/guide/animations.html#click-animation -->
 <img
   v-click
   class="absolute -bottom-9 -left-7 w-80 opacity-50"
@@ -126,14 +123,14 @@ layoutClass: gap-16
 You can use the `Toc` component to generate a table of contents for your slides:
 
 ```html
-<Toc minDepth="1" maxDepth="1"></Toc>
+<Toc minDepth="1" maxDepth="1" />
 ```
 
 The title will be inferred from your slide content, or you can override it with `title` and `level` in your frontmatter.
 
 ::right::
 
-<Toc v-click minDepth="1" maxDepth="2"></Toc>
+<Toc text-sm minDepth="1" maxDepth="2" />
 
 ---
 layout: image-right
@@ -142,13 +139,12 @@ image: https://cover.sli.dev
 
 # Code
 
-Use code snippets and get the highlighting directly, and even types hover![^1]
+Use code snippets and get the highlighting directly, and even types hover!
 
-```ts {all|5|7|7-8|10|all} twoslash
+```ts [filename-example.ts] {all|4|6|6-7|9|all} twoslash
 // TwoSlash enables TypeScript hover information
 // and errors in markdown code blocks
 // More at https://shiki.style/packages/twoslash
-
 import { computed, ref } from 'vue'
 
 const count = ref(0)
@@ -157,13 +153,14 @@ const doubled = computed(() => count.value * 2)
 doubled.value = 2
 ```
 
-<arrow v-click="[4, 5]" x1="350" y1="310" x2="195" y2="334" color="#953" width="2" arrowSize="1" />
+<arrow v-click="[4, 5]" x1="350" y1="310" x2="195" y2="342" color="#953" width="2" arrowSize="1" />
 
 <!-- This allow you to embed external code blocks -->
 <<< @/snippets/external.ts#snippet
 
 <!-- Footer -->
-[^1]: [Learn More](https://sli.dev/guide/syntax.html#line-highlighting)
+
+[Learn more](https://sli.dev/features/line-highlighting)
 
 <!-- Inline style -->
 <style>
@@ -271,7 +268,7 @@ const author = {
 
 You can use Vue components directly inside your slides.
 
-We have provided a few built-in components like `<Tweet/>` and `<Youtube/>` that you can use directly. And adding your custom components is also super easy.
+We have provided a few built-in components like `<Tweet/>`, `<BlueSky/>`, and `<Youtube/>` that you can use directly. And adding your custom components is also super easy.
 
 ```html
 <Counter :count="10" />
@@ -332,8 +329,8 @@ theme: seriph
 
 </div>
 
-Read more about [How to use a theme](https://sli.dev/themes/use.html) and
-check out the [Awesome Themes Gallery](https://sli.dev/themes/gallery.html).
+Read more about [How to use a theme](https://sli.dev/guide/theme-addon#use-theme) and
+check out the [Awesome Themes Gallery](https://sli.dev/resources/theme-gallery).
 
 ---
 
@@ -343,21 +340,46 @@ You can add `v-click` to elements to add a click animation.
 
 <div v-click>
 
-This shows up when you click the slide:
+This shows up when you press <kbd>space</kbd> or <kbd>right</kbd>, or click outside the slide on the right.
 
 ```html
-<div v-click>This shows up when you click the slide.</div>
+<div v-click>This shows up when you trigger a click animation.</div>
 ```
 
 </div>
 
-<br>
+<p v-click>
+You can also add modifiers to change the animation:
+</p>
+
+<div class="grid gap-3 mt-4 text-sm" style="grid-template-columns: repeat(3, 1fr) 1.5fr 1fr">
+  <div v-after.up class="p-3 rounded border border-primary/20 bg-primary/10">
+    <div class="font-mono text-xs opacity-60 mb-1">v-click.up</div>
+    <div>Slide from bottom</div>
+  </div>
+  <div v-click.fade-in class="p-3 rounded border border-primary/30 bg-primary/15">
+    <div class="font-mono text-xs opacity-60 mb-1">v-click.fade-in</div>
+    <div>Fade in</div>
+  </div>
+  <div v-click.fade class="p-3 rounded border border-primary/40 bg-primary/20">
+    <div class="font-mono text-xs opacity-60 mb-1">v-click.fade</div>
+    <div>Dim (0.5 opacity)</div>
+  </div>
+  <div v-click.fade.right.scale class="p-3 rounded border border-primary/50 bg-primary/25">
+    <div class="font-mono text-xs opacity-60 mb-1">v-click.fade.right.scale</div>
+    <div>Composed</div>
+  </div>
+  <div v-click.none class="p-3 rounded border border-primary/60 bg-primary/30">
+    <div class="font-mono text-xs opacity-60 mb-1">v-click.none</div>
+    <div>No transition</div>
+  </div>
+</div>
 
 <v-click>
 
-The <span v-mark.red="3"><code>v-mark</code> directive</span>
+The <span v-mark.red="7"><code>v-mark</code> directive</span>
 also allows you to add
-<span v-mark.circle.orange="4">inline marks</span>
+<span v-mark.circle.orange="8">inline marks</span>
 , powered by [Rough Notation](https://roughnotation.com/):
 
 ```html
@@ -366,9 +388,9 @@ also allows you to add
 
 </v-click>
 
-<div mt-20 v-click>
+<div v-click mt-12>
 
-[Learn More](https://sli.dev/guide/animations#click-animations)
+[Learn more](https://sli.dev/guide/animations#click-animation)
 
 </div>
 
@@ -448,37 +470,31 @@ const final = {
   :initial="{ x:35, y: 30, opacity: 0}"
   :enter="{ y: 0, opacity: 1, transition: { delay: 3500 } }">
 
-[Learn More](https://sli.dev/guide/animations.html#motion)
+[Learn more](https://sli.dev/guide/animations.html#motion)
 
 </div>
 
 ---
 
-# LaTeX
+# $\LaTeX$
 
-LaTeX is supported out-of-box powered by [KaTeX](https://katex.org/).
+$\LaTeX$ is supported out-of-box. Powered by [$\KaTeX$](https://katex.org/).
 
-<br>
+<div h-3 />
 
 Inline $\sqrt{3x-1}+(1+x)^2$
 
 Block
 $$ {1|3|all}
-\begin{array}{c}
-
-\nabla \times \vec{\mathbf{B}} -\, \frac1c\, \frac{\partial\vec{\mathbf{E}}}{\partial t} &
-= \frac{4\pi}{c}\vec{\mathbf{j}}    \nabla \cdot \vec{\mathbf{E}} & = 4 \pi \rho \\
-
-\nabla \times \vec{\mathbf{E}}\, +\, \frac1c\, \frac{\partial\vec{\mathbf{B}}}{\partial t} & = \vec{\mathbf{0}} \\
-
-\nabla \cdot \vec{\mathbf{B}} & = 0
-
-\end{array}
+\begin{aligned}
+\nabla \cdot \vec{E} &= \frac{\rho}{\varepsilon_0} \\
+\nabla \cdot \vec{B} &= 0 \\
+\nabla \times \vec{E} &= -\frac{\partial\vec{B}}{\partial t} \\
+\nabla \times \vec{B} &= \mu_0\vec{J} + \mu_0\varepsilon_0\frac{\partial\vec{E}}{\partial t}
+\end{aligned}
 $$
 
-<br>
-
-[Learn more](https://sli.dev/guide/syntax#latex)
+[Learn more](https://sli.dev/features/latex)
 
 ---
 
@@ -556,7 +572,7 @@ database "MySql" {
 
 </div>
 
-[Learn More](https://sli.dev/guide/syntax.html#diagrams)
+Learn more: [Mermaid Diagrams](https://sli.dev/features/mermaid) and [PlantUML Diagrams](https://sli.dev/features/plantuml)
 
 ---
 foo: bar
@@ -582,7 +598,7 @@ Double-click on the draggable elements to edit their positions.
 
 ```md
 <v-drag text-3xl>
-  <carbon:arrow-up />
+  <div class="i-carbon:arrow-up" />
   Use the `v-drag` component to have a draggable container!
 </v-drag>
 ```
@@ -604,7 +620,7 @@ Double-click on the draggable elements to edit their positions.
 <v-drag-arrow pos="67,452,253,46" two-way op70 />
 
 ---
-src: ./pages/multiple-entries.md
+src: ./pages/imported-slides.md
 hide: false
 ---
 
@@ -641,4 +657,6 @@ class: text-center
 
 # Learn More
 
-[Documentation](https://sli.dev) · [GitHub](https://github.com/slidevjs/slidev) · [Showcases](https://sli.dev/showcases.html)
+[Documentation](https://sli.dev) · [GitHub](https://github.com/slidevjs/slidev) · [Showcases](https://sli.dev/resources/showcases)
+
+<PoweredBySlidev mt-10 />

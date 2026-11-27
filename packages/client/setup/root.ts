@@ -1,17 +1,18 @@
-import { computed, getCurrentInstance, reactive, ref, shallowRef, watch } from 'vue'
 import { useHead } from '@unhead/vue'
+import { computed, getCurrentInstance, reactive, ref, shallowRef, watch } from 'vue'
 import { useRouter } from 'vue-router'
-import { configs, slidesTitle } from '../env'
-import { initSharedState, onPatch, patch } from '../state/shared'
-import { initDrawingState } from '../state/drawings'
-import { TRUST_ORIGINS, injectionClicksContext, injectionCurrentPage, injectionRenderContext, injectionSlidevContext } from '../constants'
-import { skipTransition } from '../logic/hmr'
-import { makeId } from '../logic/utils'
-import { getSlidePath } from '../logic/slides'
-import { createFixedClicks } from '../composables/useClicks'
-import { useNav } from '../composables/useNav'
-import { useEmbeddedControl } from '../composables/useEmbeddedCtrl'
 import setups from '#slidev/setups/root'
+import { createFixedClicks } from '../composables/useClicks'
+import { useEmbeddedControl } from '../composables/useEmbeddedCtrl'
+import { useNav } from '../composables/useNav'
+import { usePrintStyles } from '../composables/usePrintStyles'
+import { injectionClicksContext, injectionCurrentPage, injectionRenderContext, injectionSlidevContext, TRUST_ORIGINS } from '../constants'
+import { configs, slidesTitle } from '../env'
+import { getSlidePath } from '../logic/slides'
+import { makeId } from '../logic/utils'
+import { hmrSkipTransition, syncDirections } from '../state'
+import { initDrawingState } from '../state/drawings'
+import { initSharedState, onPatch, patch } from '../state/shared'
 
 export default function setupRoot() {
   const app = getCurrentInstance()!.appContext.app
@@ -21,7 +22,7 @@ export default function setupRoot() {
     configs,
     themeConfigs: computed(() => configs.themeConfig),
   })
-  app.provide(injectionRenderContext, ref('none'))
+  app.provide(injectionRenderContext, ref('none' as const))
   app.provide(injectionSlidevContext, context)
   app.provide(injectionCurrentPage, computed(() => context.nav.currentSlideNo))
   app.provide(injectionClicksContext, shallowRef(createFixedClicks()))
@@ -43,6 +44,7 @@ export default function setupRoot() {
     hasPrimarySlide,
     isNotesViewer,
     isPresenter,
+    isPrintMode,
   } = useNav()
 
   useHead({
@@ -50,35 +52,35 @@ export default function setupRoot() {
     htmlAttrs: configs.htmlAttrs,
   })
 
+  usePrintStyles()
+
   initSharedState(`${slidesTitle} - shared`)
   initDrawingState(`${slidesTitle} - drawings`)
 
   const id = `${location.origin}_${makeId()}`
+  const syncType = computed(() => isPresenter.value ? 'presenter' : 'viewer')
 
   // update shared state
   function updateSharedState() {
-    if (isNotesViewer.value)
-      return
+    const shouldSend = isPresenter.value
+      ? syncDirections.value.presenterSend
+      : syncDirections.value.viewerSend
 
+    if (!shouldSend)
+      return
+    if (isNotesViewer.value || isPrintMode.value)
+      return
     // we allow Presenter mode, or Viewer mode from trusted origins to update the shared state
     if (!isPresenter.value && !TRUST_ORIGINS.includes(location.host.split(':')[0]))
       return
 
-    if (isPresenter.value) {
-      patch('page', +currentSlideNo.value)
-      patch('clicks', clicksContext.value.current)
-      patch('clicksTotal', clicksContext.value.total)
-    }
-    else {
-      patch('viewerPage', +currentSlideNo.value)
-      patch('viewerClicks', clicksContext.value.current)
-      patch('viewerClicksTotal', clicksContext.value.total)
-    }
-
+    patch('page', +currentSlideNo.value)
+    patch('clicks', clicksContext.value.current)
+    patch('clicksTotal', clicksContext.value.total)
     patch('lastUpdate', {
       id,
-      type: isPresenter.value ? 'presenter' : 'viewer',
-      time: new Date().getTime(),
+      type: syncType.value,
+      time: Date.now(),
     })
   }
   const router = useRouter()
@@ -86,17 +88,26 @@ export default function setupRoot() {
   watch(clicksContext, updateSharedState)
 
   onPatch((state) => {
-    if (!hasPrimarySlide.value)
+    const shouldReceive = isPresenter.value
+      ? syncDirections.value.presenterReceive
+      : syncDirections.value.viewerReceive
+    if (!shouldReceive)
       return
-    if (state.lastUpdate?.type === 'presenter' && (+state.page !== +currentSlideNo.value || +clicksContext.value.current !== +state.clicks)) {
-      skipTransition.value = false
-      router.replace({
-        path: getSlidePath(state.page, isPresenter.value),
-        query: {
-          ...router.currentRoute.value.query,
-          clicks: state.clicks || 0,
-        },
-      })
-    }
+    if (!hasPrimarySlide.value || isPrintMode.value)
+      return
+    if (state.lastUpdate?.type === syncType.value)
+      return
+    if ((+state.page === +currentSlideNo.value && +clicksContext.value.current === +state.clicks))
+      return
+    // if (state.lastUpdate?.type === 'presenter') {
+    hmrSkipTransition.value = false
+    router.replace({
+      path: getSlidePath(state.page, isPresenter.value),
+      query: {
+        ...router.currentRoute.value.query,
+        clicks: state.clicks || 0,
+      },
+    })
+    // }
   })
 }

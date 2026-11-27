@@ -1,15 +1,16 @@
 <script setup lang="ts">
-import { TransitionGroup, computed, shallowRef, watch } from 'vue'
+import type { SlideRoute } from '@slidev/types'
 import { recomputeAllPoppers } from 'floating-vue'
-import { useNav } from '../composables/useNav'
-import { useViewTransition } from '../composables/useViewTransition'
-import { skipTransition } from '../logic/hmr'
-import { createFixedClicks } from '../composables/useClicks'
-import { activeDragElement } from '../state'
-import { CLICKS_MAX } from '../constants'
-import SlideWrapper from './SlideWrapper.vue'
-import DragControl from './DragControl.vue'
+import { computed, shallowRef, TransitionGroup, watchEffect } from 'vue'
 import { GlobalBottom, GlobalTop } from '#slidev/global-layers'
+import { createFixedClicks } from '../composables/useClicks'
+import { useNav } from '../composables/useNav'
+import { usePreloadImages } from '../composables/usePreloadImages'
+import { useViewTransition } from '../composables/useViewTransition'
+import { CLICKS_MAX } from '../constants'
+import { activeDragElement, disableTransition, hmrSkipTransition } from '../state'
+import DragControl from './DragControl.vue'
+import SlideWrapper from './SlideWrapper.vue'
 
 defineProps<{
   renderContext: 'slide' | 'presenter'
@@ -19,20 +20,38 @@ const {
   currentSlideRoute,
   currentTransition,
   getPrimaryClicks,
+  prevRoute,
   nextRoute,
   slides,
   isPrintMode,
   isPrintWithClicks,
   clicksDirection,
+  printRange,
 } = useNav()
 
-// preload next route
-watch(currentSlideRoute, () => {
-  if (currentSlideRoute.value?.meta && currentSlideRoute.value.meta.preload !== false)
-    currentSlideRoute.value.meta.__preloaded = true
-  if (nextRoute.value?.meta && nextRoute.value.meta.preload !== false)
-    nextRoute.value.meta.__preloaded = true
-}, { immediate: true })
+function preloadRoute(route: SlideRoute) {
+  if (route.meta.preload !== false) {
+    route.meta.__preloaded = true
+    route.load()
+  }
+}
+// preload current, prev and next slides
+watchEffect(() => {
+  preloadRoute(currentSlideRoute.value)
+  preloadRoute(prevRoute.value)
+  preloadRoute(nextRoute.value)
+})
+// preload all slides after 3s
+watchEffect((onCleanup) => {
+  const routes = slides.value
+  const timeout = setTimeout(() => {
+    routes.forEach(preloadRoute)
+  }, 3000)
+  onCleanup(() => clearTimeout(timeout))
+})
+
+// preload images for nearby slides
+usePreloadImages(currentSlideRoute, prevRoute, nextRoute, slides)
 
 const hasViewTransition = useViewTransition()
 
@@ -40,12 +59,15 @@ const DrawingLayer = shallowRef<any>()
 if (__SLIDEV_FEATURE_DRAWINGS__ || __SLIDEV_FEATURE_DRAWINGS_PERSIST__)
   import('./DrawingLayer.vue').then(v => DrawingLayer.value = v.default)
 
-const loadedRoutes = computed(() => slides.value.filter(r => r.meta?.__preloaded || r === currentSlideRoute.value))
+const loadedRoutes = computed(() => isPrintMode.value
+  ? printRange.value.map(no => slides.value[no - 1])
+  : slides.value.filter(r => r.meta?.__preloaded || r === currentSlideRoute.value),
+)
 
 function onAfterLeave() {
   // After transition, we disable it so HMR won't trigger it again
   // We will turn it back on `nav.go` so the normal navigation would still work
-  skipTransition.value = true
+  hmrSkipTransition.value = true
   // recompute poppers after transition
   recomputeAllPoppers()
 }
@@ -57,8 +79,8 @@ function onAfterLeave() {
 
   <!-- Slides -->
   <component
-    :is="hasViewTransition ? 'div' : TransitionGroup"
-    v-bind="skipTransition ? {} : currentTransition"
+    :is="(hasViewTransition && !isPrintMode && !hmrSkipTransition && !disableTransition) ? 'div' : TransitionGroup"
+    v-bind="(hmrSkipTransition || disableTransition || isPrintMode) ? {} : currentTransition"
     id="slideshow"
     tag="div"
     :class="{
@@ -67,14 +89,15 @@ function onAfterLeave() {
     }"
     @after-leave="onAfterLeave"
   >
-    <SlideWrapper
-      v-for="route of loadedRoutes"
-      v-show="route === currentSlideRoute"
-      :key="route.no"
-      :clicks-context="isPrintMode && !isPrintWithClicks ? createFixedClicks(route, CLICKS_MAX) : getPrimaryClicks(route)"
-      :route="route"
-      :render-context="renderContext"
-    />
+    <template v-for="route of loadedRoutes" :key="route.no">
+      <SlideWrapper
+        v-show="route === currentSlideRoute"
+        :class="{ 'slidev-page-active': route === currentSlideRoute }"
+        :clicks-context="isPrintMode && !isPrintWithClicks ? createFixedClicks(route, CLICKS_MAX) : getPrimaryClicks(route)"
+        :route="route"
+        :render-context="renderContext"
+      />
+    </template>
   </component>
 
   <DragControl v-if="activeDragElement" :data="activeDragElement" />

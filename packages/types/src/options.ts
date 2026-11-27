@@ -1,3 +1,6 @@
+import type { MarkdownItShikiOptions } from '@shikijs/markdown-it'
+import type { KatexOptions } from 'katex'
+import type { CodeOptionsThemes, ShorthandsBundle } from 'shiki/core'
 import type { SlidevData } from './types'
 
 export interface RootsInfo {
@@ -28,13 +31,31 @@ export interface SlidevEntryOptions {
    * Enable inspect plugin
    */
   inspect?: boolean
+
+  /**
+   * Build with --download option
+   */
+  download?: boolean
+
+  /**
+   * Base URL in dev or build mode
+   */
+  base?: string
+
+  /**
+   * Exclude speaker notes from the built output
+   */
+  withoutNotes?: boolean
+
+  /**
+   * Override routerMode at build time
+   */
+  routerMode?: 'hash' | 'history' | 'memory'
 }
 
-export interface ResolvedSlidevOptions extends RootsInfo {
+export interface ResolvedSlidevOptions extends RootsInfo, SlidevEntryOptions {
   data: SlidevData
-  entry: string
   themeRaw: string
-  theme: string
   themeRoots: string[]
   addonRoots: string[]
   /**
@@ -42,18 +63,23 @@ export interface ResolvedSlidevOptions extends RootsInfo {
    */
   roots: string[]
   mode: 'dev' | 'build' | 'export'
-  remote?: string
-  inspect?: boolean
   utils: ResolvedSlidevUtils
 }
 
 export interface ResolvedSlidevUtils {
+  shiki: ShorthandsBundle<string, string>
+  shikiOptions: MarkdownItShikiOptions & CodeOptionsThemes
+  katexOptions: KatexOptions | null
+  indexHtml: string
+  define: Record<string, string>
+  iconsResolvePath: string[]
   isMonacoTypesIgnored: (pkg: string) => boolean
+  getLayouts: () => Promise<Record<string, string>>
 }
 
 export interface SlidevServerOptions {
   /**
    * @returns `false` if server should be restarted
    */
-  loadData?: () => Promise<SlidevData | false>
+  loadData?: (loadedSource: Record<string, string>) => Promise<SlidevData | false>
 }

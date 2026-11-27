@@ -1,6 +1,6 @@
 <script setup lang="ts">
-import { computed, ref, watch } from 'vue'
 import { autoResetRef } from '@vueuse/core'
+import { computed, ref, watch } from 'vue'
 
 const a = ref(2)
 const b = ref(4)

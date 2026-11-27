@@ -67,6 +67,17 @@ pnpm demo:composable-vue
 
 The server will restart automatically every time the builds get updated.
 
+### Before you open a PR
+
+Run the full local gate:
+
+```bash
+pnpm verify   # build → typecheck → lint → test
+```
+
+Note: tests require a prior build, because workspace packages resolve to their
+built `dist/`. `pnpm verify` handles this ordering for you.
+
 ## Project Structure
 
 ### Monorepo
@@ -80,7 +91,7 @@ packages
   parser/          - parser for Slidev's extended Markdown format
   create-app/      - scripts and template for `npm init slidev`
   create-theme/    - scripts and template for `npm init slidev-theme`
-  theme-*/         - official themes
+  vscode/          - the VSCode extension
 ```
 
 ## Code Style

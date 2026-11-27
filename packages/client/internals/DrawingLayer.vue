@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { onBeforeUnmount, onMounted, ref, watch } from 'vue'
-import { useSlideContext } from '../context'
 import { useDrawings } from '../composables/useDrawings'
+import { useSlideContext } from '../context'
 
 const { drauu, drawingEnabled, loadCanvas } = useDrawings()
 

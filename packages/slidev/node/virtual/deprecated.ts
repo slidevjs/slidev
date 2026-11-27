@@ -22,7 +22,7 @@ export const templateLegacyRoutes: VirtualModuleTemplate = {
  */
 export const templateLegacyTitles: VirtualModuleTemplate = {
   id: '/@slidev/titles.md',
-  async getContent() {
+  getContent() {
     return `
 <script setup lang="ts">
 import TitleRenderer from '#slidev/title-renderer'

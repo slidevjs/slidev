@@ -14,9 +14,9 @@ pie
 
 <script setup lang="ts">
 import { getCurrentInstance, ref, watch, watchEffect } from 'vue'
-import { renderMermaid } from '../modules/mermaid'
 import ShadowRoot from '../internals/ShadowRoot.vue'
 import { isDark } from '../logic/dark'
+import { renderMermaid } from '../modules/mermaid'
 
 const props = defineProps<{
   codeLz: string
@@ -62,7 +62,9 @@ watchEffect(() => {
   const svgEl = el.value?.children?.[0] as SVGElement | undefined
   if (svgEl && svgEl.hasAttribute('viewBox') && actualHeight.value == null) {
     const v = Number.parseFloat(svgEl.getAttribute('viewBox')?.split(' ')[3] || '')
-    actualHeight.value = Number.isNaN(v) ? undefined : v
+    actualHeight.value = Number.isNaN(v)
+      ? undefined
+      : v
   }
 }, { flush: 'post' })
 

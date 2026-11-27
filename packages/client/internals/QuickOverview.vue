@@ -1,18 +1,21 @@
 <script setup lang="ts">
 import { useEventListener } from '@vueuse/core'
 import { computed, ref, watchEffect } from 'vue'
-import { breakpoints, showOverview, windowSize } from '../state'
-import { currentOverviewPage, overviewRowCount } from '../logic/overview'
 import { createFixedClicks } from '../composables/useClicks'
-import { CLICKS_MAX } from '../constants'
 import { useNav } from '../composables/useNav'
+import { CLICKS_MAX } from '../constants'
 import { pathPrefix } from '../env'
-import SlideContainer from './SlideContainer.vue'
-import SlideWrapper from './SlideWrapper.vue'
+import { currentOverviewPage, overviewRowCount } from '../logic/overview'
+import { isScreenshotSupported } from '../logic/screenshot'
+import { snapshotManager } from '../logic/snapshot'
+import { breakpoints, showOverview, windowSize } from '../state'
 import DrawingPreview from './DrawingPreview.vue'
 import IconButton from './IconButton.vue'
+import SlideContainer from './SlideContainer.vue'
+import SlideWrapper from './SlideWrapper.vue'
 
-const { currentSlideNo, go: goSlide, slides } = useNav()
+const nav = useNav()
+const { currentSlideNo, go: goSlide, slides } = nav
 
 function close() {
   showOverview.value = false
@@ -48,6 +51,12 @@ const rowCount = computed(() => {
 
 const keyboardBuffer = ref<string>('')
 
+async function captureSlidesOverview() {
+  showOverview.value = false
+  await snapshotManager.startCapturing(nav)
+  showOverview.value = true
+}
+
 useEventListener('keypress', (e) => {
   if (!showOverview.value) {
     keyboardBuffer.value = ''
@@ -75,7 +84,7 @@ useEventListener('keypress', (e) => {
   keyboardBuffer.value += String(num)
 
   // beyond the number of slides, reset
-  if (+keyboardBuffer.value >= slides.value.length) {
+  if (+keyboardBuffer.value > slides.value.length) {
     keyboardBuffer.value = ''
     return
   }
@@ -98,11 +107,6 @@ watchEffect(() => {
   // Watch rowCount, make sure up and down shortcut work correctly.
   overviewRowCount.value = rowCount.value
 })
-
-const activeSlidesLoaded = ref(false)
-setTimeout(() => {
-  activeSlidesLoaded.value = true
-}, 3000)
 </script>
 
 <template>
@@ -113,9 +117,8 @@ setTimeout(() => {
     leave-to-class="opacity-0 scale-102 !backdrop-blur-0px"
   >
     <div
-      v-if="showOverview || activeSlidesLoaded"
-      v-show="showOverview"
-      class="fixed left-0 right-0 top-0 h-[calc(var(--vh,1vh)*100)] z-20 bg-main !bg-opacity-75 p-16 py-20 overflow-y-auto backdrop-blur-5px"
+      v-if="showOverview"
+      class="fixed left-0 right-0 top-0 h-[calc(var(--vh,1vh)*100)] z-modal bg-main !bg-opacity-75 p-16 py-20 overflow-y-auto backdrop-blur-5px select-none"
       @click="close"
     >
       <div
@@ -134,6 +137,8 @@ setTimeout(() => {
           >
             <SlideContainer
               :key="route.no"
+              :no="route.no"
+              :use-snapshot="true"
               :width="cardWidth"
               class="pointer-events-none"
             >
@@ -161,9 +166,12 @@ setTimeout(() => {
       </div>
     </div>
   </Transition>
-  <div v-if="showOverview" class="fixed top-4 right-4 z-20 text-gray-400 flex flex-col items-center gap-2">
+  <div
+    v-show="showOverview"
+    class="fixed top-4 right-4 z-modal text-gray-400 flex flex-col items-center gap-2"
+  >
     <IconButton title="Close" class="text-2xl" @click="close">
-      <carbon:close />
+      <div class="i-carbon:close" />
     </IconButton>
     <IconButton
       v-if="__SLIDEV_FEATURE_PRESENTER__"
@@ -174,7 +182,15 @@ setTimeout(() => {
       tab-index="-1"
       class="text-2xl"
     >
-      <carbon:list-boxes />
+      <div class="i-carbon:list-boxes" />
+    </IconButton>
+    <IconButton
+      v-if="__DEV__ && isScreenshotSupported"
+      title="Capture slides as images"
+      class="text-2xl"
+      @click="captureSlidesOverview"
+    >
+      <div class="i-carbon:drop-photo" />
     </IconButton>
   </div>
 </template>

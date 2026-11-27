@@ -1,9 +1,9 @@
 <script setup lang="ts">
-import { computed, ref, watch } from 'vue'
 import Fuse from 'fuse.js'
-import { activeElement, showGotoDialog } from '../state'
-import { useNav } from '../composables/useNav'
+import { computed, ref, watch } from 'vue'
 import TitleRenderer from '#slidev/title-renderer'
+import { useNav } from '../composables/useNav'
+import { activeElement, showGotoDialog } from '../state'
 
 const container = ref<HTMLDivElement>()
 const input = ref<HTMLInputElement>()
@@ -25,8 +25,12 @@ const fuse = computed(() => new Fuse(slides.value.map(i => i.meta?.slide).filter
   minMatchCharLength: 1,
 }))
 
-const path = computed(() => text.value.startsWith('/') ? text.value.substring(1) : text.value)
-const result = computed(() => fuse.value.search(path.value).map(result => result.item))
+const path = computed(() => text.value.startsWith('/')
+  ? text.value.substring(1)
+  : text.value)
+const result = computed(() => path.value
+  ? fuse.value.search(path.value).map(result => result.item)
+  : [])
 const valid = computed(() => !!result.value.length)
 
 function goTo() {
@@ -111,7 +115,7 @@ watch(activeElement, () => {
     ref="container"
     class="fixed right-5 transition-all"
     w-90 max-w-90 min-w-90
-    :class="showGotoDialog ? 'top-5' : '-top-20'"
+    :class="showGotoDialog ? 'top-5' : '-top-20 op0 pointer-events-none'"
   >
     <div
       class="bg-main transform"
@@ -136,7 +140,7 @@ watch(activeElement, () => {
       >
     </div>
     <div
-      v-if="result.length > 0"
+      v-if="showGotoDialog && result.length > 0"
       ref="list"
       class="autocomplete-list"
       shadow="~"

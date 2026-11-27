@@ -1,18 +1,20 @@
 <script setup lang="ts">
 import type { SlideRoute } from '@slidev/types'
-import { useFixedNav, useNav } from '../composables/useNav'
 import { createFixedClicks } from '../composables/useClicks'
+import { useFixedNav, useNav } from '../composables/useNav'
 import { CLICKS_MAX } from '../constants'
+import { getPrintSlideAnchorId } from '../logic/slidePath'
 import PrintSlideClick from './PrintSlideClick.vue'
 
-const { route } = defineProps<{ route: SlideRoute }>()
+const { route } = defineProps<{ hidden?: boolean, route: SlideRoute }>()
 const { isPrintWithClicks } = useNav()
-const clicks0 = createFixedClicks(route, isPrintWithClicks.value ? 0 : CLICKS_MAX)
+const clicks0 = createFixedClicks(route, () => isPrintWithClicks.value ? 0 : CLICKS_MAX)
 </script>
 
 <template>
+  <span :id="getPrintSlideAnchorId(route.no)" />
   <PrintSlideClick
-    :clicks-context="clicks0"
+    v-show="!hidden"
     :nav="useFixedNav(route, clicks0)"
   />
   <template v-if="isPrintWithClicks">
@@ -22,6 +24,7 @@ const clicks0 = createFixedClicks(route, isPrintWithClicks.value ? 0 : CLICKS_MA
     -->
     <PrintSlideClick
       v-for="i in Math.max(0, clicks0.total - clicks0.clicksStart)"
+      v-show="!hidden"
       :key="i"
       :nav="useFixedNav(route, createFixedClicks(route, i + clicks0.clicksStart))"
     />

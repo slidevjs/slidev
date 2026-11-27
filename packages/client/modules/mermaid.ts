@@ -1,8 +1,9 @@
-import mermaid from 'mermaid/dist/mermaid.esm.mjs'
-import lz from 'lz-string'
 import { clearUndefined } from '@antfu/utils'
-import setupMermaid from '../setup/mermaid'
+import lz from 'lz-string'
+import mermaid from 'mermaid/dist/mermaid.esm.mjs'
+import mermaidRenderers from '#slidev/setups/mermaid-renderer'
 import { makeId } from '../logic/utils'
+import setupMermaid from '../setup/mermaid'
 
 mermaid.startOnLoad = false
 mermaid.initialize({ startOnLoad: false })
@@ -17,12 +18,24 @@ export async function renderMermaid(lzEncoded: string, options: any) {
   if (_cache)
     return _cache
 
+  const code = lz.decompressFromBase64(lzEncoded)
+
+  // custom renderer
+  for (const setup of mermaidRenderers) {
+    const renderer = await setup()
+    if (renderer) {
+      const svg = await renderer(code, options)
+      cache.set(key, svg)
+      return svg
+    }
+  }
+
+  // fallback: existing mermaid
   mermaid.initialize({
     startOnLoad: false,
-    ...clearUndefined(setupMermaid() || {}),
+    ...clearUndefined(await setupMermaid() || {}),
     ...clearUndefined(options),
   })
-  const code = lz.decompressFromBase64(lzEncoded)
   const id = makeId()
   const { svg } = await mermaid.render(id, code, containerElement)
   cache.set(key, svg)

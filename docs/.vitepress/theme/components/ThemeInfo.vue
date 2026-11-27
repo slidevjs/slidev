@@ -1,7 +1,7 @@
 <script setup lang="ts">
-import { ref } from 'vue'
-import { isClient, useIntervalFn } from '@vueuse/core'
 import type { ThemeInfo } from '../../themes'
+import { isClient, useIntervalFn } from '@vueuse/core'
+import { ref } from 'vue'
 
 const props = defineProps<{
   theme: ThemeInfo
@@ -33,32 +33,33 @@ if (props.theme.previews.length > 1 && isClient) {
         :src="url"
         class="absolute top-0 bottom-0 left-0 right-0 transition-transform transform duration-500"
         :style="{ transform: idx > index ? 'scale(1.05) translate(110%)' : 'scale(1.05) translate(0)' }"
+        loading="lazy"
       >
     </a>
-    <div class="font-bold">
+    <a :href="theme.link || theme.repo" class="font-bold !text-$vp-c-text-1 !decoration-none">
       {{ theme.name }}
-    </div>
+    </a>
     <div
-      class="text-current text-xs opacity-75 whitespace-nowrap overflow-hidden overflow-ellipsis"
+      class="text-current text-xs opacity-75 whitespace-nowrap overflow-hidden text-ellipsis"
+      :title="theme.description"
     >
       {{ theme.description }}
     </div>
     <div class="mt-2 flex">
       <a
-        v-if="theme.author.link"
+        v-if="theme.author?.link"
         :href="theme.author.link"
-        class="text-current text-sm opacity-50"
+        class="text-current text-sm opacity-60 hover:opacity-100"
         target="_blank"
       >{{ theme.author.name }}</a>
-      <div v-else class="text-current text-sm opacity-50">
+      <div v-else-if="theme.author?.name" class="text-current text-sm opacity-60 hover:opacity-100">
         {{ theme.author.name }}
       </div>
       <div class="flex-auto" />
       <a
         v-if="theme.id"
         :href="`https://npmjs.com/package/${theme.id}`"
-        class="ml-2 text-current opacity-20 text-sm"
-        hover="opacity-100 text-[#cb3837]"
+        class="ml-2 text-current opacity-40 text-sm hover:opacity-100"
         target="_blank"
       >
         <simple-icons-npm />
@@ -66,7 +67,7 @@ if (props.theme.previews.length > 1 && isClient) {
       <a
         v-if="theme.repo"
         :href="theme.repo"
-        class="ml-2 text-current opacity-20 text-sm hover:opacity-100"
+        class="ml-2 text-current opacity-40 text-sm hover:opacity-100"
         target="_blank"
       >
         <simple-icons-github />

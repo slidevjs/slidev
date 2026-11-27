@@ -1,19 +1,16 @@
 import type { AppContext } from '@slidev/types'
-import TwoSlashFloatingVue from '@shikijs/vitepress-twoslash/client'
 import type { App } from 'vue'
-import { nextTick } from 'vue'
-import { createRouter, createWebHashHistory, createWebHistory } from 'vue-router'
-import { createHead } from '@unhead/vue'
-import { routeForceRefresh } from '../logic/route'
-import { createVClickDirectives } from '../modules/v-click'
-import { createVMarkDirective } from '../modules/v-mark'
-import { createVDragDirective } from '../modules/v-drag'
-import { createVMotionDirectives } from '../modules/v-motion'
-import setupRoutes from '../setup/routes'
+import TwoSlashFloatingVue from '@shikijs/vitepress-twoslash/client'
+import { createHead } from '@unhead/vue/client'
+import { createMemoryHistory, createRouter, createWebHashHistory, createWebHistory } from 'vue-router'
 import setups from '#slidev/setups/main'
-
-import '#slidev/styles'
-import 'shiki-magic-move/style.css'
+import { createVClickDirectives } from '../modules/v-click'
+import { createVDragDirective } from '../modules/v-drag'
+import { createVMarkDirective } from '../modules/v-mark'
+import { createVMotionDirectives } from '../modules/v-motion'
+import { setupPWA } from '../setup/pwa'
+import setupRoutes from '../setup/routes'
+import '../styles'
 
 export default async function setupMain(app: App) {
   function setMaxHeight() {
@@ -25,9 +22,11 @@ export default async function setupMain(app: App) {
   window.addEventListener('resize', setMaxHeight)
 
   const router = createRouter({
-    history: __SLIDEV_HASH_ROUTE__
-      ? createWebHashHistory(import.meta.env.BASE_URL)
-      : createWebHistory(import.meta.env.BASE_URL),
+    history: __SLIDEV_MEMORY_ROUTE__
+      ? createMemoryHistory(import.meta.env.BASE_URL)
+      : __SLIDEV_HASH_ROUTE__
+        ? createWebHashHistory(import.meta.env.BASE_URL)
+        : createWebHistory(import.meta.env.BASE_URL),
     routes: setupRoutes(),
   })
 
@@ -44,13 +43,9 @@ export default async function setupMain(app: App) {
     router,
   }
 
-  nextTick(() => {
-    router.afterEach(async () => {
-      await nextTick()
-      routeForceRefresh.value += 1
-    })
-  })
-
   for (const setup of setups)
     await setup(context)
+
+  if (__SLIDEV_FEATURE_PWA__)
+    setupPWA()
 }

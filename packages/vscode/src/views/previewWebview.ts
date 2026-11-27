@@ -1,75 +1,139 @@
-import { reactive, ref, shallowRef, watch, watchEffect } from '@vue/runtime-core'
-import type { WebviewView } from 'vscode'
-import { Uri, commands, env, window } from 'vscode'
-import { useDisposable } from '../composables/useDisposable'
-import { useFocusedSlideNo } from '../composables/useFocusedSlideNo'
-import { usePreviewState } from '../composables/usePreviewState'
-import { useVscodeContext } from '../composables/useVscodeContext'
-import { isDarkTheme, previewSync } from '../configs'
-import { extCtx } from '../index'
-import { activeSlidevData } from '../projects'
-import { createSingletonComposable } from '../utils/singletonComposable'
-import { useLogger } from './logger'
+import type { PreviewMode } from '../html/ready'
+import { computed, defineService, extensionContext, reactive, ref, useIsDarkTheme, useVscodeContext, useWebviewView, watch, watchEffect } from 'reactive-vscode'
+import { commands, env, Uri, window } from 'vscode'
+import { useFocusedSlide } from '../composables/useFocusedSlide'
+import { useServerDetector } from '../composables/useServerDetector'
+import { config } from '../configs'
+import { generateErrorHtml } from '../html/error'
+import { generateReadyHtml } from '../html/ready'
+import { activeData, activeProject } from '../projects'
+import { getSlidesTitle } from '../utils/getSlidesTitle'
+import { logger } from './logger'
 
-export const usePreviewWebview = createSingletonComposable(() => {
-  const logger = useLogger()
-  const { port, ready, html, compatMode, refreshState } = usePreviewState()
-  const focusedSlideNo = useFocusedSlideNo()
+export const usePreviewWebview = defineService(() => {
+  const { focusedSlideNo, viewportSlideNo, focusSlide, revealViewportSlide } = useFocusedSlide()
+  const isDarkTheme = useIsDarkTheme()
 
-  useVscodeContext('slidev:preview:sync', previewSync)
+  const { redetect } = useServerDetector()
+  const port = computed(() => activeProject.value?.port.value || config.port)
+  const detected = computed(() => activeProject.value ? activeProject.value.detected.value : null)
+  const message = computed(() => detected.value?.message ?? '')
+  const compatMode = useVscodeContext('slidev:preview:compat', () => !!detected.value?.compatMode)
+  const ready = useVscodeContext('slidev:preview:ready', () => activeProject.value && !!detected.value?.ready)
+  const savedPreviewMode = extensionContext.value?.globalState.get<PreviewMode>('slidev:preview:mode')
+  const previewMode = ref<PreviewMode>(savedPreviewMode === 'overview'
+    ? 'overview'
+    : 'slide')
+  const hashRoute = computed(() => activeData.value?.slides[0]?.frontmatter.routerMode === 'hash')
+  const overviewInitialSlideNo = ref<number>()
+  useVscodeContext('slidev:preview:sync', () => config['preview-sync'])
+  useVscodeContext('slidev:preview:overview', () => previewMode.value === 'overview')
 
-  const view = shallowRef<WebviewView>()
   const previewNavState = reactive({
     no: 0,
     clicks: 0,
     hasNext: true,
     hasPrev: false,
   })
-  const initializedClientId = ref('')
+  let overviewSlideNoForUrl: number | undefined
 
-  useDisposable(window.registerWebviewViewProvider(
+  function getOverviewSlideNoForUrl() {
+    const slideNo = Number(
+      overviewSlideNoForUrl
+      ?? viewportSlideNo.value
+      ?? focusedSlideNo.value
+      ?? previewNavState.no,
+    )
+    return Number.isFinite(slideNo) && slideNo > 0
+      ? slideNo
+      : undefined
+  }
+
+  function updateOverviewInitialSlideNo() {
+    overviewInitialSlideNo.value = previewMode.value === 'overview'
+      ? getOverviewSlideNoForUrl()
+      : undefined
+  }
+
+  updateOverviewInitialSlideNo()
+
+  const html = computed(() => ready.value
+    ? generateReadyHtml(port.value, previewMode.value, hashRoute.value, overviewInitialSlideNo.value)
+    : generateErrorHtml(message.value),
+  )
+
+  useVscodeContext('slidev:preview:has-prev-slide', () => previewMode.value === 'slide' && previewNavState.no > 1)
+  useVscodeContext('slidev:preview:has-next-slide', () => previewMode.value === 'slide' && activeData.value && previewNavState.no < activeData.value.slides.length)
+  useVscodeContext('slidev:preview:has-next-click', () => previewMode.value === 'slide' && previewNavState.hasNext)
+  useVscodeContext('slidev:preview:has-prev-click', () => previewMode.value === 'slide' && previewNavState.hasPrev)
+
+  const initializedClientId = ref('')
+  let pendingOverviewScroll: { no: number } | undefined
+  let overviewScrollTimer: ReturnType<typeof setTimeout> | undefined
+  let syncEditorToOverviewUntil = 0
+
+  function cancelPendingOverviewScroll() {
+    pendingOverviewScroll = undefined
+    if (overviewScrollTimer) {
+      clearTimeout(overviewScrollTimer)
+      overviewScrollTimer = undefined
+    }
+  }
+
+  const { view, postMessage, forceReload } = useWebviewView(
     'slidev-preview',
+    html,
     {
-      resolveWebviewView(webviewView) {
-        view.value = webviewView
-        view.value.webview.options = {
-          enableScripts: true,
-          localResourceRoots: [extCtx.value.extensionUri],
+      retainContextWhenHidden: true,
+      webviewOptions: {
+        enableScripts: true,
+        localResourceRoots: [extensionContext.value!.extensionUri],
+      },
+      async onDidReceiveMessage(data) {
+        if (data.type === 'command') {
+          commands.executeCommand(`slidev.${data.command}`, ...(data.args ?? []))
         }
-        view.value.webview.onDidReceiveMessage(async (data) => {
-          if (data.type === 'command') {
-            commands.executeCommand(`slidev.${data.command}`)
+        else if (data.type === 'update-state') {
+          if (initializedClientId.value === data.clientId) {
+            Object.assign(previewNavState, data.navState)
           }
-          else if (data.type === 'update-state') {
-            if (initializedClientId.value === data.clientId) {
-              Object.assign(previewNavState, data.navState)
-            }
-            else {
-              initializedClientId.value = data.clientId
-              if (previewSync.value && initializedClientId.value === data.clientId)
-                postMessage('navigate', { no: focusedSlideNo.value })
-            }
+          else {
+            initializedClientId.value = data.clientId
+            if (previewMode.value === 'slide' && config['preview-sync'] && focusedSlideNo.value != null)
+              postSlidevMessage('navigate', { no: focusedSlideNo.value })
           }
-        })
+        }
+        else if (data.type === 'overview-scroll') {
+          syncEditorToOverviewUntil = Date.now() + 300
+          cancelPendingOverviewScroll()
+          const no = Number(data.no)
+          if (Number.isFinite(no))
+            overviewSlideNoForUrl = no
+          if (previewMode.value === 'overview' && config['preview-sync'] && Number.isFinite(no))
+            revealViewportSlide(no)
+        }
+        else if (data.type === 'open-external' && typeof data.url === 'string') {
+          env.openExternal(Uri.parse(data.url))
+        }
       },
     },
-    { webviewOptions: { retainContextWhenHidden: true } },
-  ))
+  )
 
   const pageId = ref(0)
-  let i = 0
-  function refresh() {
-    refreshState()
+  async function refresh() {
+    if (!ready.value)
+      await redetect(port.value)
     if (!view.value)
       return
-    view.value.webview.html = `${html.value}<!--${i++}-->`
+    updateOverviewInitialSlideNo()
+    forceReload()
     logger.info(`Webview refreshed. Current URL: http://localhost:${port.value}`)
     setTimeout(() => pageId.value++, 300)
   }
-  watchEffect(refresh)
+  watch([ready, view, port, previewMode], refresh)
 
-  function postMessage(type: string, data: Record<string, unknown>) {
-    view.value?.webview.postMessage({
+  function postSlidevMessage(type: string, data: Record<string, unknown>) {
+    return postMessage({
       target: 'slidev',
       sender: 'vscode',
       type,
@@ -77,19 +141,40 @@ export const usePreviewWebview = createSingletonComposable(() => {
     })
   }
 
-  watch([pageId, previewSync, focusedSlideNo], ([_, sync, no]) => {
-    if (sync) {
-      if (compatMode.value)
-        previewNavState.no = no
-      postMessage('navigate', { no, clicks: 999999 })
-    }
+  function scrollOverviewToSlide(no: number) {
+    if (Date.now() < syncEditorToOverviewUntil)
+      return
+    overviewSlideNoForUrl = no
+    pendingOverviewScroll = { no }
+    if (overviewScrollTimer)
+      return
+    overviewScrollTimer = setTimeout(() => {
+      overviewScrollTimer = undefined
+      const scroll = pendingOverviewScroll
+      pendingOverviewScroll = undefined
+      if (scroll && Date.now() >= syncEditorToOverviewUntil && previewMode.value === 'overview' && config['preview-sync'])
+        postSlidevMessage('overview-scroll', scroll)
+    }, 50)
+  }
+
+  watch([pageId], () => {
+    postSlidevMessage('css-vars', { '--slidev-slide-container-background': 'transparent' })
+    if (previewMode.value === 'overview' && config['preview-sync'] && viewportSlideNo.value != null)
+      scrollOverviewToSlide(viewportSlideNo.value)
   })
-  watch([pageId], () => postMessage('css-vars', { '--slidev-slide-container-background': 'transparent' }))
-  watch([pageId, isDarkTheme], ([_, dark]) => postMessage('color-schema', { color: dark ? 'dark' : 'light' }))
+  watch([pageId, isDarkTheme], ([_, dark]) => postSlidevMessage('color-schema', {
+    color: dark ? 'dark' : 'light',
+  }))
 
   watchEffect(() => {
     if (view.value) {
-      const slideNo = ready.value && previewNavState.no > 0 ? ` (${previewNavState.no}/${activeSlidevData.value?.slides.length})` : ''
+      if (previewMode.value === 'overview' && activeData.value) {
+        view.value.title = getSlidesTitle(activeData.value)
+        return
+      }
+      const slideNo = ready.value && previewMode.value === 'slide' && previewNavState.no > 0
+        ? ` (${previewNavState.no}/${activeData.value?.slides.length})`
+        : ''
       const compatInfo = compatMode.value ? ' (compat mode)' : ''
       view.value.title = `Preview${slideNo}${compatInfo}`
     }
@@ -97,24 +182,73 @@ export const usePreviewWebview = createSingletonComposable(() => {
 
   function useNavOperation(operation: string, ...args: unknown[]) {
     return () => {
+      if (previewMode.value !== 'slide')
+        return
       if (compatMode.value)
         window.showErrorMessage('Unsupported operation: Slidev server too old.')
-      postMessage('navigate', { operation, args })
+      postSlidevMessage('navigate', { operation, args })
     }
   }
+
+  watch(
+    () => previewNavState.no,
+    (no) => {
+      if (previewMode.value === 'slide' && no > 0 && ready.value && config['preview-sync'] && activeProject.value) {
+        focusSlide(activeProject.value, no)
+      }
+    },
+  )
+  watch(
+    [
+      () => config['preview-sync'],
+      previewMode,
+      () => previewMode.value === 'slide'
+        ? focusedSlideNo.value
+        : viewportSlideNo.value,
+    ],
+    ([enabled, mode, no]) => {
+      if (enabled && mode === 'slide' && no != null && previewNavState.no !== no) {
+        postSlidevMessage('navigate', { no, clicks: 999999 })
+      }
+      else if (enabled && mode === 'overview' && no != null) {
+        scrollOverviewToSlide(no)
+      }
+    },
+  )
 
   return {
     view,
     refresh,
-    retry: () => !ready.value && refresh(),
-    previewNavState,
+    setPreviewMode: (mode: PreviewMode) => {
+      initializedClientId.value = ''
+      if (mode !== previewMode.value)
+        overviewSlideNoForUrl = undefined
+      overviewInitialSlideNo.value = mode === 'overview'
+        ? getOverviewSlideNoForUrl()
+        : undefined
+      previewMode.value = mode
+      void extensionContext.value?.globalState.update('slidev:preview:mode', mode)
+    },
     nextClick: useNavOperation('next'),
     prevClick: useNavOperation('prev'),
     nextSlide: useNavOperation('nextSlide', true),
     prevSlide: useNavOperation('prevSlide', true),
     openExternal: () => {
-      const query = previewNavState.clicks > 0 ? `?clicks=${previewNavState.clicks}` : ''
-      const url = `http://localhost:${port.value}/${previewNavState.no}${query}`
+      const hashRoute = activeData.value?.slides[0]?.frontmatter.routerMode === 'hash'
+      const no = previewMode.value === 'overview'
+        ? getOverviewSlideNoForUrl()
+        : previewNavState.no
+      if (!no)
+        return
+      const slideNo = activeData.value
+        ? Math.min(Math.max(Math.round(no), 1), activeData.value.slides.length)
+        : no
+      const query = previewNavState.clicks > 0
+        ? `?clicks=${previewNavState.clicks}`
+        : ''
+      const url = `http://localhost:${port.value}/${hashRoute ? '#' : ''}${slideNo}${previewMode.value === 'slide'
+        ? query
+        : ''}`
       return env.openExternal(Uri.parse(url))
     },
   }

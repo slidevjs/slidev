@@ -4,43 +4,60 @@ outline: deep
 
 # Getting Started
 
-Slidev <sup>(slide + dev, **/slaɪdɪv/**)</sup> is a web-based slides maker and presenter. It's designed for developers to focus on writing content in Markdown while also having the power of HTML and Vue components to deliver pixel-perfect layouts and designs with embedded interactive demos in your presentations.
+Slidev <sup>(slide + dev, **/slaɪdɪv/**)</sup> is a web-based slides maker and presenter. It's designed for developers to focus on writing content in Markdown. With the power of web technologies like Vue, you are able to deliver pixel-perfect designs with interactive demos to your presentation.
 
-It uses a feature-rich markdown file to generate beautiful slides with an instant reloading experience, along with many built-in integrations such as live coding, PDF exporting, presentation recording, and so on. Since it's powered by the web, you can do anything with Slidev - the possibilities are endless.
+::: tip
 
-You can learn more about the rationale behind the project in the [Why Slidev](/guide/why) section.
+You can learn more about the rationale behind this project in <LinkInline link="guide/why" />.
 
-## Features
+:::
 
-- 📝 [**Markdown-based**](/guide/syntax.html) - use your favorite editors and workflow
-- 🧑‍💻 [**Developer Friendly**](/guide/syntax.html#code-blocks) - built-in syntax highlighting, live coding, etc.
-- 🎨 [**Themable**](/themes/gallery.html) - theme can be shared and used with npm packages
-- 🌈 [**Stylish**](/guide/syntax.html#embedded-styles) - on-demand utilities via [UnoCSS](https://github.com/unocss/unocss).
-- 🤹 [**Interactive**](/custom/directory-structure.html#components) - embedding Vue components seamlessly
-- 🎙 [**Presenter Mode**](/guide/presenter-mode.html) - use another window, or even your phone to control your slides
-- 🎨 [**Drawing**](/guide/drawing.html) - draw and annotate on your slides
-- 🧮 [**LaTeX**](/guide/syntax.html#latex) - built-in LaTeX math equations support
-- 📰 [**Diagrams**](/guide/syntax.html#diagrams) - creates diagrams with textual descriptions
-- 🌟 [**Icons**](/guide/syntax.html#icons) - Access to icons from any icon set directly
-- 💻 [**Editors**](/guide/editors.html) - integrated editor, or [extension for VS Code](https://github.com/slidevjs/slidev-vscode)
-- 🎥 [**Recording**](/guide/recording.html) - built-in recording and camera view
-- 📤 [**Portable**](/guide/exporting.html) - export into PDF, PNGs, or even a hostable SPA
+<!--
+- 📝 [**Markdown-based**](/guide/syntax) - focus on content and use your favorite editor
+- 🧑‍💻 [**Developer Friendly**](/guide/syntax#code-blocks) - built-in code highlighting, live coding, etc.
+- 🎨 [**Themable**](/resources/theme-gallery) - theme can be shared and used with npm packages
+- 🌈 [**Stylish**](/guide/syntax#embedded-styles) - on-demand utilities via [UnoCSS](https://github.com/unocss/unocss).
+- 🤹 [**Interactive**](/custom/directory-structure#components) - embedding Vue components seamlessly
+- 🎙 [**Presenter Mode**](/guide/ui#presenter-mode) - use another window, or even your phone to control your slides
+- 🎨 [**Drawing**](/features/drawing) - draw and annotate on your slides
+- 🧮 [**LaTeX**](/guide/syntax#latex) - built-in LaTeX math equations support
+- 📰 [**Diagrams**](/guide/syntax#diagrams) - creates diagrams using textual descriptions with [Mermaid.js](https://mermaid.js.org/)
+- 🌟 [**Icons**](/guide/syntax#icons) - access to icons from any icon set directly
+- 💻 [**Editor**](/guide/index#editor) - integrated editor, or the [VSCode extension](/features/vscode-extension)
+- 🎥 [**Recording**](/features/recording) - built-in recording and camera view
+- 📤 [**Portable**](/guide/exporting) - export into PDF, PNGs, or PPTX
 - ⚡️ [**Fast**](https://vitejs.dev) - instant reloading powered by [Vite](https://vitejs.dev)
-- 🛠 [**Hackable**](/custom/config-vite.html) - using Vite plugins, Vue components, or any npm packages
+- 🛠 [**Hackable**](/custom/) - using Vite plugins, Vue components, or any npm packages
+-->
 
-## Scaffolding Your First Presentation
+<!-- <FeaturesAnimation /> -->
+
+## Create Slides
 
 ### Try it Online
 
-Start Slidev right in your browser: [sli.dev/new](https://sli.dev/new)
-
-[![](https://developer.stackblitz.com/img/open_in_stackblitz.svg)](https://sli.dev/new)
+Start Slidev right in your browser with StackBlitz: [sli.dev/new](https://sli.dev/new)
 
 ### Create Locally
 
+> Requires [Node.js](https://nodejs.org) >= 22.12.0 installed.
+
+Run the following command to create a new Slidev project locally:
+
 ::: code-group
 
+```bash [pnpm]
+# If you haven't installed pnpm
+npm i -g pnpm
+
+pnpm create slidev
+```
+
 ```bash [npm]
+# Not recommended -
+# NPM will download the packages each time you create a new project,
+# which is slow and takes up a lot of space
+
 npm init slidev@latest
 ```
 
@@ -48,61 +65,93 @@ npm init slidev@latest
 yarn create slidev
 ```
 
-```bash [pnpm]
-pnpm create slidev
+```bash [bun]
+bun create slidev
+```
+
+```bash [deno]
+deno init --npm slidev
 ```
 
 :::
 
-Follow the prompts and start making your slides now! For more details about the markdown syntax, read through the [syntax guide](/guide/syntax).
+Follow the prompts to start your slides project. The slides content is in `slides.md`, which initially includes demos of most the Slidev features. For more information about the Markdown syntax, please check <LinkInline link="guide/syntax" />.
 
-## Command Line Interface
+:::: details Single file usage (not recommended)
 
-In a project where Slidev is installed, you can use the `slidev` binary in your npm scripts.
+If you prefer to have a single Markdown file as your slides, you can install the Slidev CLI globally:
 
-```json
+::: code-group
+
+```bash [pnpm]
+pnpm i -g @slidev/cli
+```
+
+```bash [npm]
+npm i -g @slidev/cli
+```
+
+```bash [yarn]
+yarn global add @slidev/cli
+```
+
+```bash [bun]
+bun i -g @slidev/cli
+```
+
+```bash [deno]
+deno i -g npm:@slidev/cli
+```
+
+:::
+
+Then, you can create and start a single file slides via:
+
+```bash
+slidev slides.md
+```
+
+::::
+
+## Basic Commands
+
+Slidev provides a set of commands in its CLI. Here are some common ones:
+
+- `slidev` - Start the dev server. See [the dev command](../builtin/cli#dev).
+- `slidev export` - Export the slides to PDF, PPTX, or PNGs. See <LinkInline link="guide/exporting" />.
+- `slidev build` - Build the slides as a static web application. See <LinkInline link="guide/hosting" />.
+- `slidev format` - Format the slides. See [the format command](../builtin/cli#format).
+- `slidev --help` - Show the help message
+
+To run these commands, you can add them to your `package.json` scripts (which has been done for you if the project was created via `npm init slidev`):
+
+```json [package.json]
 {
   "scripts": {
-    "dev": "slidev", // start dev server
-    "build": "slidev build", // build for production SPA
-    "export": "slidev export" // export slides to pdf
+    "dev": "slidev --open",
+    "build": "slidev build",
+    "export": "slidev export"
   }
 }
 ```
 
-Otherwise, you can use it with [`npx`](https://www.npmjs.com/package/npx)
+Then, you can simply run `npm run dev`, `npm run build`, and `npm run export`.
 
-```bash
-$ npx slidev
-```
+For more information about the CLI, please check the [CLI guide](../builtin/cli).
 
-Run `slidev --help` for more options available.
+## Setup Your Editor {#editor}
 
-## Markdown Syntax
+Since Slidev uses Markdown as the source entry, you can use any editor you prefer to create your slides. We also provide tools to help you edit you slides more conveniently:
 
-Slidev reads your `slides.md` file under your project root and converts them into slides. Whenever you make changes to it, the content of the slides will be updated immediately. For example:
+<LinkCard link="features/vscode-extension" />
+<LinkCard link="features/side-editor" />
+<LinkCard link="features/prettier-plugin" />
 
-````md
-# Slidev
+## Join the Community
 
-Hello World
+It's recommended to join our official [Discord Server](https://chat.sli.dev/) to get help, share your slides, or discuss anything about Slidev.
 
----
-
-# Page 2
-
-Directly use code blocks for highlighting
-
-```ts
-console.log('Hello, World!')
-```
-
----
-
-# Page 3
-````
-
-Read more about the Slidev Markdown syntax in the [syntax guide](/guide/syntax).
+If you're encountering bugs, feel free to open an issue on [GitHub](https://github.com/slidevjs/slidev/issues/new/choose).
 
 ## Tech Stack
 

@@ -1,0 +1,57 @@
+// Ported from https://github.com/vuejs/language-tools/blob/master/extensions/vscode/languages/markdown-language-configuration.json
+{
+  "autoClosingPairs": [
+    // html
+    {
+      "open": "{",
+      "close": "}"
+    },
+    {
+      "open": "[",
+      "close": "]"
+    },
+    {
+      "open": "(",
+      "close": ")"
+    },
+    {
+      "open": "'",
+      "close": "'"
+    },
+    {
+      "open": "\"",
+      "close": "\""
+    },
+    {
+      "open": "<!--",
+      "close": "-->",
+      "notIn": [
+        "comment",
+        "string"
+      ]
+    },
+    // javascript
+    // commented to fix https://github.com/vuejs/language-tools/issues/1428
+    // {
+    //   "open": "`",
+    //   "close": "`",
+    //   "notIn": [
+    //     "string",
+    //     "comment"
+    //   ]
+    // },
+    {
+      "open": "/**",
+      "close": " */",
+      "notIn": [
+        "string"
+      ]
+    }
+  ],
+  "colorizedBracketPairs": [
+    [
+      "{{",
+      "}}"
+    ]
+  ]
+}

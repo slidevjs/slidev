@@ -1,10 +1,9 @@
 <script setup lang="ts">
-import { onMounted, watchEffect } from 'vue'
 import { recomputeAllPoppers } from 'floating-vue'
-import { windowSize } from '../state'
-import PrintContainer from '../internals/PrintContainer.vue'
-import PrintStyle from '../internals/PrintStyle.vue'
+import { onMounted, watchEffect } from 'vue'
 import { useNav } from '../composables/useNav'
+import PrintContainer from '../internals/PrintContainer.vue'
+import { windowSize } from '../state'
 
 const { isPrintMode } = useNav()
 
@@ -21,7 +20,6 @@ onMounted(() => {
 </script>
 
 <template>
-  <PrintStyle v-if="isPrintMode" />
   <div id="page-root" class="grid grid-cols-[1fr_max-content]">
     <PrintContainer
       class="w-full h-full"

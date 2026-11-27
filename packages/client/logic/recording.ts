@@ -1,9 +1,10 @@
-import type { Ref } from 'vue'
-import { nextTick, ref, shallowRef, watch } from 'vue'
-import { useDevicesList, useEventListener, useLocalStorage } from '@vueuse/core'
-import { isTruthy } from '@antfu/utils'
 import type RecorderType from 'recordrtc'
 import type { Options as RecorderOptions } from 'recordrtc'
+import type { Ref } from 'vue'
+import { isTruthy } from '@antfu/utils'
+import { fixWebmDuration } from '@fix-webm-duration/fix'
+import { useDevicesList, useEventListener, useLocalStorage } from '@vueuse/core'
+import { nextTick, ref, shallowRef, watch } from 'vue'
 import { currentCamera, currentMic } from '../state'
 
 type Defined<T> = T extends undefined ? never : T
@@ -12,6 +13,9 @@ type MimeType = Defined<RecorderOptions['mimeType']>
 export const recordingName = ref('')
 export const recordCamera = ref(true)
 export const mimeType = useLocalStorage<MimeType>('slidev-record-mimetype', 'video/webm')
+export const frameRate = useLocalStorage<number>('slidev-record-framerate', 30)
+export const bitRate = useLocalStorage<number>('slidev-record-bitrate', 8192)
+export const resolution = useLocalStorage<string>('slidev-record-resolution', '1920x1080')
 
 export const mimeExtMap: Record<string, string> = {
   'video/webm': 'webm',
@@ -47,11 +51,11 @@ export const {
 } = useDevicesList({
   onUpdated() {
     if (currentCamera.value !== 'none') {
-      if (!cameras.value.find(i => i.deviceId === currentCamera.value))
+      if (!cameras.value.some(i => i.deviceId === currentCamera.value))
         currentCamera.value = cameras.value[0]?.deviceId || 'default'
     }
     if (currentMic.value !== 'none') {
-      if (!microphones.value.find(i => i.deviceId === currentMic.value))
+      if (!microphones.value.some(i => i.deviceId === currentMic.value))
         currentMic.value = microphones.value[0]?.deviceId || 'default'
     }
   },
@@ -75,10 +79,10 @@ export function useRecording() {
   const streamCamera: Ref<MediaStream | undefined> = shallowRef()
   const streamCapture: Ref<MediaStream | undefined> = shallowRef()
   const streamSlides: Ref<MediaStream | undefined> = shallowRef()
+  let recordingStartTime = 0
 
   const config: RecorderOptions = {
     type: 'video',
-    bitsPerSecond: 4 * 256 * 8 * 1024,
     // Extending recording limit as default is only 1h (see https://github.com/muaz-khan/RecordRTC/issues/144)
     timeSlice: 24 * 60 * 60 * 1000,
   }
@@ -102,6 +106,11 @@ export function useRecording() {
   async function startCameraStream() {
     await ensureDevicesListPermissions()
     await nextTick()
+
+    // Stopped tracks can never be resumed, the whole stream has to be requested again
+    if (streamCamera.value?.getTracks().some(track => track.readyState === 'ended'))
+      closeStream(streamCamera)
+
     if (!streamCamera.value) {
       if (currentCamera.value === 'none' && currentMic.value === 'none')
         return
@@ -141,16 +150,18 @@ export function useRecording() {
     const { default: Recorder } = await import('recordrtc')
     await startCameraStream()
 
+    const [width, height] = resolution.value.split('x').map(Number)
     streamCapture.value = await navigator.mediaDevices.getDisplayMedia({
       video: {
         // aspectRatio: 1.6,
-        frameRate: 15,
-        width: 3840,
-        height: 2160,
+        frameRate: frameRate.value,
+        width,
+        height,
         // @ts-expect-error missing types
         cursor: 'motion',
         resizeMode: 'crop-and-scale',
       },
+      selfBrowserSurface: 'include',
     })
     streamCapture.value.addEventListener('inactive', stopRecording)
 
@@ -179,17 +190,18 @@ export function useRecording() {
     )
 
     recorderSlides.value.startRecording()
+    recordingStartTime = Date.now()
     recording.value = true
   }
 
   async function stopRecording() {
     recording.value = false
+    const duration = Date.now() - recordingStartTime
+
     recorderCamera.value?.stopRecording(() => {
       if (recordCamera.value) {
         const blob = recorderCamera.value!.getBlob()
-        const url = URL.createObjectURL(blob)
-        download(getFilename('camera', config.mimeType), url)
-        window.URL.revokeObjectURL(url)
+        downloadBlob(blob, duration, getFilename('camera', config.mimeType))
       }
       recorderCamera.value = undefined
       if (!showAvatar.value)
@@ -197,13 +209,20 @@ export function useRecording() {
     })
     recorderSlides.value?.stopRecording(() => {
       const blob = recorderSlides.value!.getBlob()
-      const url = URL.createObjectURL(blob)
-      download(getFilename('screen', config.mimeType), url)
-      window.URL.revokeObjectURL(url)
+      downloadBlob(blob, duration, getFilename('screen', config.mimeType))
       closeStream(streamCapture)
-      closeStream(streamSlides)
+      // `streamSlides` only borrows its tracks from `streamCapture` and `streamCamera`,
+      // stopping them here would also end the mic still used by the camera stream
+      streamSlides.value = undefined
       recorderSlides.value = undefined
     })
+  }
+
+  async function downloadBlob(blob: Blob, duration: number, filename: string) {
+    const fixedBlob = await fixWebmDuration(blob, duration, { logger: false })
+    const url = URL.createObjectURL(fixedBlob)
+    download(filename, url)
+    window.URL.revokeObjectURL(url)
   }
 
   function closeStream(stream: Ref<MediaStream | undefined>) {

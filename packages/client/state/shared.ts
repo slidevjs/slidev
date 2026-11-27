@@ -1,3 +1,4 @@
+// @ts-expect-error - virtual module
 import serverState from 'server-reactive:nav'
 import { createSyncState } from './syncState'
 
@@ -6,14 +7,21 @@ export interface SharedState {
   clicks: number
   clicksTotal: number
 
+  timer: {
+    status: 'stopped' | 'running' | 'paused'
+    slides: Record<number, {
+      start?: number
+      end?: number
+    }>
+    startedAt: number
+    pausedAt: number
+  }
+
   cursor?: {
     x: number
     y: number
+    style?: 'cursor' | 'laser'
   }
-
-  viewerPage: number
-  viewerClicks: number
-  viewerClicksTotal: number
 
   lastUpdate?: {
     id: string
@@ -22,18 +30,22 @@ export interface SharedState {
   }
 }
 
-const { init, onPatch, patch, state } = createSyncState<SharedState>(serverState, {
+const { init, onPatch, onUpdate, patch, state } = createSyncState<SharedState>(serverState, {
   page: 1,
   clicks: 0,
   clicksTotal: 0,
-  viewerPage: 1,
-  viewerClicks: 0,
-  viewerClicksTotal: 0,
+  timer: {
+    status: 'stopped',
+    slides: {},
+    startedAt: 0,
+    pausedAt: 0,
+  },
 })
 
 export {
   init as initSharedState,
   onPatch,
+  onUpdate as onSharedUpdate,
   patch,
   state as sharedState,
 }
