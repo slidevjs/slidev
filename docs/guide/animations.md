@@ -73,7 +73,7 @@ For the components, you can use the `hide` prop to achieve the same effect:
 ```
 
 An item will become visible each time you click "next".
-It accepts a `depth` prop for nested list:
+It accepts a `depth` prop for a nested list that is the only child:
 
 ```md
 <v-clicks depth="2">
@@ -84,6 +84,38 @@ It accepts a `depth` prop for nested list:
 - Item 2
   - Item 2.1
   - Item 2.2
+
+</v-clicks>
+```
+
+Paragraphs, lists, and tables are often mixed. Without an extra prop, `<v-clicks>` treats each list and each table as one block, so every item in that list appears together. `lists` and `tables` step into those blocks. The number is how many levels deep to reveal.
+
+- `lists="1"` reveals each top-level item. Nested items stay with their parent.
+- `lists="2"` also reveals nested items, one level further for each extra number.
+- `tables="1"` reveals each body row. The header stays visible.
+- `tables="2"` reveals each body cell.
+
+```md
+<v-clicks lists="2" tables="1">
+
+Here are the first priority items:
+
+- Item 1
+- Item 2
+- Item 3
+
+And others group of items:
+
+- Medium:
+  - Sub item 1
+  - Sub item 2
+- Minor:
+  - Sub item 3
+
+| Name  | Priority |
+| ----- | -------- |
+| Alpha | High     |
+| Beta  | Low      |
 
 </v-clicks>
 ```

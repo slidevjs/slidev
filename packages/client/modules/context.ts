@@ -1,4 +1,4 @@
-import type { ComputedRef } from '@vue/reactivity'
+import type { ComputedRef } from 'vue'
 import type { SlidevContextNav } from '../composables/useNav'
 import type { configs } from '../env'
 
