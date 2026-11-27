@@ -36,8 +36,18 @@ export async function useMarkdownItPlugins(
     md.use(MarkdownItKatex, katexOptions)
   md.use(MarkdownItVDrag, markdownTransformMap)
   md.use(MarkdownItSlotSugar)
-  if (config.comark || config.mdc)
+  if (config.comark || config.mdc) {
     md.use(MarkdownItComark)
+    const inlineRuler = (md.inline as any).ruler
+    const originalInlineSpan = inlineRuler.__rules__?.find((r: any) => r.name === 'mdc_inline_span')?.fn
+    if (originalInlineSpan) {
+      inlineRuler.at('mdc_inline_span', (state: any, silent: boolean) => {
+        if (/^\s*\[[\sx]\]\s/i.test(state.src.slice(state.pos)))
+          return false
+        return originalInlineSpan(state, silent)
+      })
+    }
+  }
   md.use(MarkdownItStyleScoped)
   md.use(MarkdownItGitHubAlerts as any)
 }
