@@ -131,7 +131,13 @@ async function isolate(page: Page, id: number, hideDescendants: boolean, hideDec
       }
       return true
     },
-    { id, idAttribute: ID_ATTRIBUTE, restoreAttribute: RESTORE_ATTRIBUTE, hideDescendants, hideDecoration },
+    {
+      id,
+      idAttribute: ID_ATTRIBUTE,
+      restoreAttribute: RESTORE_ATTRIBUTE,
+      hideDescendants,
+      hideDecoration,
+    },
   )
 }
 
@@ -247,7 +253,12 @@ export async function shootClip(page: Page, clip: Rect): Promise<string | undefi
       return window.scrollY
     }, Math.max(0, y - 1))
     const buffer = await page.screenshot({
-      clip: { x, y: y - scrollY, width: w, height: h },
+      clip: {
+        x,
+        y: y - scrollY,
+        width: w,
+        height: h,
+      },
       omitBackground: true,
       timeout: 10_000,
     })
@@ -272,8 +283,11 @@ export function isUsableDataUri(url: string): boolean {
  * the in-page route, `canvas.toDataURL()`, throws on a cross-origin image.
  */
 async function fetchImage(page: Page, url: string): Promise<string | undefined> {
-  if (url.startsWith('data:'))
-    return isUsableDataUri(url) ? url : undefined
+  if (url.startsWith('data:')) {
+    return isUsableDataUri(url)
+      ? url
+      : undefined
+  }
   try {
     const response = await page.context().request.get(url, { timeout: 15_000 })
     if (!response.ok())
@@ -400,7 +414,9 @@ export async function capture(
       await fulfil(request)
 
     for (const [sourceId, nodes] of imagesBySource) {
-      let data = nodes[0].screenshot?.required ? undefined : await fetchImage(page, nodes[0].data)
+      let data = nodes[0].screenshot?.required
+        ? undefined
+        : await fetchImage(page, nodes[0].data)
       if (data) {
         report.imagesFetched++
       }

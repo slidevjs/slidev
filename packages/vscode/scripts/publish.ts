@@ -56,7 +56,14 @@ async function publish() {
     async () => {
       await x(
         'npx',
-        ['@vscode/vsce', 'publish', '--no-dependencies', '--skip-duplicate', '-p', process.env.VSCE_TOKEN!],
+        [
+          '@vscode/vsce',
+          'publish',
+          '--no-dependencies',
+          '--skip-duplicate',
+          '-p',
+          process.env.VSCE_TOKEN!,
+        ],
         options,
       )
     },
@@ -67,7 +74,14 @@ async function publish() {
     async () => {
       await x(
         'npx',
-        ['ovsx', 'publish', '--no-dependencies', '--skip-duplicate', '-p', process.env.OVSX_TOKEN!],
+        [
+          'ovsx',
+          'publish',
+          '--no-dependencies',
+          '--skip-duplicate',
+          '-p',
+          process.env.OVSX_TOKEN!,
+        ],
         options,
       )
     },
