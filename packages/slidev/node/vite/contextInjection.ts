@@ -13,7 +13,9 @@ export function createContextInjectionPlugin(): Plugin {
   return {
     name: 'slidev:context-injection',
     transform: {
-      filter: { id: { include: RE_VUE_FILE, exclude: RE_CLIENT_FILE } },
+      filter: {
+        id: { include: RE_VUE_FILE, exclude: RE_CLIENT_FILE },
+      },
       async handler(code, id) {
         if (!RE_VUE_FILE.test(id) || RE_CLIENT_FILE.test(id))
           return
