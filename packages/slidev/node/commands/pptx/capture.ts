@@ -120,7 +120,12 @@ async function isolate(page: Page, id: number, hideDescendants: boolean): Promis
       }
       return true
     },
-    { id, idAttribute: ID_ATTRIBUTE, restoreAttribute: RESTORE_ATTRIBUTE, hideDescendants },
+    {
+      id,
+      idAttribute: ID_ATTRIBUTE,
+      restoreAttribute: RESTORE_ATTRIBUTE,
+      hideDescendants,
+    },
   )
 }
 
@@ -180,7 +185,12 @@ async function shoot(page: Page, selector: string): Promise<string | undefined> 
       return undefined
     // `boundingBox()` is viewport-relative; `shootClip` wants document coordinates.
     const scrollY = await page.evaluate(() => window.scrollY)
-    return await shootClip(page, { x: box.x, y: box.y + scrollY, w: box.width, h: box.height })
+    return await shootClip(page, {
+      x: box.x,
+      y: box.y + scrollY,
+      w: box.width,
+      h: box.height,
+    })
   }
   catch {
     return undefined
@@ -227,7 +237,12 @@ export async function shootClip(page: Page, clip: Rect): Promise<string | undefi
       return window.scrollY
     }, Math.max(0, y - 1))
     const buffer = await page.screenshot({
-      clip: { x, y: y - scrollY, width: w, height: h },
+      clip: {
+        x,
+        y: y - scrollY,
+        width: w,
+        height: h,
+      },
       omitBackground: true,
       timeout: 10_000,
     })
@@ -252,8 +267,11 @@ export function isUsableDataUri(url: string): boolean {
  * the in-page route, `canvas.toDataURL()`, throws on a cross-origin image.
  */
 async function fetchImage(page: Page, url: string): Promise<string | undefined> {
-  if (url.startsWith('data:'))
-    return isUsableDataUri(url) ? url : undefined
+  if (url.startsWith('data:')) {
+    return isUsableDataUri(url)
+      ? url
+      : undefined
+  }
   try {
     const response = await page.context().request.get(url, { timeout: 15_000 })
     if (!response.ok())

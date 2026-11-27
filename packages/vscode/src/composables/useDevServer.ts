@@ -43,7 +43,9 @@ export function useDevServer(project: SlidevProject) {
       const args = [
         JSON.stringify(basename(project.entry)),
         `--port ${p}`,
-        env.remoteName != null ? '--remote' : '',
+        env.remoteName != null
+          ? '--remote'
+          : '',
       ].filter(Boolean).join(' ')
       // eslint-disable-next-line no-template-curly-in-string
       terminal.value.sendText(config['dev-command'].replaceAll('${args}', args).replaceAll('${port}', `${p}`))

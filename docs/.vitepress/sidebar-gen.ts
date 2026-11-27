@@ -99,28 +99,36 @@ export async function getSidebarObject() {
       if (typeof path === 'string') {
         const match = findParsed(path)
         if (match?.type === 'features') {
-          return [{
-            text: `✨ ${match.item.title}`,
-            link: `/${path}`,
-          }]
+          return [
+            {
+              text: `✨ ${match.item.title}`,
+              link: `/${path}`,
+            },
+          ]
         }
         if (match?.type === 'guide') {
-          return [{
-            text: `📖 ${match.item.title}`,
-            link: `/${path}`,
-          }]
+          return [
+            {
+              text: `📖 ${match.item.title}`,
+              link: `/${path}`,
+            },
+          ]
         }
         if (match?.type === 'custom') {
-          return [{
-            text: `🛠️ ${match.item.title}`,
-            link: `/${path}`,
-          }]
+          return [
+            {
+              text: `🛠️ ${match.item.title}`,
+              link: `/${path}`,
+            },
+          ]
         }
         console.warn(`Dependent file not found: ${path}`)
-        return [{
-          text: path,
-          link: `/${path}`,
-        }]
+        return [
+          {
+            text: path,
+            link: `/${path}`,
+          },
+        ]
       }
       else {
         return Object.entries(path).map(([text, link]) => ({

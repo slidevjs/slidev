@@ -100,7 +100,9 @@ export async function insertSlide(data: LoadedSlidevData, options: InsertSlideOp
 
   const frontmatter = options.frontmatter ?? {}
   const hasFrontmatter = Object.keys(frontmatter).length > 0
-  const doc = hasFrontmatter ? new YAML.Document(frontmatter) : undefined
+  const doc = hasFrontmatter
+    ? new YAML.Document(frontmatter)
+    : undefined
 
   const source: SourceSlideInfo = {
     filepath: anchor.source.filepath,
@@ -198,7 +200,14 @@ export async function moveSlide(data: LoadedSlidevData, options: MoveSlideOption
   const anchorIdx = md.slides.indexOf(anchor.source)
   if (anchorIdx < 0)
     throw new Error(`Slide ${anchorNo} is out of sync with its source file. Try again.`)
-  md.slides.splice(before != null ? anchorIdx : anchorIdx + 1, 0, slide.source)
+  md.slides.splice(before != null
+    ? anchorIdx
+    : anchorIdx + 1, 0, slide.source)
   const fileContent = await parser.save(md)
-  return { moved: slide, anchor, filepath: md.filepath, fileContent }
+  return {
+    moved: slide,
+    anchor,
+    filepath: md.filepath,
+    fileContent,
+  }
 }

@@ -16,7 +16,13 @@ import { buildPptx } from './build'
 const BLACK = { r: 0, g: 0, b: 0, a: 1 }
 
 function slide(nodes: SlideIr['nodes']): SlideIr {
-  return { no: 1, clickIndex: 0, containerId: '001-01', size: { w: 980, h: 552 }, nodes }
+  return {
+    no: 1,
+    clickIndex: 0,
+    containerId: '001-01',
+    size: { w: 980, h: 552 },
+    nodes,
+  }
 }
 
 async function slideXml(ir: SlideIr[]): Promise<string> {
@@ -41,7 +47,11 @@ function textNode(runs: SlideIr['nodes'][number] extends never ? never : any): a
 describe('unit conversions', () => {
   it('writes font size in points, not pixels', async () => {
     const xml = await slideXml([
-      slide([textNode([{ text: 'Hello', fontSize: 32, fontFamily: 'Arial' }])]),
+      slide([
+        textNode([
+          { text: 'Hello', fontSize: 32, fontFamily: 'Arial' },
+        ]),
+      ]),
     ])
     // 32 CSS px at 96 px/in is 24 pt, and OOXML stores hundredths of a point.
     // Getting this wrong makes every deck a third too large.
@@ -50,7 +60,16 @@ describe('unit conversions', () => {
 
   it('writes letter spacing in points and disables kerning', async () => {
     const xml = await slideXml([
-      slide([textNode([{ text: 'WIDE', fontSize: 16, fontFamily: 'Arial', letterSpacing: 2 }])]),
+      slide([
+        textNode([
+          {
+            text: 'WIDE',
+            fontSize: 16,
+            fontFamily: 'Arial',
+            letterSpacing: 2,
+          },
+        ]),
+      ]),
     ])
     // 2px -> 1.5pt -> spc is hundredths of a point.
     expect(xml).toContain('spc="150"')
@@ -59,12 +78,14 @@ describe('unit conversions', () => {
 
   it('places geometry at exactly 9525 EMU per pixel', async () => {
     const xml = await slideXml([
-      slide([{
-        kind: 'box',
-        sourceId: 1,
-        rect: { x: 100, y: 50, w: 200, h: 25 },
-        fill: BLACK,
-      }]),
+      slide([
+        {
+          kind: 'box',
+          sourceId: 1,
+          rect: { x: 100, y: 50, w: 200, h: 25 },
+          fill: BLACK,
+        },
+      ]),
     ])
     // Integer EMU throughout, so there is no rounding drift to chase later.
     expect(xml).toContain('x="952500"') // 100 * 9525
@@ -75,13 +96,15 @@ describe('unit conversions', () => {
 
   it('writes a corner radius that is not zero', async () => {
     const xml = await slideXml([
-      slide([{
-        kind: 'box',
-        sourceId: 1,
-        rect: { x: 0, y: 0, w: 200, h: 100 },
-        fill: BLACK,
-        radius: 12,
-      }]),
+      slide([
+        {
+          kind: 'box',
+          sourceId: 1,
+          rect: { x: 0, y: 0, w: 200, h: 100 },
+          fill: BLACK,
+          radius: 12,
+        },
+      ]),
     ])
     expect(xml).toContain('prst="roundRect"')
     // OOXML states the corner adjustment as hundred-thousandths of the shorter
@@ -98,12 +121,14 @@ describe('unit conversions', () => {
 describe('fills and borders', () => {
   it('maps alpha to transparency', async () => {
     const xml = await slideXml([
-      slide([{
-        kind: 'box',
-        sourceId: 1,
-        rect: { x: 0, y: 0, w: 10, h: 10 },
-        fill: { r: 255, g: 0, b: 0, a: 0.6 },
-      }]),
+      slide([
+        {
+          kind: 'box',
+          sourceId: 1,
+          rect: { x: 0, y: 0, w: 10, h: 10 },
+          fill: { r: 255, g: 0, b: 0, a: 0.6 },
+        },
+      ]),
     ])
     // 0.6 opacity is 40% transparent, and OOXML alpha is the inverse again,
     // in thousandths of a percent.
@@ -112,7 +137,14 @@ describe('fills and borders', () => {
 
   it('emits no alpha element for an opaque fill', async () => {
     const xml = await slideXml([
-      slide([{ kind: 'box', sourceId: 1, rect: { x: 0, y: 0, w: 10, h: 10 }, fill: BLACK }]),
+      slide([
+        {
+          kind: 'box',
+          sourceId: 1,
+          rect: { x: 0, y: 0, w: 10, h: 10 },
+          fill: BLACK,
+        },
+      ]),
     ])
     expect(xml).not.toContain('<a:alpha')
   })
@@ -120,12 +152,14 @@ describe('fills and borders', () => {
   it('uses one uniform line when all four borders match', async () => {
     const border = { width: 2, color: BLACK, style: 'solid' as const }
     const xml = await slideXml([
-      slide([{
-        kind: 'box',
-        sourceId: 1,
-        rect: { x: 0, y: 0, w: 100, h: 100 },
-        borders: [border, border, border, border],
-      }]),
+      slide([
+        {
+          kind: 'box',
+          sourceId: 1,
+          rect: { x: 0, y: 0, w: 100, h: 100 },
+          borders: [border, border, border, border],
+        },
+      ]),
     ])
     // One shape, not five.
     expect(xml.match(/<p:sp>/g)).toHaveLength(1)
@@ -134,12 +168,14 @@ describe('fills and borders', () => {
   it('splits differing borders into one rectangle per side', async () => {
     const thick = { width: 4, color: BLACK, style: 'solid' as const }
     const xml = await slideXml([
-      slide([{
-        kind: 'box',
-        sourceId: 1,
-        rect: { x: 0, y: 0, w: 100, h: 100 },
-        borders: [thick, undefined, undefined, undefined],
-      }]),
+      slide([
+        {
+          kind: 'box',
+          sourceId: 1,
+          rect: { x: 0, y: 0, w: 100, h: 100 },
+          borders: [thick, undefined, undefined, undefined],
+        },
+      ]),
     ])
     // Just the edge. pptxgenjs gives a shape a single uniform border, so a
     // left-accent bar or a single top rule has to be its own rectangle, and
@@ -154,18 +190,32 @@ describe('fills and borders', () => {
 describe('text', () => {
   it('emits a real line break for a soft break, not a vertical tab', async () => {
     const xml = await slideXml([
-      slide([textNode([
-        { text: 'first', fontSize: 16, fontFamily: 'Arial' },
-        { text: 'second', fontSize: 16, fontFamily: 'Arial', breakBefore: true },
-      ])]),
+      slide([
+        textNode([
+          { text: 'first', fontSize: 16, fontFamily: 'Arial' },
+          {
+            text: 'second',
+            fontSize: 16,
+            fontFamily: 'Arial',
+            breakBefore: true,
+          },
+        ]),
+      ]),
     ])
     expect(xml).toContain('<a:br/>')
     expect(xml).not.toContain('\v')
   })
 
   it('keeps the midpoint of a centered line when adding slack', async () => {
-    const centered = { ...textNode([{ text: 'x', fontSize: 16, fontFamily: 'Arial' }]), align: 'center' }
-    const xml = await slideXml([slide([centered])])
+    const centered = {
+      ...textNode([
+        { text: 'x', fontSize: 16, fontFamily: 'Arial' },
+      ]),
+      align: 'center',
+    }
+    const xml = await slideXml([
+      slide([centered]),
+    ])
     // The box is widened by 12px so PowerPoint's wider metrics do not force a
     // wrap, so its origin moves left by half of that to hold the center still.
     expect(xml).toContain('x="-57150"') // -6 * 9525
@@ -173,11 +223,24 @@ describe('text', () => {
   })
 
   it('turns off wrapping for a single line and on for several', async () => {
-    const one = await slideXml([slide([textNode([{ text: 'x', fontSize: 16, fontFamily: 'Arial' }])])])
+    const one = await slideXml([
+      slide([
+        textNode([
+          { text: 'x', fontSize: 16, fontFamily: 'Arial' },
+        ]),
+      ]),
+    ])
     expect(one).toContain('wrap="none"')
 
     const many = await slideXml([
-      slide([{ ...textNode([{ text: 'x', fontSize: 16, fontFamily: 'Arial' }]), lineCount: 3 }]),
+      slide([
+        {
+          ...textNode([
+            { text: 'x', fontSize: 16, fontFamily: 'Arial' },
+          ]),
+          lineCount: 3,
+        },
+      ]),
     ])
     expect(many).not.toContain('wrap="none"')
   })
@@ -187,7 +250,12 @@ describe('slide assembly', () => {
   it('writes notes into the notes slide', async () => {
     const buffer = await buildPptx(
       PptxGenJS,
-      [{ ...slide([]), note: 'Say this part out loud.' }],
+      [
+        {
+          ...slide([]),
+          note: 'Say this part out loud.',
+        },
+      ],
       { width: 980, height: 552 },
     )
     const zip = await JSZip.loadAsync(buffer)
@@ -197,11 +265,20 @@ describe('slide assembly', () => {
 
   it('falls back to a background picture and draws nothing else', async () => {
     const png = 'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVR42mP8z8BQDwAEhQGAhKmMIQAAAABJRU5ErkJggg=='
-    const xml = await slideXml([{
-      ...slide([{ kind: 'box', sourceId: 1, rect: { x: 0, y: 0, w: 10, h: 10 }, fill: BLACK }]),
-      fallbackPng: png,
-      fallbackReason: 'walker timed out',
-    }])
+    const xml = await slideXml([
+      {
+        ...slide([
+          {
+            kind: 'box',
+            sourceId: 1,
+            rect: { x: 0, y: 0, w: 10, h: 10 },
+            fill: BLACK,
+          },
+        ]),
+        fallbackPng: png,
+        fallbackReason: 'walker timed out',
+      },
+    ])
     // The safety valve has to be exclusive. Drawing the shapes as well would
     // put half-measured content on top of a correct picture of the same thing.
     expect(xml).not.toContain('<p:sp>')
@@ -209,7 +286,11 @@ describe('slide assembly', () => {
 
   it('produces a non-empty shape tree, which the image exporter never does', async () => {
     const xml = await slideXml([
-      slide([textNode([{ text: 'Selectable', fontSize: 16, fontFamily: 'Arial' }])]),
+      slide([
+        textNode([
+          { text: 'Selectable', fontSize: 16, fontFamily: 'Arial' },
+        ]),
+      ]),
     ])
     expect(xml).toContain('<a:t>Selectable</a:t>')
   })
@@ -222,7 +303,16 @@ describe('a hyperlink is not underlined unless CSS says so', () => {
     // `border-bottom`, which is already drawn as its own shape, so the deck
     // came out with two lines under every link.
     const xml = await slideXml([
-      slide([textNode([{ text: 'Documentation', fontSize: 16, fontFamily: 'Arial', link: 'https://sli.dev' }])]),
+      slide([
+        textNode([
+          {
+            text: 'Documentation',
+            fontSize: 16,
+            fontFamily: 'Arial',
+            link: 'https://sli.dev',
+          },
+        ]),
+      ]),
     ])
     expect(xml).toContain('u="none"')
     expect(xml).not.toContain('u="sng"')
@@ -230,7 +320,17 @@ describe('a hyperlink is not underlined unless CSS says so', () => {
 
   it('still underlines a run whose CSS asks for it', async () => {
     const xml = await slideXml([
-      slide([textNode([{ text: 'Documentation', fontSize: 16, fontFamily: 'Arial', link: 'https://sli.dev', underline: true }])]),
+      slide([
+        textNode([
+          {
+            text: 'Documentation',
+            fontSize: 16,
+            fontFamily: 'Arial',
+            link: 'https://sli.dev',
+            underline: true,
+          },
+        ]),
+      ]),
     ])
     expect(xml).toContain('u="sng"')
   })
@@ -244,12 +344,19 @@ describe('a dashed border keeps its dashes', () => {
     // with `border-bottom: 1px dashed`, so every link in a deck came out with
     // a solid bar under it.
     const xml = await slideXml([
-      slide([{
-        kind: 'box',
-        sourceId: 1,
-        rect: { x: 0, y: 0, w: 100, h: 20 },
-        borders: [undefined, undefined, dashed, undefined],
-      }]),
+      slide([
+        {
+          kind: 'box',
+          sourceId: 1,
+          rect: { x: 0, y: 0, w: 100, h: 20 },
+          borders: [
+            undefined,
+            undefined,
+            dashed,
+            undefined,
+          ],
+        },
+      ]),
     ])
     expect(xml).toContain('<a:prstDash val="dash"/>')
     expect(xml).toContain('prst="line"')
@@ -257,12 +364,19 @@ describe('a dashed border keeps its dashes', () => {
 
   it('leaves a solid edge as a filled bar', async () => {
     const xml = await slideXml([
-      slide([{
-        kind: 'box',
-        sourceId: 1,
-        rect: { x: 0, y: 0, w: 100, h: 20 },
-        borders: [undefined, undefined, { width: 1, color: BLACK, style: 'solid' as const }, undefined],
-      }]),
+      slide([
+        {
+          kind: 'box',
+          sourceId: 1,
+          rect: { x: 0, y: 0, w: 100, h: 20 },
+          borders: [
+            undefined,
+            undefined,
+            { width: 1, color: BLACK, style: 'solid' as const },
+            undefined,
+          ],
+        },
+      ]),
     ])
     expect(xml).not.toContain('prst="line"')
   })
@@ -274,17 +388,19 @@ describe('a fill is stated, never inherited', () => {
     // `{ type: 'none' }`, so the explicit-looking version was the one that
     // inherited the default shape style.
     const xml = await slideXml([
-      slide([{
-        kind: 'box',
-        sourceId: 1,
-        rect: { x: 0, y: 0, w: 100, h: 100 },
-        borders: [
-          { width: 1, color: BLACK, style: 'solid' as const },
-          { width: 1, color: BLACK, style: 'solid' as const },
-          { width: 1, color: BLACK, style: 'solid' as const },
-          { width: 1, color: BLACK, style: 'solid' as const },
-        ],
-      }]),
+      slide([
+        {
+          kind: 'box',
+          sourceId: 1,
+          rect: { x: 0, y: 0, w: 100, h: 100 },
+          borders: [
+            { width: 1, color: BLACK, style: 'solid' as const },
+            { width: 1, color: BLACK, style: 'solid' as const },
+            { width: 1, color: BLACK, style: 'solid' as const },
+            { width: 1, color: BLACK, style: 'solid' as const },
+          ],
+        },
+      ]),
     ])
     expect(xml).toContain('<a:noFill/>')
   })

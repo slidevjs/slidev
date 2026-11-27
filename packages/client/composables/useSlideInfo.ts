@@ -41,8 +41,12 @@ export function useSlideInfo(no: number): UseSlideInfo {
         info.value = payload.data
     })
     import.meta.hot?.on('slidev:update-note', (payload) => {
-      if (payload.no === no && info.value && info.value.note?.trim() !== payload.note?.trim())
-        info.value = { ...info.value, ...payload }
+      if (payload.no === no && info.value && info.value.note?.trim() !== payload.note?.trim()) {
+        info.value = {
+          ...info.value,
+          ...payload,
+        }
+      }
     })
   }
 

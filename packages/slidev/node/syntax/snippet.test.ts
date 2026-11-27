@@ -12,10 +12,14 @@ const options = {
   roots: [fixturesRoot],
   data: {
     watchFiles: {},
-    slides: [{
-      index: 0,
-      source: { filepath: path.join(fixturesRoot, 'test.md') },
-    }],
+    slides: [
+      {
+        index: 0,
+        source: {
+          filepath: path.join(fixturesRoot, 'test.md'),
+        },
+      },
+    ],
   },
 } as any
 
@@ -66,13 +70,21 @@ it('not transform in code block', async () => {
 })
 
 it('resolves a snippet path that stays inside the allowed roots', () => {
-  const slide = { source: { filepath: path.join(fixturesRoot, 'test.md') } } as any
+  const slide = {
+    source: {
+      filepath: path.join(fixturesRoot, 'test.md'),
+    },
+  } as any
   const result = resolveSnippetImport('<<< @/snippets/snippet.ts#snippet', fixturesRoot, slide, [fixturesRoot])
   expect(result?.src).toBe(path.join(fixturesRoot, 'snippets/snippet.ts').replaceAll('\\', '/'))
 })
 
 it('throws when a snippet path escapes the allowed roots', () => {
-  const slide = { source: { filepath: path.join(fixturesRoot, 'test.md') } } as any
+  const slide = {
+    source: {
+      filepath: path.join(fixturesRoot, 'test.md'),
+    },
+  } as any
   expect(() => resolveSnippetImport('<<< ../../../../../outside.ts', fixturesRoot, slide, [fixturesRoot]))
     .toThrow(/escapes the project root/)
 })
@@ -91,4 +103,30 @@ it('whitelists a {monaco-write} snippet under the path the writer resolves', asy
   // pathe normalises separators, so this is the writer's path.resolve verbatim.
   expect(path.resolve(fixturesRoot, [...monacoWriterWhitelist][0]))
     .toBe(path.join(fixturesRoot, 'snippets/snippet.ts'))
+})
+
+it('registers the snippet in the current watchFiles after the data is reloaded', async () => {
+  const data = {
+    watchFiles: {} as Record<string, Set<number>>,
+    slides: options.data.slides,
+  }
+  const md = MarkdownExit()
+  md.use(MarkdownItSnippet, { ...options, data })
+
+  // The dev server swaps in fresh objects when it reloads the slides.
+  data.watchFiles = {}
+  data.slides = [
+    {
+      index: 0,
+      source: {
+        filepath: path.join(fixturesRoot, 'test.md'),
+      },
+    },
+  ]
+
+  await md.renderAsync('<<< @/snippets/snippet.ts', { id: 'slides.md__slidev_1.md' })
+
+  expect(data.watchFiles).toEqual({
+    [path.join(fixturesRoot, 'snippets/snippet.ts')]: new Set([0]),
+  })
 })
