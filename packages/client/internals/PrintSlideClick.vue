@@ -1,8 +1,8 @@
 <script setup lang="ts">
 import type { SlidevContextNav } from '../composables/useNav'
-import { GlobalBottom, GlobalTop } from '#slidev/global-layers'
 import { provideLocal } from '@vueuse/core'
 import { computed, reactive, shallowRef, useTemplateRef } from 'vue'
+import { GlobalBottom, GlobalTop } from '#slidev/global-layers'
 import { injectionSlideElement, injectionSlidevContext } from '../constants'
 import { configs, slideHeight, slideWidth } from '../env'
 import { getSlideClass } from '../utils'
@@ -62,5 +62,10 @@ provideLocal(injectionSlideElement, useTemplateRef('slide-element'))
 <style scoped lang="postcss">
 .print-slide-container {
   @apply relative overflow-hidden break-after-page translate-0 bg-main;
+}
+
+.print-slide-container > .slidev-page {
+  /* Keep the unscaled slide box from being split across PDF pages. */
+  contain: size;
 }
 </style>

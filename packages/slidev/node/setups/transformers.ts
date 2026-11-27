@@ -8,6 +8,7 @@ export default async function setupTransformers(roots: string[]) {
     preCodeblock: [],
     postCodeblock: [],
     post: [],
+    codeblocks: [],
   }
   for (const r of [...returns].reverse()) {
     if (r.pre)
@@ -20,6 +21,8 @@ export default async function setupTransformers(roots: string[]) {
       result.postCodeblock.push(...r.postCodeblock)
     if (r.post)
       result.post.push(...r.post)
+    if (r.codeblocks)
+      result.codeblocks.push(...r.codeblocks)
   }
   return result
 }

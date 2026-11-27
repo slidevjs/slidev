@@ -61,6 +61,7 @@ const builtinIcons: Record<string, string> = {
   '.yml': 'i-vscode-icons:file-type-light-yaml',
   '.yaml': 'i-vscode-icons:file-type-light-yaml',
   '.php': 'i-vscode-icons:file-type-php',
+  '.svg': 'i-vscode-icons:file-type-svg',
 }
 
 function matchIcon(title: string) {
@@ -81,5 +82,5 @@ function matchIcon(title: string) {
 </script>
 
 <template>
-  <div v-if="matchIcon(title)" :class="`${matchIcon(title)} w-3.5 h-3.5 relative`" />
+  <div v-if="matchIcon(title)" class="w-3.5 h-3.5 relative" :class="matchIcon(title)" />
 </template>

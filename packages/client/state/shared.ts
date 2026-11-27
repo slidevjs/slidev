@@ -7,9 +7,20 @@ export interface SharedState {
   clicks: number
   clicksTotal: number
 
+  timer: {
+    status: 'stopped' | 'running' | 'paused'
+    slides: Record<number, {
+      start?: number
+      end?: number
+    }>
+    startedAt: number
+    pausedAt: number
+  }
+
   cursor?: {
     x: number
     y: number
+    style?: 'cursor' | 'laser'
   }
 
   lastUpdate?: {
@@ -23,6 +34,12 @@ const { init, onPatch, onUpdate, patch, state } = createSyncState<SharedState>(s
   page: 1,
   clicks: 0,
   clicksTotal: 0,
+  timer: {
+    status: 'stopped',
+    slides: {},
+    startedAt: 0,
+    pausedAt: 0,
+  },
 })
 
 export {

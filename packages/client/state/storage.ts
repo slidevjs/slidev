@@ -1,6 +1,6 @@
 import type { DragElementState } from '../composables/useDragElements'
 import { breakpointsTailwind, isClient, useActiveElement, useBreakpoints, useFullscreen, useLocalStorage, useMagicKeys, useToggle, useWindowSize } from '@vueuse/core'
-import { computed, ref, shallowRef } from 'vue'
+import { computed, reactive, ref, shallowRef } from 'vue'
 import { slideAspect } from '../env'
 
 export const showRecordingDialog = ref(false)
@@ -16,6 +16,23 @@ export const hmrSkipTransition = ref(false)
 export const disableTransition = ref(false)
 
 export const shortcutsEnabled = ref(true)
+
+// Use a locking mechanism to support multiple simultaneous locks
+// and avoid race conditions. Race conditions may occur, for example,
+// when locking shortcuts on editor focus and moving from one editor
+// to another, as blur events can be triggered after focus.
+const shortcutsLocks = reactive(new Set<symbol>())
+
+export const shortcutsLocked = computed(() => shortcutsLocks.size > 0)
+
+export function lockShortcuts() {
+  const lock = Symbol('shortcuts lock')
+  shortcutsLocks.add(lock)
+  return () => {
+    shortcutsLocks.delete(lock)
+  }
+}
+
 export const breakpoints = useBreakpoints({
   xs: 460,
   ...breakpointsTailwind,
@@ -38,10 +55,21 @@ export const skipExportPdfTip = useLocalStorage('slidev-skip-export-pdf-tip', fa
 export const captureDelay = useLocalStorage('slidev-export-capture-delay', 400, { listenToStorageChanges: false })
 
 export const showPresenterCursor = useLocalStorage('slidev-presenter-cursor', true, { listenToStorageChanges: false })
+
+export const cursorStyle = useLocalStorage<'cursor' | 'laser'>('slidev-cursor-style', 'cursor', { listenToStorageChanges: false })
+
+export function togglePresenterCursor() {
+  showPresenterCursor.value = !showPresenterCursor.value
+}
+
 export const showEditor = useLocalStorage('slidev-show-editor', false, { listenToStorageChanges: false })
 export const isEditorVertical = useLocalStorage('slidev-editor-vertical', false, { listenToStorageChanges: false })
-export const editorWidth = useLocalStorage('slidev-editor-width', isClient ? window.innerWidth * 0.4 : 318, { listenToStorageChanges: false })
-export const editorHeight = useLocalStorage('slidev-editor-height', isClient ? window.innerHeight * 0.4 : 300, { listenToStorageChanges: false })
+export const editorWidth = useLocalStorage('slidev-editor-width', isClient
+  ? window.innerWidth * 0.4
+  : 318, { listenToStorageChanges: false })
+export const editorHeight = useLocalStorage('slidev-editor-height', isClient
+  ? window.innerHeight * 0.4
+  : 300, { listenToStorageChanges: false })
 
 export const activeDragElement = shallowRef<DragElementState | null>(null)
 

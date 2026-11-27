@@ -1,10 +1,9 @@
 import type { ResolvedSlidevOptions, SlidevConfig, SlidevData } from '@slidev/types'
 import type { LogLevel, ViteDevServer } from 'vite'
 import type { Argv } from 'yargs'
-import { exec } from 'node:child_process'
+import { execFile } from 'node:child_process'
 import fs from 'node:fs/promises'
 import os from 'node:os'
-import path from 'node:path'
 import process from 'node:process'
 import * as readline from 'node:readline'
 import { verifyConfig } from '@slidev/parser'
@@ -12,15 +11,18 @@ import { blue, bold, cyan, cyanBright, dim, gray, green, underline, yellow } fro
 import equal from 'fast-deep-equal'
 import { getPort } from 'get-port-please'
 import openBrowser from 'open'
+import path from 'pathe'
 import yargs from 'yargs'
 import { version } from '../package.json'
 import { createServer } from './commands/serve'
 import { getThemeMeta, resolveTheme } from './integrations/themes'
 import { resolveOptions } from './options'
 import { parser } from './parser'
-import { getRoots, isInstalledGlobally, resolveEntry } from './resolver'
+import { isInstalledGlobally, resolveEntry } from './resolver'
 import setupPreparser from './setups/preparser'
 import { updateFrontmatterPatch } from './utils'
+
+const RE_NODE_MODULES_OR_GIT = /node_modules|\.git/
 
 const CONFIG_RESTART_FIELDS: (keyof SlidevConfig)[] = [
   'monaco',
@@ -33,22 +35,16 @@ const CONFIG_RESTART_FIELDS: (keyof SlidevConfig)[] = [
   'seoMeta',
 ]
 
-/**
- * Files that triggers a restart when added or removed
- */
-const FILES_CREATE_RESTART = [
-  'global-bottom.vue',
-  'global-top.vue',
-  'uno.config.js',
-  'uno.config.ts',
-  'unocss.config.js',
-  'unocss.config.ts',
-]
-
 const FILES_CHANGE_RESTART = [
   'setup/shiki.ts',
   'setup/katex.ts',
   'setup/preparser.ts',
+  'setup/transformers.ts',
+  'setup/unocss.ts',
+  'setup/vite-plugins.ts',
+  'uno.config.ts',
+  'unocss.config.ts',
+  'vite.config.{js,ts,mjs,mts}',
 ]
 
 setupPreparser()
@@ -122,8 +118,10 @@ cli.command(
     let lastRemoteUrl: string | undefined
 
     let restartTimer: ReturnType<typeof setTimeout> | undefined
-    function restartServer() {
-      clearTimeout(restartTimer!)
+    async function restartServer() {
+      await server?.close()
+      server = undefined
+      clearTimeout(restartTimer)
       restartTimer = setTimeout(() => {
         console.log(yellow('\n  restarting...\n'))
         initServer()
@@ -131,10 +129,10 @@ cli.command(
     }
 
     async function initServer() {
-      if (server)
-        await server.close()
       const options = await resolveOptions({ entry, remote, theme, inspect, base }, 'dev')
-      const host = remote !== undefined ? bind : 'localhost'
+      const host = remote !== undefined
+        ? bind
+        : 'localhost'
       port = userPort || await getPort({
         port: 3030,
         random: false,
@@ -147,10 +145,15 @@ cli.command(
           server: {
             port,
             strictPort: true,
-            open,
             host,
             // @ts-expect-error Vite <= 4
             force,
+            // Allow Cloudflare Quick Tunnel domains when tunneling is enabled
+            ...(tunnel && remote != null
+              ? {
+                  allowedHosts: ['.trycloudflare.com'],
+                }
+              : {}),
           },
           optimizeDeps: {
             // Vite 5
@@ -162,7 +165,7 @@ cli.command(
         {
           async loadData(loadedSource) {
             const { data: oldData, entry } = options
-            const loaded = await parser.load(options.userRoot, entry, loadedSource, 'dev')
+            const loaded = await parser.load(options, entry, loadedSource, 'dev')
 
             const themeRaw = theme || loaded.headmatter.theme as string || 'default'
             if (options.themeRaw !== themeRaw) {
@@ -171,7 +174,9 @@ cli.command(
               return false
             }
             // Because themeRaw is not changed, we don't resolve it again
-            const themeMeta = options.themeRoots[0] ? await getThemeMeta(themeRaw, options.themeRoots[0]) : undefined
+            const themeMeta = options.themeRoots[0]
+              ? await getThemeMeta(themeRaw, options.themeRoots[0])
+              : undefined
             const newData: SlidevData = {
               ...loaded,
               themeMeta,
@@ -207,9 +212,32 @@ cli.command(
 
       let publicIp: string | undefined
       if (remote)
-        publicIp = await import('public-ip').then(r => r.publicIpv4())
+        publicIp = await resolvePublicIp()
 
       lastRemoteUrl = printInfo(options, port, base, remote, tunnelUrl, publicIp)
+      if (open)
+        await openSlidevInBrowser()
+
+      return options
+    }
+
+    async function openSlidevInBrowser() {
+      const url = `http://localhost:${port}${base}`
+      try {
+        await openBrowser(url)
+      }
+      catch {
+        console.log(yellow(`\n  Could not open the browser automatically. Please open ${url} in your browser.\n`))
+      }
+    }
+
+    async function resolvePublicIp() {
+      try {
+        return await import('public-ip').then(r => r.publicIpv4())
+      }
+      catch {
+        console.log(yellow('\n  Could not determine the public IP address.\n'))
+      }
     }
 
     async function openTunnel(port: number) {
@@ -233,14 +261,15 @@ cli.command(
         name: 'o',
         fullname: 'open',
         action() {
-          openBrowser(`http://localhost:${port}${base}`)
+          openSlidevInBrowser()
         },
       },
       {
         name: 'e',
         fullname: 'edit',
         action() {
-          exec(`code "${entry}"`)
+          const editor = process.env.EDITOR || 'code'
+          execFile(editor, [entry])
         },
       },
       {
@@ -275,6 +304,8 @@ cli.command(
     ]
 
     function bindShortcut() {
+      if (!process.stdin.isTTY)
+        return
       process.stdin.resume()
       process.stdin.setEncoding('utf8')
       readline.emitKeypressEvents(process.stdin)
@@ -299,22 +330,20 @@ cli.command(
       }
 
       process.stdin.on('keypress', onKeyPress)
-      server?.httpServer?.on('close', () => {
-        process.stdin.off('keypress', onKeyPress)
-      })
     }
 
-    initServer()
+    const { roots } = await initServer()
     bindShortcut()
 
     // Start watcher to restart server on file changes
     const { watch } = await import('chokidar')
-    const watcher = watch([
-      ...FILES_CREATE_RESTART,
-      ...FILES_CHANGE_RESTART,
-    ], {
+    const watchGlobs = roots
+      .filter(i => !i.includes('node_modules'))
+      .flatMap(root => FILES_CHANGE_RESTART.map(i => path.join(root, i)))
+    const watcher = watch(watchGlobs, {
       ignored: ['node_modules', '.git'],
       ignoreInitial: true,
+      ignorePermissionErrors: true,
     })
     watcher.on('unlink', (file) => {
       console.log(yellow(`\n  file ${file} removed, restarting...\n`))
@@ -325,10 +354,6 @@ cli.command(
       restartServer()
     })
     watcher.on('change', (file) => {
-      if (typeof file !== 'string')
-        return
-      if (FILES_CREATE_RESTART.includes(file))
-        return
       console.log(yellow(`\n  file ${file} changed, restarting...\n`))
       restartServer()
     })
@@ -354,6 +379,15 @@ cli.command(
       type: 'boolean',
       describe: 'allow download as PDF',
     })
+    .option('without-notes', {
+      type: 'boolean',
+      describe: 'exclude speaker notes from the built output',
+    })
+    .option('router-mode', {
+      type: 'string',
+      choices: ['hash', 'history', 'memory'],
+      describe: 'override routerMode in the built output (hash for subdirectory deploys like GitHub Pages; memory keeps the slide number out of the URL, for kiosk/follower decks)',
+    })
     .option('inspect', {
       default: false,
       type: 'boolean',
@@ -362,11 +396,19 @@ cli.command(
     .strict()
     .help(),
   async (args) => {
-    const { entry, theme, base, download, out, inspect } = args
+    const { entry, theme, base, download, out, inspect, 'without-notes': withoutNotes, 'router-mode': routerMode } = args
     const { build } = await import('./commands/build')
 
     for (const entryFile of entry as unknown as string[]) {
-      const options = await resolveOptions({ entry: entryFile, theme, inspect, download, base }, 'build')
+      const options = await resolveOptions({
+        entry: entryFile,
+        theme,
+        inspect,
+        download,
+        base,
+        withoutNotes,
+        routerMode: routerMode as 'hash' | 'history' | 'memory' | undefined,
+      }, 'build')
 
       printInfo(options)
       await build(
@@ -374,7 +416,9 @@ cli.command(
         {
           base,
           build: {
-            outDir: entry.length === 1 ? out : path.join(out, path.basename(entryFile, '.md')),
+            outDir: entry.length === 1
+              ? out
+              : path.join(out, path.basename(entryFile, '.md')),
           },
         },
         { ...args, entry: entryFile },
@@ -399,6 +443,18 @@ cli.command(
 )
 
 cli.command(
+  'mcp [entry]',
+  'Start an MCP (Model Context Protocol) server over stdio for AI agents to inspect and edit the slides',
+  args => commonOptions(args)
+    .strict()
+    .help(),
+  async ({ entry }) => {
+    const { startMcpStdioServer } = await import('./mcp/stdio')
+    await startMcpStdioServer(await resolveEntry(entry))
+  },
+)
+
+cli.command(
   'theme [subcommand]',
   'Theme related operations',
   (command) => {
@@ -413,10 +469,12 @@ cli.command(
           }),
         async ({ entry: entryRaw, dir, theme: themeInput }) => {
           const entry = await resolveEntry(entryRaw)
-          const roots = await getRoots(entry)
-          const data = await parser.load(roots.userRoot, entry)
+          const options = await resolveOptions({ entry }, 'dev')
+          const data = await parser.load(options, entry)
           let themeRaw = themeInput || data.headmatter.theme as string | null | undefined
-          themeRaw = themeRaw === null ? 'none' : (themeRaw || 'default')
+          themeRaw = themeRaw === null
+            ? 'none'
+            : (themeRaw || 'default')
           if (themeRaw === 'none') {
             console.error('Cannot eject theme "none"')
             process.exit(1)
@@ -433,7 +491,7 @@ cli.command(
             path.resolve(dir),
             {
               recursive: true,
-              filter: i => !/node_modules|\.git/.test(path.relative(root, i)),
+              filter: i => !RE_NODE_MODULES_OR_GIT.test(path.relative(root, i)),
             },
           )
 
@@ -462,7 +520,7 @@ cli.command(
   async (args) => {
     const { entry, theme } = args
     const { exportSlides, getExportOptions } = await import('./commands/export')
-    const port = await getPort(12445)
+    const candidatePort = await getPort(12445)
 
     let warned = false
     for (const entryFile of entry as unknown as string) {
@@ -477,21 +535,27 @@ cli.command(
         )
       }
 
-      const server = await createServer(
-        options,
-        {
-          server: { port },
-          clearScreen: false,
-        },
-      )
-      await server.listen(port)
-      printInfo(options)
-      const result = await exportSlides({
-        port,
-        ...getExportOptions({ ...args, entry: entryFile }, options),
-      })
-      console.log(`${green('  ✓ ')}${dim('exported to ')}${result}\n`)
-      server.close()
+      let server: ViteDevServer | undefined
+      try {
+        server = await createServer(
+          options,
+          {
+            server: { port: candidatePort },
+            clearScreen: false,
+          },
+        )
+        await server.listen(candidatePort)
+        const port = getViteServerPort(server)
+        printInfo(options)
+        const result = await exportSlides({
+          port,
+          ...getExportOptions({ ...args, entry: entryFile }, options),
+        })
+        console.log(`${green('  ✓ ')}${dim('exported to ')}${result}\n`)
+      }
+      finally {
+        await server?.close()
+      }
     }
 
     process.exit(0)
@@ -530,30 +594,37 @@ cli.command(
     wait,
   }) => {
     const { exportNotes } = await import('./commands/export')
-    const port = await getPort(12445)
+    const candidatePort = await getPort(12445)
 
     for (const entryFile of entry as unknown as string[]) {
       const options = await resolveOptions({ entry: entryFile }, 'export')
-      const server = await createServer(
-        options,
-        {
-          server: { port },
-          clearScreen: false,
-        },
-      )
-      await server.listen(port)
+      let server: ViteDevServer | undefined
+      try {
+        server = await createServer(
+          options,
+          {
+            server: { port: candidatePort },
+            clearScreen: false,
+          },
+        )
+        await server.listen(candidatePort)
+        const port = getViteServerPort(server)
 
-      printInfo(options)
+        printInfo(options)
 
-      const result = await exportNotes({
-        port,
-        output: output || (options.data.config.exportFilename ? `${options.data.config.exportFilename}-notes` : `${path.basename(entryFile, '.md')}-export-notes`),
-        timeout,
-        wait,
-      })
-      console.log(`${green('  ✓ ')}${dim('exported to ')}${result}\n`)
-
-      server.close()
+        const result = await exportNotes({
+          port,
+          output: output || (options.data.config.exportFilename
+            ? `${options.data.config.exportFilename}-notes`
+            : `${path.basename(entryFile, '.md')}-export-notes`),
+          timeout,
+          wait,
+        })
+        console.log(`${green('  ✓ ')}${dim('exported to ')}${result}\n`)
+      }
+      finally {
+        await server?.close()
+      }
     }
 
     process.exit(0)
@@ -563,6 +634,13 @@ cli.command(
 cli
   .help()
   .parse()
+
+function getViteServerPort(server: ViteDevServer): number {
+  const address = server.httpServer?.address()
+  if (address && typeof address === 'object')
+    return address.port
+  throw new Error('Failed to get Vite server port')
+}
 
 function commonOptions(args: Argv<object>) {
   return args
@@ -586,7 +664,13 @@ function exportOptions<T>(args: Argv<T>) {
     })
     .option('format', {
       type: 'string',
-      choices: ['pdf', 'png', 'pptx', 'md'],
+      choices: [
+        'pdf',
+        'png',
+        'pptx',
+        'pptx-editable',
+        'md',
+      ],
       describe: 'output format',
     })
     .option('timeout', {
@@ -599,7 +683,12 @@ function exportOptions<T>(args: Argv<T>) {
     })
     .option('wait-until', {
       type: 'string',
-      choices: ['networkidle', 'load', 'domcontentloaded', 'none'],
+      choices: [
+        'networkidle',
+        'load',
+        'domcontentloaded',
+        'none',
+      ],
       describe: 'wait until the specified event before exporting each slide',
     })
     .option('range', {
@@ -653,12 +742,16 @@ function printInfo(
   console.log()
   console.log()
   console.log(`  ${cyan('●') + blue('■') + yellow('▲')}`)
-  console.log(`${bold('  Slidev')}  ${blue(`v${version}`)} ${isInstalledGlobally.value ? yellow('(global)') : ''}`)
+  console.log(`${bold('  Slidev')}  ${blue(`v${version}`)} ${isInstalledGlobally.value
+    ? yellow('(global)')
+    : ''}`)
   console.log()
 
   verifyConfig(options.data.config, options.data.themeMeta, v => console.warn(yellow(`  ! ${v}`)))
 
-  console.log(dim('  theme       ') + (options.theme ? green(options.theme) : gray('none')))
+  console.log(dim('  theme       ') + (options.theme
+    ? green(options.theme)
+    : gray('none')))
   console.log(dim('  css engine  ') + blue('unocss'))
   console.log(dim('  entry       ') + dim(path.normalize(path.dirname(options.entry)) + path.sep) + path.basename(options.entry))
 
@@ -666,19 +759,29 @@ function printInfo(
     const baseText = base?.slice(0, -1) || ''
     const portAndBase = port + baseText
     const baseUrl = `http://localhost:${bold(portAndBase)}`
-    const query = remote ? `?password=${remote}` : ''
-    const presenterPath = `${options.data.config.routerMode === 'hash' ? '/#/' : '/'}presenter/${query}`
-    const entryPath = `${options.data.config.routerMode === 'hash' ? '/#/' : '/'}entry${query}/`
-    const overviewPath = `${options.data.config.routerMode === 'hash' ? '/#/' : '/'}overview${query}/`
+    const query = remote
+      ? `?password=${remote}`
+      : ''
+    const presenterPath = `${options.data.config.routerMode === 'hash'
+      ? '/#/'
+      : '/'}presenter/${query}`
+    const entryPath = `${options.data.config.routerMode === 'hash'
+      ? '/#/'
+      : '/'}entry${query}/`
+    const overviewPath = `${options.data.config.routerMode === 'hash'
+      ? '/#/'
+      : '/'}overview${query}/`
     console.log()
     console.log(`${dim('  public slide show ')}  > ${cyan(`${baseUrl}/`)}`)
     if (query)
       console.log(`${dim('  private slide show ')} > ${cyan(`${baseUrl}/${query}`)}`)
-    if (options.utils.define.__SLIDEV_FEATURE_PRESENTER__)
+    if (options.utils.define.__SLIDEV_FEATURE_PRESENTER__ === 'true')
       console.log(`${dim('  presenter mode ')}     > ${blue(`${baseUrl}${presenterPath}`)}`)
     console.log(`${dim('  slides overview ')}    > ${blue(`${baseUrl}${overviewPath}`)}`)
-    if (options.utils.define.__SLIDEV_FEATURE_BROWSER_EXPORTER__)
+    if (options.utils.define.__SLIDEV_FEATURE_BROWSER_EXPORTER__ === 'true')
       console.log(`${dim('  export slides')}       > ${blue(`${baseUrl}/export/`)}`)
+    if (options.mode === 'dev' && options.data.config.mcp !== false)
+      console.log(`${dim('  mcp server    ')}     > ${blue(`http://localhost:${bold(port)}/__mcp`)}`)
     if (options.inspect)
       console.log(`${dim('  vite inspector')}      > ${yellow(`${baseUrl}/__inspect/`)}`)
 
@@ -687,7 +790,7 @@ function printInfo(
     if (remote !== undefined) {
       Object.values(os.networkInterfaces())
         .forEach(v => (v || [])
-          .filter(details => String(details.family).slice(-1) === '4' && !details.address.includes('127.0.0.1'))
+          .filter(details => String(details.family).endsWith('4') && !details.address.includes('127.0.0.1'))
           .forEach(({ address }) => {
             lastRemoteUrl = `http://${address}:${portAndBase}${entryPath}`
             console.log(`${dim('  remote control ')}     > ${blue(lastRemoteUrl)}`)
@@ -708,7 +811,9 @@ function printInfo(
     }
 
     console.log()
-    console.log(`${dim('  shortcuts ')}          > ${underline('r')}${dim('estart | ')}${underline('o')}${dim('pen | ')}${underline('e')}${dim('dit | ')}${underline('q')}${dim('uit')}${lastRemoteUrl ? ` | ${dim('qr')}${underline('c')}${dim('ode')}` : ''}`)
+    console.log(`${dim('  shortcuts ')}          > ${underline('r')}${dim('estart | ')}${underline('o')}${dim('pen | ')}${underline('e')}${dim('dit | ')}${underline('q')}${dim('uit')}${lastRemoteUrl
+      ? ` | ${dim('qr')}${underline('c')}${dim('ode')}`
+      : ''}`)
 
     return lastRemoteUrl
   }

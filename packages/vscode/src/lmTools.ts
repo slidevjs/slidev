@@ -1,14 +1,12 @@
 import { slash } from '@antfu/utils'
 import { stringifySlide } from '@slidev/parser/core'
-import { createSingletonComposable, useDisposable } from 'reactive-vscode'
+import { defineService, useDisposable } from 'reactive-vscode'
 import { LanguageModelTextPart, LanguageModelToolResult, lm } from 'vscode'
-import { useEditingSlideSource } from './composables/useEditingSlideSource'
-import { useFocusedSlideNo } from './composables/useFocusedSlideNo'
+import { useFocusedSlide } from './composables/useFocusedSlide'
 import { activeEntry, activeProject, projects } from './projects'
 
-export const useLmTools = createSingletonComposable(() => {
-  const focusedSlideNo = useFocusedSlideNo()
-  const editingSlide = useEditingSlideSource()
+export const useLmTools = defineService(() => {
+  const { focusedMarkdown, focusedSourceSlide, focusedSlideNo } = useFocusedSlide()
 
   registerSimpleTool('slidev_getActiveSlide', () => {
     const project = activeProject.value
@@ -20,11 +18,11 @@ export const useLmTools = createSingletonComposable(() => {
     return formatObject({
       'Entry file': project.entry,
       'Root directory': project.userRoot,
-      'Preview server port': project.port || 'Not running',
+      'Preview server port': project.port.value || 'Not running',
       'Number of slides': project.data.slides.length,
-      'Focused slide no. in presentation (from 1)': focusedSlideNo.value,
-      'Editing file': editingSlide.markdown.value?.filepath || 'Not editing',
-      'Editing slide index in file (from 0)': editingSlide.index.value,
+      'Focused slide no. in presentation (from 1)': focusedSlideNo.value || 'None',
+      'Editing file': focusedMarkdown.value?.filepath || 'Not editing',
+      'Editing slide index in file (from 0)': focusedSourceSlide.value ? focusedSourceSlide.value.index : 'N/A',
     })
   })
 
@@ -64,7 +62,9 @@ export const useLmTools = createSingletonComposable(() => {
 
   // List all loaded Slidev entries
   registerSimpleTool('slidev_listEntries', () => {
-    const entries = [...projects.keys()]
+    const entries = [
+      ...projects.keys(),
+    ]
     if (entries.length === 0) {
       return 'No loaded Slidev project entries.'
     }
@@ -76,7 +76,7 @@ export const useLmTools = createSingletonComposable(() => {
     const project = resolveProjectFromEntry(input.entrySlidePath)
     return formatObject({
       'Project entry': project.entry,
-      'Preview port': project.port || 'Not running',
+      'Preview port': project.port.value || 'Not running',
     })
   })
 
@@ -122,7 +122,9 @@ function resolveProjectFromEntry(entry: string) {
   let project = projects.get(entry)
   if (!project) {
     entry = slash(entry)
-    const possibleProjects = [...projects.values()].filter(p => p.entry.includes(entry))
+    const possibleProjects = [
+      ...projects.values(),
+    ].filter(p => p.entry.includes(entry))
     if (possibleProjects.length === 0) {
       throw new Error(`No project found for entry: ${entry}. All entries: ${formatList(projects.keys())}`)
     }

@@ -42,7 +42,9 @@ export function create({
     }
   },
   onDidChangeLanguageSettings = () => {
-    return { dispose() { } }
+    return {
+      dispose() { },
+    }
   },
 }: {
   documentSelector?: DocumentSelector
@@ -82,7 +84,6 @@ export function create({
           sendError: noop,
           sendTrack: noop,
         },
-        // @ts-expect-error https://github.com/redhat-developer/yaml-language-server/pull/910
         clientCapabilities: context.env?.clientCapabilities,
         workspaceContext: getWorkspaceContextService(context),
       })
@@ -159,7 +160,12 @@ export function create({
 
         provideOnTypeFormattingEdits(document, position, key, options) {
           return worker(document, () => {
-            return ls.doDocumentOnTypeFormatting(document, { ch: key, options, position, textDocument: document })
+            return ls.doDocumentOnTypeFormatting(document, {
+              ch: key,
+              options,
+              position,
+              textDocument: document,
+            })
           })
         },
 

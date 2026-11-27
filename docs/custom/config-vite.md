@@ -15,29 +15,27 @@ Slidev internally adds the following plugins to Vite:
 - [unplugin-icons](https://github.com/unplugin/unplugin-icons)
 - [vite-plugin-vue-markdown](https://github.com/unplugin/unplugin-vue-markdown)
 - [vite-plugin-remote-assets](https://github.com/antfu/vite-plugin-remote-assets)
-- [unocss/vite](https://github.com/unocss/unocss/tree/main/packages/vite)
+- [unocss/vite](https://github.com/unocss/unocss/tree/main/packages-integrations/vite)
 
 To configure the built-in plugins listed above, create a `vite.config.ts` with the following content. Please note that Slidev has some [default configurations](https://github.com/slidevjs/slidev/blob/main/packages/slidev/node/vite/index.ts) for those plugins, this usage will override some of them, which may potentially cause the app to break. Please treat this as **an advanced feature**, and make sure you know what you are doing before moving on.
 
-<!-- eslint-disable import/first -->
-
 ```ts twoslash [vite.config.ts]
-/// <reference types="@slidev/types" />
-import type MarkdownIt from 'markdown-it'
+/* eslint-disable import/first */
+import type MarkdownExit from 'markdown-exit'
 
 declare const MyPlugin: (md: any) => void
 // ---cut---
-import { defineConfig } from 'vite'
+import { defineViteConfig } from '@slidev/types'
 
-export default defineConfig({
+export default defineViteConfig({
   slidev: {
     vue: {
       /* vue options */
     },
     markdown: {
-      /* markdown-it options */
-      markdownItSetup(md) {
-        /* custom markdown-it plugins */
+      /* markdown-exit options */
+      markdownSetup(md) {
+        /* custom markdown-exit plugins */
         md.use(MyPlugin)
       },
     },
@@ -47,6 +45,12 @@ export default defineConfig({
 ```
 
 See the [type declarations](https://github.com/slidevjs/slidev/blob/main/packages/types/src/vite.ts#L11) for more options.
+
+`defineViteConfig` is a drop-in replacement for Vite's `defineConfig`. The `slidev` field is declared by `@slidev/types`, and TypeScript only picks that declaration up when the package is part of your program, which is what importing the helper does. If you prefer Vite's own `defineConfig`, reference the types at the top of the file instead:
+
+```ts
+/// <reference types="@slidev/types" />
+```
 
 ::: warning
 It is not allowed to re-add plugins that has been used internally be Slidev. For example, instead of

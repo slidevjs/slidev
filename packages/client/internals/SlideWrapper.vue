@@ -1,9 +1,9 @@
 <script setup lang="ts">
 import type { ClicksContext, RenderContext, SlideRoute } from '@slidev/types'
 import type { CSSProperties, PropType } from 'vue'
-import { SlideBottom, SlideTop } from '#slidev/global-layers'
 import { provideLocal } from '@vueuse/core'
 import { computed, ref, toRef } from 'vue'
+import { SlideBottom, SlideTop } from '#slidev/global-layers'
 import { injectionClicksContext, injectionCurrentPage, injectionFrontmatter, injectionRenderContext, injectionRoute, injectionSlideZoom } from '../constants'
 import { configs } from '../env'
 import { getSlideClass } from '../utils'
@@ -32,19 +32,11 @@ provideLocal(injectionRenderContext, ref(props.renderContext))
 provideLocal(injectionClicksContext, toRef(props, 'clicksContext'))
 provideLocal(injectionSlideZoom, zoom)
 
-const zoomStyle = computed(() => {
-  return zoom.value === 1
-    ? undefined
-    : {
-        width: `${100 / zoom.value}%`,
-        height: `${100 / zoom.value}%`,
-        transformOrigin: 'top left',
-        transform: `scale(${zoom.value})`,
-      }
-})
 const style = computed<CSSProperties>(() => ({
-  ...zoomStyle.value,
   'user-select': configs.selectable ? undefined : 'none',
+  '--slidev-slide-zoom-scale': zoom.value === 1
+    ? undefined
+    : zoom.value,
 }))
 </script>
 
@@ -69,5 +61,14 @@ const style = computed<CSSProperties>(() => ({
 .slidev-page {
   position: absolute;
   inset: 0;
+
+  /* Zoom handling */
+  --slidev-slide-zoom-scale: 1;
+  width: calc(100% / var(--slidev-slide-zoom-scale));
+  height: calc(100% / var(--slidev-slide-zoom-scale));
+  transform-origin: top left;
+  scale: var(--slidev-slide-zoom-scale);
+  /* slide scale = container scale * zoom scale */
+  --slidev-slide-scale: calc(var(--slidev-slide-container-scale) * var(--slidev-slide-zoom-scale));
 }
 </style>

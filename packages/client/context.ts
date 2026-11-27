@@ -52,7 +52,9 @@ export type SlideContext = ReturnType<typeof useSlideContext>
  */
 export function frontmatterToProps(frontmatter: Record<string, any>, pageNo: number) {
   return {
-    ...objectOmit(frontmatter, pageNo === 0 ? HEADMATTER_FIELDS : FRONTMATTER_FIELDS),
+    ...objectOmit(frontmatter, pageNo === 0
+      ? HEADMATTER_FIELDS
+      : FRONTMATTER_FIELDS),
     frontmatter,
   }
 }

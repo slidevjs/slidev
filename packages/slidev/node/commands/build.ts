@@ -3,8 +3,8 @@ import type { InlineConfig, ResolvedConfig } from 'vite'
 import { existsSync } from 'node:fs'
 import fs from 'node:fs/promises'
 import http from 'node:http'
-import { join, resolve } from 'node:path'
 import connect from 'connect'
+import { join, resolve } from 'pathe'
 import sirv from 'sirv'
 import { build as viteBuild } from 'vite'
 import { resolveViteConfigs } from './shared'
@@ -14,49 +14,59 @@ export async function build(
   viteConfig: InlineConfig = {},
   args: BuildArgs,
 ) {
-  const indexPath = resolve(options.userRoot, 'index.html')
+  const indexHtmlId = resolve(options.userRoot, 'index.html')
 
-  let originalIndexHTML: string | undefined
-  if (existsSync(indexPath))
-    originalIndexHTML = await fs.readFile(indexPath, 'utf-8')
-
-  await fs.writeFile(indexPath, options.utils.indexHtml, 'utf-8')
   let config: ResolvedConfig = undefined!
 
-  try {
-    const inlineConfig = await resolveViteConfigs(
-      options,
-      {
-        plugins: [
-          {
-            name: 'resolve-config',
-            configResolved(_config) {
-              config = _config
+  const inlineConfig = await resolveViteConfigs(
+    options,
+    {
+      plugins: [
+        {
+          name: 'slidev:build',
+          configResolved(_config) {
+            config = _config
+          },
+          resolveId: {
+            order: 'pre',
+            handler(id) {
+              if (id === indexHtmlId)
+                return id
+              return null
             },
           },
-        ],
-        build: {
-          chunkSizeWarningLimit: 2000,
+          load: {
+            order: 'pre',
+            handler(id) {
+              if (id === indexHtmlId) {
+                return options.utils.indexHtml
+              }
+            },
+          },
         },
-      } satisfies InlineConfig,
-      viteConfig,
-      'build',
-    )
+      ],
+      build: {
+        chunkSizeWarningLimit: 2000,
+        rollupOptions: {
+          input: {
+            index: indexHtmlId,
+          },
+        },
+      },
+    } satisfies InlineConfig,
+    viteConfig,
+    'build',
+  )
 
-    await viteBuild(inlineConfig)
-  }
-  finally {
-    if (originalIndexHTML != null)
-      await fs.writeFile(indexPath, originalIndexHTML, 'utf-8')
-    else
-      await fs.unlink(indexPath)
-  }
+  await viteBuild(inlineConfig)
 
   const outDir = resolve(options.userRoot, config.build.outDir)
 
   // copy or generate ogImage if it's a relative path, skip if not
   if (options.data.config.seoMeta?.ogImage === 'auto' || options.data.config.seoMeta?.ogImage?.startsWith('.')) {
-    const filename = options.data.config.seoMeta?.ogImage === 'auto' ? 'og-image.png' : options.data.config.seoMeta.ogImage
+    const filename = options.data.config.seoMeta?.ogImage === 'auto'
+      ? 'og-image.png'
+      : options.data.config.seoMeta.ogImage
     const projectOgImagePath = resolve(options.userRoot, filename)
     const outputOgImagePath = resolve(outDir, filename)
 
@@ -78,7 +88,7 @@ export async function build(
       )
       server.listen(port)
 
-      const { exportSlides } = await import('./export')
+      const { exportSlides, resolveExportDarkMode } = await import('./export')
       const tempDir = resolve(outDir, 'temp')
       await fs.mkdir(tempDir, { recursive: true })
 
@@ -92,12 +102,15 @@ export async function build(
         range: '1',
         width: options.data.config.canvasWidth,
         height: Math.round(options.data.config.canvasWidth / options.data.config.aspectRatio),
-        routerMode: options.data.config.routerMode,
+        // This renders slides by URL, so memory routing falls back to history.
+        routerMode: options.data.config.routerMode === 'memory'
+          ? 'history'
+          : options.data.config.routerMode,
         waitUntil: 'networkidle',
         timeout: args.timeout || 30000,
         perSlide: true,
         omitBackground: false,
-        dark: args.dark,
+        dark: resolveExportDarkMode(args.dark, options.data.config.colorSchema),
       })
 
       const tempFiles = await fs.readdir(tempDir)
@@ -138,10 +151,11 @@ export async function build(
       }),
     )
     server.listen(port)
+    const filename = options.data.config.exportFilename || 'slidev-exported'
     await exportSlides({
       port,
       base: config.base,
-      ...getExportOptions(args, options, join(outDir, 'slidev-exported.pdf')),
+      ...getExportOptions(args, options, join(outDir, `${filename}.pdf`)),
     })
     server.close()
   }

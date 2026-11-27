@@ -3,6 +3,7 @@ import { throttledWatch, useEventListener } from '@vueuse/core'
 import { computed, ref, watch } from 'vue'
 import { useNav } from '../composables/useNav'
 import { useDynamicSlideInfo } from '../composables/useSlideInfo'
+import { parseSideEditorContent } from '../logic/sideEditor'
 import { activeElement, editorHeight, editorWidth, isInputting, showEditor, isEditorVertical as vertical } from '../state'
 import IconButton from './IconButton.vue'
 import ShikiEditor from './ShikiEditor.vue'
@@ -25,7 +26,9 @@ watch(
   (v) => {
     if (!isInputting.value) {
       note.value = (v?.note || '').trim()
-      const frontmatterPart = v?.frontmatterRaw?.trim() ? `---\n${v.frontmatterRaw.trim()}\n---\n\n` : ''
+      const frontmatterPart = v?.frontmatterRaw?.trim()
+        ? `---\n${v.frontmatterRaw.trim()}\n---\n\n`
+        : ''
       content.value = frontmatterPart + (v?.source.contentRaw || '').trim()
       dirty.value = false
     }
@@ -36,11 +39,7 @@ watch(
 async function save() {
   dirty.value = false
 
-  let frontmatterRaw: string | undefined
-  const contentOnly = content.value.trim().replace(/^---\n([\s\S]*?)\n---\n/, (_, f) => {
-    frontmatterRaw = f
-    return ''
-  })
+  const { content: contentOnly, frontmatterRaw } = parseSideEditorContent(content.value)
 
   await update({
     note: note.value || undefined,

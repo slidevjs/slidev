@@ -45,24 +45,6 @@ html {
   @apply border-none hover:border-none hover:text-white;
 }
 
-.slidev-vclick-target {
-  @apply transition-opacity duration-100;
-}
-
-.slidev-vclick-hidden {
-  opacity: 0 !important;
-  pointer-events: none !important;
-  user-select: none !important;
-}
-
-.slidev-vclick-display-none {
-  display: none !important;
-}
-
-.slidev-vclick-fade {
-  opacity: 0.5;
-}
-
 .slidev-icon {
   display: inline-block;
   vertical-align: sub;
@@ -80,7 +62,11 @@ html {
 /* Note Clicks */
 
 .slidev-note-with-clicks .slidev-note-fade {
-  color: #888888ab;
+  color: #888888cc;
+}
+
+.dark .slidev-note-with-clicks .slidev-note-fade {
+  color: #a1a1a1cc;
 }
 
 .slidev-note-click-mark {
@@ -136,13 +122,32 @@ html {
   transform: scale(calc(1 / var(--slidev-slide-scale)));
 }
 
-#twoslash-container {
-  position: fixed;
+/*
+ * Counter the slide scale so iframes lay out and rasterize at their real
+ * on-screen resolution. Without this, canvas-based content (e.g. Excalidraw)
+ * is rendered at the slide's design size and bitmap-upscaled, which makes it
+ * blurry when the slide is scaled up. Scales below 1 are not countered, so
+ * scaled-down views like the overview keep the original layout.
+ */
+.slidev-layout-iframe {
+  --slidev-iframe-raster: max(var(--slidev-slide-scale, 1), 1);
+  width: calc(100% * var(--slidev-iframe-raster));
+  height: calc(100% * var(--slidev-iframe-raster));
+  transform: scale(calc(var(--slidev-iframe-scale, 1) / var(--slidev-iframe-raster)));
+  transform-origin: top left;
 }
 
-#twoslash-container .v-popper__wrapper:not(.no-slide-scale > *) {
-  transform: scale(calc(1 * var(--slidev-slide-scale)));
-  transform-origin: 30px top;
+#twoslash-container {
+  position: fixed;
+
+  .v-popper__wrapper:not(.no-slide-scale > *) {
+    zoom: var(--slidev-slide-scale);
+  }
+
+  .v-popper__popper:not(.no-slide-scale > *) {
+    translate: calc(10px * (1 - var(--slidev-slide-scale))) 0;
+    width: max-content;
+  }
 }
 
 .slidev-note ul {
