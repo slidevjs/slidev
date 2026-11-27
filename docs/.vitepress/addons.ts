@@ -385,6 +385,17 @@ export const community: AddonInfo[] = [
     },
     repo: 'https://github.com/erikzaadi/slidev-addon-logi-spotlight',
   },
+  {
+    id: 'slidev-addon-archify',
+    name: 'Archify Diagrams, Stories, & Explainers',
+    description: 'Bring archify diagrams, explainers, & stories in your presentation',
+    tags: ['Diagram', 'Integration'],
+    author: {
+      name: 'Kapil Sachdeva',
+      link: 'https://github.com/ksachdeva',
+    },
+    repo: 'https://github.com/ksachdeva/slidev-addon-archify',
+  },
   // Add yours here!
   {
     id: '',
