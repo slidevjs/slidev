@@ -29,7 +29,9 @@ export function createVueCompilerFlagsPlugin(
   const define = objectEntries(options.utils.define)
   const flagMap = new Map(define)
   const flagRe = new RegExp(
-    [...flagMap.keys()].map(k => `(?<![\\w$])${escapeRegExp(k)}(?![\\w$])`).join('|'),
+    [
+      ...flagMap.keys(),
+    ].map(k => `(?<![\\w$])${escapeRegExp(k)}(?![\\w$])`).join('|'),
     'g',
   )
   return {

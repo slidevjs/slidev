@@ -19,7 +19,9 @@ function transformCode(define: Record<string, string>, code: string, id: string,
   }
   // Mirror Vite's hook filtering: the handler only runs when the id matches.
   const include = transform.filter?.id?.include
-  const matches = Array.isArray(include) ? include.some(re => re.test(id)) : include?.test(id)
+  const matches = Array.isArray(include)
+    ? include.some(re => re.test(id))
+    : include?.test(id)
   if (!matches)
     return undefined
   if (transform.filter?.id?.exclude?.test(id))
