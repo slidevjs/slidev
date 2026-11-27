@@ -35,7 +35,10 @@ describe('vite plugin hook filters', () => {
 
   it('filters slide resolver calls without narrowing the dynamic slide loader', () => {
     const options = {
-      data: { slides: [], features: { katex: false } },
+      data: {
+        slides: [],
+        features: { katex: false },
+      },
       userRoot: '/project',
       mode: 'dev',
       utils: {},

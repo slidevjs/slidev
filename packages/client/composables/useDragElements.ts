@@ -14,6 +14,20 @@ import { useDynamicSlideInfo } from './useSlideInfo'
 const RE_NEWLINE = /\r?\n/g
 const RE_POS_ATTR = /pos=".*?"/
 
+/**
+ * The effective `zoom` of the element itself (e.g. from a UnoCSS class).
+ * CSS zoom scales the element's box, which would otherwise offset the drag box.
+ */
+function getElementZoom(el: HTMLElement): number {
+  const raw = getComputedStyle(el).getPropertyValue('zoom')
+  const zoom = Number.parseFloat(raw) / (raw.endsWith('%')
+    ? 100
+    : 1)
+  if (!Number.isFinite(zoom) || zoom <= 0)
+    return 1
+  return zoom
+}
+
 export type DragElementDataSource = 'frontmatter' | 'prop' | 'directive'
 /**
  * Markdown source position, injected by markdown-it plugin
@@ -168,11 +182,13 @@ export function useDragElement(directive: DirectiveBinding | null, posRaw?: stri
   const rotateCos = computed(() => Math.cos(rotateRad.value))
 
   const container = ref<HTMLElement>()
+  const elementZoom = ref(1)
   const bounds = ref({ left: 0, top: 0, width: 0, height: 0 })
   const actualHeight = ref(0)
   function updateBounds() {
     if (!container.value)
       return
+    elementZoom.value = getElementZoom(container.value)
     const rect = container.value.getBoundingClientRect()
     bounds.value = {
       left: rect.left / zoom.value,
@@ -202,16 +218,19 @@ export function useDragElement(directive: DirectiveBinding | null, posRaw?: stri
     : configuredY0
 
   const containerStyle = computed(() => {
+    // x0/y0/width/height are in slide coordinates, while a `zoom` on the
+    // element scales its box in the slide coordinate space as well
+    const zoomScale = elementZoom.value
     return Number.isFinite(x0.value)
       ? {
         position: 'absolute',
         zIndex: 100,
-        left: `${x0.value - width.value / 2}px`,
-        top: `${y0.value - height.value / 2}px`,
-        width: `${width.value}px`,
+        left: `${(x0.value - width.value / 2) / zoomScale}px`,
+        top: `${(y0.value - height.value / 2) / zoomScale}px`,
+        width: `${width.value / zoomScale}px`,
         height: autoHeight
           ? undefined
-          : `${height.value}px`,
+          : `${height.value / zoomScale}px`,
         transformOrigin: 'center center',
         transform: `rotate(${rotate.value}deg)`,
       } satisfies CSSProperties

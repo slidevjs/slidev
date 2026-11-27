@@ -741,6 +741,29 @@ export const community: ThemeInfo[] = [
       'minimalism',
     ],
   },
+  {
+    id: 'slidev-theme-tufte',
+    name: 'Tufte',
+    description: 'After Edward Tufte: warm paper, one serif with old-style figures, a margin column for notes and sources, three-rule tables, sparklines and directly labelled bars, no chartjunk.',
+    author: {
+      name: 'Christoph Martel',
+      link: 'https://github.com/abits',
+    },
+    repo: 'https://github.com/abits/slidev-theme-tufte',
+    previews: [
+      'https://cdn.jsdelivr.net/gh/abits/slidev-theme-tufte@73a1245/screenshots/1.png',
+      'https://cdn.jsdelivr.net/gh/abits/slidev-theme-tufte@73a1245/screenshots/3.png',
+      'https://cdn.jsdelivr.net/gh/abits/slidev-theme-tufte@73a1245/screenshots/4.png',
+      'https://cdn.jsdelivr.net/gh/abits/slidev-theme-tufte@73a1245/screenshots/5.png',
+      'https://cdn.jsdelivr.net/gh/abits/slidev-theme-tufte@73a1245/screenshots/6.png',
+      'https://cdn.jsdelivr.net/gh/abits/slidev-theme-tufte@73a1245/screenshots/10.png',
+    ],
+    tags: [
+      'light',
+      'minimalism',
+      'academic',
+    ],
+  },
   // Add yours here!
   {
     id: '',
