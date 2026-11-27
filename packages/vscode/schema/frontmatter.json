@@ -65,6 +65,28 @@
           "markdownDescription": "Manually specified the total clicks needed to this slide to start",
           "default": 0
         },
+        "exportClicks": {
+          "anyOf": [
+            {
+              "type": "boolean",
+              "const": true
+            },
+            {
+              "type": "array",
+              "items": {
+                "type": [
+                  "number",
+                  "string"
+                ]
+              }
+            },
+            {
+              "type": "string"
+            }
+          ],
+          "description": "Click steps to export for this slide, overriding the `withClicks` export option\n\n- `true` - one page per click step\n- `last` - one page with the final state\n- `[0, 2, 'last']` or `'0,2-3,5-'` - one page per listed click step, `last` being the final state\n- `[]` - skip this slide\n\nSee https://sli.dev/features/export-clicks",
+          "markdownDescription": "Click steps to export for this slide, overriding the `withClicks` export option\n\n- `true` - one page per click step\n- `last` - one page with the final state\n- `[0, 2, 'last']` or `'0,2-3,5-'` - one page per listed click step, `last` being the final state\n- `[]` - skip this slide\n\nSee https://sli.dev/features/export-clicks"
+        },
         "preload": {
           "type": "boolean",
           "description": "Preload the slide when the previous slide is active",

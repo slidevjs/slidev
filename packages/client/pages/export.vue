@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import type { ScreenshotSession } from '../logic/screenshot'
 import { sleep } from '@antfu/utils'
-import { parseRangeString } from '@slidev/parser/utils'
+import { getExportClickSteps, parseRangeString, resolveExportClicks } from '@slidev/parser/utils'
 import { useHead } from '@unhead/vue'
 import { provideLocal, useElementSize, useStyleTag, watchDebounced } from '@vueuse/core'
 import { computed, ref, useTemplateRef, watch } from 'vue'
@@ -21,7 +21,7 @@ import { isScreenshotSupported, startScreenshotSession } from '../logic/screensh
 import { captureDelay, skipExportPdfTip } from '../state'
 import Play from './play.vue'
 
-const { slides, isPrintWithClicks, hasNext, go, next, currentSlideNo, clicks, printRange } = useNav()
+const { slides, isPrintWithClicks, hasNext, go, next, currentSlideNo, clicks, clicksContext, printRange } = useNav()
 const router = useRouter()
 const { isColorSchemaConfigured, isDark } = useDarkMode()
 const { width: containerWidth } = useElementSize(useTemplateRef('export-container'))
@@ -57,6 +57,17 @@ function doPrint() {
   setTimeout(window.print, 100)
 }
 
+// slides with `exportClicks: last` only have their final state (see SlidesShow.vue),
+// so only a list of steps needs filtering here (an empty one skips the slide)
+function shouldCaptureClick() {
+  const route = slides.value[currentSlideNo.value - 1]
+  const exportClicks = resolveExportClicks(route?.meta.slide.frontmatter.exportClicks, isPrintWithClicks.value)
+  if (typeof exportClicks === 'boolean')
+    return true
+  const { clicksStart, total } = clicksContext.value
+  return getExportClickSteps(exportClicks, clicksStart, total).includes(clicks.value)
+}
+
 async function capturePngs() {
   if (screenshotSession.value) {
     screenshotSession.value.dispose()
@@ -76,11 +87,13 @@ async function capturePngs() {
       if (!screenshotSession.value) {
         break
       }
-      result.push({
-        slideIndex: currentSlideNo.value - 1,
-        clickIndex: clicks.value,
-        dataUrl: screenshotSession.value.screenshot(document.getElementById('slide-content')!),
-      })
+      if (shouldCaptureClick()) {
+        result.push({
+          slideIndex: currentSlideNo.value - 1,
+          clickIndex: clicks.value,
+          dataUrl: screenshotSession.value.screenshot(document.getElementById('slide-content')!),
+        })
+      }
       if (hasNext.value) {
         await sleep(captureDelay.value)
         next()

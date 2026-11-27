@@ -136,6 +136,10 @@ By default, Slidev exports one page per slide with clicks animations disabled (e
 $ slidev export --with-clicks
 ```
 
+To choose the exported click steps for individual slides, you can use the `exportClicks` option in their frontmatter:
+
+<LinkCard link="features/export-clicks" />
+
 ### Output Filename
 
 You can specify the output filename with the `--output` option:
