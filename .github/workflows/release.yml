@@ -10,28 +10,31 @@ jobs:
     permissions:
       id-token: write
       contents: write
+
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
         with:
           fetch-depth: 0
-      - uses: actions/setup-node@v4
+
+      - uses: pnpm/action-setup@73e46992e05b19abd31f2f3c20e0e7370d762115 # v6.1.1
+
+      - uses: actions/setup-node@949feb2413d6458794dcd2491c4babbbce0c15c1 # v7.1.0
         with:
           node-version: lts/*
           registry-url: https://registry.npmjs.org/
+
       - run: npx changelogithub
         env:
           GITHUB_TOKEN: ${{secrets.GITHUB_TOKEN}}
-      - run: npm i -g @antfu/ni
-      - run: nci
-      - run: nr ci:publish
-        env:
-          NODE_AUTH_TOKEN: ${{secrets.NPM_TOKEN}}
-          NPM_CONFIG_PROVENANCE: true
+
+      - run: npm i -g npm@latest
+      - run: pnpm i
+      - run: pnpm run ci:publish
 
       - name: Publish to VSCE & OVSX
-        run: npm run publish
+        run: pnpm run publish
         working-directory: ./packages/vscode
         env:
-          VSCE_TOKEN: ${{secrets.VSCE_TOKEN}}
-          OVSX_TOKEN: ${{secrets.OVSX_TOKEN}}
+          VSCE_TOKEN: ${{secrets.VSCE_PAT}}
+          OVSX_TOKEN: ${{secrets.OVSX_PAT}}

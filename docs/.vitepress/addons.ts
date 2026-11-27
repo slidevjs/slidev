@@ -15,6 +15,7 @@ export const official: AddonInfo[] = [
   },
 ]
 
+// Please add your addon to the end of the list.
 export const community: AddonInfo[] = [
   {
     id: 'slidev-addon-python-runner',
@@ -37,6 +38,17 @@ export const community: AddonInfo[] = [
       link: 'https://github.com/AlbertBrand',
     },
     repo: 'https://github.com/AlbertBrand/slidev-addon-tldraw',
+  },
+  {
+    id: 'slidev-addon-react',
+    name: 'React Components',
+    description: 'Use React components with JSX/TSX in your Slidev presentations.',
+    tags: ['React', 'Component', 'Integration'],
+    repo: 'https://github.com/Ygilany/slidev-addon-react',
+    author: {
+      name: 'YGilany',
+      link: 'https://github.com/YGilany',
+    },
   },
   {
     id: 'slidev-addon-typst',
@@ -193,6 +205,187 @@ export const community: AddonInfo[] = [
     repo: 'https://github.com/AlbertBrand/slidev-addon-hls-player',
   },
   {
+    id: 'slidev-addon-window-mockup',
+    name: 'Window Mockup',
+    description: 'Styled window frames',
+    tags: ['Component'],
+    author: {
+      name: 'whitphx',
+      link: 'https://github.com/whitphx',
+    },
+    repo: 'https://github.com/whitphx/slidev-addon-window-mockup',
+  },
+  {
+    id: 'slidev-addon-diagram-js',
+    name: 'BPMN, DMN & more',
+    description: 'Display diagrams like BPMN, DMN, Wardley Maps and Event Storming in your slidev',
+    tags: ['Component'],
+    author: {
+      name: 'emaarco',
+      link: 'https://github.com/emaarco',
+    },
+    repo: 'https://github.com/emaarco/slidev-addon-diagram-js',
+  },
+  {
+    id: 'slidev-addon-p5',
+    name: 'Runner for p5js',
+    description: 'Display, edit and run p5js sketches in your slidev',
+    tags: ['Component', 'Code runner'],
+    author: {
+      name: 'mjvo',
+      link: 'https://github.com/mjvo',
+    },
+    repo: 'https://github.com/mjvo/slidev-addon-p5',
+  },
+  {
+    id: 'slidev-pane',
+    name: 'slidev-pane',
+    description: 'PowerPoint-style pane presenter for Slidev with slide thumbnails, quick navigation, and a zoomable main canvas.',
+    tags: ['Navigation'],
+    author: {
+      name: 'xunz',
+      link: 'https://github.com/xunz3',
+    },
+    repo: 'https://github.com/xunz3/slidev-pane',
+  },
+  {
+    id: 'slidev-agent',
+    name: 'slidev-agent',
+    description: 'Slidev addon and wrapper CLI for LangChain-powered slide authoring.',
+    tags: ['Component', 'Integration'],
+    author: {
+      name: 'Christian Bromann',
+      link: 'https://github.com/christian-bromann',
+    },
+    repo: 'https://github.com/christian-bromann/slidev-agent',
+  },
+  {
+    id: 'slidev-addon-animated-text',
+    name: 'Animated text',
+    description: 'Stroke by stroke animated text with any font using tegaki.',
+    tags: ['Component'],
+    author: {
+      name: 'Andreas Taranetz',
+      link: 'https://andreas.taranetz.com/',
+    },
+    repo: 'https://github.com/andreas-taranetz/slidev-addon-animated-text',
+  },
+  {
+    id: 'slidev-addon-livecode',
+    name: 'Live embedded VS Code IDE',
+    description: 'Live VS Code IDE sessions in your Slidev presentations, powered by coderaft',
+    tags: [
+      'Component',
+      'Integration',
+      'Tool',
+      'IDE',
+    ],
+    author: {
+      name: 'Mickaël Alves',
+      link: 'https://mickaelalves.dev/',
+    },
+    repo: 'https://github.com/mickaelalvs/slidev-addon-livecode',
+  },
+  {
+    id: 'slidev-addon-second-screen',
+    name: 'Second Screen',
+    description: 'Open presentation on a second screen from presenter view with automatic fullscreen and visual status indicator.',
+    tags: ['Navigation', 'Presenter'],
+    author: {
+      name: 'Denis Sowa',
+      link: 'https://github.com/L-C-P',
+    },
+    repo: 'https://github.com/L-C-P/slidev-addon-second-screen',
+  },
+  {
+    id: 'slidev-addon-sandpack',
+    name: 'Sandpack',
+    description: 'Build stepped, multi-file Sandpack live-code demos from readable Markdown.',
+    tags: ['Code runner', 'React', 'Integration'],
+    author: {
+      name: 'Nir Tamir',
+      link: 'https://github.com/nirtamir2',
+    },
+    repo: 'https://github.com/nirtamir2/slidev-addon-sandpack',
+  },
+  {
+    id: 'slidev-addon-studio',
+    name: 'Studio',
+    description: 'Edit slides on the canvas, with every change written back to your Markdown.',
+    tags: ['Editor', 'Tool'],
+    author: {
+      name: 'Daniel Christensen',
+      link: 'https://github.com/BobTheShoplifter',
+    },
+    repo: 'https://github.com/BobTheShoplifter/slidev-addon-studio',
+  },
+  {
+    id: 'slidev-addon-gsap',
+    name: 'GSAP',
+    description: 'Use click-driven GSAP timelines for a much more natural and powerful way to specify your animations.',
+    tags: ['Animation', 'Integration'],
+    author: {
+      name: 'Max Kurze',
+      link: 'https://github.com/maxkurze1',
+    },
+    repo: 'https://github.com/maxkurze1/slidev-addon-gsap',
+  },
+  {
+    id: 'slidev-addon-audience-filter',
+    name: 'Audience Filter',
+    description: 'Show or hide slides per audience via showFor/hideFor frontmatter, with an audience switch in the presenter view.',
+    tags: ['Tool', 'Presenter'],
+    author: {
+      name: 'Denis Sowa',
+      link: 'https://github.com/L-C-P',
+    },
+    repo: 'https://github.com/L-C-P/slidev-addon-audience-filter',
+  },
+  {
+    id: 'slidev-addon-autofit',
+    name: 'Autofit',
+    description: 'Automatically scales slide content down until it fits, like the "shrink text on overflow" option in PowerPoint.',
+    tags: ['Layout'],
+    author: {
+      name: 'Denis Sowa',
+      link: 'https://github.com/L-C-P',
+    },
+    repo: 'https://github.com/L-C-P/slidev-addon-autofit',
+  },
+  {
+    id: 'slidev-addon-obs',
+    name: 'OBS',
+    description: 'Switch OBS Studio scenes per slide via obs-websocket (v4 and v5).',
+    tags: ['Integration', 'Tool'],
+    author: {
+      name: 'Denis Sowa',
+      link: 'https://github.com/L-C-P',
+    },
+    repo: 'https://github.com/L-C-P/slidev-addon-obs',
+  },
+  {
+    id: 'slidev-addon-archify-explorer',
+    name: 'Archify Explorer',
+    description: 'Open interactive Archify diagrams from static previews in Slidev.',
+    tags: ['Diagram', 'Integration'],
+    author: {
+      name: 'Sergio Valverde',
+      link: 'https://github.com/svg153',
+    },
+    repo: 'https://github.com/svg153/slidev-archify-explorer',
+  },
+  {
+    id: 'slidev-addon-logi-spotlight',
+    name: 'Logi Spotlight',
+    description: 'Start the presentation from a Logitech Spotlight clicker and get its timer vibrations, like in Google Slides.',
+    tags: ['Integration'],
+    author: {
+      name: 'Erik Zaadi',
+      link: 'https://github.com/erikzaadi',
+    },
+    repo: 'https://github.com/erikzaadi/slidev-addon-logi-spotlight',
+  },
+  {
     id: 'slidev-addon-inalia',
     name: 'Inalia',
     description: 'Make your talks more engaging with real-time interactions.',
@@ -209,9 +402,5 @@ export const community: AddonInfo[] = [
     link: 'https://github.com/slidevjs/slidev/edit/main/docs/.vitepress/addons.ts',
     name: 'Yours?',
     description: 'Click here to submit your addon :)',
-    tags: [],
-    author: {
-      name: '',
-    },
   },
 ]

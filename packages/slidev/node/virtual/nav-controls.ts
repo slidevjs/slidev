@@ -1,6 +1,6 @@
 import type { VirtualModuleTemplate } from './types'
 import { existsSync } from 'node:fs'
-import { join } from 'node:path'
+import { join } from 'pathe'
 import { toAtFS } from '../resolver'
 
 export const templateNavControls: VirtualModuleTemplate = {

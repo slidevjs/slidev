@@ -6,5 +6,7 @@ export default defineConfig({
     'typeit': 'ignore',
     // `engines.vscode` must be updated when bumping `@types/vscode` version
     '@types/vscode': 'ignore',
+    // Prevent multiple versions. `volar-service-yaml` is using v2.
+    'prettier': 'patch',
   },
 })

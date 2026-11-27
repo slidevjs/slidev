@@ -3,12 +3,13 @@
 
 import fs from 'node:fs'
 import { createRequire } from 'node:module'
-import path from 'node:path'
 // @ts-check
 import process from 'node:process'
 import { fileURLToPath } from 'node:url'
 import { blue, bold, cyan, dim, green, yellow } from 'ansis'
 import minimist from 'minimist'
+import { detect } from 'package-manager-detector/detect'
+import path from 'pathe'
 import prompts from 'prompts'
 import { x } from 'tinyexec'
 
@@ -18,9 +19,13 @@ const require = createRequire(import.meta.url)
 const __dirname = fileURLToPath(new URL('.', import.meta.url))
 const { version } = require('./package.json')
 
+const RE_VALID_PACKAGE_NAME = /^(?:@[a-z0-9-*~][a-z0-9-*._~]*\/)?[a-z0-9-~][a-z0-9-._~]*$/
+const RE_WHITESPACE = /\s+/g
+const RE_LEADING_DOT_UNDERSCORE = /^[._]/
+const RE_NON_ALPHANUMERIC = /[^a-z0-9-~]+/g
+
 const renameFiles = {
   _gitignore: '.gitignore',
-  _npmrc: '.npmrc',
 }
 
 async function init() {
@@ -74,12 +79,9 @@ async function init() {
   const templateDir = path.join(__dirname, 'template')
 
   const write = (file, content) => {
-    const targetPath = renameFiles[file]
-      ? path.join(root, renameFiles[file])
-      : path.join(root, file)
+    const targetPath = path.join(root, renameFiles[file] ?? file)
     if (content)
       fs.writeFileSync(targetPath, content)
-
     else
       copy(path.join(templateDir, file), targetPath)
   }
@@ -89,18 +91,12 @@ async function init() {
     write(file)
 
   const pkg = require(path.join(templateDir, 'package.json'))
-
   pkg.name = packageName
-
   write('package.json', JSON.stringify(pkg, null, 2))
 
-  const pkgManager = (/pnpm/.test(process.env.npm_execpath || '') || /pnpm/.test(process.env.npm_config_user_agent || ''))
-    ? 'pnpm'
-    : /yarn/.test(process.env.npm_execpath || '') ? 'yarn' : 'npm'
-
-  const related = path.relative(cwd, root)
-
   console.log(green('  Done.\n'))
+
+  const pkgManager = await detect().then(r => r.name).catch(() => undefined) ?? 'npm'
 
   /**
    * @type {{ yes: boolean }}
@@ -109,33 +105,42 @@ async function init() {
     type: 'confirm',
     name: 'yes',
     initial: 'Y',
-    message: 'Install and start it now?',
+    message: `Install and start it now${pkgManager
+      ? ` using ${pkgManager}`
+      : ''}?`,
   })
 
   if (yes) {
-    const { agent } = await prompts({
-      name: 'agent',
-      type: 'select',
-      message: 'Choose the package manager',
-      choices: ['npm', 'yarn', 'pnpm', 'bun', 'deno'].map(i => ({ value: i, title: i })),
-    })
-
-    if (!agent)
+    if (!pkgManager)
       return
 
-    await x(agent, ['install'], { nodeOptions: { stdio: 'inherit', cwd: root } })
-    await x(agent, ['run', 'dev'], { nodeOptions: { stdio: 'inherit', cwd: root } })
+    writeReadme(pkgManager)
+    await x(pkgManager, ['install'], {
+      nodeOptions: { stdio: 'inherit', cwd: root },
+    })
+    await x(pkgManager, ['run', 'dev'], {
+      nodeOptions: { stdio: 'inherit', cwd: root },
+    })
   }
   else {
+    writeReadme(pkgManager)
     console.log(dim('\n  start it later by:\n'))
     if (root !== cwd)
-      console.log(blue(`  cd ${bold(related)}`))
+      console.log(blue(`  cd ${bold(path.relative(cwd, root))}`))
 
-    console.log(blue(`  ${pkgManager === 'yarn' ? 'yarn' : `${pkgManager} install`}`))
-    console.log(blue(`  ${pkgManager === 'yarn' ? 'yarn dev' : `${pkgManager} run dev`}`))
+    console.log(blue(`  ${pkgManager} install`))
+    console.log(blue(`  ${pkgManager} run dev`))
     console.log()
     console.log(`  ${cyan('●')} ${blue('■')} ${yellow('▲')}`)
     console.log()
+  }
+
+  function writeReadme(pm = 'npm') {
+    const readmeTemplate = fs.readFileSync(path.join(templateDir, 'README.md'), 'utf-8')
+    const readmeContent = readmeTemplate
+      .replace('npm install', `${pm} install`)
+      .replace('npm run dev', `${pm} run dev`)
+    write('README.md', readmeContent)
   }
 }
 
@@ -143,14 +148,13 @@ function copy(src, dest) {
   const stat = fs.statSync(src)
   if (stat.isDirectory())
     copyDir(src, dest)
-
   else
     fs.copyFileSync(src, dest)
 }
 
 async function getValidPackageName(projectName) {
   projectName = path.basename(projectName)
-  const packageNameRegExp = /^(?:@[a-z0-9-*~][a-z0-9-*._~]*\/)?[a-z0-9-~][a-z0-9-._~]*$/
+  const packageNameRegExp = RE_VALID_PACKAGE_NAME
   if (packageNameRegExp.test(projectName)) {
     return projectName
   }
@@ -158,9 +162,9 @@ async function getValidPackageName(projectName) {
     const suggestedPackageName = projectName
       .trim()
       .toLowerCase()
-      .replace(/\s+/g, '-')
-      .replace(/^[._]/, '')
-      .replace(/[^a-z0-9-~]+/g, '-')
+      .replace(RE_WHITESPACE, '-')
+      .replace(RE_LEADING_DOT_UNDERSCORE, '')
+      .replace(RE_NON_ALPHANUMERIC, '-')
 
     /**
      * @type {{ inputPackageName: string }}
@@ -170,7 +174,9 @@ async function getValidPackageName(projectName) {
       name: 'inputPackageName',
       message: 'Package name:',
       initial: suggestedPackageName,
-      validate: input => packageNameRegExp.test(input) ? true : 'Invalid package.json name',
+      validate: input => packageNameRegExp.test(input)
+        ? true
+        : 'Invalid package.json name',
     })
     return inputPackageName
   }

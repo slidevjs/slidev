@@ -23,6 +23,7 @@ export type { DrawingsState } from './state/drawings'
 export { drawingState, onDrawingUpdate } from './state/drawings'
 export type { SharedState } from './state/shared'
 export { onSharedUpdate, sharedState } from './state/shared'
+export { lockShortcuts } from './state/storage'
 
 export {
   addSyncMethod,

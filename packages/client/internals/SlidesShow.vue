@@ -1,10 +1,11 @@
 <script setup lang="ts">
 import type { SlideRoute } from '@slidev/types'
-import { GlobalBottom, GlobalTop } from '#slidev/global-layers'
 import { recomputeAllPoppers } from 'floating-vue'
 import { computed, shallowRef, TransitionGroup, watchEffect } from 'vue'
+import { GlobalBottom, GlobalTop } from '#slidev/global-layers'
 import { createFixedClicks } from '../composables/useClicks'
 import { useNav } from '../composables/useNav'
+import { usePreloadImages } from '../composables/usePreloadImages'
 import { useViewTransition } from '../composables/useViewTransition'
 import { CLICKS_MAX } from '../constants'
 import { activeDragElement, disableTransition, hmrSkipTransition } from '../state'
@@ -49,6 +50,9 @@ watchEffect((onCleanup) => {
   onCleanup(() => clearTimeout(timeout))
 })
 
+// preload images for nearby slides
+usePreloadImages(currentSlideRoute, prevRoute, nextRoute, slides)
+
 const hasViewTransition = useViewTransition()
 
 const DrawingLayer = shallowRef<any>()
@@ -88,6 +92,7 @@ function onAfterLeave() {
     <template v-for="route of loadedRoutes" :key="route.no">
       <SlideWrapper
         v-show="route === currentSlideRoute"
+        :class="{ 'slidev-page-active': route === currentSlideRoute }"
         :clicks-context="isPrintMode && !isPrintWithClicks ? createFixedClicks(route, CLICKS_MAX) : getPrimaryClicks(route)"
         :route="route"
         :render-context="renderContext"

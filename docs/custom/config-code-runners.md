@@ -8,9 +8,8 @@ By default, JavaScript, TypeScript runners are supported built-in. They run in t
 
 Create `./setup/code-runners.ts` with the following content:
 
-<!-- eslint-disable import/first -->
-
 ```ts twoslash [setup/code-runners.ts]
+/* eslint-disable import/first */
 declare const executePythonCodeRemotely: (code: string) => Promise<string>
 declare const sanitizeHtml: (html: string) => string
 // ---cut---
@@ -65,7 +64,7 @@ The runner can either return a text or HTML output, or an element to be mounted.
 
 ## Additional Runner Dependencies
 
-By default, Slidev will scan the Markdown source and automatically import the necessary dependencies for the code runners. If you want to manually import dependencies, you can use the `monacoRunAdditionalDeps` option in the slide frontmatter:
+By default, Slidev will scan the Markdown source and automatically import the necessary dependencies for the code runners. If you want to manually import dependencies, you can use the `monacoRunAdditionalDeps` option in the [headmatter](./index#headmatter):
 
 ```yaml
 monacoRunAdditionalDeps:

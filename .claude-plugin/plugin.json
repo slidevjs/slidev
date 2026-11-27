@@ -1,0 +1,12 @@
+{
+  "name": "slidev",
+  "version": "1.0.0",
+  "description": "Claude Code skill for creating and presenting Slidev slidedecks",
+  "author": {
+    "name": "Anthony Fu",
+    "url": "https://github.com/antfu"
+  },
+  "repository": "https://github.com/slidevjs/slidev",
+  "license": "MIT",
+  "keywords": ["presentations", "slides", "markdown", "vue", "developer-tools"]
+}
