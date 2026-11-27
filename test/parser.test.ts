@@ -25,7 +25,9 @@ describe('advance debounce config', () => {
     expect(getDefaultConfig().advanceDebounce).toBe(0)
     expect(resolveConfig({}).advanceDebounce).toBe(0)
     expect(resolveConfig({ advanceDebounce: 100 }).advanceDebounce).toBe(100)
-    expect(resolveConfig({ config: { advanceDebounce: 250 } }).advanceDebounce).toBe(250)
+    expect(resolveConfig({
+      config: { advanceDebounce: 250 },
+    }).advanceDebounce).toBe(250)
   })
 })
 

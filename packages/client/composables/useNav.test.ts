@@ -207,7 +207,13 @@ describe('advanceDebounce', () => {
     expect(queryClicks.value).toBe(3)
   })
 
-  it.each([undefined, 0, -1, Number.NaN, Number.POSITIVE_INFINITY])('leaves navigation unrestricted with %s', async (interval) => {
+  it.each([
+    undefined,
+    0,
+    -1,
+    Number.NaN,
+    Number.POSITIVE_INFINITY,
+  ])('leaves navigation unrestricted with %s', async (interval) => {
     Object.assign(configs, { advanceDebounce: interval })
     const { nav, queryClicks } = createNav()
     await nav.next()

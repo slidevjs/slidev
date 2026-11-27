@@ -3,7 +3,12 @@ import { isPresentShortcut } from './utils'
 
 describe('isPresentShortcut', () => {
   const key = (key: string, mods: { metaKey?: boolean, ctrlKey?: boolean } = {}) =>
-    ({ key, metaKey: false, ctrlKey: false, ...mods })
+    ({
+      key,
+      metaKey: false,
+      ctrlKey: false,
+      ...mods,
+    })
 
   it('matches Google Slides present keys', () => {
     expect(isPresentShortcut(key('Enter', { metaKey: true }))).toBe(true)
