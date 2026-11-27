@@ -7,6 +7,7 @@ import { useDrawings } from '../composables/useDrawings'
 import { useMousePosInSlide } from '../composables/useMousePosInSlide'
 import { useNav } from '../composables/useNav'
 import { useSwipeControls } from '../composables/useSwipeControls'
+import { useTimer } from '../composables/useTimer'
 import { useWakeLock } from '../composables/useWakeLock'
 import { slidesTitle } from '../env'
 import ClicksSlider from '../internals/ClicksSlider.vue'
@@ -245,8 +246,10 @@ function parseTimerString(timeString: string) {
   return hours * 3600 + minutes * 60 + seconds
 }
 
+const { passed } = useTimer()
+
 window.addEventListener('slidev-slide-changed', (e) => {
-  const timerCounter = parseTimerString(timer.value)
+  const timerCounter = Math.floor(passed.value)
   const splitCounter = typeof (e as CustomEvent).detail.frontmatter.split === 'string'
     ? parseTimerString((e as CustomEvent).detail.frontmatter.split)
     : (e as CustomEvent).detail.frontmatter.split || 0
