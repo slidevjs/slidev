@@ -180,6 +180,7 @@ export async function exportNotes({
       },
       printBackground: true,
       preferCSSPageSize: true,
+      tagged: true,
     })
   }
   finally {
@@ -405,6 +406,7 @@ export async function exportSlides({
         pageRanges: '1',
         printBackground: true,
         preferCSSPageSize: true,
+        tagged: true,
       })
       buffers.push(pdf)
     }
@@ -447,6 +449,7 @@ export async function exportSlides({
       },
       printBackground: true,
       preferCSSPageSize: true,
+      tagged: true,
     })
 
     // Edit generated PDF: add metadata and (optionally) TOC
