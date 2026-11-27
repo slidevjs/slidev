@@ -175,6 +175,57 @@ src: ./pages/three.md
       .toEqual(['./pages/one.md', './pages/three.md'])
   })
 
+  describe('missing blank line after `---`', () => {
+    const cases = {
+      'a multi-line comment': '<!--\nnote\n-->',
+      'a comment containing a colon': '<!-- note: something -->',
+      'plain text': 'hello',
+      'a list': '- a\n- b',
+    }
+
+    for (const [name, body] of Object.entries(cases)) {
+      it(`records an error for ${name}`, async () => {
+        const data = await parse(`# Slide 1\n\n---\n${body}\n\n---\n\n# Slide 3\n`, 'slides.md')
+
+        expect(data.slides).toHaveLength(2)
+        expect(data.slides[1].frontmatter).toEqual({})
+        expect(data.errors).toEqual([
+          {
+            row: 2,
+            message: expect.stringContaining('blank line'),
+          },
+        ])
+      })
+    }
+
+    it('does not record an error when the blank line exists', async () => {
+      const data = await parse(`# Slide 1\n\n---\n\n<!--\nnote\n-->\n\n---\n\n# Slide 3\n`, 'slides.md')
+
+      expect(data.slides[1].note).toBe('note')
+      expect(data.errors).toBeUndefined()
+    })
+
+    it('does not record an error for a valid or comment-only frontmatter', async () => {
+      const data = await parse(`# Slide 1\n\n---\nlayout: center\n---\n\n# Slide 2\n\n---\n# layout: center\n---\n\n# Slide 3\n`, 'slides.md')
+
+      expect(data.slides[1].frontmatter).toEqual({ layout: 'center' })
+      expect(data.slides[2].frontmatter).toEqual({})
+      expect(data.errors).toBeUndefined()
+    })
+  })
+
+  it('ignores an HTML comment inside frontmatter and records an error', async () => {
+    const data = await parse(`# Slide 1\n\n---\nlayout: center\n<!-- note -->\n---\n\n# Slide 2\n`, 'slides.md')
+
+    expect(data.slides[1].frontmatter).toEqual({ layout: 'center' })
+    expect(data.errors).toEqual([
+      {
+        row: 2,
+        message: expect.stringContaining('HTML comments are not supported in frontmatter'),
+      },
+    ])
+  })
+
   it('detects slide separator even when comment opens on the same line', async () => {
     const data = await parse(`a
 
