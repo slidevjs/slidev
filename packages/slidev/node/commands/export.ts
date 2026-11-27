@@ -1,4 +1,4 @@
-import type { ExportArgs, ResolvedSlidevOptions, SlideInfo, TocItem } from '@slidev/types'
+import type { ExportArgs, ResolvedSlidevOptions, SlideInfo, SlidevConfig, TocItem } from '@slidev/types'
 import { Buffer } from 'node:buffer'
 import fs from 'node:fs/promises'
 import process from 'node:process'
@@ -40,6 +40,12 @@ export interface ExportOptions {
   perSlide?: boolean
   scale?: number
   omitBackground?: boolean
+}
+
+export function resolveExportDarkMode(dark: boolean | undefined, colorSchema: SlidevConfig['colorSchema']) {
+  if (colorSchema === 'light dark' || colorSchema === 'dark light')
+    return dark ?? colorSchema === 'dark light'
+  return dark || colorSchema === 'dark'
 }
 
 interface ExportPngResult {
@@ -207,6 +213,12 @@ export async function exportSlides({
   omitBackground = false,
 }: ExportOptions) {
   const pages: number[] = parseRangeString(total, range)
+
+  // Writers disagree about who creates the parent directory of `--output`, so
+  // the ones calling `fs.writeFile` directly failed with ENOENT on a path like
+  // `dist/slides.pptx`. Create it here, before the browser starts. `png` gets
+  // only the parent: its `--output` is a directory that `genPagePng` creates.
+  await fs.mkdir(dirname(path.resolve(output)), { recursive: true })
 
   const { chromium } = await importPlaywright()
   const browser = await chromium.launch({
@@ -676,7 +688,7 @@ export function getExportOptions(args: ExportArgs, options: ResolvedSlidevOption
     waitUntil: waitUntil === 'none'
       ? undefined
       : (waitUntil ?? 'networkidle') as 'networkidle' | 'load' | 'domcontentloaded',
-    dark: dark || options.data.config.colorSchema === 'dark',
+    dark: resolveExportDarkMode(dark, options.data.config.colorSchema),
     // Export navigates by URL; memory routing ignores the URL, so fall back to history.
     routerMode: options.data.config.routerMode === 'memory'
       ? 'history'

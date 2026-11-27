@@ -79,7 +79,7 @@ export function generateFontParams(options: ResolvedFontOptions) {
     .sort()
     .join(';')
   const fontParams = options.webfonts
-    .map(i => `family=${i.replace(RE_QUOTED_STRING, '$1').replace(RE_WHITESPACE, '+')}:${options.italic ? 'ital,' : ''}wght@${weights}`)
+    .map(i => `family=${i.replace(RE_QUOTED_STRING, '$2').replace(RE_WHITESPACE, '+')}:${options.italic ? 'ital,' : ''}wght@${weights}`)
     .join('&')
   return fontParams
 }
@@ -132,6 +132,8 @@ export function updateFrontmatterPatch(source: SourceSlideInfo, frontmatter: Rec
 export function getBodyJson(req: Connect.IncomingMessage) {
   return new Promise<any>((resolve, reject) => {
     let body = ''
+    // A chunk can end in the middle of a character
+    req.setEncoding('utf8')
     req.on('data', chunk => body += chunk)
     req.on('error', reject)
     req.on('end', () => {

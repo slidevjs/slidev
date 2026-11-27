@@ -554,6 +554,11 @@ export const community: ThemeInfo[] = [
       'https://raw.githubusercontent.com/oller/slidev-theme-nord/HEAD/example-export/5.png',
       'https://raw.githubusercontent.com/oller/slidev-theme-nord/HEAD/example-export/6.png',
       'https://raw.githubusercontent.com/oller/slidev-theme-nord/HEAD/example-export/7.png',
+      'https://raw.githubusercontent.com/oller/slidev-theme-nord/HEAD/example-export/8.png',
+      'https://raw.githubusercontent.com/oller/slidev-theme-nord/HEAD/example-export/9.png',
+      'https://raw.githubusercontent.com/oller/slidev-theme-nord/HEAD/example-export/10.png',
+      'https://raw.githubusercontent.com/oller/slidev-theme-nord/HEAD/example-export/11.png',
+      'https://raw.githubusercontent.com/oller/slidev-theme-nord/HEAD/example-export/12.png',
     ],
     tags: [
       'dark',
@@ -734,6 +739,29 @@ export const community: ThemeInfo[] = [
       'dark',
       'light',
       'minimalism',
+    ],
+  },
+  {
+    id: 'slidev-theme-tufte',
+    name: 'Tufte',
+    description: 'After Edward Tufte: warm paper, one serif with old-style figures, a margin column for notes and sources, three-rule tables, sparklines and directly labelled bars, no chartjunk.',
+    author: {
+      name: 'Christoph Martel',
+      link: 'https://github.com/abits',
+    },
+    repo: 'https://github.com/abits/slidev-theme-tufte',
+    previews: [
+      'https://cdn.jsdelivr.net/gh/abits/slidev-theme-tufte@73a1245/screenshots/1.png',
+      'https://cdn.jsdelivr.net/gh/abits/slidev-theme-tufte@73a1245/screenshots/3.png',
+      'https://cdn.jsdelivr.net/gh/abits/slidev-theme-tufte@73a1245/screenshots/4.png',
+      'https://cdn.jsdelivr.net/gh/abits/slidev-theme-tufte@73a1245/screenshots/5.png',
+      'https://cdn.jsdelivr.net/gh/abits/slidev-theme-tufte@73a1245/screenshots/6.png',
+      'https://cdn.jsdelivr.net/gh/abits/slidev-theme-tufte@73a1245/screenshots/10.png',
+    ],
+    tags: [
+      'light',
+      'minimalism',
+      'academic',
     ],
   },
   // Add yours here!
