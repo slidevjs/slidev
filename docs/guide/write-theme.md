@@ -28,6 +28,10 @@ $ bun create slidev-theme
 $ deno init --npm slidev-theme
 ```
 
+```bash [vlt]
+$ vlt create slidev-theme
+```
+
 :::
 
 Then you can modify and play with it. You can also refer to the [official themes](../resources/theme-gallery#official-themes) as examples.

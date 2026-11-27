@@ -46,6 +46,10 @@ $ bun add -D playwright-chromium
 $ deno add -D npm:playwright-chromium
 ```
 
+```bash [vlt]
+$ vlt install -D playwright-chromium
+```
+
 :::
 
 ## Formats
