@@ -33,6 +33,7 @@
     "@iconify-json/carbon": "catalog:icons",
     "@iconify-json/ph": "catalog:icons",
     "@iconify-json/svg-spinners": "catalog:icons",
+    "@sapphi-red/web-noise-suppressor": "catalog:frontend",
     "@shikijs/engine-javascript": "catalog:frontend",
     "@shikijs/magic-move": "catalog:frontend",
     "@shikijs/monaco": "catalog:monaco",
