@@ -110,7 +110,7 @@ declare module '#slidev/setups/context-menu' {
   export default setups
 }
 
-declare module '#slidev/styles' {
+declare module '#slidev/conditional-styles' {
   // side-effects only
 }
 

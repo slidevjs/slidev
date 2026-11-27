@@ -3,12 +3,14 @@ import { computed } from 'vue'
 import { useRouter } from 'vue-router'
 import { useNav } from '../composables/useNav'
 
+const RE_DIGITS = /\d+/
+
 const { currentRoute } = useRouter()
 const { total } = useNav()
 
 const guessedSlide = computed(() => {
   const path = currentRoute.value.path
-  const match = path.match(/\d+/)
+  const match = path.match(RE_DIGITS)
   if (match) {
     const slideNo = +match[0]
     if (slideNo > 0 && slideNo <= total.value)

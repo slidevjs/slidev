@@ -1,6 +1,6 @@
 ---
 name: slidev
-description: Create and present web-based slides for developers using Markdown, Vue components, code highlighting, animations, and interactive features. Use when building technical presentations, conference talks, or teaching materials.
+description: Create and present web-based slidedecks for developers using Slidev with Markdown, Vue components, code highlighting, animations, and interactive features. Use when building technical presentations, conference talks, code walkthroughs, teaching materials, or developer decks.
 ---
 
 # Slidev - Presentation Slides for Developers
@@ -9,20 +9,33 @@ Web-based slides maker built on Vite, Vue, and Markdown.
 
 ## When to Use
 
-- Technical presentations with live code examples
+- Technical presentations or slidedecks with live code examples
 - Syntax-highlighted code snippets with animations
 - Interactive demos (Monaco editor, runnable code)
 - Mathematical equations (LaTeX) or diagrams (Mermaid, PlantUML)
 - Record presentations with presenter notes
 - Export to PDF, PPTX, or host as SPA
+- Code walkthroughs for developer talks or workshops
+
+## Prerequisites
+
+Slidev is a Node.js project. Before creating or running a deck, check that the machine has:
+
+- **Node.js >= 22.12.0**: `node -v`. If it is missing or older, install the LTS release from https://nodejs.org or use a version manager such as `nvm` or `fnm`.
+- **pnpm** (recommended package manager): `pnpm -v`. If it is missing, run `npm i -g pnpm` or `corepack enable`. npm, yarn, and bun also work; replace `pnpm` in the commands below.
+
+Do not assume a development setup exists. If either check fails, walk the user through the installation before running any Slidev command.
 
 ## Quick Start
 
 ```bash
 pnpm create slidev    # Create project
-pnpm run dev          # Start dev server
-pnpm run export       # Export to PDF
+pnpm run dev          # Start dev server (opens http://localhost:3030)
+pnpm run build        # Build static SPA
+pnpm run export       # Export to PDF (requires playwright-chromium)
 ```
+
+**Verify**: After `pnpm run dev`, confirm slides load at `http://localhost:3030`. After `pnpm run export`, check the output PDF exists in the project root.
 
 ## Basic Syntax
 
@@ -144,6 +157,8 @@ Presenter notes go here
 | OG image | `seoMeta.ogImage` or `og-image.png` | [build-og-image](references/build-og-image.md) |
 | SEO tags | `seoMeta:` | [build-seo-meta](references/build-seo-meta.md) |
 
+**Export prerequisite**: `pnpm add -D playwright-chromium` is required for PDF/PPTX/PNG export. If export fails with a browser error, install this dependency first.
+
 ### Editor & Tools
 
 | Feature | Usage | Reference |
@@ -152,6 +167,7 @@ Presenter notes go here
 | VS Code extension | Install `antfu.slidev` | [editor-vscode](references/editor-vscode.md) |
 | Prettier | `prettier-plugin-slidev` | [editor-prettier](references/editor-prettier.md) |
 | Eject theme | `slidev theme eject` | [tool-eject-theme](references/tool-eject-theme.md) |
+| MCP server (AI agents) | `http://localhost:<port>/__mcp` or `slidev mcp` | [tool-mcp](references/tool-mcp.md) |
 
 ### Lifecycle & API
 

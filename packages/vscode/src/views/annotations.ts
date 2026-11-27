@@ -8,6 +8,10 @@ import { config } from '../configs'
 import { activeProject } from '../projects'
 import { toRelativePath } from '../utils/toRelativePath'
 
+const RE_NEWLINE = /\r?\n/
+const RE_LEADING_BACKTICKS = /^\s*`+/
+const RE_FRONTMATTER_BLOCK = /^---[\s\S]*?\n---/
+
 const frontmatterBgOptions = {
   isWholeLine: true,
   backgroundColor: '#8881',
@@ -36,24 +40,28 @@ const codeBlockLineNumberDecoration = window.createTextEditorDecorationType({
 
 function mergeSlideNumbers(slides: { index: number }[]): string {
   const indexes = slides.map(s => s.index + 1)
-  const merged = [[indexes[0], indexes[0]]]
+  const merged = [
+    [indexes[0], indexes[0]],
+  ]
   for (let i = 1; i < indexes.length; i++) {
     if (merged[merged.length - 1][1] + 1 === indexes[i])
       merged[merged.length - 1][1] = indexes[i]
     else
       merged.push([indexes[i], indexes[i]])
   }
-  return merged.map(([start, end]) => start === end ? `#${start}` : `#${start}-${end}`).join(', ')
+  return merged.map(([start, end]) => start === end
+    ? `#${start}`
+    : `#${start}-${end}`).join(', ')
 }
 
 interface CodeBlockInfo {
   startLine: number
   endLine: number
-  indent: string
+  indent: number
 }
 
 function findCodeBlocks(docText: string): CodeBlockInfo[] {
-  const lines = docText.split(/\r?\n/)
+  const lines = docText.split(RE_NEWLINE)
   const codeBlocks: CodeBlockInfo[] = []
 
   for (let i = 0; i < lines.length; i++) {
@@ -61,8 +69,8 @@ function findCodeBlocks(docText: string): CodeBlockInfo[] {
     const trimmedLine = line.trimStart()
 
     if (trimmedLine.startsWith('```')) {
-      const indent = line.slice(0, line.length - trimmedLine.length)
-      const codeBlockLevel = line.match(/^\s*`+/)![0]
+      const indent = line.length - trimmedLine.length
+      const codeBlockLevel = line.match(RE_LEADING_BACKTICKS)![0]
       const backtickCount = codeBlockLevel.trim().length
       const startLine = i
 
@@ -115,11 +123,9 @@ function updateCodeBlockLineNumbers(editor: ReturnType<typeof useActiveTextEdito
       // \u2800 renders as a space but won't be trimmed
       const paddedNumber = String(lineNumber).padStart(numberWidth, '\u2800')
 
+      const position = new Position(currentLine, block.indent)
       codeBlockLineNumbers.push({
-        range: new Range(
-          new Position(currentLine, 0),
-          new Position(currentLine, 0),
-        ),
+        range: new Range(position, position),
         renderOptions: {
           before: {
             contentText: `${paddedNumber}│`,
@@ -142,7 +148,14 @@ export const useAnnotations = defineService(() => {
   const projectInfo = useProjectFromDoc(doc)
 
   watch(
-    [editor, doc, projectInfo, activeProject, () => config.annotations, () => config['annotations-line-numbers']],
+    [
+      editor,
+      doc,
+      projectInfo,
+      activeProject,
+      () => config.annotations,
+      () => config['annotations-line-numbers'],
+    ],
     ([editor, doc, projectInfo, activeProject, enabled, lineNumbersEnabled]) => {
       if (!editor || !doc)
         return
@@ -182,7 +195,9 @@ export const useAnnotations = defineService(() => {
       const frontmatterContentRanges: DecorationOptions[] = []
       const frontmatterEndRanges: DecorationOptions[] = []
       for (const slide of md.slides) {
-        const lineNo = slide.frontmatterStyle === 'frontmatter' ? slide.start : slide.start - 1
+        const lineNo = slide.frontmatterStyle === 'frontmatter'
+          ? slide.start
+          : slide.start - 1
         const line = doc.lineAt(clamp(lineNo, 0, doc.lineCount))
 
         const start = new Position(line.lineNumber, 0)
@@ -204,7 +219,7 @@ export const useAnnotations = defineService(() => {
 
         if (slide.frontmatterRaw != null) {
           const range = docText.slice(doc.offsetAt(start))
-          const match = range.match(/^---[\s\S]*?\n---/)
+          const match = range.match(RE_FRONTMATTER_BLOCK)
           if (match && match.index != null) {
             const endLine = doc.positionAt(doc.offsetAt(start) + match.index + match[0].length).line
             frontmatterContentRanges.push({

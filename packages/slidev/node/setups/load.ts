@@ -1,6 +1,6 @@
 import type { Awaitable } from '@antfu/utils'
 import { existsSync } from 'node:fs'
-import { resolve } from 'node:path'
+import { resolve } from 'pathe'
 import { loadModule } from '../utils'
 
 export async function loadSetups<F extends (...args: any) => any>(

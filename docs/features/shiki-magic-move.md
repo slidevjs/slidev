@@ -59,11 +59,11 @@ const add = () => count += 1
 You can add a title bar to magic move blocks by specifying a filename in the opening fence of each step:
 
 `````md
-````md magic-move
-```js [app.js]
+````md magic-move [app.js]
+```js
 console.log('Step 1')
 ```
-```js [app.js]
+```js
 console.log('Step 2')
 ```
 ````
@@ -95,6 +95,22 @@ console.log('Step 2')
 ```
 ````
 `````
+
+## Animation Options {#animation-options}
+
+> Available since v52.21.0
+
+Besides `magicMoveDuration`, you can fine-tune the underlying [Shiki Magic Move](https://shiki.style/packages/magic-move#options) animation (easing, stagger, delays, diffing behavior, etc.) via the `shiki.magicMove` headmatter option:
+
+```yaml
+---
+shiki:
+  magicMove:
+    easing: ease-in-out
+    stagger: 5
+    delayMove: 0.2
+---
+```
 
 ## Copy Button {#copy-button}
 

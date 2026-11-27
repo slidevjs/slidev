@@ -1,9 +1,9 @@
 import type { ResolvedSlidevOptions, UnoSetup } from '@slidev/types'
-import type { UserConfig } from '@unocss/core'
 import type { Theme } from '@unocss/preset-uno'
+import type { VitePluginConfig } from 'unocss/vite'
 import { existsSync } from 'node:fs'
 import { readFile } from 'node:fs/promises'
-import { resolve } from 'node:path'
+import { resolve } from 'pathe'
 import { mergeConfigs, presetIcons } from 'unocss'
 import { loadSetups } from '../setups/load'
 import { loadModule } from '../utils'
@@ -18,8 +18,10 @@ export default async function setupUnocss(
     ].map(async (i) => {
       if (!existsSync(i))
         return undefined
-      const loaded = await loadModule(i) as UserConfig | { default: UserConfig }
-      return 'default' in loaded ? loaded.default : loaded
+      const loaded = await loadModule(i) as VitePluginConfig | { default: VitePluginConfig }
+      return 'default' in loaded
+        ? loaded.default
+        : loaded
     })
   }
 
@@ -36,10 +38,10 @@ export default async function setupUnocss(
         }),
       ],
       safelist: await loadModule(resolve(clientRoot, '.generated/unocss-tokens.ts')),
-    },
-    (await loadModule<{ default: UserConfig }>(resolve(clientRoot, 'uno.config.ts'))).default,
+    } satisfies VitePluginConfig,
+    (await loadModule<{ default: VitePluginConfig }>(resolve(clientRoot, 'uno.config.ts'))).default,
     ...await loadSetups<UnoSetup>(roots, 'unocss.ts', [], loadFileConfigs),
-  ].filter(Boolean) as UserConfig<Theme>[]
+  ].filter(Boolean) as VitePluginConfig<Theme>[]
 
   const config = mergeConfigs(configs)
 

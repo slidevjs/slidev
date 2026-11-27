@@ -46,8 +46,11 @@ function processNote() {
     let n = marker
     let p = marker.parentElement
     while (p && n !== noteDisplay.value) {
-      if (!parentsMap.has(p))
-        parentsMap.set(p, [[null, lastClicks]])
+      if (!parentsMap.has(p)) {
+        parentsMap.set(p, [
+          [null, lastClicks],
+        ])
+      }
       parentsMap.get(p)!.push([n, clicks])
       n = p
       p = p.parentElement
@@ -171,5 +174,10 @@ watchEffect(() => {
 <style>
 .slidev-note :first-child {
   margin-top: 0;
+}
+
+.slidev-note {
+  overflow-wrap: anywhere;
+  word-break: break-word;
 }
 </style>

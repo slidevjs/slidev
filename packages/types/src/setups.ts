@@ -10,7 +10,7 @@ import type { Router, RouteRecordRaw } from 'vue-router'
 import type { CodeRunnerProviders } from './code-runner'
 import type { ContextMenuItem } from './context-menu'
 import type { ResolvedSlidevOptions } from './options'
-import type { MarkdownTransformer } from './transform'
+import type { CodeblockTransformer, MarkdownTransformer } from './transform'
 import type { SlidevPreparserExtension } from './types'
 
 export interface AppContext {
@@ -65,9 +65,20 @@ export type ShikiSetupReturn
 
 export interface TransformersSetupReturn {
   pre: (MarkdownTransformer | false)[]
+  /**
+   * @deprecated It has the same effect as `pre`
+   */
   preCodeblock: (MarkdownTransformer | false)[]
+  /**
+   * @deprecated It has the same effect as `pre`
+   */
   postCodeblock: (MarkdownTransformer | false)[]
+  /**
+   * @deprecated It has the same effect as `pre`
+   */
   post: (MarkdownTransformer | false)[]
+
+  codeblocks: (CodeblockTransformer | false)[]
 }
 
 // node side

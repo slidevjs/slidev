@@ -1,7 +1,7 @@
 import type { ResolvedSlidevOptions, SlidevServerOptions } from '@slidev/types'
 import type { InlineConfig } from 'vite'
-import { join } from 'node:path'
 import process from 'node:process'
+import { join } from 'pathe'
 import { createServer as createViteServer } from 'vite'
 import { resolveViteConfigs } from './shared'
 

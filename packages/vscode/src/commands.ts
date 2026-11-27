@@ -1,5 +1,5 @@
-import { relative } from 'node:path'
 import { slash } from '@antfu/utils'
+import { relative } from 'pathe'
 import { useCommand } from 'reactive-vscode'
 import { ConfigurationTarget, window, workspace } from 'vscode'
 import { useDevServer } from './composables/useDevServer'
@@ -9,6 +9,8 @@ import { activeEntry, activeProject, addProject, projects, rescanProjects } from
 import { findPossibleEntries } from './utils/findPossibleEntries'
 import { getSlidesTitle } from './utils/getSlidesTitle'
 import { usePreviewWebview } from './views/previewWebview'
+
+const RE_DIGITS = /^\d+$/
 
 export function useCommands() {
   useCommand('slidev.enable-extension', () => config.update('force-enabled', true, ConfigurationTarget.Workspace))
@@ -20,7 +22,10 @@ export function useCommands() {
     while (true) {
       const addNewEntry = '$(add) Add new slides entry...'
       const entry = await window.showQuickPick(
-        [...projects.keys(), addNewEntry],
+        [
+          ...projects.keys(),
+          addNewEntry,
+        ],
         {
           title: 'Choose active slides entry.',
         },
@@ -55,7 +60,10 @@ export function useCommands() {
         const workspaceRoot = workspace.workspaceFolders[0].uri.fsPath
         const relatives = selected.map(s => slash(relative(workspaceRoot, s)))
         // write back to settings.json
-        await config.update('include', [...config.include, ...relatives])
+        await config.update('include', [
+          ...config.include,
+          ...relatives,
+        ])
       }
     }
     return !!selected
@@ -104,7 +112,7 @@ export function useCommands() {
       prompt: `Slidev Preview Port for ${getSlidesTitle(activeProject.value.data)}`,
       value: config.port.toString(),
       validateInput: (v) => {
-        if (!v.match(/^\d+$/))
+        if (!RE_DIGITS.test(v))
           return 'Port should be a number'
         if (+v < 1024 || +v > 65535)
           return 'Port should be between 1024 and 65535'
@@ -134,6 +142,8 @@ export function useCommands() {
   useCommand('slidev.preview-next-click', () => usePreviewWebview().nextClick())
   useCommand('slidev.preview-prev-slide', () => usePreviewWebview().prevSlide())
   useCommand('slidev.preview-next-slide', () => usePreviewWebview().nextSlide())
+  useCommand('slidev.show-slide-preview', () => usePreviewWebview().setPreviewMode('slide'))
+  useCommand('slidev.show-overview-preview', () => usePreviewWebview().setPreviewMode('overview'))
 
   useCommand('slidev.enable-preview-sync', () => (config.update('preview-sync', true, ConfigurationTarget.Global)))
   useCommand('slidev.disable-preview-sync', () => (config.update('preview-sync', false, ConfigurationTarget.Global)))

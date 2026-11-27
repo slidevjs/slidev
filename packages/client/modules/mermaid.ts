@@ -1,7 +1,7 @@
-import mermaidRenderers from '#slidev/setups/mermaid-renderer'
 import { clearUndefined } from '@antfu/utils'
 import lz from 'lz-string'
 import mermaid from 'mermaid/dist/mermaid.esm.mjs'
+import mermaidRenderers from '#slidev/setups/mermaid-renderer'
 import { makeId } from '../logic/utils'
 import setupMermaid from '../setup/mermaid'
 
