@@ -50,6 +50,7 @@ export default async function setupUnocss(
   config.theme.fontFamily.sans ||= data.config.fonts.sans.join(',')
   config.theme.fontFamily.mono ||= data.config.fonts.mono.join(',')
   config.theme.fontFamily.serif ||= data.config.fonts.serif.join(',')
+  config.theme.fontFamily.body ||= config.theme.fontFamily[data.config.fonts.body]
 
   return config
 }
