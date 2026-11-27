@@ -26,7 +26,9 @@ watch(
   (v) => {
     if (!isInputting.value) {
       note.value = (v?.note || '').trim()
-      const frontmatterPart = v?.frontmatterRaw?.trim() ? `---\n${v.frontmatterRaw.trim()}\n---\n\n` : ''
+      const frontmatterPart = v?.frontmatterRaw?.trim()
+        ? `---\n${v.frontmatterRaw.trim()}\n---\n\n`
+        : ''
       content.value = frontmatterPart + (v?.source.contentRaw || '').trim()
       dirty.value = false
     }

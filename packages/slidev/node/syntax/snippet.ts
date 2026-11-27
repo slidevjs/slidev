@@ -153,7 +153,9 @@ export function resolveSnippetImport(lineText: string, userRoot: string, slide: 
         incTags = {}
         for (const tag of tags) {
           if (tag && tag !== '!') {
-            incTags[tag.startsWith('!') ? tag.slice(1) : tag] = !tag.startsWith('!')
+            incTags[tag.startsWith('!')
+              ? tag.slice(1)
+              : tag] = !tag.startsWith('!')
           }
         }
         if (Object.keys(incTags).length === 0) {
@@ -264,7 +266,9 @@ function filterLinesByTags(lines: ReadonlyArray<string>, incTags: Record<string,
           tagStack.push({ tag: activeTag, select, lineNumber })
         }
         else if (wildcard !== undefined) {
-          select = activeTag && !select ? false : wildcard
+          select = activeTag && !select
+            ? false
+            : wildcard
           activeTag = thisTag
           tagStack.push({ tag: thisTag, select, lineNumber })
         }
@@ -287,14 +291,22 @@ function filterLinesByTags(lines: ReadonlyArray<string>, incTags: Record<string,
     .map(([k]) => k)
     .filter(k => !tagsSelected.has(k))
   if (missingTags.length > 0) {
-    console.warn(`tag${missingTags.length > 1 ? 's' : ''} '${missingTags.join(', ')}' not found in file ${sourceFile}`)
+    console.warn(`tag${missingTags.length > 1
+      ? 's'
+      : ''} '${missingTags.join(', ')}' not found in file ${sourceFile}`)
   }
 
   return includedLines
 }
 
-export default function MarkdownItSnippet(md: MarkdownExit, { userRoot, userWorkspaceRoot, roots, data: { watchFiles, slides } }: ResolvedSlidevOptions) {
-  const allowedRoots = [...new Set([userWorkspaceRoot, userRoot, ...(roots ?? [])].filter(Boolean))]
+export default function MarkdownItSnippet(md: MarkdownExit, { userRoot, userWorkspaceRoot, roots, data }: ResolvedSlidevOptions) {
+  const allowedRoots = [
+    ...new Set([
+      userWorkspaceRoot,
+      userRoot,
+      ...(roots ?? []),
+    ].filter(Boolean)),
+  ]
   md.block.ruler.before('fence', 'snippet_import', (state, startLine, _endLine, silent) => {
     const pos = state.bMarks[startLine] + state.tShift[startLine]
     const max = state.eMarks[startLine]
@@ -308,7 +320,11 @@ export default function MarkdownItSnippet(md: MarkdownExit, { userRoot, userWork
       return true
 
     const slideNo = state.env.id?.match(regexSlideSourceId)
-    const slide = slideNo ? slides[slideNo[1] - 1] : null
+    // Read `data` on every render: the dev server replaces `data.slides` and
+    // `data.watchFiles` with fresh objects each time it reloads the slides.
+    const slide = slideNo
+      ? data.slides[slideNo[1] - 1]
+      : null
 
     if (!slide) {
       console.warn(yellow(`[markdown-it-snippet] Snippet syntax is not supported in ${state.env.id || 'unknown source'}. Skipped.`))
@@ -339,16 +355,25 @@ export default function MarkdownItSnippet(md: MarkdownExit, { userRoot, userWork
       token.map = [startLine, startLine + 1]
     }
     else {
-      watchFiles[src] ??= new Set()
-      watchFiles[src].add(slide.index)
+      data.watchFiles[src] ??= new Set()
+      data.watchFiles[src].add(slide.index)
 
       const token = state.push('fence', 'code', 0)
       token.info = `${lang} ${meta}`.trim()
-      token.content = content.endsWith('\n') ? content : `${content}\n`
+      token.content = content.endsWith('\n')
+        ? content
+        : `${content}\n`
       token.map = [startLine, startLine + 1]
     }
 
     state.line = startLine + 1
     return true
-  }, { alt: ['paragraph', 'reference', 'blockquote', 'list'] })
+  }, {
+    alt: [
+      'paragraph',
+      'reference',
+      'blockquote',
+      'list',
+    ],
+  })
 }

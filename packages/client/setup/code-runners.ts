@@ -65,14 +65,18 @@ export default createSingletonPromise(async () => {
 function runJavaScript(code: string): CodeRunnerOutputs {
   const result = ref<CodeRunnerOutput[]>([])
 
-  const onError = (error: any) => result.value.push({ error: String(error) })
+  const onError = (error: any) => result.value.push({
+    error: String(error),
+  })
   const logger = (...objs: any[]) => result.value.push(objs.map(printObject))
   const vmConsole = Object.assign({}, console)
   vmConsole.info = vmConsole.log = vmConsole.debug = vmConsole.warn = vmConsole.error = logger
   vmConsole.clear = () => result.value.length = 0
   try {
     const wrappedCode = `return async (console, __slidev_import, __slidev_on_error) => {
-    ${configs.monacoRunUseStrict ? `"use strict";` : ''}
+    ${configs.monacoRunUseStrict
+      ? `"use strict";`
+      : ''}
       try {
         ${fixupCode(code)}
       } catch (e) {
@@ -119,7 +123,9 @@ function runJavaScript(code: string): CodeRunnerOutputs {
       textRep = `Set (${arg.size}) {${setIter.map(objectToText).join(', ')}}`
     }
     else if (arg instanceof Map) {
-      const mapIter = [...arg.entries()]
+      const mapIter = [
+        ...arg.entries(),
+      ]
       textRep
         = `Map (${arg.size}) {${mapIter
           .map(([k, v]) => `${objectToText(k)} => ${objectToText(v)}`)
@@ -135,13 +141,19 @@ function runJavaScript(code: string): CodeRunnerOutputs {
     else if (typeof arg === 'object') {
       const name = arg.constructor?.name ?? ''
       // No one needs to know an obj is an obj
-      const nameWithoutObject = name && name === 'Object' ? '' : name
-      const prefix = nameWithoutObject ? `${nameWithoutObject}: ` : ''
+      const nameWithoutObject = name && name === 'Object'
+        ? ''
+        : name
+      const prefix = nameWithoutObject
+        ? `${nameWithoutObject}: `
+        : ''
 
       // JSON.stringify omits any keys with a value of undefined. To get around this, we replace undefined with the text __undefined__ and then do a global replace using regex back to keyword undefined
       textRep
         = prefix
-          + JSON.stringify(arg, (_, value) => (value === undefined ? '__undefined__' : value), 2).replace(
+          + JSON.stringify(arg, (_, value) => (value === undefined
+            ? '__undefined__'
+            : value), 2).replace(
             /"__undefined__"/g,
             'undefined',
           )
