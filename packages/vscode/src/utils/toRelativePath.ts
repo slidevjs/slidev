@@ -1,5 +1,5 @@
-import { relative } from 'node:path'
 import { slash } from '@antfu/utils'
+import { relative } from 'pathe'
 import { workspace } from 'vscode'
 
 export function toRelativePath(path: string) {

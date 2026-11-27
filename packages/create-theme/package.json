@@ -1,7 +1,7 @@
 {
   "name": "create-slidev-theme",
   "type": "module",
-  "version": "52.14.2",
+  "version": "53.1.0",
   "description": "Create starter theme template for Slidev",
   "author": "Anthony Fu <anthonyfu117@hotmail.com>",
   "license": "MIT",
@@ -17,11 +17,12 @@
     "create-slidev-theme": "index.mjs"
   },
   "engines": {
-    "node": ">=20.12.0"
+    "node": ">=22.12.0"
   },
   "dependencies": {
     "ansis": "catalog:prod",
     "minimist": "catalog:prod",
+    "pathe": "catalog:prod",
     "prompts": "catalog:prod"
   }
 }

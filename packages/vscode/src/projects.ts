@@ -3,9 +3,9 @@ import type { ComputedRef, EffectScope, Ref, ShallowRef } from 'reactive-vscode'
 import type { SlidevServer } from './composables/useDevServer'
 import type { DetectedServerState } from './composables/useServerDetector'
 import { existsSync } from 'node:fs'
-import { basename, dirname } from 'node:path'
 import { debounce, slash } from '@antfu/utils'
 import { load } from '@slidev/parser/fs'
+import { basename, dirname } from 'pathe'
 import { isMatch } from 'picomatch'
 import { computed, effectScope, extensionContext, markRaw, onScopeDispose, ref, shallowReactive, shallowRef, useDisposable, useFileSystemWatcher, useVscodeContext, watch, watchEffect } from 'reactive-vscode'
 import { FileSystemError, Uri, window, workspace } from 'vscode'
@@ -25,9 +25,13 @@ export interface SlidevProject {
 }
 
 export const projects = shallowReactive(new Map<string, SlidevProject>())
-export const slidevFiles = computed(() => [...projects.values()].flatMap(p => Object.keys(p.data.markdownFiles)))
+export const slidevFiles = computed(() => [
+  ...projects.values(),
+].flatMap(p => Object.keys(p.data.markdownFiles)))
 export const activeEntry = ref<string | null>(null)
-export const activeProject = computed(() => activeEntry.value ? projects.get(activeEntry.value) : undefined)
+export const activeProject = computed(() => activeEntry.value
+  ? projects.get(activeEntry.value)
+  : undefined)
 export const activeData = computed(() => activeProject.value?.data)
 
 export function useProjects() {
@@ -60,7 +64,10 @@ export function useProjects() {
   })
 
   // Auto set active project
-  watch(() => [...projects.keys(), activeEntry.value], () => {
+  watch(() => [
+    ...projects.keys(),
+    activeEntry.value,
+  ], () => {
     if (!activeEntry.value) {
       const previous = extensionContext.value!.workspaceState.get('slidev:activeProject', null)
       if (previous && projects.has(previous)) {
@@ -68,7 +75,9 @@ export function useProjects() {
         return
       }
       const firstKind = findShallowestPath(
-        [...projects.keys()].filter(path => basename(path) === 'slides.md'),
+        [
+          ...projects.keys(),
+        ].filter(path => basename(path) === 'slides.md'),
       )
       if (firstKind) {
         activeEntry.value = firstKind
@@ -195,7 +204,10 @@ export function removeProject(entry: string) {
 
 async function loadProject(entry: string) {
   const userRoot = dirname(entry)
-  return markRaw(await load(userRoot, entry, async (path: string) => {
+  return markRaw(await load({
+    userRoot,
+    roots: [userRoot],
+  }, entry, async (path: string) => {
     const document = workspace.textDocuments.find(d => slash(d.uri.fsPath) === path)
     if (document) {
       return document.getText()

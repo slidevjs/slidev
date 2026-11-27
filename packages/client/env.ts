@@ -1,10 +1,12 @@
-import configs from '#slidev/configs'
 import { objectMap } from '@antfu/utils'
 import { computed } from 'vue'
+import configs from '#slidev/configs'
 
 export { configs }
 
-export const mode = __DEV__ ? 'dev' : 'build'
+export const mode = import.meta.env.DEV
+  ? 'dev'
+  : 'build'
 
 export const slideAspect = computed(() => configs.aspectRatio)
 export const slideWidth = computed(() => configs.canvasWidth)

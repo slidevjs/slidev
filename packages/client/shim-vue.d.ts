@@ -23,6 +23,7 @@ declare module 'vue-router' {
       noteHTML: string
       filepath: string
       start: number
+      sourceIndex: number
       id: number
       no: number
     }

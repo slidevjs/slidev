@@ -1,10 +1,10 @@
 <script setup lang="ts">
 import type { Ref } from 'vue'
-import HandoutCover from '#slidev/global-components/handout-cover'
-import HandoutEnding from '#slidev/global-components/handout-ending'
 import { useElementSize } from '@vueuse/core'
 import { computed, nextTick, onBeforeUnmount, onMounted, ref, watch, watchEffect } from 'vue'
 import { useRoute } from 'vue-router'
+import HandoutCover from '#slidev/global-components/handout-cover'
+import HandoutEnding from '#slidev/global-components/handout-ending'
 import { useNav } from '../../composables/useNav'
 import { useHandoutPageSetup } from '../../composables/usePrintStyles'
 import { themeVars } from '../../env'
@@ -58,7 +58,9 @@ function detectPageBlocks(el: HTMLElement | null, fallback: number) {
   const directCount = directChildren.filter(node => node.classList.contains('break-after-page') || node.hasAttribute('data-handout-page')).length
   if (directCount > 0)
     return directCount
-  return hasContent ? Math.max(1, fallback) : fallback
+  return hasContent
+    ? Math.max(1, fallback)
+    : fallback
 }
 
 function recountCoverPages() {

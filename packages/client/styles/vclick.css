@@ -48,7 +48,7 @@
   display: none !important;
 }
 
-// No longer used, but kept for backward compatibility
+/* No longer used, but kept for backward compatibility */
 .slidev-vclick-fade {
   opacity: 0.5;
 }

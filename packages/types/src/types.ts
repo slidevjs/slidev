@@ -97,6 +97,7 @@ export interface SlidevDetectedFeatures {
     deps: string[]
   }
   tweet: boolean
+  bluesky: boolean
   mermaid: boolean
 }
 
@@ -134,7 +135,7 @@ export interface SlidevPreparserExtension {
   transformNote?: (note: string | undefined, frontmatter: any) => Promise<string | undefined>
 }
 
-export type PreparserExtensionLoader = (headmatter: Record<string, unknown>, filepath: string, mode?: string) => Promise<SlidevPreparserExtension[]>
+export type PreparserExtensionLoader = (roots: string[], headmatter: Record<string, unknown>, filepath: string, mode?: string) => Promise<SlidevPreparserExtension[]>
 
 export type RenderContext = 'none' | 'slide' | 'overview' | 'presenter' | 'previewNext'
 

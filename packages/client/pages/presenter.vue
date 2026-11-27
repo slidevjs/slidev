@@ -1,9 +1,10 @@
 <script setup lang="ts">
 import { useHead } from '@unhead/vue'
-import { useEventListener, useLocalStorage, useMediaQuery, useMouse, useWindowFocus } from '@vueuse/core'
-import { computed, onMounted, reactive, ref, shallowRef, watch } from 'vue'
+import { useEventListener, useLocalStorage, useMediaQuery, useWindowFocus } from '@vueuse/core'
+import { computed, onMounted, ref, shallowRef, watch, watchEffect } from 'vue'
 import { createClicksContextBase } from '../composables/useClicks'
 import { useDrawings } from '../composables/useDrawings'
+import { useMousePosInSlide } from '../composables/useMousePosInSlide'
 import { useNav } from '../composables/useNav'
 import { useSwipeControls } from '../composables/useSwipeControls'
 import { useWakeLock } from '../composables/useWakeLock'
@@ -14,6 +15,7 @@ import CurrentProgressBar from '../internals/CurrentProgressBar.vue'
 import DrawingControls from '../internals/DrawingControls.vue'
 import Goto from '../internals/Goto.vue'
 import IconButton from '../internals/IconButton.vue'
+import LaserPointer from '../internals/LaserPointer.vue'
 import NavControls from '../internals/NavControls.vue'
 import NoteEditable from '../internals/NoteEditable.vue'
 import NoteStatic from '../internals/NoteStatic.vue'
@@ -27,7 +29,7 @@ import TimerBar from '../internals/TimerBar.vue'
 import TimerInlined from '../internals/TimerInlined.vue'
 import { onContextMenu } from '../logic/contextMenu'
 import { registerShortcuts } from '../logic/shortcuts'
-import { decreasePresenterFontSize, increasePresenterFontSize, presenterLayout, presenterNotesFontSize, showEditor, showPresenterCursor } from '../state'
+import { cursorStyle, decreasePresenterFontSize, increasePresenterFontSize, presenterLayout, presenterNotesFontSize, showEditor, showPresenterCursor } from '../state'
 import { sharedState } from '../state/shared'
 
 const inFocus = useWindowFocus()
@@ -100,7 +102,6 @@ const resizeStartRowSize = ref(280)
 
 const RESIZER_LIMITS = {
   minNotesWidth: 240,
-  maxNotesWidth: 720,
   minNotesRowSize: 160,
   maxNotesWidthRatio: 0.7,
   maxNotesRowHeightRatio: 0.75,
@@ -118,10 +119,7 @@ const isNotesOnBottom = computed(() => presenterLayout.value === 1 && !isLayout1
 function clampNotesWidth(width: number) {
   if (!Number.isFinite(width))
     return RESIZER_LIMITS.minNotesWidth
-  return Math.max(
-    RESIZER_LIMITS.minNotesWidth,
-    Math.min(RESIZER_LIMITS.maxNotesWidth, Math.round(width)),
-  )
+  return Math.max(RESIZER_LIMITS.minNotesWidth, Math.round(width))
 }
 
 function updateNotesWidthFromPointer(clientX: number) {
@@ -244,28 +242,20 @@ if (__DEV__ && __SLIDEV_FEATURE_EDITOR__)
 
 // sync presenter cursor
 onMounted(() => {
-  const slidesContainer = main.value!.querySelector('#slide-content')!
-  const mouse = reactive(useMouse())
+  const mouse = useMousePosInSlide()
   const focus = useWindowFocus()
 
-  watch(
-    () => {
-      if (!focus.value || isDrawing.value || !showPresenterCursor.value || !slidesContainer)
-        return undefined
-
-      const rect = slidesContainer.getBoundingClientRect()
-      const x = (mouse.x - rect.left) / rect.width * 100
-      const y = (mouse.y - rect.top) / rect.height * 100
-
-      if (x < 0 || x > 100 || y < 0 || y > 100)
-        return undefined
-
-      return { x, y }
-    },
-    (pos) => {
-      sharedState.cursor = pos
-    },
-  )
+  watchEffect(() => {
+    if (!mouse.value || !focus.value || isDrawing.value || !showPresenterCursor.value) {
+      sharedState.cursor = undefined
+    }
+    else {
+      sharedState.cursor = {
+        ...mouse.value,
+        style: cursorStyle.value,
+      }
+    }
+  })
 })
 </script>
 
@@ -328,6 +318,7 @@ onMounted(() => {
           @contextmenu="onContextMenu"
         >
           <SlidesShow render-context="presenter" />
+          <LaserPointer />
         </SlideContainer>
 
         <ClicksSlider
@@ -400,6 +391,7 @@ onMounted(() => {
             class="w-full max-w-full h-full overflow-auto p-2 lg:p-4"
             :style="{ fontSize: `${presenterNotesFontSize}em` }"
             :clicks-context="clicksContext"
+            auto-scroll
           />
           <div border-t border-main />
           <div class="py-1 px-2 text-sm transition" :class="inFocus ? '' : 'op25'">
@@ -441,6 +433,7 @@ onMounted(() => {
   --slidev-presenter-notes-width: 360px;
   --slidev-presenter-notes-row-size: 280px;
   --uno: bg-gray/20 flex-1 of-hidden;
+  position: relative;
   display: grid;
   gap: 1px 1px;
 }
@@ -577,8 +570,6 @@ onMounted(() => {
   top: 0;
   width: 1px;
   height: 100%;
-  background-color: currentColor;
-  opacity: 0.2;
   transform: translateX(-50%);
 }
 
@@ -601,8 +592,6 @@ onMounted(() => {
   top: 0;
   width: 1px;
   height: 100%;
-  background-color: currentColor;
-  opacity: 0.2;
   transform: translateX(-50%);
 }
 </style>

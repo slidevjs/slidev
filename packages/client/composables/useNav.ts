@@ -1,13 +1,13 @@
 import type { ClicksContext, SlideRoute, TocItem } from '@slidev/types'
 import type { ComputedRef, Ref, TransitionGroupProps, WritableComputedRef } from 'vue'
 import type { RouteLocationNormalized, Router } from 'vue-router'
-import { slides } from '#slidev/slides'
 import { clamp } from '@antfu/utils'
 import { parseRangeString } from '@slidev/parser/utils'
-import { createSharedComposable } from '@vueuse/core'
-import { computed, ref, watch } from 'vue'
+import { createSharedComposable, injectLocal } from '@vueuse/core'
+import { computed, hasInjectionContext, ref, toRaw, watch } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
-import { CLICKS_MAX } from '../constants'
+import { slides } from '#slidev/slides'
+import { CLICKS_MAX, injectionSlidevContext } from '../constants'
 import { configs } from '../env'
 import { useRouteQuery } from '../logic/route'
 import { getSlide, getSlidePath } from '../logic/slides'
@@ -26,6 +26,7 @@ export interface SlidevContextNav {
   currentSlideRoute: ComputedRef<SlideRoute>
   currentTransition: ComputedRef<TransitionGroupProps | undefined>
   currentLayout: ComputedRef<string>
+  currentFrontmatter: ComputedRef<Record<string, any>>
 
   nextRoute: ComputedRef<SlideRoute>
   prevRoute: ComputedRef<SlideRoute>
@@ -101,10 +102,27 @@ export function useNavBase(
 
   const navDirection = ref(0)
   const clicksDirection = ref(0)
+  let lastAdvance = Number.NEGATIVE_INFINITY
+
+  function acceptAdvance() {
+    const interval = configs.advanceDebounce
+    if (isPrint.value || !Number.isFinite(interval) || interval <= 0)
+      return true
+
+    const now = performance.now()
+    if (now - lastAdvance < interval)
+      return false
+
+    lastAdvance = now
+    return true
+  }
 
   const currentPath = computed(() => getSlidePath(currentSlideRoute.value, isPresenter.value))
   const currentSlideNo = computed(() => currentSlideRoute.value.no)
-  const currentLayout = computed(() => currentSlideRoute.value.meta?.layout || (currentSlideNo.value === 1 ? 'cover' : 'default'))
+  const currentLayout = computed(() => currentSlideRoute.value.meta?.layout || (currentSlideNo.value === 1
+    ? 'cover'
+    : 'default'))
+  const currentFrontmatter = computed(() => currentSlideRoute.value.meta.slide.frontmatter)
 
   const clicks = computed(() => clicksContext.value.current)
   const clicksStart = computed(() => clicksContext.value.clicksStart)
@@ -114,7 +132,9 @@ export function useNavBase(
   const hasNext = computed(() => currentSlideNo.value < slides.value.length || clicks.value < clicksTotal.value)
   const hasPrev = computed(() => currentSlideNo.value > 1 || clicks.value > 0)
 
-  const currentTransition = computed(() => isPrint.value ? undefined : getCurrentTransition(navDirection.value, currentSlideRoute.value, prevRoute.value))
+  const currentTransition = computed(() => isPrint.value
+    ? undefined
+    : getCurrentTransition(navDirection.value, currentSlideRoute.value, prevRoute.value))
 
   watch(currentSlideRoute, (next, prev) => {
     navDirection.value = next.no - prev.no
@@ -140,14 +160,17 @@ export function useNavBase(
   )
 
   async function next() {
+    if (!acceptAdvance())
+      return
     clicksDirection.value = 1
     if (clicksTotal.value <= queryClicks.value)
-      await nextSlide()
+      await advanceSlide()
     else
       queryClicks.value += 1
   }
 
   async function prev() {
+    lastAdvance = Number.NEGATIVE_INFINITY
     clicksDirection.value = -1
     if (queryClicks.value <= clicksStart.value)
       await prevSlide(true)
@@ -156,21 +179,33 @@ export function useNavBase(
   }
 
   async function nextSlide(lastClicks = false) {
+    if (!acceptAdvance())
+      return
+    await advanceSlide(lastClicks)
+  }
+
+  // Internal navigation must not consume or reset the suppression window.
+  async function advanceSlide(lastClicks = false) {
     clicksDirection.value = 1
     if (currentSlideNo.value < slides.value.length) {
-      await go(
+      await navigate(
         currentSlideNo.value + 1,
-        lastClicks && !isPrint.value ? CLICKS_MAX : undefined,
+        lastClicks && !isPrint.value
+          ? CLICKS_MAX
+          : undefined,
       )
     }
   }
 
   async function prevSlide(lastClicks = false) {
+    lastAdvance = Number.NEGATIVE_INFINITY
     clicksDirection.value = -1
     if (currentSlideNo.value > 1) {
       await go(
         currentSlideNo.value - 1,
-        lastClicks && !isPrint.value ? CLICKS_MAX : undefined,
+        lastClicks && !isPrint.value
+          ? CLICKS_MAX
+          : undefined,
       )
     }
   }
@@ -184,6 +219,11 @@ export function useNavBase(
   }
 
   async function go(no: number | string, clicks: number = 0, force = false) {
+    lastAdvance = Number.NEGATIVE_INFINITY
+    await navigate(no, clicks, force)
+  }
+
+  async function navigate(no: number | string, clicks: number = 0, force = false) {
     hmrSkipTransition.value = false
     const pageChanged = currentSlideNo.value !== no
     const clicksChanged = clicks !== queryClicks.value
@@ -195,8 +235,12 @@ export function useNavBase(
         path: getSlidePath(no, isPresenter.value, router.currentRoute.value.name === 'export'),
         query: {
           ...router.currentRoute.value.query,
-          clicks: clicks === 0 ? undefined : clicks.toString(),
-          embedded: location.search.includes('embedded') ? 'true' : undefined,
+          clicks: clicks === 0
+            ? undefined
+            : clicks.toString(),
+          embedded: location.search.includes('embedded')
+            ? 'true'
+            : undefined,
         },
       })
     }
@@ -223,6 +267,7 @@ export function useNavBase(
     currentPage: currentSlideNo,
     currentSlideRoute,
     currentLayout,
+    currentFrontmatter,
     currentTransition,
     clicksDirection,
     nextRoute,
@@ -288,7 +333,9 @@ const useNavState = createSharedComposable((): SlidevContextNavState => {
   const isNotesViewer = computed(() => currentRoute.name === 'notes')
   const isPresenterAvailable = computed(() => !isPresenter.value && (!configs.remote || query.value.get('password') === configs.remote))
   const hasPrimarySlide = computed(() => !!currentRoute.params.no)
-  const currentSlideNo = computed(() => hasPrimarySlide.value ? getSlide(currentRoute.params.no as string)?.no ?? 1 : 1)
+  const currentSlideNo = computed(() => hasPrimarySlide.value
+    ? getSlide(currentRoute.params.no as string)?.no ?? 1
+    : 1)
   const currentSlideRoute = computed(() => slides.value[currentSlideNo.value - 1])
   const printRange = ref(parseRangeString(slides.value.length, currentRoute?.query?.range as string | undefined))
 
@@ -362,7 +409,7 @@ const useNavState = createSharedComposable((): SlidevContextNavState => {
   }
 })
 
-export const useNav = createSharedComposable((): SlidevContextNavFull => {
+const useSharedNav = createSharedComposable((): SlidevContextNavFull => {
   const state = useNavState()
   const router = useRouter()
 
@@ -398,3 +445,22 @@ export const useNav = createSharedComposable((): SlidevContextNavFull => {
     ...state,
   }
 })
+
+export function useNav(): SlidevContextNavFull {
+  const nav = useSharedNav()
+  // `useNav()` is also called outside of `setup()`, most notably from the
+  // `mounted`/`created` hooks of the `v-motion` and `v-mark` directives.
+  // `injectLocal` throws there, and there is no slide-local context to read
+  // anyway, so fall back to the shared nav.
+  const context = hasInjectionContext()
+    ? injectLocal(injectionSlidevContext, undefined)
+    : undefined
+  if (!context)
+    return nav
+
+  const localNav = toRaw(context).nav as unknown as SlidevContextNav
+  return {
+    ...nav,
+    ...localNav,
+  }
+}

@@ -20,6 +20,17 @@ function replaceCRLF(s: string) {
   return s.replace(/\r\n/g, '\n')
 }
 
+describe('advance debounce config', () => {
+  it('is disabled by default and resolves deck and nested config values', () => {
+    expect(getDefaultConfig().advanceDebounce).toBe(0)
+    expect(resolveConfig({}).advanceDebounce).toBe(0)
+    expect(resolveConfig({ advanceDebounce: 100 }).advanceDebounce).toBe(100)
+    expect(resolveConfig({
+      config: { advanceDebounce: 250 },
+    }).advanceDebounce).toBe(250)
+  })
+})
+
 describe('md parser', () => {
   const userRoot = resolve(__dirname, 'fixtures/markdown')
   const files = fg.sync('*.md', {
@@ -29,7 +40,10 @@ describe('md parser', () => {
 
   for (const file of files) {
     it(basename(file), async () => {
-      const data = await load(userRoot, file)
+      const data = await load({
+        userRoot,
+        roots: [userRoot],
+      }, file)
 
       expect(stringify(data.entry).trim()).toEqual(replaceCRLF(data.entry.raw.trim()))
 
@@ -113,6 +127,130 @@ f
       .toEqual({ })
   })
 
+  it('does not take the slide title from a heading inside a code block', async () => {
+    const data = await parse([
+      '```bash',
+      '# Install the CLI',
+      'npm i -g @slidev/cli',
+      '```',
+      '',
+      '## Getting started',
+      '',
+      '---',
+      '',
+      '```bash',
+      '# Only a code comment',
+      '```',
+      '',
+    ].join('\n'), 'file.md')
+
+    expect(data.slides[0].title).toBe('Getting started')
+    expect(data.slides[0].level).toBe(2)
+    expect(data.slides[1].title).toBe(undefined)
+  })
+
+  it('ignores a leading UTF-8 BOM', async () => {
+    const markdown = '﻿---\ntheme: seriph\ntitle: Hello\n---\n\n# Slide 1\n\n---\n\n# Slide 2\n'
+
+    const data = await parse(markdown, 'file.md')
+    expect(data.slides.map(i => i.content.trim())).toEqual(['# Slide 1', '# Slide 2'])
+    expect(data.slides[0].frontmatter).toEqual({ theme: 'seriph', title: 'Hello' })
+
+    const userRoot = resolve(__dirname, 'fixtures/markdown')
+    const filepath = slash(resolve(userRoot, 'bom.md'))
+    const loaded = await load({
+      userRoot,
+      roots: [userRoot],
+    }, filepath, { [filepath]: markdown })
+    expect(loaded.headmatter).toEqual({ theme: 'seriph', title: 'Hello' })
+  })
+
+  it('ignores slide separators inside HTML comments', async () => {
+    const data = await parse(`---
+src: ./pages/one.md
+---
+
+<!--
+---
+src: ./pages/two.md
+---
+-->
+
+---
+src: ./pages/three.md
+---
+`, 'slides.md')
+
+    expect(data.slides).toHaveLength(2)
+    expect(data.slides.map(slide => slide.frontmatter.src))
+      .toEqual(['./pages/one.md', './pages/three.md'])
+  })
+
+  describe('missing blank line after `---`', () => {
+    const cases = {
+      'a multi-line comment': '<!--\nnote\n-->',
+      'a comment containing a colon': '<!-- note: something -->',
+      'plain text': 'hello',
+      'a list': '- a\n- b',
+    }
+
+    for (const [name, body] of Object.entries(cases)) {
+      it(`records an error for ${name}`, async () => {
+        const data = await parse(`# Slide 1\n\n---\n${body}\n\n---\n\n# Slide 3\n`, 'slides.md')
+
+        expect(data.slides).toHaveLength(2)
+        expect(data.slides[1].frontmatter).toEqual({})
+        expect(data.errors).toEqual([
+          {
+            row: 2,
+            message: expect.stringContaining('blank line'),
+          },
+        ])
+      })
+    }
+
+    it('does not record an error when the blank line exists', async () => {
+      const data = await parse(`# Slide 1\n\n---\n\n<!--\nnote\n-->\n\n---\n\n# Slide 3\n`, 'slides.md')
+
+      expect(data.slides[1].note).toBe('note')
+      expect(data.errors).toBeUndefined()
+    })
+
+    it('does not record an error for a valid or comment-only frontmatter', async () => {
+      const data = await parse(`# Slide 1\n\n---\nlayout: center\n---\n\n# Slide 2\n\n---\n# layout: center\n---\n\n# Slide 3\n`, 'slides.md')
+
+      expect(data.slides[1].frontmatter).toEqual({ layout: 'center' })
+      expect(data.slides[2].frontmatter).toEqual({})
+      expect(data.errors).toBeUndefined()
+    })
+  })
+
+  it('ignores an HTML comment inside frontmatter and records an error', async () => {
+    const data = await parse(`# Slide 1\n\n---\nlayout: center\n<!-- note -->\n---\n\n# Slide 2\n`, 'slides.md')
+
+    expect(data.slides[1].frontmatter).toEqual({ layout: 'center' })
+    expect(data.errors).toEqual([
+      {
+        row: 2,
+        message: expect.stringContaining('HTML comments are not supported in frontmatter'),
+      },
+    ])
+  })
+
+  it('detects slide separator even when comment opens on the same line', async () => {
+    const data = await parse(`a
+
+----<!--
+hidden
+-->
+
+b
+`, 'file.md')
+
+    expect(data.slides).toHaveLength(2)
+    expect(data.slides.map(s => s.content.trim())).toEqual(['a', 'hidden\n-->\n\nb'])
+  })
+
   async function parseWithExtension(
     src: string,
     transformRawLines: (lines: string[]) => void | Promise<void> = () => {},
@@ -122,7 +260,10 @@ f
     return await parse(
       src,
       'file.md',
-      [{ transformRawLines, ...more }, ...moreExts] as any,
+      [
+        { transformRawLines, ...more },
+        ...moreExts,
+      ] as any,
     )
   }
 
@@ -188,7 +329,9 @@ background: ${i}${more}
       let i = 0
       while (i < lines.length) {
         if (lines[i].startsWith('@cov ')) {
-          const repl = [...cov(lines[i].substring(5), '').split('\n')]
+          const repl = [
+            ...cov(lines[i].substring(5), '').split('\n'),
+          ]
           lines.splice(i, 1, ...repl)
         }
         i++
@@ -210,19 +353,22 @@ background: ${i}${more}
 a..A
 a.a.A.A
 .a.A.
-`, undefined, {}, [{
-      name: 'test',
-      transformRawLines(lines: string[]) {
-        for (const i in lines)
-          lines[i] = lines[i].replace(/A/g, 'B').replace(/a/g, 'A')
+`, undefined, {}, [
+      {
+        name: 'test',
+        transformRawLines(lines: string[]) {
+          for (const i in lines)
+            lines[i] = lines[i].replace(/A/g, 'B').replace(/a/g, 'A')
+        },
       },
-    }, {
-      name: 'test',
-      transformRawLines(lines: string[]) {
-        for (const i in lines)
-          lines[i] = lines[i].replace(/A/g, 'C')
+      {
+        name: 'test',
+        transformRawLines(lines: string[]) {
+          for (const i in lines)
+            lines[i] = lines[i].replace(/A/g, 'C')
+        },
       },
-    }])
+    ])
     expect(data.slides.map(i => i.content.trim().replace(/\n/g, '%')).join('/'))
       .toEqual('C..B%C.C.B.B%.C.B.')
   })
@@ -230,7 +376,9 @@ a.a.A.A
   // Generate cartesian product of given iterables:
   function* cartesian(...all: any[]): Generator<any[], void, void> {
     const [head, ...tail] = all
-    const remainder = tail.length ? cartesian(...tail) : [[]]
+    const remainder = tail.length
+      ? cartesian(...tail)
+      : [[]]
     for (const r of remainder) {
       for (const h of head)
         yield [h, ...r]
@@ -314,18 +462,30 @@ a.a.A.A
       }
       expect(project(data.slides.map(i => i.content.replace(/\n/g, '%')).join('/')))
         .toEqual(project([
-          ...withSlideBefore ? ['./'] : [],
-          ...prependContent ? ['<a>%<b>%'] : [],
+          ...withSlideBefore
+            ? ['./']
+            : [],
+          ...prependContent
+            ? ['<a>%<b>%']
+            : [],
           'ccc%ddd',
-          ...appendContent ? ['%</b>%</a>'] : [],
-          ...withSlideAfter ? ['/..'] : [],
+          ...appendContent
+            ? ['%</b>%</a>']
+            : [],
+          ...withSlideAfter
+            ? ['/..']
+            : [],
         ].join('')))
 
       if (withFrontmatter || addFrontmatter) {
         expect(data.slides[withSlideBefore ? 1 : 0].frontmatter)
           .toEqual({
-            ...withFrontmatter ? { m: 'M', n: 'N' } : {},
-            ...addFrontmatter ? { adda: 'add', addb: 'add' } : {},
+            ...withFrontmatter
+              ? { m: 'M', n: 'N' }
+              : {},
+            ...addFrontmatter
+              ? { adda: 'add', addb: 'add' }
+              : {},
           })
       }
     })
@@ -377,6 +537,19 @@ Some text
       `
       const images = extractImagesUsage(content, {})
       expect(images).toEqual(['/img1.png', 'https://example.com/img2.jpg', './relative/path.svg'])
+    })
+
+    it('ignores the optional title in markdown images', () => {
+      const content = `![alt](/images/photo.jpg "A photo")
+![alt](/images/other.png 'Another')`
+      const images = extractImagesUsage(content, {})
+      expect(images).toEqual(['/images/photo.jpg', '/images/other.png'])
+    })
+
+    it('unwraps angle-bracketed markdown image destinations', () => {
+      const content = '![alt](</images/my photo.jpg>)'
+      const images = extractImagesUsage(content, {})
+      expect(images).toEqual(['/images/my photo.jpg'])
     })
 
     it('ignores data URLs in markdown images', () => {
@@ -510,5 +683,79 @@ Some content
       const images = extractImagesUsage(content, {})
       expect(images).toEqual(['/image.PNG', '/image.JpG', '/image.WEBP'])
     })
+  })
+
+  describe('resolveConfig drawings', () => {
+    it('applies drawings defaults from the theme', () => {
+      const config = resolveConfig({}, {
+        defaults: {
+          drawings: { presenterOnly: true },
+        },
+      } as any)
+      expect(config.drawings).toEqual({
+        enabled: true,
+        persist: false,
+        presenterOnly: true,
+        syncAll: true,
+      })
+    })
+
+    it('applies drawings from the nested `config` headmatter key', () => {
+      const config = resolveConfig({
+        config: {
+          drawings: { syncAll: false },
+        },
+      })
+      expect(config.drawings.syncAll).toBe(false)
+    })
+
+    it('lets headmatter override the theme defaults', () => {
+      const config = resolveConfig(
+        {
+          drawings: { enabled: false },
+        },
+        {
+          defaults: {
+            drawings: { enabled: true, presenterOnly: true },
+          },
+        } as any,
+      )
+      expect(config.drawings.enabled).toBe(false)
+      expect(config.drawings.presenterOnly).toBe(true)
+    })
+  })
+
+  it('detects circular src imports without overflowing', async () => {
+    const root = resolve(__dirname, 'fixtures/markdown/circular')
+    const data = await load({
+      userRoot: root,
+      roots: [root],
+    }, resolve(root, 'a.md'))
+    // Must return (not hang / overflow) and record a circular-import diagnostic
+    const errors = Object.values(data.markdownFiles).flatMap(md => md.errors ?? [])
+    expect(errors.some(e => /circular/i.test(e.message))).toBe(true)
+  })
+
+  it('records an error when a src: import selects a slide below the first one', async () => {
+    const root = resolve(__dirname, 'fixtures/markdown/out-of-range')
+    const data = await load({
+      userRoot: root,
+      roots: [root],
+    }, resolve(root, 'entry.md'))
+    const errors = Object.values(data.markdownFiles).flatMap(md => md.errors ?? [])
+    expect(errors.map(e => e.message)).toEqual([
+      expect.stringContaining('Slide 0 does not exist'),
+    ])
+  })
+
+  it('records an error when a src: import escapes the allowed roots', async () => {
+    const root = resolve(__dirname, 'fixtures/markdown/escaping/root')
+    const data = await load({
+      userRoot: root,
+      roots: [root],
+      allowedRoots: [root],
+    }, resolve(root, 'entry.md'))
+    const errors = Object.values(data.markdownFiles).flatMap(md => md.errors ?? [])
+    expect(errors.some(e => /escapes the project root/i.test(e.message))).toBe(true)
   })
 })

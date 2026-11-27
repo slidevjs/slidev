@@ -69,6 +69,7 @@ exports[`md parser > frontmatter.md > config 1`] = `
 
 exports[`md parser > frontmatter.md > features 1`] = `
 {
+  "bluesky": false,
   "katex": false,
   "mermaid": false,
   "monaco": false,
@@ -437,7 +438,7 @@ Content 2",
 ",
     "importChain": undefined,
     "index": 6,
-    "level": 1,
+    "level": undefined,
     "note": undefined,
     "revision": "-vfy6yo",
     "source": {
@@ -469,7 +470,7 @@ Content 2",
       "frontmatterStyle": "frontmatter",
       "images": [],
       "index": 6,
-      "level": 1,
+      "level": undefined,
       "note": undefined,
       "raw": "---
 layout: cover
@@ -484,9 +485,9 @@ Content 2
 ",
       "revision": "-vfy6yo",
       "start": 59,
-      "title": "When there is already a frontmatter, the first yaml block should be treated as content",
+      "title": undefined,
     },
-    "title": "When there is already a frontmatter, the first yaml block should be treated as content",
+    "title": undefined,
   },
   {
     "content": "# Title
@@ -613,6 +614,7 @@ exports[`md parser > mdc.md > config 1`] = `
 
 exports[`md parser > mdc.md > features 1`] = `
 {
+  "bluesky": false,
   "katex": false,
   "mermaid": false,
   "monaco": false,
@@ -737,6 +739,7 @@ exports[`md parser > minimal.md > config 1`] = `
 
 exports[`md parser > minimal.md > features 1`] = `
 {
+  "bluesky": false,
   "katex": false,
   "mermaid": false,
   "monaco": false,
@@ -963,6 +966,7 @@ exports[`md parser > multi-entries.md > config 1`] = `
 
 exports[`md parser > multi-entries.md > features 1`] = `
 {
+  "bluesky": false,
   "katex": true,
   "mermaid": false,
   "monaco": false,

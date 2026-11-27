@@ -2,8 +2,8 @@ import type RecorderType from 'recordrtc'
 import type { Options as RecorderOptions } from 'recordrtc'
 import type { Ref } from 'vue'
 import { isTruthy } from '@antfu/utils'
+import { fixWebmDuration } from '@fix-webm-duration/fix'
 import { useDevicesList, useEventListener, useLocalStorage } from '@vueuse/core'
-import fixWebmDuration from 'fix-webm-duration'
 import { nextTick, ref, shallowRef, watch } from 'vue'
 import { currentCamera, currentMic } from '../state'
 
@@ -106,6 +106,11 @@ export function useRecording() {
   async function startCameraStream() {
     await ensureDevicesListPermissions()
     await nextTick()
+
+    // Stopped tracks can never be resumed, the whole stream has to be requested again
+    if (streamCamera.value?.getTracks().some(track => track.readyState === 'ended'))
+      closeStream(streamCamera)
+
     if (!streamCamera.value) {
       if (currentCamera.value === 'none' && currentMic.value === 'none')
         return
@@ -206,7 +211,9 @@ export function useRecording() {
       const blob = recorderSlides.value!.getBlob()
       downloadBlob(blob, duration, getFilename('screen', config.mimeType))
       closeStream(streamCapture)
-      closeStream(streamSlides)
+      // `streamSlides` only borrows its tracks from `streamCapture` and `streamCamera`,
+      // stopping them here would also end the mic still used by the camera stream
+      streamSlides.value = undefined
       recorderSlides.value = undefined
     })
   }

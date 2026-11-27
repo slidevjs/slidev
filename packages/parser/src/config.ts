@@ -26,6 +26,7 @@ export function getDefaultConfig(): SlidevConfig {
     lineNumbers: false,
     colorSchema: 'auto',
     routerMode: 'history',
+    advanceDebounce: 0,
     aspectRatio: 16 / 9,
     canvasWidth: 980,
     exportFilename: '',
@@ -45,8 +46,10 @@ export function getDefaultConfig(): SlidevConfig {
     htmlAttrs: {},
     transition: null,
     editor: true,
+    mcp: true,
     contextMenu: null,
     wakeLock: true,
+    pwa: false,
     remote: false,
     mdc: false,
     comark: false,
@@ -55,7 +58,9 @@ export function getDefaultConfig(): SlidevConfig {
     duration: '30min',
     timer: 'stopwatch',
     magicMoveDuration: 800,
+    shiki: {},
     preloadImages: true,
+    clickAnimation: '',
     handout: resolveHandoutOptions(),
   }
 }
@@ -83,7 +88,11 @@ export function resolveConfig(headmatter: any, themeMeta: SlidevThemeMeta = {}, 
       ...headmatter.config?.fonts,
       ...headmatter?.fonts,
     }),
-    drawings: resolveDrawings(headmatter.drawings, filepath),
+    drawings: resolveDrawings({
+      ...themeMeta.defaults?.drawings,
+      ...headmatter.config?.drawings,
+      ...headmatter?.drawings,
+    }, filepath),
     htmlAttrs: {
       ...defaultConfig.htmlAttrs,
       ...themeMeta.defaults?.htmlAttrs,
@@ -110,8 +119,15 @@ export function resolveConfig(headmatter: any, themeMeta: SlidevThemeMeta = {}, 
   if (config.highlighter === 'prism')
     throw new Error(`[slidev] "prism" support has been dropped. Please use "highlighter: shiki" instead`)
 
-  if (config.colorSchema !== 'dark' && config.colorSchema !== 'light')
+  if (![
+    'dark',
+    'light',
+    'auto',
+    'light dark',
+    'dark light',
+  ].includes(config.colorSchema)) {
     config.colorSchema = 'auto'
+  }
   if (themeColorSchema && config.colorSchema === 'auto')
     config.colorSchema = themeColorSchema
 
@@ -136,7 +152,7 @@ export function verifyConfig(
     : undefined
 
   if (themeColorSchema && config.colorSchema !== themeColorSchema)
-    warn(`Color schema "${config.colorSchema}" does not supported by the theme`)
+    warn(`Color schema "${config.colorSchema}" is not supported by the theme`)
 
   if (themeHightlighter && config.highlighter !== themeHightlighter)
     warn(`Syntax highlighter "${config.highlighter}" does not supported by the theme`)
@@ -163,7 +179,12 @@ export function resolveFonts(fonts: FontOptions = {}): ResolvedFontOptions {
   const webfonts = fonts.webfonts
     ? fonts.webfonts
     : fallbacks
-      ? uniq([...sans, ...serif, ...mono, ...custom]).filter(i => !local.includes(i))
+      ? uniq([
+          ...sans,
+          ...serif,
+          ...mono,
+          ...custom,
+        ]).filter(i => !local.includes(i))
       : []
 
   function toQuoted(font: string) {
@@ -225,18 +246,49 @@ export function resolveFonts(fonts: FontOptions = {}): ResolvedFontOptions {
 }
 
 const PAPER_SIZES_MM: Record<string, { label: string, mm: [number, number] }> = {
-  a5: { label: 'A5', mm: [148, 210] },
-  a4: { label: 'A4', mm: [210, 297] },
-  a3: { label: 'A3', mm: [297, 420] },
-  letter: { label: 'letter', mm: [215.9, 279.4] },
-  legal: { label: 'legal', mm: [215.9, 355.6] },
-  tabloid: { label: 'tabloid', mm: [279.4, 431.8] },
-  executive: { label: 'executive', mm: [184.15, 266.7] },
+  a5: {
+    label: 'A5',
+    mm: [148, 210],
+  },
+  a4: {
+    label: 'A4',
+    mm: [210, 297],
+  },
+  a3: {
+    label: 'A3',
+    mm: [297, 420],
+  },
+  letter: {
+    label: 'letter',
+    mm: [215.9, 279.4],
+  },
+  legal: {
+    label: 'legal',
+    mm: [215.9, 355.6],
+  },
+  tabloid: {
+    label: 'tabloid',
+    mm: [279.4, 431.8],
+  },
+  executive: {
+    label: 'executive',
+    mm: [184.15, 266.7],
+  },
 }
 
 const PX_PER_MM = 96 / 25.4
-const DEFAULT_HANDOUT_MARGINS = { top: '0cm', right: '0cm', bottom: '0cm', left: '0cm' } as const
-const DEFAULT_HANDOUT_COVER_MARGINS = { top: '1cm', right: '1.5cm', bottom: '1cm', left: '1.5cm' } as const
+const DEFAULT_HANDOUT_MARGINS = {
+  top: '0cm',
+  right: '0cm',
+  bottom: '0cm',
+  left: '0cm',
+} as const
+const DEFAULT_HANDOUT_COVER_MARGINS = {
+  top: '1cm',
+  right: '1.5cm',
+  bottom: '1cm',
+  left: '1.5cm',
+} as const
 
 function formatMm(value: number): string {
   return `${Number(value.toFixed(3))}mm`
@@ -275,8 +327,12 @@ export function resolveHandoutOptions(
     }
   }
 
-  const normalized = typeof options === 'string' ? { size: options } : options || {}
-  const requestedKey = normalized.size ? normalized.size.toLowerCase() : 'a4'
+  const normalized = typeof options === 'string'
+    ? { size: options }
+    : options || {}
+  const requestedKey = normalized.size
+    ? normalized.size.toLowerCase()
+    : 'a4'
   const preset = PAPER_SIZES_MM[requestedKey] || PAPER_SIZES_MM.a4
 
   let widthMm = normalized.width && normalized.height
@@ -291,7 +347,9 @@ export function resolveHandoutOptions(
     : preset.mm[1]
 
   const orientation = normalized.orientation
-    ?? (widthMm >= heightMm ? 'landscape' : 'portrait')
+    ?? (widthMm >= heightMm
+      ? 'landscape'
+      : 'portrait')
 
   if (orientation === 'landscape' && heightMm > widthMm)
     [widthMm, heightMm] = [heightMm, widthMm]
@@ -309,7 +367,9 @@ export function resolveHandoutOptions(
       : cssKeyword
 
   return {
-    size: normalized.width && normalized.height ? 'custom' : cssKeyword,
+    size: normalized.width && normalized.height
+      ? 'custom'
+      : cssKeyword,
     orientation,
     widthMm,
     heightMm,
@@ -333,7 +393,9 @@ function resolveDrawings(options: DrawingsOptions = {}, filepath?: string): Reso
   const persistPath = typeof persist === 'string'
     ? persist
     : persist
-      ? `.slidev/drawings${filepath ? `/${filepath.match(RE_FILENAME_STEM)?.[1]}` : ''}`
+      ? `.slidev/drawings${filepath
+        ? `/${filepath.match(RE_FILENAME_STEM)?.[1]}`
+        : ''}`
       : false
 
   return {

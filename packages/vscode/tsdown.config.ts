@@ -1,9 +1,9 @@
 import { existsSync } from 'node:fs'
 import { copyFile, mkdir, writeFile } from 'node:fs/promises'
-import { join } from 'node:path'
 import process from 'node:process'
 import { fileURLToPath } from 'node:url'
 import { resolvePath } from 'mlly'
+import { join } from 'pathe'
 import { defineConfig } from 'tsdown'
 import { generateCodeblockPatch } from './syntaxes/codeblock-patch.ts'
 
@@ -17,9 +17,11 @@ export default defineConfig({
   clean: true,
   minify: process.env.NODE_ENV === 'production',
   sourcemap: true,
-  external: [
-    'vscode',
-  ],
+  deps: {
+    neverBundle: [
+      'vscode',
+    ],
+  },
   alias: {
     '@slidev/parser/fs': fileURLToPath(new URL('../parser/src/fs.ts', import.meta.url)),
     '@slidev/parser/core': fileURLToPath(new URL('../parser/src/core.ts', import.meta.url)),
@@ -49,7 +51,12 @@ export default defineConfig({
     if (!existsSync(resDir))
       await mkdir(resDir, { recursive: true })
 
-    for (const file of ['logo-mono.svg', 'logo-mono-dark.svg', 'logo.png', 'logo.svg'])
+    for (const file of [
+      'logo-mono.svg',
+      'logo-mono-dark.svg',
+      'logo.png',
+      'logo.svg',
+    ])
       await copyFile(join(assetsDir, file), join(resDir, file))
 
     await writeFile(

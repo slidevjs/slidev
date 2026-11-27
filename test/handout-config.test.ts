@@ -11,8 +11,18 @@ describe('handout config', () => {
       widthMm: 210,
       heightMm: 297,
       cssPageSize: 'A4',
-      margins: { top: '0cm', right: '0cm', bottom: '0cm', left: '0cm' },
-      coverMargins: { top: '1cm', right: '1.5cm', bottom: '1cm', left: '1.5cm' },
+      margins: {
+        top: '0cm',
+        right: '0cm',
+        bottom: '0cm',
+        left: '0cm',
+      },
+      coverMargins: {
+        top: '1cm',
+        right: '1.5cm',
+        bottom: '1cm',
+        left: '1.5cm',
+      },
     })
   })
 

@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import type { SlideRoute } from '@slidev/types'
-import HandoutBottom from '#slidev/global-components/handout-bottom'
 import { computed, nextTick, onMounted, ref, watch } from 'vue'
+import HandoutBottom from '#slidev/global-components/handout-bottom'
 import { configs, slideHeight, slideWidth } from '../env'
 import NoteDisplay from './NoteDisplay.vue'
 import PrintSlide from './PrintSlide.vue'
@@ -213,8 +213,12 @@ async function paginateNotes() {
   let cursor = 0
 
   while (cursor < blocks.length) {
-    const target = cursor === 0 ? firstTarget : continuationTarget
-    const limit = cursor === 0 ? firstLimit : continuationLimit
+    const target = cursor === 0
+      ? firstTarget
+      : continuationTarget
+    const limit = cursor === 0
+      ? firstLimit
+      : continuationLimit
     const { html, consumed } = fitBlocks(blocks.slice(cursor), target, limit)
     if (!consumed)
       break
@@ -222,7 +226,9 @@ async function paginateNotes() {
     cursor += consumed
   }
 
-  notePages.value = pages.length ? pages : [noteHtml.value]
+  notePages.value = pages.length
+    ? pages
+    : [noteHtml.value]
   paginationReady.value = true
   emit('pageCountChange', Math.max(1, notePages.value.length))
 }
