@@ -239,6 +239,14 @@ export function createSlidesLoader(
         hmrSlidesIndexes.add(i)
       }
 
+      // Snippet imports (`<<<` and inside magic-move) add their files to `watchFiles`
+      // when a slide is rendered, not when it is parsed, so the reloaded data does
+      // not have them. Keep them, or later edits to those files are ignored.
+      for (const [file, indexes] of Object.entries(data.watchFiles)) {
+        if (!data.markdownFiles[file] && !newData.watchFiles[file])
+          newData.watchFiles[file] = indexes
+      }
+
       Object.assign(data, newData)
       Object.assign(utils, createDataUtils(options))
 
@@ -286,10 +294,21 @@ export function createSlidesLoader(
 
     resolveId: {
       order: 'pre',
+      filter: { id: /^\/@slidev\/|__slidev_/ },
       handler(id) {
         if (id.startsWith('/@slidev/') || id.includes('__slidev_'))
           return id
         return null
+      },
+    },
+
+    transform: {
+      // Snippet imports register their files in `watchFiles` while the slide is
+      // rendered by the Markdown plugin, so watch them once that has happened.
+      order: 'post',
+      handler(_code, id) {
+        if (regexSlideSourceId.test(id))
+          updateServerWatcher()
       },
     },
 
