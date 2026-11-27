@@ -39,6 +39,11 @@ deno run dev --remote
 # i.e. slidev --remote
 ```
 
+```bash [vlt]
+vlt run dev -- --remote
+# i.e. slidev --remote
+```
+
 :::
 
 ## Password Protection
@@ -73,6 +78,11 @@ bun dev --remote --tunnel
 
 ```bash [deno]
 deno run dev --remote --tunnel
+# i.e. slidev --remote --tunnel
+```
+
+```bash [vlt]
+vlt run dev -- --remote --tunnel
 # i.e. slidev --remote --tunnel
 ```
 

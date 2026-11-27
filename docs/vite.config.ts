@@ -54,6 +54,13 @@ export default defineConfig({
     }),
     Inspect(),
     UnoCSS(),
-    groupIconVitePlugin(),
+    groupIconVitePlugin({
+      customIcon: {
+        vlt: {
+          light: 'vscode-icons:file-type-light-vlt',
+          dark: 'vscode-icons:file-type-vlt',
+        },
+      },
+    }),
   ],
 })

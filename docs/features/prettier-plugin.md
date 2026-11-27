@@ -36,6 +36,10 @@ bun add -D prettier prettier-plugin-slidev
 deno add -D npm:prettier npm:prettier-plugin-slidev
 ```
 
+```bash [vlt]
+vlt install -D prettier prettier-plugin-slidev
+```
+
 :::
 
 ## 2. Activate the plugin
