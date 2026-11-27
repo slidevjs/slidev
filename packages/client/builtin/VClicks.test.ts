@@ -102,12 +102,13 @@ describe('v-clicks lists and tables', () => {
       'li:+1',
       'li:+1',
       'p:+1',
+      // Relative deltas follow mount order: nested items mount before their parent.
+      'li:-2',
+      'li:+2',
       'li:+1',
-      'li:+1',
-      'li:+1',
-      'li:+1',
-      'li:+1',
-      'tr:+1',
+      'li:-1',
+      'li:+4',
+      'tr:+2',
       'tr:+1',
     ])
     expect(html).not.toMatch(/<th[^>]*data-at=/)
@@ -130,7 +131,44 @@ describe('v-clicks lists and tables', () => {
     expect(shallow).not.toMatch(/<li[^>]*data-at="\+1"[^>]*>Child/)
 
     const nested = await renderClicks({ lists: '2' }, slot)
-    expect(clickSteps(nested)).toEqual(['li:+1', 'li:+1'])
+    expect(clickSteps(nested)).toEqual(['li:-1', 'li:+2'])
+  })
+
+  it('reveals a parent item before its nested items', async () => {
+    const html = await renderClicks({ depth: 3, at: 1 }, () => [
+      h('ul', [
+        h('li', [
+          'A',
+          h('ul', [
+            h('li', [
+              'B',
+              h('ul', [
+                h('li', 'C'),
+              ]),
+            ]),
+          ]),
+        ]),
+        h('li', 'D'),
+      ]),
+    ])
+
+    expect(clickSteps(html)).toEqual(['li:1', 'li:2', 'li:3', 'li:4'])
+    expect(html).toMatch(/data-at="1"[^>]*>A/)
+    expect(html).toMatch(/data-at="4"[^>]*>D/)
+
+    // Relative deltas follow Vue's mount order, which mounts children first.
+    const relative = await renderClicks({ depth: 3 }, () => [
+      h('ul', [
+        h('li', [
+          'A',
+          h('ul', [
+            h('li', 'B'),
+          ]),
+        ]),
+        h('li', 'C'),
+      ]),
+    ])
+    expect(clickSteps(relative)).toEqual(['li:-1', 'li:+2', 'li:+2'])
   })
 
   it('reveals body cells when tables is 2', async () => {
@@ -170,7 +208,7 @@ describe('v-clicks lists and tables', () => {
     ]
 
     expect(clickSteps(await renderClicks({ depth: 1 }, slot))).toEqual(['li:+1', 'li:+1'])
-    expect(clickSteps(await renderClicks({ depth: 2 }, slot))).toEqual(['li:+1', 'li:+1', 'li:+1'])
+    expect(clickSteps(await renderClicks({ depth: 2 }, slot))).toEqual(['li:+1', 'li:-1', 'li:+2'])
   })
 
   it('treats a whole list as one step when lists is omitted', async () => {

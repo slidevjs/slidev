@@ -132,8 +132,14 @@ export default defineComponent({
     let globalIdx = 1
     let execIdx = 0
 
-    const nextClickValue = () => {
-      const thisShowIdx = +at + Math.ceil(globalIdx++ / every) - 1
+    const reserveClick = () => +at + Math.ceil(globalIdx++ / every) - 1
+
+    /**
+     * Directive value for a reserved click index.
+     * Call it after the node's children are mapped: Vue mounts children first,
+     * so relative deltas must follow that order.
+     */
+    const clickValueFor = (thisShowIdx: number) => {
       const delta = thisShowIdx - execIdx
       execIdx = thisShowIdx
       return isRelative
@@ -142,6 +148,8 @@ export default defineComponent({
           : `${delta}`
         : thisShowIdx
     }
+
+    const nextClickValue = () => clickValueFor(reserveClick())
 
     const mapSubList = (children: VNodeArrayChildren, depth: number, maxDepth: number): VNodeArrayChildren => {
       const vNodes = openAllTopLevelSlots(children).map((i) => {
@@ -163,13 +171,16 @@ export default defineComponent({
         if (!isVNode(i) || i.type === Comment)
           return i
 
+        // Reserve the index before recursing, so a parent shows before its nested items.
+        const thisShowIdx = reserveClick()
+
         let vNode
         if (depth < maxDepth && Array.isArray(i.children))
           vNode = h(i, {}, mapSubList(i.children, depth, maxDepth))
         else
           vNode = h(i)
 
-        return applyDirective(vNode, nextClickValue())
+        return applyDirective(vNode, clickValueFor(thisShowIdx))
       })
       return vNodes
     }
