@@ -272,7 +272,7 @@ If the PDF or PNG are missing Emojis, you are likely missing required fonts (suc
 This can affect e.g. CI/CD-like in-container sort of Linux environments. It can be fixed e.g. like this:
 
 ```bash
-$ curl -L --output NotoColorEmoji.ttf https://github.com/googlefonts/noto-emoji/raw/main/fonts/NotoColorEmoji.ttf
+$ curl -L --output NotoColorEmoji.ttf https://github.com/googlefonts/noto-emoji/raw/main/2D/fonts/NotoColorEmoji.ttf
 $ sudo mv NotoColorEmoji.ttf /usr/local/share/fonts/
 $ fc-cache -fv
 ```

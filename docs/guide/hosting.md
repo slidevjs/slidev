@@ -190,6 +190,29 @@ Create `vercel.json` in your project root with the following content:
 
 Then go to your [Vercel dashboard](https://vercel.com/) and create a new site with the repository.
 
+### Cloudflare Workers {#cloudflare-workers}
+
+Create `wrangler.jsonc` in your project root with the following content, so that Workers serves `index.html` for paths like `/2` or `/presenter/1`:
+
+::: details wrangler.jsonc
+
+```jsonc
+{
+  "name": "my-slides",
+  "compatibility_date": "2026-11-01",
+  "assets": {
+    "directory": "./dist",
+    "not_found_handling": "single-page-application"
+  }
+}
+```
+
+:::
+
+`slidev build` also writes a `_redirects` file with a catch-all rule for hosts that read it. Workers rejects that rule as an infinite loop, so the deploy fails with `Invalid _redirects configuration`. Slidev does not write the file when the build output already has one, so add an empty `public/_redirects` to your project.
+
+Then build your slides and deploy them with `npx wrangler deploy`, or connect the repository in your [Cloudflare dashboard](https://dash.cloudflare.com/).
+
 ### Zephyr Cloud {#zephyr-cloud}
 
 To deploy your Slidev deck on [Zephyr Cloud](https://zephyr-cloud.io/), you can add Zephyr support to an existing Slidev project with:
