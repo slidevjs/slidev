@@ -175,6 +175,12 @@ You can use scoped CSS to style your slides:
 
 <LinkCard link="features/slide-scope-style" />
 
+## Slide-scoped DOM {#slide-scoped-dom}
+
+Inline template expressions cannot use `document` or `window`. The `v-slide-el` directive runs a real function on mount, with queries limited to the current slide:
+
+<LinkCard link="features/slide-el" />
+
 ## Importing Slides {#importing-slides}
 
 <LinkCard link="features/importing-slides" />
