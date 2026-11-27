@@ -35,3 +35,9 @@ Use `{*}` when you only need maxHeight:
 ## Use Case
 
 When code is too long to fit on one slide but you want to show it all with scrolling.
+
+## Fit Guidance
+
+Use `maxHeight` when the complete snippet should remain available. If only a few lines are important, prefer a smaller focused snippet or line-highlighting steps. For export-heavy decks, check that the scrollable block is still understandable in the exported format.
+
+See [layout-content-fit](layout-content-fit.md) for choosing between splitting, scrolling, local transforms, and slide-level zoom.
