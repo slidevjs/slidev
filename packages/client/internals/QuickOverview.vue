@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { useEventListener } from '@vueuse/core'
-import { computed, ref, watchEffect } from 'vue'
+import { computed, ref, watch, watchEffect } from 'vue'
 import { createFixedClicks } from '../composables/useClicks'
 import { useNav } from '../composables/useNav'
 import { CLICKS_MAX } from '../constants'
@@ -15,7 +15,13 @@ import SlideContainer from './SlideContainer.vue'
 import SlideWrapper from './SlideWrapper.vue'
 
 const nav = useNav()
-const { currentSlideNo, go: goSlide, slides } = nav
+const { currentSlideNo, go: goSlide, slides, hasGrid } = nav
+
+const numCols = computed(() => {
+  if (!hasGrid.value)
+    return 1
+  return (slides.value[slides.value.length - 1]?.meta.slide?.gridCol ?? 0) + 1
+})
 
 function close() {
   showOverview.value = false
@@ -26,11 +32,12 @@ function go(page: number) {
   close()
 }
 
-function focus(page: number) {
-  if (page === currentOverviewPage.value)
-    return true
-  return false
-}
+const cards = new Map<number, HTMLElement>()
+
+watch([showOverview, currentOverviewPage], () => {
+  if (showOverview.value)
+    cards.get(currentOverviewPage.value)?.scrollIntoView({ block: 'nearest', inline: 'nearest' })
+}, { flush: 'post' })
 
 const xs = breakpoints.smaller('xs')
 const sm = breakpoints.smaller('sm')
@@ -46,7 +53,7 @@ const cardWidth = computed(() => {
 })
 
 const rowCount = computed(() => {
-  return Math.floor((windowSize.width.value - padding) / (cardWidth.value + gap))
+  return Math.max(1, Math.floor((windowSize.width.value - padding + gap) / (cardWidth.value + gap)))
 })
 
 const keyboardBuffer = ref<string>('')
@@ -89,9 +96,9 @@ useEventListener('keypress', (e) => {
     return
   }
 
-  const extactMatch = slides.value.findIndex(i => `/${i.no}` === keyboardBuffer.value)
-  if (extactMatch !== -1)
-    currentOverviewPage.value = extactMatch + 1
+  const exactMatch = slides.value.find(i => String(i.no) === keyboardBuffer.value)
+  if (exactMatch)
+    currentOverviewPage.value = exactMatch.no
 
   // When the input number is the largest at the number of digits, we go to that page directly.
   if (+keyboardBuffer.value * 10 > slides.value.length) {
@@ -100,11 +107,14 @@ useEventListener('keypress', (e) => {
   }
 })
 
+watch([showOverview, currentSlideNo], () => {
+  if (showOverview.value) {
+    currentOverviewPage.value = currentSlideNo.value
+    keyboardBuffer.value = ''
+  }
+})
+
 watchEffect(() => {
-  // Watch currentPage, make sure every time we open overview,
-  // we focus on the right page.
-  currentOverviewPage.value = currentSlideNo.value
-  // Watch rowCount, make sure up and down shortcut work correctly.
   overviewRowCount.value = rowCount.value
 })
 </script>
@@ -118,21 +128,26 @@ watchEffect(() => {
   >
     <div
       v-if="showOverview"
-      class="fixed left-0 right-0 top-0 h-[calc(var(--vh,1vh)*100)] z-modal bg-main !bg-opacity-75 p-16 py-20 overflow-y-auto backdrop-blur-5px select-none"
+      class="fixed left-0 right-0 top-0 h-[calc(var(--vh,1vh)*100)] z-modal bg-main !bg-opacity-75 p-16 py-20 overflow-auto backdrop-blur-5px select-none"
       @click="close"
     >
       <div
-        class="grid gap-y-4 gap-x-8 w-full"
-        :style="`grid-template-columns: repeat(auto-fit,minmax(${cardWidth}px,1fr))`"
+        class="grid gap-y-4 gap-x-8"
+        :class="hasGrid ? 'w-max' : 'w-full'"
+        :style="hasGrid
+          ? `grid-template-columns: repeat(${numCols}, ${cardWidth}px)`
+          : `grid-template-columns: repeat(auto-fit,minmax(${cardWidth}px,1fr))`"
       >
         <div
           v-for="(route, idx) of slides"
           :key="route.no"
+          :ref="el => el ? cards.set(route.no, el as HTMLElement) : cards.delete(route.no)"
           class="relative"
+          :style="hasGrid ? { gridColumn: (route.meta.slide?.gridCol ?? 0) + 1, gridRow: (route.meta.slide?.gridRow ?? 0) + 1 } : undefined"
         >
           <div
             class="inline-block border rounded overflow-hidden bg-main hover:border-primary transition"
-            :class="(focus(idx + 1) || currentOverviewPage === idx + 1) ? 'border-primary' : 'border-main'"
+            :class="(currentOverviewPage === route.no) ? 'border-primary' : 'border-main'"
             @click="go(route.no)"
           >
             <SlideContainer

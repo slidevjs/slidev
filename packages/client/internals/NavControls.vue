@@ -24,6 +24,9 @@ const {
   currentSlideNo,
   hasNext,
   hasPrev,
+  hasGrid,
+  currentGridCol,
+  currentGridRow,
   isEmbedded,
   isPresenter,
   isPresenterAvailable,
@@ -191,6 +194,7 @@ if (__SLIDEV_FEATURE_RECORD__)
       <div class="px2 my-auto">
         <span class="text-lg">{{ currentSlideNo }}</span>
         <span class="opacity-50 text-sm"> / {{ total }}</span>
+        <span v-if="hasGrid" class="opacity-40 text-xs ml1 font-mono">({{ currentGridCol + 1 }},{{ currentGridRow + 1 }})</span>
       </div>
 
       <CustomNavControls />

@@ -38,6 +38,55 @@ Use UnoCSS classes and Vue components to style and enrich your slides:
 </div>
 ````
 
+You can also use `----` padded with a new line to create a nested slide below the previous slide. Nested slides form a two-dimensional grid: `---` starts a new column, while `----` starts the next row in the current column.
+
+<!-- eslint-skip -->
+
+```md {5,11,17}
+# Preparing the lab
+
+Set up the tools and sample inputs.
+
+----
+
+# Check the environment
+
+Run the sample with a known input.
+
+---
+
+# Working through a sample
+
+Follow an input through the program.
+
+----
+
+# Trace the result
+```
+
+To configure a nested slide, put its frontmatter directly after `----` and close it with `---`:
+
+<!-- eslint-skip -->
+
+```md
+----
+title: More detail
+layout: center
+---
+
+# Nested Slide
+```
+
+This is equivalent to setting `nested: true` in the frontmatter of a slide:
+
+```md
+---
+nested: true
+---
+
+# Nested Slide
+```
+
 ## Frontmatter & Headmatter {#frontmatter}
 
 At the beginning of each slide, you can add an optional [frontmatter](https://jekyllrb.com/docs/front-matter/) to configure the slide. The first frontmatter block is called **headmatter** and can configure the whole slide deck. The rest are **frontmatters** for individual slides. Texts in the headmatter or the frontmatter should be an object in [YAML](https://www.cloudbees.com/blog/yaml-tutorial-everything-you-need-get-started/) format. For example:
