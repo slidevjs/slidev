@@ -81,6 +81,7 @@ describe('resolveOptions', () => {
       ],
     }
     const reloadedData = {
+      features: { typstMath: false },
       headmatter: {
         addons: ['slidev-addon-final'],
         routerMode: 'memory',
