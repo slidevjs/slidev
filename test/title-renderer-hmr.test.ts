@@ -73,13 +73,13 @@ async function createReproServer(entry: string) {
           configureServer(s) {
             const hot = s.environments.client.hot
             const send = hot.send.bind(hot)
-            hot.send = ((...args: Parameters<typeof hot.send>) => {
+            hot.send = ((...args: [payload: HotPayload | string, data?: unknown]) => {
               const payload = args[0]
               if (payload && typeof payload === 'object' && payload.type === 'full-reload')
                 capture.fullReloads.push(payload)
               if (typeof payload === 'string' && payload === 'slidev:update-slide')
                 capture.slideUpdates += 1
-              return send(...args)
+              return (send as (...a: typeof args) => void)(...args)
             }) as typeof hot.send
           },
         },
