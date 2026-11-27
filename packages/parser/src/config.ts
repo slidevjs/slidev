@@ -166,6 +166,7 @@ export function resolveFonts(fonts: FontOptions = {}): ResolvedFontOptions {
     fallbacks = true,
     italic = false,
     provider = 'google',
+    body = 'sans',
   } = fonts
   let sans = toArray(fonts.sans).flatMap(i => i.split(',')).map(i => i.trim())
   let serif = toArray(fonts.serif).flatMap(i => i.split(',')).map(i => i.trim())
@@ -243,6 +244,7 @@ export function resolveFonts(fonts: FontOptions = {}): ResolvedFontOptions {
     serif,
     mono,
     math,
+    body,
     webfonts,
     provider,
     local,

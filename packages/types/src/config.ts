@@ -18,6 +18,7 @@ export interface ResolvedFontOptions {
   mono: string[]
   serif: string[]
   math: string[]
+  body: 'sans' | 'serif' | 'mono'
   weights: string[]
   italic: boolean
   provider: 'none' | 'google' | 'coollabs'
