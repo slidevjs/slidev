@@ -7,9 +7,6 @@
     "packages/client"
   ],
 
-  // Enable the flat config support
-  "eslint.experimental.useFlatConfig": true,
-
   // Disable the default formatter
   "prettier.enable": false,
   "editor.formatOnSave": false,

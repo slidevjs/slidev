@@ -47,3 +47,13 @@ console.log('Hello, World!')
 ````
 
 You can also set a specific height using CSS units like `{height:'300px'}` or `{height:'100%'}`.
+
+## Line Numbers
+
+Like other code blocks, the Monaco editor respects the global `lineNumbers` headmatter. You can also toggle line numbers for a single editor with `{lines:true}` while keeping it editable.
+
+````md
+```ts {monaco} {lines:true}
+console.log('HelloWorld')
+```
+````

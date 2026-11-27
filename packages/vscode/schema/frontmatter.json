@@ -107,6 +107,11 @@
           "markdownDescription": "Custom zoom level for the slide",
           "default": 1
         },
+        "clickAnimation": {
+          "type": "string",
+          "description": "Default click animation for the slide",
+          "markdownDescription": "Default click animation for the slide"
+        },
         "dragPos": {
           "type": "object",
           "additionalProperties": {

@@ -1,5 +1,7 @@
 declare module 'vue' {
-  type SlideContext = import('./context').SlideContext
+  import type { ShallowUnwrapRef } from 'vue'
+
+  type SlideContext = ShallowUnwrapRef<import('./context').SlideContext>
   interface ComponentCustomProperties extends SlideContext {
   }
 }
@@ -21,6 +23,7 @@ declare module 'vue-router' {
       noteHTML: string
       filepath: string
       start: number
+      sourceIndex: number
       id: number
       no: number
     }

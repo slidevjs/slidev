@@ -1,20 +1,22 @@
 import type { ResolvedSlidevOptions, SlidevData, SlidevServerOptions } from '@slidev/types'
 import type { ConfigEnv, InlineConfig } from 'vite'
-import MarkdownIt from 'markdown-it'
+import MarkdownExit from 'markdown-exit'
 import { loadConfigFromFile, mergeConfig } from 'vite'
 import { resolveSourceFiles } from '../resolver'
-import markdownItLink from '../syntax/markdown-it/markdown-it-link'
+import markdownItLink from '../syntax/link'
 import { stringifyMarkdownTokens } from '../utils'
 import { ViteSlidevPlugin } from '../vite'
 
-export const sharedMd = MarkdownIt({ html: true })
+export const sharedMd = MarkdownExit({ html: true })
 sharedMd.use(markdownItLink)
 
 export function getSlideTitle(data: SlidevData) {
   const tokens = sharedMd.parseInline(data.config.title, {})
   const title = stringifyMarkdownTokens(tokens)
   const slideTitle = data.config.titleTemplate.replace('%s', title)
-  return slideTitle === 'Slidev - Slidev' ? 'Slidev' : slideTitle
+  return slideTitle === 'Slidev - Slidev'
+    ? 'Slidev'
+    : slideTitle
 }
 
 export async function resolveViteConfigs(
@@ -26,7 +28,9 @@ export async function resolveViteConfigs(
 ) {
   // Merge theme & addon & user configs
   const configEnv: ConfigEnv = {
-    mode: command === 'build' ? 'production' : 'development',
+    mode: command === 'build'
+      ? 'production'
+      : 'development',
     command,
   }
   const files = resolveSourceFiles(options.roots, 'vite.config')

@@ -43,6 +43,12 @@ Pattern: `./style.css` | `./styles/index.{css,js,ts}`
 
 Files following this convention will be injected to the App root. If you need to import multiple CSS entries, you can create the following structure and manage the import order yourself.
 
+:::warning
+Global CSS here also applies to the presenter UI. Prefer scoping styles to individual slides, or wrap your selectors under `.slidev-layout` to avoid leaking styles into presenter mode.
+
+**Example:** Use `.slidev-layout .grid { ... }` instead of just `.grid { ... }`.
+:::
+
 ```bash
 your-slidev/
   ├── ...
@@ -84,6 +90,18 @@ Styles will be processed by [UnoCSS](https://unocss.dev/) and [PostCSS](https://
 ```
 
 Learn more about the syntax [here](https://unocss.dev/transformers/directives#apply).
+
+### Targeting the Active Slide
+
+To style whichever slide is currently visible without hardcoding page numbers (`.slidev-page-7`), Slidev applies the `.slidev-page-active` class to the current slide wrapper inside `#slideshow`:
+
+```css
+.slidev-page-active .my-element {
+  color: red;
+}
+```
+
+This includes Play mode, the main Presenter view, and single-slide print/export views rendered through the slideshow (such as `/2?print=true` or `--per-slide`). It is not applied to overview thumbnails, Presenter Next previews, or standalone `/print` and `/export` frames.
 
 ## `index.html`
 

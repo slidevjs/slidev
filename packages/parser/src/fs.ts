@@ -1,9 +1,34 @@
-import type { PreparserExtensionLoader, SlideInfo, SlidevData, SlidevMarkdown, SlidevPreparserExtension, SourceSlideInfo } from '@slidev/types'
-import fs from 'node:fs'
-import { dirname, resolve } from 'node:path'
+import type {
+  PreparserExtensionLoader,
+  SlideInfo,
+  SlidevData,
+  SlidevMarkdown,
+  SlidevPreparserExtension,
+  SourceSlideInfo,
+} from '@slidev/types'
+import { existsSync } from 'node:fs'
+import { readFile, writeFile } from 'node:fs/promises'
 import { slash } from '@antfu/utils'
+import { dirname, isAbsolute, relative, resolve } from 'pathe'
 import YAML from 'yaml'
 import { detectFeatures, parse, parseRangeString, stringify } from './core'
+
+/**
+ * Whether `filePath` resolves inside any of `roots` (no `..` escape).
+ * Inlined here (rather than imported from the `slidev` package) because
+ * `@slidev/parser` must stay independent of `@slidev/slidev`.
+ */
+export function isPathInsideRoots(filePath: string, roots: string[]): boolean {
+  return roots.some((root) => {
+    const rel = relative(root, filePath)
+    return rel === '' || (!!rel && !rel.startsWith('..') && !isAbsolute(rel))
+  })
+}
+
+const RE_FRONTMATTER_START = /^\uFEFF?---(?:[^-].*)?$/
+const RE_BLANK_LINE = /^\s*$/
+const RE_FRONTMATTER_END = /^---$/
+const RE_CRLF = /\r?\n/g
 
 export * from './core'
 
@@ -13,30 +38,50 @@ export function injectPreparserExtensionLoader(fn: PreparserExtensionLoader) {
   preparserExtensionLoader = fn
 }
 
+export interface LoadRootsInfo {
+  roots: string[]
+  userRoot: string
+  /**
+   * When provided, `src:` includes resolving outside these roots are
+   * rejected (recorded as an error) instead of being loaded. Optional for
+   * backward compatibility with other `@slidev/parser` consumers.
+   */
+  allowedRoots?: string[]
+}
+
 /**
  * Slidev data without config and themeMeta,
  * because config and themeMeta depends on the theme to be loaded.
  */
 export type LoadedSlidevData = Omit<SlidevData, 'config' | 'themeMeta'>
 
-export async function load(userRoot: string, filepath: string, loadedSource: Record<string, string> = {}, mode?: string): Promise<LoadedSlidevData> {
-  const markdown = loadedSource[filepath] ?? fs.readFileSync(filepath, 'utf-8')
+export async function load(
+  options: LoadRootsInfo,
+  filepath: string,
+  sources: Record<string, string> | ((path: string) => Promise<string>) = {},
+  mode?: string,
+): Promise<LoadedSlidevData> {
+  const loadSource = typeof sources === 'function'
+    ? sources
+    : async (path: string) => sources[path] ?? readFile(path, 'utf-8')
+
+  const markdown = await loadSource(filepath)
 
   let extensions: SlidevPreparserExtension[] | undefined
   if (preparserExtensionLoader) {
     // #703
     // identify the headmatter, to be able to load preparser extensions
     // (strict parsing based on the parsing code)
-    const lines = markdown.split(/\r?\n/g)
+    const lines = markdown.split(RE_CRLF)
     let hm = ''
-    if (lines[0].match(/^---([^-].*)?$/) && !lines[1]?.match(/^\s*$/)) {
+    if (RE_FRONTMATTER_START.test(lines[0]) && !lines[1]?.match(RE_BLANK_LINE)) {
       let hEnd = 1
-      while (hEnd < lines.length && !lines[hEnd].trimEnd().match(/^---$/))
+      while (hEnd < lines.length && !RE_FRONTMATTER_END.test(lines[hEnd].trimEnd()))
         hEnd++
       hm = lines.slice(1, hEnd).join('\n')
     }
     const o = YAML.parse(hm) as Record<string, unknown> ?? {}
-    extensions = await preparserExtensionLoader(o, filepath, mode)
+    extensions = await preparserExtensionLoader(options.roots, o, filepath, mode)
   }
 
   const markdownFiles: Record<string, SlidevMarkdown> = {}
@@ -46,7 +91,7 @@ export async function load(userRoot: string, filepath: string, loadedSource: Rec
   async function loadMarkdown(path: string, range?: string, frontmatterOverride?: Record<string, unknown>, importers?: SourceSlideInfo[]) {
     let md = markdownFiles[path]
     if (!md) {
-      const raw = loadedSource[path] ?? fs.readFileSync(path, 'utf-8')
+      const raw = await loadSource(path)
       md = await parse(raw, path, extensions)
       markdownFiles[path] = md
       watchFiles[path] = new Set()
@@ -55,6 +100,16 @@ export async function load(userRoot: string, filepath: string, loadedSource: Rec
     const directImporter = importers?.at(-1)
     for (const index of parseRangeString(md.slides.length, range)) {
       const subSlide = md.slides[index - 1]
+      if (!subSlide) {
+        // `parseRangeString` only drops indexes above the total, so a range
+        // such as `#0` or `#-3` still reaches here and has no slide.
+        md.errors ??= []
+        md.errors.push({
+          row: 0,
+          message: `Slide ${index} does not exist in "${path}", which has ${md.slides.length} slides`,
+        })
+        continue
+      }
       try {
         await loadSlide(md, subSlide, frontmatterOverride, importers)
       }
@@ -80,7 +135,7 @@ export async function load(userRoot: string, filepath: string, loadedSource: Rec
       const [rawPath, rangeRaw] = slide.frontmatter.src.split('#')
       const path = slash(
         rawPath.startsWith('/')
-          ? resolve(userRoot, rawPath.substring(1))
+          ? resolve(options.userRoot, rawPath.substring(1))
           : resolve(dirname(slide.filepath), rawPath),
       )
 
@@ -90,7 +145,24 @@ export async function load(userRoot: string, filepath: string, loadedSource: Rec
       }
       delete frontmatterOverride.src
 
-      if (!fs.existsSync(path)) {
+      const ancestorPaths = new Set((importChain ?? []).map(s => s.filepath))
+      if (path === slide.filepath || ancestorPaths.has(path)) {
+        md.errors ??= []
+        md.errors.push({
+          row: slide.start,
+          message: `Circular import detected for "${slide.frontmatter.src}" (${path})`,
+        })
+        return
+      }
+
+      if (options.allowedRoots && !isPathInsideRoots(path, options.allowedRoots)) {
+        md.errors ??= []
+        md.errors.push({
+          row: slide.start,
+          message: `Imported markdown escapes the project root: ${path}`,
+        })
+      }
+      else if (!existsSync(path)) {
         md.errors ??= []
         md.errors.push({
           row: slide.start,
@@ -98,12 +170,17 @@ export async function load(userRoot: string, filepath: string, loadedSource: Rec
         })
       }
       else {
-        await loadMarkdown(path, rangeRaw, frontmatterOverride, importChain ? [...importChain, slide] : [slide])
+        await loadMarkdown(path, rangeRaw, frontmatterOverride, importChain
+          ? [...importChain, slide]
+          : [slide])
       }
     }
     else {
       slides.push({
-        frontmatter: { ...slide.frontmatter, ...frontmatterOverride },
+        frontmatter: {
+          ...slide.frontmatter,
+          ...frontmatterOverride,
+        },
         content: slide.content,
         revision: slide.revision,
         frontmatterRaw: slide.frontmatterRaw,
@@ -135,6 +212,6 @@ export async function load(userRoot: string, filepath: string, loadedSource: Rec
 
 export async function save(markdown: SlidevMarkdown) {
   const fileContent = stringify(markdown)
-  fs.writeFileSync(markdown.filepath, fileContent, 'utf-8')
+  await writeFile(markdown.filepath, fileContent, 'utf-8')
   return fileContent
 }

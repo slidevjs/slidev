@@ -16,6 +16,8 @@ export function useTimer() {
     interval.counter.value
     if (state.value.status === 'stopped' || !state.value.startedAt)
       return 0
+    if (state.value.status === 'paused')
+      return state.value.pausedAt - state.value.startedAt
     return Date.now() - state.value.startedAt
   })
   const passed = computed(() => passedMs.value / 1000)

@@ -13,6 +13,8 @@
  * - 1h4s
  * - 1:1:1
  */
+const RE_ALPHA = /[a-z]/i
+
 export function parseTimeString(timestamp: string | number): {
   seconds: number
   relative: boolean
@@ -54,8 +56,11 @@ export function parseTimeString(timestamp: string | number): {
     }
     seconds = (h || 0) * 3600 + (m || 0) * 60 + (s || 0)
   }
-  else if (!timestamp.match(/[a-z]/i)) {
+  else if (!RE_ALPHA.test(timestamp)) {
     seconds = Number(timestamp)
+    if (Number.isNaN(seconds)) {
+      throw new TypeError('Invalid timestamp format')
+    }
   }
   else {
     const unitMap: Record<string, number> = {

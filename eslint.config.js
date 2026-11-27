@@ -15,6 +15,10 @@ export default antfu({
       ],
     },
   },
+  ignores: [
+    'skills/**/*.md',
+    'plans/**',
+  ],
 })
   .removeRules(
     'vue/no-v-text-v-html-on-component',
@@ -29,4 +33,12 @@ export default antfu({
       // VSCE and OVSX do not support pnpm catalog when reading `@types/vscode`'s version.
       'packages/vscode/package.json',
     ],
+  })
+  .remove('antfu/markdown/rules')
+  .append({
+    // Keep code in slides as authored for presentation
+    files: ['**/*.md/**'],
+    rules: {
+      'antfu/reasonable-newline': 'off',
+    },
   })

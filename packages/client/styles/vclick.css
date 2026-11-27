@@ -1,0 +1,54 @@
+.slidev-vclick-target {
+  transition: all 0.1s ease;
+
+  &.slidev-vclick-anim-none {
+    transition: none;
+  }
+
+  &.slidev-vclick-anim-fade-in {
+    transition: all 0.3s ease;
+  }
+}
+
+.slidev-vclick-hidden {
+  opacity: 0 !important;
+  pointer-events: none !important;
+  user-select: none !important;
+
+  &.slidev-vclick-anim-fade {
+    opacity: 0.5 !important;
+  }
+
+  &.slidev-vclick-anim-fade-in {
+    opacity: 0 !important;
+  }
+
+  &.slidev-vclick-anim-up {
+    translate: 0 20px;
+  }
+
+  &.slidev-vclick-anim-down {
+    translate: 0 -20px;
+  }
+
+  &.slidev-vclick-anim-left {
+    translate: 20px 0;
+  }
+
+  &.slidev-vclick-anim-right {
+    translate: -20px 0;
+  }
+
+  &.slidev-vclick-anim-scale {
+    scale: 0.9;
+  }
+}
+
+.slidev-vclick-display-none {
+  display: none !important;
+}
+
+/* No longer used, but kept for backward compatibility */
+.slidev-vclick-fade {
+  opacity: 0.5;
+}

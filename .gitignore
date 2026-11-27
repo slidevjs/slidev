@@ -4,7 +4,10 @@
 .nuxt
 .output
 .slidev
+.ghfs
+.omo
 .vite-inspect
+.turbo
 *-export
 *.local
 *.pdf
@@ -13,7 +16,7 @@ assets/demo
 components.d.ts
 composable-vue-cn
 dist
-dist-ssr
+dist-*
 docs/.vitepress/@slidev
 docs/.vitepress/cache
 node_modules
@@ -22,6 +25,9 @@ packages/create-app/template/pages
 packages/create-app/template/slides.md
 packages/create-app/template/snippets
 packages/slidev/README.md
+packages/slidev/skills
 packages/vscode/syntaxes/codeblock-patch.json
 slides-export.md
 *slides-export.pptx
+.agents
+.claude

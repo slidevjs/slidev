@@ -2,18 +2,61 @@ import type { ResolvedSlidevOptions, SeoMeta } from '@slidev/types'
 import type { ResolvableLink } from 'unhead/types'
 import { existsSync } from 'node:fs'
 import { readFile } from 'node:fs/promises'
-import { join } from 'node:path'
 import { slash } from '@antfu/utils'
 import { white, yellow } from 'ansis'
-import { escapeHtml } from 'markdown-it/lib/common/utils.mjs'
-import { createHead, extractUnheadInputFromHtml, transformHtmlTemplate } from 'unhead/server'
+import { join } from 'pathe'
+import { parseHtmlForUnheadExtraction } from 'unhead/parser'
+import { createHead, transformHtmlTemplate } from 'unhead/server'
 import { version } from '../../package.json'
 import { getSlideTitle } from '../commands/shared'
 import { toAtFS } from '../resolver'
 import { generateCoollabsFontsUrl, generateGoogleFontsUrl } from '../utils'
 
+const RE_TRAILING_SLASH = /\/$/
+const RE_BODY_CONTENT = /<body>([\s\S]*?)<\/body>/i
+
+function escapeHtml(str: string): string {
+  return str
+    .replace(/&/g, '&amp;')
+    .replace(/</g, '&lt;')
+    .replace(/>/g, '&gt;')
+    .replace(/"/g, '&quot;')
+    .replace(/'/g, '&#039;')
+}
+
 function toAttrValue(unsafe: unknown) {
   return JSON.stringify(escapeHtml(String(unsafe)))
+}
+
+function collectPreloadImages(data: Omit<ResolvedSlidevOptions, 'utils'>['data'], base?: string): ResolvableLink[] {
+  const config = data.config
+  if (config.preloadImages === false)
+    return []
+
+  const seen = new Set<string>()
+  const links: ResolvableLink[] = []
+  const basePrefix = base
+    ? base.replace(RE_TRAILING_SLASH, '')
+    : ''
+
+  for (const slide of data.slides) {
+    const images = slide.images || slide.source?.images
+    if (!images?.length)
+      continue
+    for (const url of images) {
+      if (seen.has(url))
+        continue
+      seen.add(url)
+      const href = url.startsWith('http') || url.startsWith('//')
+        ? url
+        : `${basePrefix}${url.startsWith('/')
+          ? url
+          : `/${url}`}`
+      links.push({ rel: 'preload', as: 'image', href })
+    }
+  }
+
+  return links
 }
 
 export default async function setupIndexHtml({ mode, entry, clientRoot, userRoot, roots, data, base }: Omit<ResolvedSlidevOptions, 'utils'>): Promise<string> {
@@ -35,22 +78,34 @@ export default async function setupIndexHtml({ mode, entry, clientRoot, userRoot
       continue
     }
 
-    inputs.push(extractUnheadInputFromHtml(html).input)
-    body += `\n${(html.match(/<body>([\s\S]*?)<\/body>/i)?.[1] || '').trim()}`
+    inputs.push(parseHtmlForUnheadExtraction(html).input)
+    body += `\n${(html.match(RE_BODY_CONTENT)?.[1] || '').trim()}`
   }
 
   if (data.features.tweet) {
     body += '\n<script async src="https://platform.twitter.com/widgets.js"></script>'
   }
 
+  if (data.features.bluesky) {
+    body += '\n<script async src="https://embed.bsky.app/static/embed.js" charset="utf-8"></script>'
+  }
+
   const webFontsLink: ResolvableLink[] = []
   if (data.config.fonts.webfonts.length) {
     const { provider } = data.config.fonts
     if (provider === 'google') {
-      webFontsLink.push({ rel: 'stylesheet', href: generateGoogleFontsUrl(data.config.fonts), type: 'text/css' })
+      webFontsLink.push({
+        rel: 'stylesheet',
+        href: generateGoogleFontsUrl(data.config.fonts),
+        type: 'text/css',
+      })
     }
     else if (provider === 'coollabs') {
-      webFontsLink.push({ rel: 'stylesheet', href: generateCoollabsFontsUrl(data.config.fonts), type: 'text/css' })
+      webFontsLink.push({
+        rel: 'stylesheet',
+        href: generateCoollabsFontsUrl(data.config.fonts),
+        type: 'text/css',
+      })
     }
   }
 
@@ -66,23 +121,47 @@ export default async function setupIndexHtml({ mode, entry, clientRoot, userRoot
         : undefined
 
   const title = getSlideTitle(data)
-  const description = info ? toAttrValue(info) : null
+  const description = info
+    ? toAttrValue(info)
+    : null
   const unhead = createHead({
     init: [
       {
-        htmlAttrs: data.headmatter.lang ? { lang: data.headmatter.lang as string } : undefined,
+        htmlAttrs: data.headmatter.lang
+          ? { lang: data.headmatter.lang as string }
+          : undefined,
         title,
         link: [
-          data.config.favicon ? { rel: 'icon', href: data.config.favicon } : null,
+          data.config.favicon
+            ? { rel: 'icon', href: data.config.favicon }
+            : null,
           ...webFontsLink,
+          ...collectPreloadImages(data, base),
         ].filter(x => x),
         meta: [
           { 'http-equiv': 'Content-Type', 'content': 'text/html; charset=UTF-8' },
           { property: 'slidev:version', content: version },
-          { property: 'slidev:entry', content: mode === 'dev' && slash(entry) },
+          {
+            property: 'slidev:entry',
+            content: mode === 'dev'
+              ? slash(entry)
+              : null,
+          },
           { name: 'description', content: description },
-          { name: 'author', content: author ? toAttrValue(author) : null },
-          { name: 'keywords', content: keywords ? toAttrValue(Array.isArray(keywords) ? keywords.join(', ') : keywords) : null },
+          {
+            name: 'author',
+            content: author
+              ? toAttrValue(author)
+              : null,
+          },
+          {
+            name: 'keywords',
+            content: keywords
+              ? toAttrValue(Array.isArray(keywords)
+                  ? keywords.join(', ')
+                  : keywords)
+              : null,
+          },
           { property: 'og:title', content: seoMeta.ogTitle || title },
           { property: 'og:description', content: seoMeta.ogDescription || description },
           { property: 'og:image', content: ogImage },
@@ -104,12 +183,14 @@ export default async function setupIndexHtml({ mode, entry, clientRoot, userRoot
     main = main.replace('__ENTRY__', mainUrl)
   }
   else {
-    const basePrefix = base ? base.slice(0, -1) : ''
+    const basePrefix = base
+      ? base.slice(0, -1)
+      : ''
     main = main.replace('__ENTRY__', encodeURI(basePrefix + mainUrl))
   }
 
   main = main.replace('<!-- body -->', body)
 
-  const html = await transformHtmlTemplate(unhead, main)
+  const html = transformHtmlTemplate(unhead, main)
   return html
 }
