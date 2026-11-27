@@ -465,6 +465,7 @@ export async function getRoots(entry?: string): Promise<RootsInfo> {
     cliRoot,
     clientRoot,
     userRoot,
+    userProjectRoot: closestPkgRoot,
     userPkgJson,
     userWorkspaceRoot,
   }

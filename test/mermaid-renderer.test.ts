@@ -18,6 +18,7 @@ describe('mermaid-renderer virtual module', () => {
     const content = template.getContent.call(context, {
       userRoot: '/user/project',
       roots: ['/user/project'],
+      setupRoots: ['/user/project'],
     } as ResolvedSlidevOptions)
 
     expect(content).toContain('mermaid-renderer')

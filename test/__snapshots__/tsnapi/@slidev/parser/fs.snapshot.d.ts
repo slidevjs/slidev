@@ -5,6 +5,7 @@
 export interface LoadRootsInfo {
   roots: string[];
   userRoot: string;
+  setupRoots?: string[];
   allowedRoots?: string[];
 }
 export interface SlidevParserOptions {
