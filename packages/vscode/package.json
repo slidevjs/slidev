@@ -374,6 +374,12 @@
           "description": "The default port of Slidev server",
           "default": 3030
         },
+        "slidev.host": {
+          "type": "string",
+          "scope": "window",
+          "description": "The host of Slidev server. Change it when the server is running on another machine",
+          "default": "localhost"
+        },
         "slidev.annotations": {
           "type": "boolean",
           "scope": "window",

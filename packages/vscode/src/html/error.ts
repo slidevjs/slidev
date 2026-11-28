@@ -1,11 +1,13 @@
+import { config } from '../configs'
 import { activeProject, projects } from '../projects'
 import { getSlidesTitle } from '../utils/getSlidesTitle'
+import { getServerUrl } from '../utils/serverUrl'
 
 export function generateErrorHtml(message: string) {
   const project = activeProject.value
   const info = project
     ? `Slidev server for <i>${getSlidesTitle(project.data)}</i> ${project.port.value
-      ? `not found on <code>http://localhost:${project.port.value}</code>`
+      ? `not found on <code>${getServerUrl(config.host, project.port.value)}</code>`
       : `not started`
     }.`
     : projects.size

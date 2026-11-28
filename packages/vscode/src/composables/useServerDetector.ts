@@ -5,6 +5,7 @@ import { computed, defineService, onScopeDispose, reactive, watch } from 'reacti
 import { config } from '../configs'
 import { activeProject, askAddProject, projects, scannedProjects } from '../projects'
 import { isSamePath } from '../utils/isSamePath'
+import { getDetectUrls, getServerUrl } from '../utils/serverUrl'
 import { logger } from '../views/logger'
 
 const versionRE = /<meta (?:name|property)="slidev:version" content="([^"]+)">/
@@ -54,7 +55,7 @@ export const useServerDetector = defineService(() => {
           state.entry = entry
           logger.info(`[Slidev] Detected Slidev server entry: ${detectedEntry} on port ${port}`)
           if (scannedProjects.value) {
-            askAddProject(entry, `A Slidev server is detected running on localhost:${port}.`)
+            askAddProject(entry, `A Slidev server is detected running on ${getServerUrl(config.host, port)}.`)
           }
         }
         return true
@@ -65,8 +66,13 @@ export const useServerDetector = defineService(() => {
       return false
     }
 
-    // We can't use `localhost:` here
-    state.ready = await pingUrl(`http://[::1]:${port}`) || await pingUrl(`http://127.0.0.1:${port}`)
+    let ready = false
+    for (const url of getDetectUrls(config.host, port)) {
+      ready = await pingUrl(url)
+      if (ready)
+        break
+    }
+    state.ready = ready
 
     state.pending = null
     resolve(state.ready)
@@ -88,6 +94,11 @@ export const useServerDetector = defineService(() => {
         redetect(port)
     }
   }, { immediate: true })
+
+  watch(() => config.host, () => {
+    for (const port of portsToDetect.value)
+      redetect(port)
+  })
 
   const interval = setInterval(() => {
     const activePort = activeProject.value?.port.value
