@@ -49,6 +49,14 @@ Custom dev command:
 }
 ```
 
+Connect to a server running on another machine (default `localhost`):
+
+```json
+{
+  "slidev.host": "192.168.1.20"
+}
+```
+
 ## Placeholders
 
 - `${args}` - All CLI arguments

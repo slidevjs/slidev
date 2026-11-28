@@ -80,6 +80,18 @@ Examples:
 - For PNPM users, you can set it to `pnpm slidev ${args}`.
 - For [code-server](https://coder.com/docs/code-server/) users, you can set it to `pnpm slidev ${args} --base /proxy/${port}/`. This will make the dev server accessible at `http://localhost:8080/proxy/3000/`.
 
+#### Server Host {#host}
+
+By default, the preview connects to the Slidev server on `localhost`. If the server is running on another machine, set `slidev.host` to its hostname or IP address:
+
+```json
+{
+  "slidev.host": "192.168.1.20"
+}
+```
+
+Make sure the server is reachable from your machine, for example by starting it with `slidev --remote`.
+
 #### Slides Tree View {#slides-tree}
 
 > Available since v0.52.0

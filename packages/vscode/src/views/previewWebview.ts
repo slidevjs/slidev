@@ -8,6 +8,7 @@ import { generateErrorHtml } from '../html/error'
 import { generateReadyHtml } from '../html/ready'
 import { activeData, activeProject } from '../projects'
 import { getSlidesTitle } from '../utils/getSlidesTitle'
+import { getServerUrl } from '../utils/serverUrl'
 import { logger } from './logger'
 
 export const usePreviewWebview = defineService(() => {
@@ -16,6 +17,7 @@ export const usePreviewWebview = defineService(() => {
 
   const { redetect } = useServerDetector()
   const port = computed(() => activeProject.value?.port.value || config.port)
+  const serverUrl = computed(() => getServerUrl(config.host, port.value))
   const detected = computed(() => activeProject.value ? activeProject.value.detected.value : null)
   const message = computed(() => detected.value?.message ?? '')
   const compatMode = useVscodeContext('slidev:preview:compat', () => !!detected.value?.compatMode)
@@ -58,7 +60,7 @@ export const usePreviewWebview = defineService(() => {
   updateOverviewInitialSlideNo()
 
   const html = computed(() => ready.value
-    ? generateReadyHtml(port.value, previewMode.value, hashRoute.value, overviewInitialSlideNo.value)
+    ? generateReadyHtml(serverUrl.value, previewMode.value, hashRoute.value, overviewInitialSlideNo.value)
     : generateErrorHtml(message.value),
   )
 
@@ -127,10 +129,10 @@ export const usePreviewWebview = defineService(() => {
       return
     updateOverviewInitialSlideNo()
     forceReload()
-    logger.info(`Webview refreshed. Current URL: http://localhost:${port.value}`)
+    logger.info(`Webview refreshed. Current URL: ${serverUrl.value}`)
     setTimeout(() => pageId.value++, 300)
   }
-  watch([ready, view, port, previewMode], refresh)
+  watch([ready, view, serverUrl, previewMode], refresh)
 
   function postSlidevMessage(type: string, data: Record<string, unknown>) {
     return postMessage({
@@ -246,7 +248,7 @@ export const usePreviewWebview = defineService(() => {
       const query = previewNavState.clicks > 0
         ? `?clicks=${previewNavState.clicks}`
         : ''
-      const url = `http://localhost:${port.value}/${hashRoute ? '#' : ''}${slideNo}${previewMode.value === 'slide'
+      const url = `${serverUrl.value}/${hashRoute ? '#' : ''}${slideNo}${previewMode.value === 'slide'
         ? query
         : ''}`
       return env.openExternal(Uri.parse(url))
